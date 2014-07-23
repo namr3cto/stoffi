@@ -13,7 +13,6 @@ pickle-email-*.html
 
 # Secret files
 config/initializers/secret_token.rb
-config/initializers/omniauth.rb
 config/secrets.yml
 
 ## Environment normalisation:
