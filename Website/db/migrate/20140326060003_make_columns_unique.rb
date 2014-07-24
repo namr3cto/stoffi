@@ -1,7 +1,7 @@
 class MakeColumnsUnique < ActiveRecord::Migration
   def change
     # remove duplicates
-    remove_dups('songs_users', Song.connection)
+    #remove_dups('songs_users', Song.connection)
 
 
     add_index :artists, :name, :unique => true, :name => 'by_name'

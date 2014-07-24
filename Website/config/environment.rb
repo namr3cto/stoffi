@@ -2,7 +2,7 @@
 # Load the rails application
 require File.expand_path('../application', __FILE__)
 
-#Rails.env = 'development'
+Rails.env = 'development'
 
 # Make sure we use UTF-8
 Encoding.default_external = Encoding::UTF_8

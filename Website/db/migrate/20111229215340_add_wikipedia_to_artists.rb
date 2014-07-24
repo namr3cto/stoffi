@@ -2,6 +2,6 @@
 class AddWikipediaToArtists < ActiveRecord::Migration
   def change
     add_column :artists, :picture, :string
-    add_column :artists, :description, :text
+    #add_column :artists, :description, :text
   end
 end

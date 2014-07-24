@@ -4,7 +4,6 @@ class CreateAlbums < ActiveRecord::Migration
     create_table :albums do |t|
       t.string :title
       t.integer :year
-	  t.integer :artist_id
       t.string :description
 
       t.timestamps

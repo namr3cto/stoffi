@@ -9,8 +9,4 @@ class AlbumsArtists < ActiveRecord::Migration
   def down
 	drop_table :albums_artists
   end
-  
-  def change
-    remove_column :albums, :artist_id
-  end
 end

@@ -9,12 +9,13 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class PagesController < ApplicationController
-	oauthenticate :only => [ :remote, :foo ]
+	oauthenticate :only => [ :remote ]
 	
 	before_filter :set_title_and_description, :except => :search
 	respond_to :html, :mobile, :embedded, :json, :xml
 	
 	def foo
+		render text: Rails.env and return
 		params = {
 			:artist => "Afasi & Filthy",
 			:track => {

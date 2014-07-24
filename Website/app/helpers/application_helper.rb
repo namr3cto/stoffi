@@ -184,10 +184,10 @@ module ApplicationHelper
 			}.merge(options.reject { |k,v| filtered_options.include? k }))
 			
 		elsif options[:type] == :function
-			link_to_function(content, destination, :class => c, :style => s, :id => options[:id])
+			link_to(content, '#', onclick: destination, :class => c, :style => s, :id => options[:id])
 		elsif options[:type] == :form
 			destination = "" unless destination
-			link_to_function(content, "#{destination}$(this).closest('form').submit()", :class => c, :style => s, :id => options[:id])
+			link_to(content, '#', onclick: "#{destination}$(this).closest('form').submit()", :class => c, :style => s, :id => options[:id])
 		end
 	end
 	

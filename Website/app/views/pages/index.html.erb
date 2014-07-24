@@ -47,7 +47,7 @@
 				<% slides.each do |s| %>
 					<% cl = "" %>
 					<% cl = "active" if s[:name] == slide[:name] %>
-					<%= link_to_function "●", "jumpToSlide(#{j});", :class => cl, :title => t("home.slides.#{s[:name]}.title") %>
+					<%= link_to '●', '#', onclick: "jumpToSlide(#{j}); return false", class: cl, title: t("home.slides.#{s[:name]}.title") %>
 					<% j+=1 %>
 				<% end %>
 				<% if slide[:url] %>

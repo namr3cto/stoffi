@@ -30,13 +30,13 @@ class User < ActiveRecord::Base
 	has_many :translations
 	has_many :donations
 	has_many :apps, :class_name => "ClientApplication", :dependent => :destroy
-	has_many :tokens, :class_name => "OauthToken", :order => "authorized_at desc", :include => [:client_application], :dependent => :destroy
+	has_many :tokens, -> { order "authorized_at desc" }, class_name: "OauthToken", dependent: :destroy
 	has_and_belongs_to_many :songs, :uniq => true
 	has_and_belongs_to_many :playlist_subscriptions, :class_name => "Playlist", :join_table => "playlist_subscribers", :uniq => true
 
 	# Setup accessible (or protected) attributes for your model
-	attr_accessible :email, :password, :password_confirmation, :remember_me, :unique_token, :id,
-		:name_source, :custom_name, :image, :show_ads, :has_password
+	#attr_accessible :email, :password, :password_confirmation, :remember_me, :unique_token, :id,
+	#	:name_source, :custom_name, :image, :show_ads, :has_password
 	
 	# The name of the user.
 	#

@@ -16,35 +16,35 @@ Stoffi::Application.routes.draw do
 			delete "leave",      :to => "users/registrations#destroy",   :as => :leave
 			get "forgot",        :to => "users/passwords#new",           :as => :forgot
 			get "reset",         :to => "users/passwords#edit",          :as => :reset
-			get "unlock",        :to => "users/unlocks#new",            :as => :unlock
+			get "unlock",        :to => "users/unlocks#new",             :as => :unlock
 			get "dashboard",     :to => "users/registrations#dashboard", :as => :dashboard
 			put "settings",      :to => "users/registrations#settings",  :as => :settings
 			
-			match "profile(/:user_id)/playlists", :to => "playlists#by"
+			get "profile(/:user_id)/playlists", :to => "playlists#by"
 			get "profile(/:id)", :to => "users/registrations#show",      :as => :profile
 			
-			match "me/playlists", :to => "playlists#by"
+			get "me/playlists", :to => "playlists#by"
 			get "me",            :to => "users/registrations#show",      :as => :me
 			
 			# handle failed omniauth
 			get "auth/failure", :to => "users/sessions#new"
 			
 			# we need to overwrite default X_path for proper redirection from devise
-			post "login",  :to => "users/sessions#create",      :as => :user_session
-			post "login",  :to => "users/sessions#create",      :as => :new_user_session
-			get  "login",  :to => "users/sessions#new",         :as => :new_user_session
+			post "login",  :to => "users/sessions#create",      :as => :xxuser_session
+			post "login",  :to => "users/sessions#create",      :as => :xxnew_user_session
+			get  "login",  :to => "users/sessions#new",         :as => :xxxnew_user_session
 			
-			post "join",     :to => "users/registrations#create", :as => :user_registration
-			get  "join",     :to => "users/registrations#new",    :as => :new_user_registration
-			get  "settings", :to => "users/registrations#edit",  :as => :edit_user_registration
+			post "join",     :to => "users/registrations#create", :as => :xxuser_registration
+			get  "join",     :to => "users/registrations#new",    :as => :xxnew_user_registration
+			get  "settings", :to => "users/registrations#edit",  :as => :xxedit_user_registration
 			
-			post "forgot", :to => "users/passwords#create",     :as => :user_password
-			get  "forgot", :to => "users/passwords#new",        :as => :new_user_password
-			get  "reset",  :to => "users/passwords#create",     :as => :edit_user_password
-			put  "reset",  :to => "users/passwords#update",     :as => :edit_user_password
+			post "forgot", :to => "users/passwords#create",     :as => :xxuser_password
+			get  "forgot", :to => "users/passwords#new",        :as => :xxnew_user_password
+			get  "reset",  :to => "users/passwords#create",     :as => :xxedit_user_password
+			put  "reset",  :to => "users/passwords#update",     :as => :xxxedit_user_password
 			
-			post "unlock", :to => "devise/unlocks#create",      :as => :user_unlock
-			get  "unlock", :to => "devise/unlocks#new",         :as => :new_user_unlock
+			post "unlock", :to => "devise/unlocks#create",      :as => :xxuser_unlock
+			get  "unlock", :to => "devise/unlocks#new",         :as => :xxnew_user_unlock
 			
 			get "profile(/:id)", :to => "users/registrations#show",      :as => :user
 		end
@@ -58,26 +58,26 @@ Stoffi::Application.routes.draw do
 		}
 		resources :users
 
-		match "youtube/:action" => "youtube"
+		get "youtube/:action" => "youtube"
 		
-		match "/news",       :to => "pages#news",       :as => :news
-		match "/tour",       :to => "pages#tour",       :as => :tour
-		match "/get",        :to => "pages#get",        :as => :get
-		match "/download",   :to => "pages#download",   :as => :download
-		match "/contact",    :to => "pages#contact",    :as => :contact
-		match "/about",      :to => "pages#about",      :as => :about
-		match "/legal",      :to => "pages#legal",      :as => :legal
-		match "/money",      :to => "pages#money",      :as => :money
-		match "/remote",     :to => "pages#remote",     :as => :remote
-		match "/history",    :to => "pages#history",    :as => :history
-		match "/language",   :to => "pages#language",   :as => :lang
-		match "/donate",     :to => "pages#donate",     :as => :donate
-		match "/mail",       :to => "pages#mail",       :as => :mail
-		match "/facebook",   :to => "pages#facebook",   :as => :facebook
-		match "/channel",    :to => "pages#channel",    :as => :facebook_channel
-		match "/search",     :to => "pages#search",     :as => :search
-		match "/old",        :to => "pages#old",        :as => :old
-		match "/foo",        :to => "pages#foo",        :as => :foo
+		get "/news",       :to => "pages#news",       :as => :news
+		get "/tour",       :to => "pages#tour",       :as => :tour
+		get "/get",        :to => "pages#get",        :as => :get
+		get "/download",   :to => "pages#download",   :as => :download
+		get "/contact",    :to => "pages#contact",    :as => :contact
+		get "/about",      :to => "pages#about",      :as => :about
+		get "/legal",      :to => "pages#legal",      :as => :legal
+		get "/money",      :to => "pages#money",      :as => :money
+		get "/remote",     :to => "pages#remote",     :as => :remote
+		get "/history",    :to => "pages#history",    :as => :history
+		get "/language",   :to => "pages#language",   :as => :lang
+		get "/donate",     :to => "pages#donate",     :as => :donate
+		get "/mail",       :to => "pages#mail",       :as => :mail
+		get "/facebook",   :to => "pages#facebook",   :as => :facebook
+		get "/channel",    :to => "pages#channel",    :as => :facebook_channel
+		get "/search",     :to => "pages#search",     :as => :search
+		get "/old",        :to => "pages#old",        :as => :old
+		get "/foo",        :to => "pages#foo",        :as => :foo
 
 		resources :translations, :languages, :votes
 		resources :songs, :artists
@@ -101,7 +101,7 @@ Stoffi::Application.routes.draw do
 		
 		resources :albums do
 			collection do
-				match "/by/:artist_id", :to => "albums#by"
+				get "/by/:artist_id", :to => "albums#by"
 			end
 		end
 		
@@ -110,19 +110,19 @@ Stoffi::Application.routes.draw do
 				put "follow"
 			end
 			collection do
-				match "/by/:user_id", :to => "playlists#by"
+				get "/by/:user_id", :to => "playlists#by"
 			end
 		end
 		
 		resources :shares do
 			collection do
-				match "/by/:user_id", :to => "shares#by"
+				get "/by/:user_id", :to => "shares#by"
 			end
 		end
 		
 		resources :donations do
 			collection do
-				match "/by/:user_id", :to => "donations#by"
+				get "/by/:user_id", :to => "donations#by"
 			end
 		end
 		
@@ -136,32 +136,32 @@ Stoffi::Application.routes.draw do
 			end
 		end
 
-		match "/oauth/test_request",      :to => "oauth#test_request",      :as => :test_request
-		match "/oauth/token",             :to => "oauth#token",             :as => :token
-		match "/oauth/access_token",      :to => "oauth#access_token",      :as => :access_token
-		match "/oauth/request_token",     :to => "oauth#request_token",     :as => :request_token
-		match "/oauth/authorize",         :to => "oauth#authorize",         :as => :authorize
-		match "/oauth/revoke",            :to => "oauth#revoke",            :as => :revoke
-		match "/oauth",                   :to => "oauth#index",             :as => :oauth
+		get "/oauth/test_request",      :to => "oauth#test_request",      :as => :test_request
+		get "/oauth/token",             :to => "oauth#token",             :as => :token
+		get "/oauth/access_token",      :to => "oauth#access_token",      :as => :access_token
+		get "/oauth/request_token",     :to => "oauth#request_token",     :as => :request_token
+		get "/oauth/authorize",         :to => "oauth#authorize",         :as => :authorize
+		get "/oauth/revoke",            :to => "oauth#revoke",            :as => :revoke
+		get "/oauth",                   :to => "oauth#index",             :as => :oauth
 		
-		match "/auth/:provider/callback" => "links#create"
+		get "/auth/:provider/callback" => "links#create"
 		
-		match "/contribute" => "contribute#index"
-		match "/contribute/translate", :to => "languages#index", :as => :contribute
-		match "/contribute(/:action)" => "contribute", :as => :contribute
+		get "/contribute" => "contribute#index"
+		get "/contribute/translate", :to => "languages#index", :as => :translate
+		get "/contribute(/:action)" => "contribute", :as => :xxcontribute
 	end
 	
-	match "(:l)" => "pages#index", :as => :root
+	get "(:l)" => "pages#index", :as => :root
 
 	# The priority is based upon order of creation:
 	# first created -> highest priority.
 
 	# Sample of regular route:
-	#   match "products/:id" => "catalog#view"
+	#   get "products/:id" => "catalog#view"
 	# Keep in mind you can assign values other than :controller and :action
 
 	# Sample of named route:
-	#   match "products/:id/purchase" => "catalog#purchase", :as => :purchase
+	#   get "products/:id/purchase" => "catalog#purchase", :as => :purchase
 	# This route can be invoked with purchase_url(:id => product.id)
 
 	# Sample resource route (maps HTTP verbs to controller actions automatically):
@@ -207,5 +207,5 @@ Stoffi::Application.routes.draw do
 
 	# This is a legacy wild controller route that"s not recommended for RESTful applications.
 	# Note: This route will make all actions in every controller accessible via GET requests.
-	# match ":controller(/:action(/:id(.:format)))"
+	# get ":controller(/:action(/:id(.:format)))"
 end
