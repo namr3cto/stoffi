@@ -52,7 +52,7 @@ class OauthClientsController < ApplicationController
 
 	# GET /apps/1
 	def show
-		@app = ClientApplication.find_by_id(params[:id])
+		@app = ClientApplication.find(params[:id])
 		@channels = @app.user == nil ? [] : ["user_"+@app.user.id]
 		@title = @app.name
 		@description = t "apps.description"
@@ -79,8 +79,8 @@ class OauthClientsController < ApplicationController
 
 	# GET /apps/1/revoke
 	def revoke
-		@app = ClientApplication.find_by_id(params[:id])
-		tokens = current_user.tokens.find_all_by_client_application_id(@app.id)
+		@app = ClientApplication.find(params[:id])
+		tokens = current_user.tokens.find_by(client_application_id: @app.id)
 		
 		tokens.each do |t|
 			t.delete

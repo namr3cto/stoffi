@@ -11,7 +11,7 @@
 			<% if not admin? and user_signed_in? and current_user.id == @donation.user.id and @donation.revokable? %>
 				<%= form_for(@donation) do |f| %>
 					<%= f.hidden_field :status, { :value => "revoked" } %>
-					<%= button_tag t("donations.revoke"), "", "", { :color => :blue, :type => :form } %>
+					<%= custom_button_tag t("donations.revoke"), "", "", { :color => :blue, :type => :form } %>
 				<% end %>
 			<% end %>
 		</div>
@@ -62,7 +62,7 @@
 
 				<div class="bottom">
 					<div class="right">
-						<%=button_tag t("save"), nil, "save", { :type => :form, :color => :blue } %>
+						<%=custom_button_tag t("save"), nil, "save", { :type => :form, :color => :blue } %>
 					</div>
 				</div>
 			<% end %>
@@ -73,41 +73,3 @@
 <div id="sidebar">
 	<%= render :partial => (user_signed_in? ? "sidebars/user" : "sidebars/main") %>
 </div>
-
-<% if false %>
-<p id="notice"><%= notice %></p>
-
-<p>
-  <b>Artist:</b>
-  <%= @donation.artist_id %>
-</p>
-
-<p>
-  <b>Artist percentage:</b>
-  <%= @donation.artist_percentage %>
-</p>
-
-<p>
-  <b>Stoffi percentage:</b>
-  <%= @donation.stoffi_percentage %>
-</p>
-
-<p>
-  <b>Charity percentage:</b>
-  <%= @donation.charity_percentage %>
-</p>
-
-<p>
-  <b>Amount:</b>
-  <%= @donation.amount %>
-</p>
-
-<p>
-  <b>User:</b>
-  <%= @donation.user_id %>
-</p>
-
-
-<%= link_to 'Edit', edit_donation_path(@donation) %> |
-<%= link_to 'Back', donations_path %>
-<% end %>

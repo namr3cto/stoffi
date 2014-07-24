@@ -9,7 +9,7 @@ class OauthController < ApplicationController
 		# we should just pass it on and not ask again
 		# for authorization
 		if request.get? and params[:oauth_token]
-			@token = ::RequestToken.find_by_token! params[:oauth_token]
+			@token = ::RequestToken.find_by!(token: params[:oauth_token])
 			if @token and !@token.invalidated?
 			
 				# find access token for the app
@@ -51,7 +51,7 @@ class OauthController < ApplicationController
 	# should authenticate and return a user if valid password.
 	# This example should work with most Authlogic or Devise.
 	def authenticate_user(username,password)
-		user = User.find_by_email params[:username]
+		user = User.find_by(email: params[:username])
 		if user && user.valid_password?(params[:password])
 			user
 		else

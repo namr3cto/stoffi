@@ -11,7 +11,7 @@
 	<%= f.password_field :password, :class => "field", :placeholder => t("dialog.password_choose_placeholder") %>
 	<%= f.password_field :password_confirmation, :class => "field", :placeholder => t("dialog.password_confirm_placeholder") %>
 	
-	<%=button_tag t("reset.link"), "hashPasswords();", "login", { :type => :form, :color => :gold } %>
+	<%=custom_button_tag t("reset.link"), "hashPasswords();", "login", { :type => :form, :color => :gold } %>
 
 	<%= render :partial => "devise/shared/links" %>
 <% end %>

@@ -63,8 +63,8 @@
 		back_url = app_path(@app) if @app.id
 		%>
 		<% unless @no_back %>
-			<%=button_tag t("back"), back_url, "back" %>
+			<%=custom_button_tag t("back"), back_url, "back" %>
 		<% end %>
-		<%=button_tag t(submit_label), nil, "save", { :type => :form, :color => :blue } %>
+		<%=custom_button_tag t(submit_label), nil, "save", { :type => :form, :color => :blue } %>
 	</div>
 </div>

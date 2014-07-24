@@ -70,8 +70,8 @@
 			back_url = playlists_path
 			back_url = playlist_path(@playlist) if @playlist.id
 			%>
-			<%=button_tag t("back"), back_url, "back" %>
-			<%=button_tag t(submit_label), nil, "save", { :type => :form, :color => :blue } %>
+			<%=custom_button_tag t("back"), back_url, "back" %>
+			<%=custom_button_tag t(submit_label), nil, "save", { :type => :form, :color => :blue } %>
 		</div>
 	</div>
 	

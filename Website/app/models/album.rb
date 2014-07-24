@@ -24,7 +24,7 @@ class Album < ActiveRecord::Base
 	# The artist will be created if it is not found (unless <tt>value</tt> is an ID).
 	def self.get(value)
 		value = find(value) if value.is_a?(Integer)
-		value = find_or_create_by_title(value) if value.is_a?(String)
+		value = find_or_create_by(title: value) if value.is_a?(String)
 		return value if value.is_a?(Playlist)
 		return nil
 	end

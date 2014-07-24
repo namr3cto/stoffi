@@ -20,8 +20,6 @@ class Device < ActiveRecord::Base
 	belongs_to :app, :foreign_key => :client_application_id, :class_name => "ClientApplication"
 	belongs_to :user
 	
-	attr_accessible :name, :version, :configuration_id
-	
 	# Whether or not the device is currently online.
 	def online?
 		status == "online"

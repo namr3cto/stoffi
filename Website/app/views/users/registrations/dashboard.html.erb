@@ -62,7 +62,7 @@
 			<%=t "playlists.empty.short" %>
 		</p>
 			
-		<%= button_tag t("create"), new_playlist_path, "", { :color => :blue } %>
+		<%= custom_button_tag t("create"), new_playlist_path, "", { :color => :blue } %>
 		
 		<h1><%=t "dashboard.support.title" %></h1>
 		<ul class="vertical" data-list="donations">
@@ -74,7 +74,7 @@
 			<%=t "dashboard.support.empty" %>
 		</p>
 			
-		<%=button_tag t("donations.send"), "donate()", "dollar", { :type => :function, :color => :gold } %>
+		<%=custom_button_tag t("donations.send"), "donate()", "dollar", { :type => :function, :color => :gold } %>
 		
 		<h1><%=t "dashboard.devices.title" %></h1>
 		<ul class="vertical" data-list="devices">
@@ -88,7 +88,7 @@
 		
 		<h1><%=t "dashboard.remote.title" %></h1>
 		<% if @configuration != nil and @configuration.devices.count > 0 %>
-			<%= button_tag t("dashboard.remote.button"), remote_path, "", { :color => :blue } %>
+			<%= custom_button_tag t("dashboard.remote.button"), remote_path, "", { :color => :blue } %>
 		<% else %>
 			<p class="message"><%=t "dashboard.remote.empty" %></p>
 		<% end %>

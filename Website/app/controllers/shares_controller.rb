@@ -79,7 +79,7 @@ class SharesController < ApplicationController
 			:album => params[:track][:album]
 		}) if params[:track]
 		
-		playlist.songs << song if song && playlist && playlist.songs.find_by_id(song.id) == nil
+		playlist.songs << song if song && playlist && playlist.songs.find(song.id) == nil
 		@share.playlist = playlist
 		@share.resource_id = @share.resource_type == "song" ? song.id : playlist.id 
 		@share.device = @current_device

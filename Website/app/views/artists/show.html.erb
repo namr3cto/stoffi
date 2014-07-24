@@ -21,7 +21,7 @@
 		<% end %>
 		<div class="actions">
 			
-			<%= button_tag(t("donations.text", :receiver => @artist.name), "donate(#{@artist.id})", "dollar_small",
+			<%= custom_button_tag(t("donations.text", :receiver => @artist.name), "donate(#{@artist.id})", "dollar_small",
 				:type => :function, :color => :gold, :class => :small) unless @artist.undonatable %>
 			
 			<div class="social-buttons">
@@ -115,7 +115,7 @@
 		<% else %>
 			<%=t "donations.long_text_html", :receiver => d(@artist.name) %>
 			<div class="right">
-				<%= button_tag t("donations.button"), "donate(#{@artist.id})", "dollar", :type => :function, :color => :blue %>
+				<%= custom_button_tag t("donations.button"), "donate(#{@artist.id})", "dollar", :type => :function, :color => :blue %>
 			</div>
 		<% end %>
 	</div>
@@ -151,7 +151,7 @@
 			<% end %>
 			
 			<div class="right">
-				<%= button_tag t("save"), "", "save", :type => :form, :color => :gold %>
+				<%= custom_button_tag t("save"), "", "save", :type => :form, :color => :gold %>
 			</div>
 		<% end %>
 	</div>

@@ -143,12 +143,12 @@ module ApplicationHelper
 			content_tag(:span, raw(truncate_html(text, :length => options[:length])), :class => 'contracted') +
 			attr +
 			content_tag(:span, :class => 'expander') do
-				link_to_function t("show_more"), "expand(this);"
+				link_to t("show_more"), '#', onclick: "expand(this);"
 			end
 		end
 	end
 	
-	def button_tag(text, destination, image = "", options = {})
+	def custom_button_tag(text, destination, image = "", options = {})
 		options.reverse_merge!(
 		{
 			:type => :link
@@ -296,8 +296,8 @@ module ApplicationHelper
 			else
 				del = "removeItem('#{del_url}', '#{id}', event, '#{collection}')"
 				del = options[:delete_func] if options[:delete_func]
-				del = link_to_function "x",
-					del,
+				del = link_to "x", '#',
+					onclick: del,
 					:class => :delete,
 					:title => h(options[:delete])
 			end

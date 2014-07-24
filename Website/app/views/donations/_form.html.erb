@@ -156,8 +156,8 @@ $(document).ready(function()
 		<div class="bottom">
 			<div class="right">
 				<%= image_tag "gfx/cards.png", :class => "cards" %>
-				<%=button_tag t("donations.send"), nil, "dollar", { :type => :form, :color => :gold } %>
-				<%=button_tag t("donations.learn"), money_path, "info", { :color => :blue } %>
+				<%=custom_button_tag t("donations.send"), nil, "dollar", { :type => :form, :color => :gold } %>
+				<%=custom_button_tag t("donations.learn"), money_path, "info", { :color => :blue } %>
 			</div>
 		</div>
 		

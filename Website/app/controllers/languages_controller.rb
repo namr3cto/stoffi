@@ -79,8 +79,8 @@ class LanguagesController < ApplicationController
 	end
 	
 	def english(translatee)
-		english = Language.find_by_english_name("english")
-		t = translatee.translations.find_by_language_id(english.id)
+		english = Language.find_by(english_name: "english")
+		t = translatee.translations.find_by(language_id: english.id)
 		return t == nil ? translatee.name : t.content
 	end
 	helper_method :english

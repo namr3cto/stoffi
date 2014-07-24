@@ -282,8 +282,8 @@ class Artist < ActiveRecord::Base
 		value = self.find(value) if value.is_a?(Integer)
 		if value.is_a?(String)
 			name = value
-			value = self.find_by_name(name.sub("&","&#38;"))
-			value = self.find_or_create_by_name(name) unless value.is_a?(Artist)
+			value = self.find_by(name: name.sub("&","&#38;"))
+			value = self.find_or_create_by(name: name) unless value.is_a?(Artist)
 		end
 		return value if value.is_a?(Artist)
 		return nil

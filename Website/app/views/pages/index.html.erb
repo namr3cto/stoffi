@@ -62,7 +62,7 @@
 <div class="center">
 	<% if @os == "windows 7" %>
 		<% subtitle = "#{t("home.download_button.os.windows7")} &nbsp; &nbsp; #{t("home.download_button.size")}: 5.1 Mb" %>
-		<%=button_tag t("home.download_button.title"), download_path, "arrow_down", { :color => :green, :subtitle => subtitle, :id => "download-button" } %>
+		<%=custom_button_tag t("home.download_button.title"), download_path, "arrow_down", { :color => :green, :subtitle => subtitle, :id => "download-button" } %>
 	<% end %>
 	
 	<div class="social-buttons">
@@ -121,11 +121,11 @@
 	</span>
 	<div>
 		<span id="donation-button">
-			<%=button_tag t("donations.button"), "donate()", "dollar", { :type => :function, :color => :gold } %>
+			<%=custom_button_tag t("donations.button"), "donate()", "dollar", { :type => :function, :color => :gold } %>
 		</span>
 		<span>
 			<% unless too_many_donations? %>
-				<%=button_tag t("home.latest.more"), news_path, "star", { :color => :blue } %>
+				<%=custom_button_tag t("home.latest.more"), news_path, "star", { :color => :blue } %>
 			<% end %>
 		</span>
 	</div>

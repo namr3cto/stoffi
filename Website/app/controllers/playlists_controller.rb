@@ -115,9 +115,9 @@ class PlaylistsController < ApplicationController
 
 	# POST /playlists
 	def create
-		exists = current_user.playlists.find_by_name(params[:playlist][:name]) != nil
+		exists = current_user.playlists.find_by(name: params[:playlist][:name]) != nil
 		@playlist = Playlist.get(current_user, params[:playlist][:name])
-		@playlist.assign_attributes(params[:playlist])
+		@playlist.assign_attributes(playlist_params)
 		@playlist.is_public = true # TODO: set default in db instead
 		success = @playlist.save
 		
@@ -148,7 +148,7 @@ class PlaylistsController < ApplicationController
 							:artist => track['artist'],
 							:album => track['album']
 						})
-						if song and not @playlist.songs.find_by_id(song.id)
+						if song and not @playlist.songs.exists?(song.id)
 							@playlist.songs << song
 						end
 					end
@@ -216,7 +216,7 @@ class PlaylistsController < ApplicationController
 						:album => track['album']
 					})
 					
-					if song and @playlist.songs.find_by_id(song.id) == nil
+					if song and not @playlist.songs.exists?(song.id)
 						@playlist.songs << song
 						props['songs']['added'] << song
 					end
@@ -227,7 +227,7 @@ class PlaylistsController < ApplicationController
 			if songs['removed']
 				songs['removed'].each do |track|
 					song = Song.find(track['id']) if (track['id'] and not track['id'].starts_with?("tmp_"))
-					song = Song.find_by_path(track['path']) if track['path'] and not song
+					song = Song.find_by(path: track['path']) if track['path'] and not song
 					
 					@playlist.songs.delete(song) if song
 					
@@ -237,7 +237,7 @@ class PlaylistsController < ApplicationController
 			
 		end
 		
-		success = @playlist.update_attributes(params[:playlist])
+		success = @playlist.update_attributes(playlist_params)
 		
 		if success
 			if not @playlist.is_public or @playlist.songs.count == 0
@@ -277,11 +277,17 @@ class PlaylistsController < ApplicationController
 		
 		not_found('playlist') and return unless @playlist.is_public
 		
-		unless @playlist.subscribers.find_by_id(current_user.id)
+		unless @playlist.subscribers.exists?(current_user.id)
 			@playlist.subscribers << current_user
 			SyncController.send('execute', @playlist, request, 'follow')
 		end
 		
 		respond_with(@playlist)
+	end
+	
+	private
+	
+	def playlist_params
+		params.require(:playlist).permit(:name, :user, :is_public)
 	end
 end

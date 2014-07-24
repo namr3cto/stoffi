@@ -26,10 +26,10 @@ artist = @song.artists.first if @song.artists.count > 0
 		<%= editable_label @song, :title, :width => 28 %>
 		<div class="actions">
 			<% if @song.youtube? or @song.soundcloud? %>
-				<%= button_tag t("links.play"), @song.play, "play_white", { :color => :blue, :class => :small } %>
+				<%= custom_button_tag t("links.play"), @song.play, "play_white", { :color => :blue, :class => :small } %>
 			<% end %>
 			<% if artist and not artist.undonatable %>
-				<%= button_tag t("donations.text", :receiver => artist.name), "donate(#{artist.id})", "dollar_small",
+				<%= custom_button_tag t("donations.text", :receiver => artist.name), "donate(#{artist.id})", "dollar_small",
 					:type => :function, :color => :gold, :class => :small %>
 			<% end %>
 			
@@ -93,7 +93,7 @@ artist = @song.artists.first if @song.artists.count > 0
 		<% else %>
 			<%=t "donations.long_text_html", :receiver => d(artist.name) %>
 			<div class="right">
-				<%= button_tag t("donations.button"), "donate(#{artist.id})", "dollar", :type => :function, :color => :blue %>
+				<%= custom_button_tag t("donations.button"), "donate(#{artist.id})", "dollar", :type => :function, :color => :blue %>
 			</div>
 		<% end %>
 	</div>

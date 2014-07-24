@@ -59,7 +59,7 @@ class Playlist < ActiveRecord::Base
 	
 	def self.get(current_user, value)
 		value = current_user.playlists.find(value) if value.is_a?(Integer)
-		value = current_user.playlists.find_or_create_by_name(value) if value.is_a?(String)
+		value = current_user.playlists.find_or_create_by(name: value) if value.is_a?(String)
 		return value if value.is_a?(Playlist)
 		return nil
 	end
@@ -68,7 +68,7 @@ class Playlist < ActiveRecord::Base
 		self.select("playlists.id, playlists.name, playlists.is_public, playlists.user_id, count(listens.id) AS listens_count").
 		joins("LEFT JOIN listens ON listens.playlist_id = playlists.id").
 		where("listens.user_id IS NULL" + (user == nil ? "" : " or listens.user_id = #{user.id}")).
-		where(user == nil ? "playlists.is_public = true" : "playlists.user_id = #{user.id}").
+		where(user == nil ? "playlists.is_public" : "playlists.user_id = #{user.id}").
 		group("playlists.id").
 		order("listens_count DESC, playlists.updated_at DESC").
 		limit(limit).

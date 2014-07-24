@@ -8,6 +8,6 @@
 		css = "lang"
 		css += " active" if I18n.locale.to_s == l
 		%>
-		<%= button_tag disp, path, flag, { :color => :blue, :class => css } %>
+		<%= custom_button_tag disp, path, flag, { :color => :blue, :class => css } %>
 	<% end %>
 </div>

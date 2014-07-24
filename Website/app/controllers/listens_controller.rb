@@ -73,9 +73,9 @@ class ListensController < ApplicationController
 			:genre => params[:track][:genre]
 		}) if params[:track]
 		
-		album.songs << song if song && album && album.songs.find_by_id(song.id) == nil
-		artist.songs << song if song && artist && artist.songs.find_by_id(song.id) == nil
-		artist.albums << album if artist && album && artist.albums.find_by_id(album.id) == nil
+		album.songs << song if song && album && album.songs.find(song.id) == nil
+		artist.songs << song if song && artist && artist.songs.find(song.id) == nil
+		artist.albums << album if artist && album && artist.albums.find(album.id) == nil
 		
 		@listen.song = song unless @listen.song
 		@listen.playlist = playlist if playlist

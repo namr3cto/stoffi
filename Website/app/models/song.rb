@@ -207,13 +207,13 @@ class Song < ActiveRecord::Base
 				value.path = p[:path] if p[:path]
 				
 				if value.save
-					value.artists << artist if artist and artist.songs.find_all_by_id(value.id).count == 0
-					value.albums << album if album and albums.songs.find_all_by_id(value.id).count == 0
-					artist.albums << album if artist and album and artist.albums.find_all_by_id(album.id).count == 0
+					value.artists << artist if artist and not artist.songs.exists?(value.id)
+					value.albums << album if album and albums.songs.exists?(value.id)
+					artist.albums << album if artist and album and artist.albums.exists?(album.id)
 				end
 			end
 		end
-		if current_user and value.is_a?(Song) and current_user.songs.find_by_id(value.id) == nil
+		if current_user and value.is_a?(Song) and not current_user.songs.exists?(value.id)
 			current_user.songs << value
 		end
 		return value if value.is_a?(Song)
@@ -227,7 +227,7 @@ class Song < ActiveRecord::Base
 		begin
 			song = nil
 			if path.start_with? "stoffi:track:" or path.start_with? "http://" or path.start_with? "https://"
-				song = find_by_path(path)
+				song = find_by(path: path)
 			end
 			unless song
 				if path.start_with? "stoffi:track:youtube:"

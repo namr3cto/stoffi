@@ -1,0 +1,47 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  query: Bob Marley
+  user_id: 1
+  page: /home
+  latitude: 50
+  longitude: 50
+  locale: us
+
+two:
+  query: bob marley
+  user_id: 1
+  page: /home
+  latitude: 50
+  longitude: 50
+  locale: us
+
+three:
+  query: Bob Sinclair
+  user_id: 1
+  page: /artists
+  latitude: 50
+  longitude: 50
+  locale: us
+
+four:
+  query: Bob Dylan
+  user_id: 2
+  page: /home
+  latitude: 30
+  longitude: 30
+  locale: us
+
+five:
+  query: Elvis Presley
+  page: /home
+  latitude: 10
+  longitude: 50
+  locale: us
+
+six:
+  query: Bob Andersson
+  page: /home
+  latitude: 60
+  longitude: 50
+  locale: se

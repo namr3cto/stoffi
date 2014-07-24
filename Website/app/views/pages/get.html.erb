@@ -5,7 +5,7 @@
 			<% if @os == "windows 7" %>
 				<% subtitle = "#{t("home.download_button.os.windows7")} &nbsp; &nbsp; #{t("home.download_button.size")}: 5.1 Mb" %>
 				<div class="download-button">
-					<%=button_tag t("home.download_button.title"), download_path, "arrow_down", { :color => :green, :subtitle => subtitle, :id => "download-button" } %>
+					<%=custom_button_tag t("home.download_button.title"), download_path, "arrow_down", { :color => :green, :subtitle => subtitle, :id => "download-button" } %>
 				</div>
 			<% else %>
 				<div class="message"><p>
@@ -65,7 +65,7 @@
 					[t("get.channels.alpha"), "alpha"]
 				]) %>
 				<p>&nbsp;</p>
-				<%= button_tag t("get.download"), "", "arrow_down_small", { :color => :blue, :type => :form } %>
+				<%= custom_button_tag t("get.download"), "", "arrow_down_small", { :color => :blue, :type => :form } %>
 			<% end %>
 		</div>
 		
@@ -88,7 +88,7 @@
 					[t("get.channels.alpha"), "alpha"]
 				]) %>
 				<p>&nbsp;</p>
-				<%= button_tag t("get.getsum"), "", "check", { :color => :blue, :type => :form } %>
+				<%= custom_button_tag t("get.getsum"), "", "check", { :color => :blue, :type => :form } %>
 			<% end %>
 		</div>
 		
@@ -134,50 +134,8 @@
 			]
 			%>
 			<% mirrors.each do |m| %>
-				<%=button_tag m[:title], m[:url], m[:title].downcase, { :color => m[:type], :width => 220 } %><br/>
+				<%=custom_button_tag m[:title], m[:url], m[:title].downcase, { :color => m[:type], :width => 220 } %><br/>
 			<% end %>
 		</div>
 	</div>
 </div>
-	
-	<!--
-	
-	<div class="main center">
-		<div class="goldenbox">
-			<h1 class="title collapsed interactive" onclick="toggleBox(this, 'variants');" id="variants-toggler">
-				<%=t "get.versions" %>
-			</h1>
-			<div id="variants" style="display: none;">
-			</div>
-		</div>
-		
-		<div class="goldenbox">
-			<h1 class="title collapsed interactive" onclick="toggleBox(this, 'mirrors');" id="mirrors-toggler">
-				<%=t "get.mirrors" %>
-			</h1>
-			<div id="mirrors" style="display: none;">
-			
-			</div>
-		</div>
-		
-		<div class="goldenbox">
-			<h1 class="title collapsed interactive" onclick="toggleBox(this, 'checksums');" id="checksums-toggler">
-				<%=t "get.checksums" %>
-			</h1>
-			<div id="checksums" style="display: none;">
-			</div>
-		</div>
-		
-		<div class="goldenbox">
-			<h1 class="title collapsed interactive" onclick="toggleBox(this, 'awards');" id="awards-toggler">
-				<%=t "get.awards" %>
-			</h1>
-			<div id="awards" style="display: none;" class="center">
-					
-					
-			</div>
-		</div>
-	</div>
-	
-</div>
--->

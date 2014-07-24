@@ -1,13 +1,13 @@
 <h1><%=t "home.latest.title" %></h1>
 <%=t "home.latest.text_html" %>
-<%=button_tag t("home.latest.more"), news_path, "star", { :color => :blue } %>
+<%=custom_button_tag t("home.latest.more"), news_path, "star", { :color => :blue } %>
 
 <h1><%= t "donations.title" %></h1>
 <% if too_many_donations? %>
 	<%= t "donations.full_text_html" %>
 <% else %>
 	<%=t "donations.front_text_html" %>
-	<%=button_tag t("donations.button"), new_donation_url, "dollar", { :color => :gold } %>
+	<%=custom_button_tag t("donations.button"), new_donation_url, "dollar", { :color => :gold } %>
 <% end %>
 
 <div class="social-buttons">

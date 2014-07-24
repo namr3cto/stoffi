@@ -9,7 +9,7 @@
 	<div class="interactive gold card box" onclick="location.href='<%=url_for @exact_artist %>';">
 		<%=image_tag @exact_artist.picture%>
 		<div class="buttons">
-			<%= button_tag(t("donations.button"), "donate(#{@exact_artist.id})", "dollar_small",
+			<%= custom_button_tag(t("donations.button"), "donate(#{@exact_artist.id})", "dollar_small",
 				:type => :function, :color => :gold, :class => :small) unless @exact_artist.undonatable %>
 		</div>
 		<h2><%=@exact_artist.name%></h2>

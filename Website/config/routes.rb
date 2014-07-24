@@ -136,13 +136,13 @@ Stoffi::Application.routes.draw do
 			end
 		end
 
-		get "/oauth/test_request",      :to => "oauth#test_request",      :as => :test_request
-		get "/oauth/token",             :to => "oauth#token",             :as => :token
-		get "/oauth/access_token",      :to => "oauth#access_token",      :as => :access_token
-		get "/oauth/request_token",     :to => "oauth#request_token",     :as => :request_token
-		get "/oauth/authorize",         :to => "oauth#authorize",         :as => :authorize
-		get "/oauth/revoke",            :to => "oauth#revoke",            :as => :revoke
-		get "/oauth",                   :to => "oauth#index",             :as => :oauth
+		get   "/oauth/test_request",      :to => "oauth#test_request",      :as => :test_request
+		get   "/oauth/token",             :to => "oauth#token",             :as => :token
+		post  "/oauth/access_token",      :to => "oauth#access_token",      :as => :access_token
+		post  "/oauth/request_token",     :to => "oauth#request_token",     :as => :request_token
+		match "/oauth/authorize",         :to => "oauth#authorize",         :as => :authorize,		via: [:get, :post]
+		get   "/oauth/revoke",            :to => "oauth#revoke",            :as => :revoke
+		get   "/oauth",                   :to => "oauth#index",             :as => :oauth
 		
 		get "/auth/:provider/callback" => "links#create"
 		

@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140722151900) do
+ActiveRecord::Schema.define(version: 20140724211357) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -93,7 +93,7 @@ ActiveRecord::Schema.define(version: 20140722151900) do
 
   create_table "client_applications", force: true do |t|
     t.string   "name"
-    t.string   "url"
+    t.string   "website"
     t.string   "support_url"
     t.string   "callback_url"
     t.string   "key",          limit: 40
@@ -260,16 +260,18 @@ ActiveRecord::Schema.define(version: 20140722151900) do
     t.integer  "user_id"
     t.string   "provider"
     t.string   "uid"
-    t.boolean  "do_share",           default: true
-    t.boolean  "do_listen",          default: true
+    t.boolean  "do_share",            default: true
+    t.boolean  "do_listen",           default: true
     t.datetime "created_at"
     t.datetime "updated_at"
-    t.boolean  "do_donate",          default: true
-    t.boolean  "do_create_playlist", default: true
-    t.boolean  "show_button",        default: true
+    t.boolean  "do_donate",           default: true
+    t.boolean  "do_create_playlist",  default: true
+    t.boolean  "show_button",         default: true
     t.string   "refresh_token"
     t.datetime "token_expires_at"
     t.string   "encrypted_uid"
+    t.string   "access_token"
+    t.string   "access_token_secret"
   end
 
   create_table "list_configs", force: true do |t|
@@ -339,6 +341,7 @@ ActiveRecord::Schema.define(version: 20140722151900) do
     t.boolean  "is_public",  default: true
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.string   "filter"
   end
 
   add_index "playlists", ["user_id", "name"], name: "by_user_and_name", unique: true
@@ -359,6 +362,18 @@ ActiveRecord::Schema.define(version: 20140722151900) do
   create_table "queues_songs", id: false, force: true do |t|
     t.integer "queue_id"
     t.integer "song_id"
+  end
+
+  create_table "searches", force: true do |t|
+    t.string   "query",      null: false
+    t.integer  "user_id"
+    t.string   "page",       null: false
+    t.integer  "latitude"
+    t.integer  "longitude"
+    t.string   "locale"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "categories"
   end
 
   create_table "shares", force: true do |t|

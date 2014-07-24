@@ -7,7 +7,7 @@
 
 	<%= f.email_field :email, :class => "field", :placeholder => t("dialog.email_placeholder") %>
 	
-	<%=button_tag t("forgot.link"), nil, "question", { :type => :form, :color => :gold } %>
+	<%=custom_button_tag t("forgot.link"), nil, "question", { :type => :form, :color => :gold } %>
 	
 	<%= render :partial => "devise/shared/links" %>
 <% end %>

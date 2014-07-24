@@ -7,7 +7,7 @@
 <div class="actions">
 
 	<% unless @artist.undonatable %>
-		<%= button_tag(t("donations.text", :receiver => @artist.name), "donate(#{@artist.id})", "dollar_small",
+		<%= custom_button_tag(t("donations.text", :receiver => @artist.name), "donate(#{@artist.id})", "dollar_small",
 			:type => :function, :color => :gold, :class => :small) unless @artist.undonatable %>
 	<% end %>
 	

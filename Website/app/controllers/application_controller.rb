@@ -45,7 +45,7 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def owns(resource, id)
-		o = resource.find_by_id(id)
+		o = resource.find(id)
 		return false if current_user == nil or o == nil
 		return false unless o.user == current_user
 		return true
@@ -66,7 +66,7 @@ class ApplicationController < ActionController::Base
 		if params[:oauth_token] && params[:oauth_secret_token]
 			t = params[:oauth_token]
 			s = params[:oauth_secret_token]
-			token = OauthToken.find_by_token_and_secret(t, s)
+			token = OauthToken.find_by(token: t, secret: s)
 			if token
 				sign_in(token.user)
 			else
@@ -405,6 +405,20 @@ class ApplicationController < ActionController::Base
 		db = File.join(Rails.root, "lib", "assets", "GeoIPASNum.dat")
 		if File.exists? db
 			GeoIP.new(db).asn(ip)
+		else
+			nil
+		end
+	end
+	helper_method :origin_network
+	
+	# Gets the origin position from an IP
+	def origin_position(ip)
+		ip = '81.233.98.217'
+		db = File.join(Rails.root, "lib", "assets", "GeoLiteCity.dat")
+		if File.exists? db
+			city = GeoIP.new(db).city(ip)
+			return nil unless city
+			return {longitude: city[:longitude], latitude: city[:latitude]}
 		else
 			nil
 		end

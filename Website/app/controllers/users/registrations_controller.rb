@@ -191,7 +191,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		Link.available.each do |link|
 			n = link[:name]
 			ln = link[:link_name] || n.downcase
-			if current_user.links.find_by_provider(ln) == nil
+			if current_user.links.find_by(provider: ln) == nil
 				img = "auth/#{n.downcase}_14_white"
 				title = t("auth.link", :service => n)
 				path = "/auth/#{ln}"

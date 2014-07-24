@@ -71,7 +71,7 @@
 			:placeholder => t("translatee.params.name"), :class => "field" %>
 		<%= text_field_tag "new_param_example", "", :size => 20,
 			:placeholder => t("translatee.params.example"), :class => "field" %>
-		<%= button_tag t("create"), :class => "button", :type => "button",
+		<%= custom_button_tag t("create"), :class => "button", :type => "button",
 			:onclick => "createParam(#{@admin_translatee.id});" %>
 	</div>
 </div>

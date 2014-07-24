@@ -34,7 +34,7 @@ class PagesController < ApplicationController
 			:art_url => params[:track][:art_url],
 			:genre => params[:track][:genre]
 		})
-		if song && artist && artist.songs.find_by_id(song.id) == nil
+		if song && artist && artist.songs.find(song.id) == nil
 			render :text => "add" and return
 		else
 			render :text => "no add" and return
@@ -195,6 +195,12 @@ class PagesController < ApplicationController
 		render :layout => false
 	end
 	
+	def search_suggestions
+		return [] unless params[:q]
+		
+		params[:q] = CGI::escapeHTML(params[:q])
+	end
+	
 	def search
 		redirect_to :action => :index and return if params[:format] == "mobile"
 	
@@ -215,10 +221,25 @@ class PagesController < ApplicationController
 		l = params[:l].to_i
 		l = 50 if l > 50
 		
+		# get position of user
+		pos = origin_position(request.remote_ip)
+		
+		begin
+			s = Search.new
+			s.query = params[:q]
+			s.longitude = pos[:longitude]
+			s.latitude = pos[:latitude]
+			s.categories = params[:c]
+			s.page = request.referer
+			s.user = current_user if user_signed_in?
+		rescue
+			logger.error "could not save search for #{params[:q]}"
+		end
+		
 		@result = Array.new
 		
 		if c.include? 'artists'
-			@exact_artist = Artist.find_by_name(params[:q])
+			@exact_artist = Artist.find_by(name: params[:q])
 			Artist.search(params[:q]).limit(l).each do |i|
 				@result.push(
 				{
@@ -234,7 +255,7 @@ class PagesController < ApplicationController
 		end
 		
 		if c.include? 'songs'
-			@exact_song = Song.find_by_title(params[:q])
+			@exact_song = Song.find_by(title: params[:q])
 		
 			# get source parameter
 			params[:s] = params[:sources] if params[:s] == nil && params[:sources]
@@ -359,7 +380,7 @@ class PagesController < ApplicationController
 		end
 		
 		if c.include? 'devices' and signed_in?
-			@exact_device = current_user.devices.find_by_name(params[:q])
+			@exact_device = current_user.devices.find_by(name: params[:q])
 			current_user.devices.search(params[:q]).limit(l).each do |i|
 				begin
 					@result.push(
@@ -378,8 +399,8 @@ class PagesController < ApplicationController
 		end
 		
 		if c.include? 'playlists'
-			@exact_playlist = current_user.playlists.find_by_name(params[:q]) if signed_in?
-			@exact_playlist = Playlist.find_by_name_and_is_public(params[:q], true) unless @exact_playlist
+			@exact_playlist = current_user.playlists.find_by(name: params[:q]) if signed_in?
+			@exact_playlist = Playlist.find_by(name: params[:q], is_public: true) unless @exact_playlist
 			Playlist.search(current_user, params[:q]).limit(l).each do |i|
 				begin
 					@result.push(

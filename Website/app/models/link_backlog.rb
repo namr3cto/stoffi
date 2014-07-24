@@ -14,5 +14,4 @@
 class LinkBacklog < ActiveRecord::Base
 	belongs_to :link
 	belongs_to :resource, :polymorphic => true
-	attr_accessible :error, :link_id, :resource_id, :resource_type
 end

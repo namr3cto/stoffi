@@ -25,7 +25,7 @@
 	<h1><%=t "donations.title" %></h1>
 	<%=t "donations.short_front_text_html" %>
 	<div class="center">
-		<%=button_tag t("donations.button"), "donate()", "dollar", { :type => :function, :color => :gold } %>
+		<%=custom_button_tag t("donations.button"), "donate()", "dollar", { :type => :function, :color => :gold } %>
 	</div>
 </div>
 
@@ -44,7 +44,7 @@
 		]
 		%>
 		<% links.each do |l| %>
-			<li class="center"><%=button_tag t("side.follow.link", :service => l[:name]), l[:url], l[:img], { :width => 140, :color => :blue } %></li>
+			<li class="center"><%=custom_button_tag t("side.follow.link", :service => l[:name]), l[:url], l[:img], { :width => 140, :color => :blue } %></li>
 		<% end %>
 	</ul>
 </div>

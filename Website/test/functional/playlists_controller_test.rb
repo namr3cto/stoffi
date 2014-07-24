@@ -27,7 +27,7 @@ class PlaylistsControllerTest < ActionController::TestCase
 
 	test "should show" do
 		get :show, :id => @playlist.to_param
-		assert_response :found
+		assert_response :success
 	end
 
 	test "should not show" do
@@ -59,7 +59,7 @@ class PlaylistsControllerTest < ActionController::TestCase
 		
 		assert_not_nil assigns(:playlist)
 		assert_redirected_to playlist_path(assigns(:playlist))
-		assert_equal 2, assigns(:playlist).songs.count
+		assert_equal 2, assigns(:playlist).songs.count, "playlist doesn't contain the correct songs"
 	end
 
 	test "should not create playlist logged out" do

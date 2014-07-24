@@ -61,7 +61,7 @@ class ArtistsController < ApplicationController
 	def create
 		if params[:artist] and params[:artist][:name]
 			params[:artist][:name] = h(params[:artist][:name])
-			@artist = Artist.find_by_name(params[:artist][:name])
+			@artist = Artist.find_by(name: params[:artist][:name])
 		end
 		
 		if @artist

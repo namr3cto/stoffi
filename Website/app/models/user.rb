@@ -54,7 +54,7 @@ class User < ActiveRecord::Base
 		
 		p,v = s.split("::",2)
 		return s unless ["twitter","facebook","google_oauth2","lastfm","vimeo"].include? p
-		l = self.links.find_by_provider(p)
+		l = self.links.find_by(provider: p)
 		return User.default_name unless l
 		names = l.names
 		return User.default_name unless (names.is_a?(Hash) and v and names[v.to_sym])
@@ -62,7 +62,7 @@ class User < ActiveRecord::Base
 	end
 	
 	# The default picture of a user.
-	def self.default_pic(size)
+	def self.default_pic(size = nil)
 		size = "_#{size.to_s}" unless size.to_s.empty?
 		"/assets/gfx/user#{size}.png"
 	end
@@ -101,7 +101,7 @@ class User < ActiveRecord::Base
 	# Will get the picture of the user by either:
 	# # Pull the picture from a linked account if the user has choosen such a picture source.
 	# # Return a default picture.
-	def picture(options)
+	def picture(options = nil)
 		size = ""
 		size = options[:size] if options != nil
 		s = image.to_s
@@ -110,7 +110,7 @@ class User < ActiveRecord::Base
 			s = s == :gravatar ? :mm : s.to_sym
 			return gravatar(s)
 		else
-			l = self.links.find_by_provider(s)
+			l = self.links.find_by(provider: s)
 			return User.default_pic unless l
 			pic = l.picture
 			return User.default_pic unless pic
@@ -158,8 +158,8 @@ class User < ActiveRecord::Base
 	
 	# Looks for, and creates if necessary, the user based on an authentication with a third party service.
 	def self.find_or_create_with_omniauth(auth)
-		link = Link.find_by_provider_and_uid(auth['provider'], auth['uid'])
-		user = User.find_by_email(auth['info']['email']) if auth['info']['email']
+		link = Link.find_by(provider: auth['provider'], uid: auth['uid'])
+		user = User.find_by(email: auth['info']['email']) if auth['info']['email']
 		
 		# link found
 		if link

@@ -12,10 +12,10 @@
 		
 		<h1 data-field="playlist-<%=@playlist.id%>-name"><%=h @playlist.name %></h1>
 		<div class="actions">
-			<%= button_tag t("links.play"), @playlist.play, "play_white", { :color => :blue, :class => :small } %>
+			<%= custom_button_tag t("links.play"), @playlist.play, "play_white", { :color => :blue, :class => :small } %>
 			<% if signed_in? and @playlist.user == current_user %>
-				<%= button_tag t("links.edit"), edit_playlist_path(@playlist), "edit_white", { :color => :blue, :class => :small } %>
-				<%= button_tag t("links.delete"), playlist_path(@playlist), "delete", { :method => :delete, :confirm => t("confirm"), :class => :small } %>
+				<%= custom_button_tag t("links.edit"), edit_playlist_path(@playlist), "edit_white", { :color => :blue, :class => :small } %>
+				<%= custom_button_tag t("links.delete"), playlist_path(@playlist), "delete", { :method => :delete, :confirm => t("confirm"), :class => :small } %>
 			<% end %>
 			
 			<div class="social-buttons">

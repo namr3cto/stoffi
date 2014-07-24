@@ -21,7 +21,7 @@ class LinksController < ApplicationController
 		Link.available.each do |link|
 			n = link[:name]
 			ln = link[:link_name] || n.downcase
-			if current_user.links.find_by_provider(ln) == nil
+			if current_user.links.find_by(provider: ln) == nil
 				path = "#{request.protocol}#{request.host_with_port}/auth/#{ln}"
 				@new_links <<
 				{
@@ -66,7 +66,7 @@ class LinksController < ApplicationController
 		auth = request.env["omniauth.auth"]
 		
 		if current_user != nil
-			@link = current_user.links.find_by_provider_and_uid(auth['provider'], auth['uid'])
+			@link = current_user.links.find_by(provider: auth['provider'], uid: auth['uid'])
 			if @link
 				logger.debug "update link credentials"
 				@link.update_credentials(auth)
