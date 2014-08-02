@@ -35,18 +35,6 @@ se:
   create: "Skapa"
   hide: "Dölj"
   back: "Tillbaka"
-  search:
-    placeholder: "Sök"
-    categories:
-      artists: "Artister"
-      songs: "Låtar"
-      albums: "Album"
-      playlists: "Spellistor"
-      devices: "Enheter"
-      users: "Personer"
-      files: "Filer"
-      soundcloud: "SoundCloud"
-      youtube: "YouTube"
   
   you: "Du"
   

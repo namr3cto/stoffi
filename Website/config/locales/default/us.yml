@@ -38,18 +38,6 @@ us:
   create: "Create"
   hide: "Hide"
   back: "Back"
-  search:
-    placeholder: "Search"
-    categories:
-      artists: "Artists"
-      songs: "Songs"
-      albums: "Albums"
-      playlists: "Playlists"
-      devices: "Devices"
-      users: "People"
-      files: "Files"
-      soundcloud: "SoundCloud"
-      youtube: "YouTube"
   
   you: "You"
   
