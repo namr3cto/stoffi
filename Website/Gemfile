@@ -120,3 +120,5 @@ gem "wikicloth"
 gem "deep_merge"
 
 gem "htmlentities"
+
+gem 'haversine'
