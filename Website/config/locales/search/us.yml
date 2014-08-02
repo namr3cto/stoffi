@@ -1,0 +1,16 @@
+us:
+  search:
+    placeholder: "Search for artists, albums, songs or genres"
+    categories:
+      artists: "Artists"
+      songs: "Songs"
+      albums: "Albums"
+      playlists: "Playlists"
+      devices: "Devices"
+      users: "People"
+      files: "Files"
+      soundcloud: "SoundCloud"
+      youtube: "YouTube"
+      
+    summary:
+      missing: "Could not find any information about %{artist}"

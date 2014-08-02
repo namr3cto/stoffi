@@ -1,0 +1,21 @@
+<div class='white full box' id='search-pane'>
+	<div class='center'>
+		<%= image_tag 'gfx/logos/blue_on_transparent_128.png', class: 'large-logo' %>
+	</div>
+	<%= form_tag search_path, class: 'search-form', id: 'search-form', method: :get do %>
+		<%= image_tag 'gfx/logos/blue_on_transparent_32.png', class: 'small-logo', style: 'display:none;' %>
+		<%= text_field_tag 'q', '', placeholder: t('search.placeholder'), class: 'search', id: 'search',
+		                   value: @query %>
+	<% end %>
+	
+	<div id='search-results'>
+		<div class='center' id='loading-search' style='display:none;'>
+			<%= image_tag 'gfx/ajax_loading_large_white.gif', class: 'loading' %>
+		</div>
+	</div>
+</div>
+
+<% if @query.to_s.empty? %>
+	<%= javascript_tag "$('#search').val('')"%>
+<% end %>
+<%= javascript_tag 'toggleSearchMode()' %>

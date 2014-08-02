@@ -1,0 +1,16 @@
+se:
+  search:
+    placeholder: "Sök"
+    categories:
+      artists: "Artister"
+      songs: "Låtar"
+      albums: "Album"
+      playlists: "Spellistor"
+      devices: "Enheter"
+      users: "Personer"
+      files: "Filer"
+      soundcloud: "SoundCloud"
+      youtube: "YouTube"
+      
+    summary:
+      missing: "Kunde inte hitta någon information om %{artist}"

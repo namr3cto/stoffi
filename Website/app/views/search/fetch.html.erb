@@ -1,0 +1,59 @@
+<div class='white full box' id='search-pane'>
+	<div class='center'>
+		<%= image_tag 'gfx/logos/blue_on_transparent_128.png', class: 'large-logo' %>
+	</div>
+	<%= form_tag search_path, class: 'search-form', id: 'search-form', method: :get do %>
+		<%= image_tag 'gfx/logos/blue_on_transparent_32.png', class: 'small-logo', style: 'display:none;' %>
+		<%= text_field_tag 'q', '', placeholder: t('search.placeholder'), class: 'search', id: 'search',
+		                   value: @query %>
+	<% end %>
+	
+	<div id='search-results'>
+		<ul id='result-list'>
+			
+			<% if @results.has_key? :exact_artist %>
+			<li class='exact artist'>
+				<%=image_tag @results[:exact_artist][:image] %>
+				<div class='banner'>
+					<span class='title'>
+						<%=@results[:exact_artist][:name]%>
+					</span>
+					<br/>
+					<span class='statistics'>
+						Listened to 3,141 times by 242 fans
+					</span>
+					<br/>
+					<span class='tabs'>
+						<a class='active tab'>Info</a>
+						<a class='tab'>Albums</a>
+						<a class='tab'>Songs</a>
+						<a class='tab'>Events</a>
+						<a class='tab'>Fans</a>
+					</span>
+				</div>
+				<div class='content'>
+					<%= Artist.find(@results[:exact_artist][:id]).info %>
+				</div>
+				
+			</li>
+			<% end %>
+			
+			<% @results[:hits].each do |hit| %>
+			
+			<% if hit.has_key? :artist %>
+				<li class='artist'><%=hit[:artist][:name]%></li>
+			<% elsif hit.has_key? :album %>
+				<li class='artist'><%=hit[:album][:name]%></li>
+			<% elsif hit.has_key? :song %>
+				<li class='artist'><%=hit[:song][:name]%></li>
+			<% elsif hit.has_key? :genre %>
+				<li class='artist'><%=hit[:genre][:name]%></li>
+			<% end %>
+			
+			<% end %>
+		</ul>
+	</div>
+</div>
+
+<%= javascript_tag "$('#search').val('bob marley')"%>
+<%= javascript_tag 'toggleSearchMode()' %>

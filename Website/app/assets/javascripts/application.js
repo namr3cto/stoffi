@@ -26,6 +26,7 @@
 //= require donations
 //= require settings
 //= require playlists
+//= require search
 
 //= require inflection
 //= require ga_social_tracking
