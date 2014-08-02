@@ -82,10 +82,6 @@ end
 	</div>
 <% end %>
 
-<div class="separator">&nbsp;</div>
-<%= form_tag search_path, :class => "search-form", :method => :get do %>
-	<%= text_field_tag "q", "", :placeholder => t("search.placeholder"), :class => "search", :id => "search",
-		:onfocus => "searchFocus('search');", :onblur => "searchBlur('search');" %>
 <% end %>
 <div class="separator">&nbsp;</div>
 
