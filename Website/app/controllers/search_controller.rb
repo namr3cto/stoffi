@@ -27,6 +27,10 @@ class SearchController < ApplicationController
 	
 	include Backend::Lastfm
 	
+	# Some weights and score points
+	WEIGHT_SIMILARITY = 1
+	WEIGHT_POPULARITY = 5
+	
 	def index
 		redirect_to :action => :index and return if params[:format] == "mobile"
 		@query = query_param
@@ -102,25 +106,64 @@ class SearchController < ApplicationController
 	def get_results(query, categories)
 		hits = []
 		hits.concat(parse_hits(Backend::Lastfm.search(query, categories)))
-		results = { hits: hits }
+		
+		hits.each do |h|
+			h[:distance] = distance(query, h[:name])
+			h[:score] = h[:distance] * WEIGHT_SIMILARITY + h[:popularity] * WEIGHT_POPULARITY
+		end
+		
+		hits = hits.sort_by { |h| h[:score] }.reverse
+		
+		results = { hits: hits.collect {|h| { name: h[:name], type: h[:type] } } }
 		results
 	end
 	
 	def parse_hits(hits)
-		max_popularity = hits.collect { |x| x[:popularity] || 0 }.max
-		parsed_hits = []
 		
+		parsed_hits = []
+		parsed_artists = {}
 		hits.each do |hit|
-			
-			# turn absolute popularity into relative popularity
-			#hit[:popularity] = (hit[:popularity].to_f || 0) / max_popularity
-			
 			case hit[:type]
 			when :artist then
-				#Artist.parse_name(hit[:name]).each do |name|
-				#	h = { type: :artist, name: name, }
-				#end
+				
+				# some artists are named "Foo feat. Bar" so we split
+				# the name and divide the popularity among them
+				artists = Artist.split_name(hit[:name])
+				popularity_pot = hit[:popularity] / artists.count.to_f
+				artists.each do |name|
+					if parsed_artists.has_key? name
+						parsed_artists[name][:popularity] += hit[:popularity]#popularity_pot
+					else
+						parsed_artists[name] = {
+							popularity: popularity_pot,
+							name: name,
+							type: :artists
+						}
+					end
+				end
 			end
 		end
+		parsed_hits.concat parsed_artists.values
+			
+		# turn absolute popularity into relative popularity
+		max_popularity = parsed_hits.collect { |x| x[:popularity] }.max
+		max_popularity = 1 if max_popularity == 0
+		parsed_hits.collect { |x| x[:popularity] /= max_popularity }
+		
+		return parsed_hits
+	end
+		
+	# calculate the 'distance' between two lists of words
+	def distance(str1, str2)
+		words1 = str1.downcase.split
+		words2 = str2.downcase.split
+		len1 = words1.count.to_f
+		len2 = words2.count.to_f
+		added = (words2 - words1).count.to_f
+		kept = len1 - (words1 - words2).count.to_f
+		return 0 if kept == 0
+		d = kept/len1
+		d *= 1 - (added/len2) unless added == 0
+		return d
 	end
 end
