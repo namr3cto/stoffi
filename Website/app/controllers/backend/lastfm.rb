@@ -41,13 +41,21 @@ module Backend::Lastfm
 		end
 	end
 	
+	# Turn a resource into a type
+	def self.resource_to_type(resource)
+		case resource
+		when 'track' then :song
+		else resource.to_sym
+		end
+	end
+	
 	# Search for a given resource
 	def self.search_for(resource, query)
 		hits = []
 		begin
 			get_hits(resource, query) do |h|
 				begin
-					hit = { type: resource}
+					hit = { type: resource_to_type(resource) }
 					case resource
 					when 'artist' then
 						hit[:popularity] = h['listeners']
