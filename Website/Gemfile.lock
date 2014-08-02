@@ -68,6 +68,7 @@ GEM
       haml
       rdoc
     hashie (3.2.0)
+    haversine (0.3.0)
     headless (1.0.2)
     hike (1.2.3)
     htmlentities (4.3.2)
@@ -257,6 +258,7 @@ DEPENDENCIES
   geoip
   haml (= 4.0.5)
   hanna-nouveau
+  haversine
   headless
   htmlentities
   jbuilder (~> 2.0)
