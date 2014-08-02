@@ -8,9 +8,6 @@
 # Copyright::	Copyright (c) 2013 Simplare
 # License::		GNU General Public License (stoffiplayer.com/license)
 
-require 'wikipedia'
-require 'mediacloth'
-require 'wikicloth'
 require 'base'
 
 # Describes an artist in the database.
@@ -19,9 +16,11 @@ class Artist < ActiveRecord::Base
 	include Base
 	
 	# associations
-	has_and_belongs_to_many :albums, :uniq => true
-	has_and_belongs_to_many :songs, :uniq => true
-	has_many :listens, :through => :songs
+	has_and_belongs_to_many :albums, uniq: true
+	has_and_belongs_to_many :songs, uniq: true
+	has_and_belongs_to_many :artists, join_table: :performances, uniq: true
+	has_many :wikipedia_links, as: :resource
+	has_many :listens, through: :songs
 	has_many :donations
 	
 	# validations
@@ -31,27 +30,6 @@ class Artist < ActiveRecord::Base
 	# Defines the default picture to use when no picture of the artist can be found.
 	def self.default_pic
 		"/assets/media/artist.png"
-	end
-	
-	# Looks for a picture on wikipedia.
-	#
-	# *DEPRECATED!*
-	def image
-		return @wiki_img if @wiki_img
-		logger.info "finding picture for #{name}"
-		Wikipedia.Configure do
-			domain "en.wikipedia.org"
-			path   "w/api.php"
-		end
-		p = page
-		if p && p.image_urls && p.image_urls.count > 0
-			@wiki_img = p.image_urls.last # last one is the one on the right
-			self.picture = @wiki_img
-			self.save
-			@wiki_img
-		else
-			nil
-		end
 	end
 	
 	# Returns the picture of the artist.
@@ -66,7 +44,7 @@ class Artist < ActiveRecord::Base
 		if name.to_s != ""
 			pic = nil
 			begin
-				key = Stoffi::Application::OA_CRED[:lastfm][:id]
+				key = Rails.application.secret.oa_cred[:lastfm][:id]
 				q = CGI.escapeHTML(e(name)).gsub(/\s/, "%20")
 				url_base = "ws.audioscrobbler.com"
 				url_path = "/2.0?method=artist.info&format=json&api_key=#{key}&artist=#{q}"
@@ -94,21 +72,6 @@ class Artist < ActiveRecord::Base
 		end
 		
 		return Artist.default_pic
-	end
-	
-	# Same as <tt>picture</tt>.
-	#
-	# *DEPRECATED!*
-	def photo
-		s = picture
-		return s if s.to_s != ""
-		
-		#i = image
-		return Artist.default_pic
-		
-		update_attribute(:picture, i)
-		save
-		return i
 	end
 	
 	# Whether or not the artist has a Twitter account.
@@ -159,37 +122,6 @@ class Artist < ActiveRecord::Base
 	# NOT IMPLEMENTED YET
 	def stream_url
 		"http://www.google.com"
-	end
-	
-	# Description of the artist.
-	#
-	# Will fetch the information from Wikipedia.
-	#
-	# *DEPRECATED!*
-	# TODO: We should create a resource called "external_source" with all twitter/facebook/wikipedia/etc urls.
-	def info
-		return ""
-		p = localized_page
-		return "" unless p && p.content
-		logger.debug "parsing page #{p.title}"
-			
-		# extract the top-most section (the one before any ToC)
-		c = WikiCloth::Parser.new({ :data => WikiParser::sanitize(p.content) })
-		c = c.sections.first
-		
-		l = I18n.locale
-		ret = WikiParser.new({ :data => c }).to_html
-		#I18n.locale = l
-		return ret
-	end
-	
-	# The URL to the artist on Wikipedia.
-	# *DEPRECATED!*
-	def wikipedia_link
-		p = localized_page
-		base = "https://#{langtag(I18n.locale)}.wikipedia.org"
-		return base unless p && p.title
-		"#{base}/wiki/#{p.title}"
 	end
 	
 	# Whether the artist is unknown.
@@ -319,164 +251,6 @@ class Artist < ActiveRecord::Base
 		
 		else
 			raise "Unsupported type"
-		end
-	end
-	
-	# We keep a list of already visited pages
-	# to prevent endless loops when hunting for
-	# an artist classified page
-	@visited_pages = []
-	
-	private
-	
-	# Cache wikipedia stuff
-	@wiki_page = nil
-	@wiki_img = nil
-	
-	# Returns a translated wikipedia page for
-	# the artist. defaults to english if none found.
-	def localized_page
-		return @page if @page
-		l = langtag(I18n.locale)
-		
-		Wikipedia.Configure do
-			domain "#{l}.wikipedia.org"
-			path   "w/api.php"
-		end
-		p = page
-		if p == nil || p.content == nil
-			logger.debug "defaulting to english"
-			Wikipedia.Configure do
-				domain "en.wikipedia.org"
-				path   "w/api.php"
-			end
-			p = page
-		else
-			logger.debug "sending translated"
-		end
-		@page = p
-		@page
-	end
-	
-	# Returns the wikipedia page for the artist
-	def page
-		@visited_pages = []
-		logger.debug "retreiving page for #{name}"
-		find_page(name, false)
-	end
-	
-	# Analyses a page and follows it.
-	def find_page(pname, verify = true)
-		logger.debug "looking up page: #{pname}"
-		logger.debug "verify find: #{verify}"
-		r = Wikipedia.find(pname)
-		
-		# parse disambiguation meta data
-		unless is_artist_page? r
-			logger.debug "check for disambiguation meta data"
-		
-			# check for {about|A|B|1|C|2...|Z|N} patterns
-			# where we are intrested in B|1 - Z|N
-			m = r.content.scan(/\{about\|[\w\s]*((\|[^\}\{\|]*\|[^\}\{\|]*)*)\}/) if r.content
-			unless m == nil || m.empty? || m.first.empty?
-				# l = ["B", "1", "C", "2", ... , "Z", "N"]
-				l = m.first.first[1..-1].split("|")
-				1.step(l.size-1,2).each do |i|
-					# check pages "1", "2" .. "N"
-					p = find_page(l[i])
-					r = p if p
-					break
-				end
-			end
-		end
-		
-		# parse links
-		logger.debug "follow links (desperate!)" if !is_artist_page?(r) && is_disambiguation_page?(r)
-		r = follow_links(r) if !is_artist_page?(r) && is_disambiguation_page?(r)
-		
-		# verify category
-		(!verify || is_artist_page?(r)) ? r : nil
-	end
-	
-	# Follows a page's links in the hunt for an artist page.
-	def follow_links(p)
-		if p.links
-			p.links.each do |l|
-				next if @visited_pages.include? l
-				
-				lp = Wikipedia.find(l)
-				if lp.is_a? Array
-					lp.each do |lp_i|
-						logger.debug "following to: #{lp_i.title}"
-						if is_artist_page? lp_i
-							p = lp_i
-							break
-						end
-					end
-				elsif not is_artist_page? p
-					if is_artist_page? lp
-						p = lp
-						break
-					end
-				end
-			end
-		end
-		p
-	end
-	
-	# Checks if a wikipedia page is classified as an artist page.
-	def is_artist_page?(p)
-		return false unless p && p.content && p.categories && p.title
-		belongs_to_categories? p, [
-			"musicians",
-			"artists",
-			"duos",
-			"groups",
-			"singers",
-			"guitarists",
-			"gitarrister",
-			"sångare",
-			"grupper",
-			"musiker"
-		], true
-	end
-	
-	# Checks if a wikipedia page is classified as an disambiguation page.
-	def is_disambiguation_page?(p)
-		logger.debug "is disambiguation page?"
-		belongs_to_categories? p, [
-			"Category:All article disambiguation pages",
-			"Category:All disambiguation pages",
-			"Category:Disambiguation pages",
-			"Kategori:Förgreningssidor"
-		]
-	end
-	
-	# Checks if a wikipedia page belongs to any of a set of category.
-	def belongs_to_categories?(p, categories, only_last = false)
-		return false unless p && p.content && p.categories && p.title
-		@visited_pages << p.title
-		p.categories.each do |c|
-			c = c.split.last if only_last
-			if categories.include? c
-				logger.debug "found category!"
-				return true
-			else
-				logger.debug "missed category: #{c}"
-			end
-		end
-		logger.debug "not in any category"
-		return false
-	end
-	
-	# The language subdomain on Wikipedia for a given locale.
-	def langtag(locale)
-		case locale.to_s
-		when 'se' then 'se'
-		when 'us' then 'en'
-		when 'uk' then 'en'
-		when 'cn' then 'zh'
-		else locale
 		end
 	end
 end
