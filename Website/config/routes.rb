@@ -75,12 +75,11 @@ Stoffi::Application.routes.draw do
 		get "/mail",       :to => "pages#mail",       :as => :mail
 		get "/facebook",   :to => "pages#facebook",   :as => :facebook
 		get "/channel",    :to => "pages#channel",    :as => :facebook_channel
-		get "/search",     :to => "pages#search",     :as => :search
 		get "/old",        :to => "pages#old",        :as => :old
 		get "/foo",        :to => "pages#foo",        :as => :foo
 
 		resources :translations, :languages, :votes
-		resources :songs, :artists
+		resources :songs, :artists, :events
 		resources :links, :devices
 		resources :oauth_clients, :path => "apps", :as => :client_application
 		resources :oauth_clients, :path => "apps", :as => :oauth_clients
@@ -149,6 +148,10 @@ Stoffi::Application.routes.draw do
 		get "/contribute" => "contribute#index"
 		get "/contribute/translate", :to => "languages#index", :as => :translate
 		get "/contribute(/:action)" => "contribute", :as => :xxcontribute
+
+		get "/search",       :to => "search#index",     :as => :search
+		get '/search/suggest'
+		get '/search/fetch'
 	end
 	
 	get "(:l)" => "pages#index", :as => :root

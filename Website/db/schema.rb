@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140724211357) do
+ActiveRecord::Schema.define(version: 20140802070900) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -208,6 +208,20 @@ ActiveRecord::Schema.define(version: 20140724211357) do
     t.datetime "updated_at"
   end
 
+  create_table "events", force: true do |t|
+    t.string   "name"
+    t.string   "venue"
+    t.decimal  "latitude"
+    t.decimal  "longitude"
+    t.datetime "from"
+    t.datetime "until"
+    t.text     "content"
+    t.string   "image"
+    t.string   "type"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
   create_table "histories", force: true do |t|
     t.integer  "user_id"
     t.datetime "created_at"
@@ -328,6 +342,14 @@ ActiveRecord::Schema.define(version: 20140724211357) do
 
   add_index "oauth_tokens", ["token"], name: "index_oauth_tokens_on_token", unique: true
 
+  create_table "performances", id: false, force: true do |t|
+    t.integer "artist_id", null: false
+    t.integer "event_id",  null: false
+  end
+
+  add_index "performances", ["artist_id", "event_id"], name: "index_performances_on_artist_id_and_event_id", unique: true
+  add_index "performances", ["event_id", "artist_id"], name: "index_performances_on_event_id_and_artist_id", unique: true
+
   create_table "playlist_subscribers", id: false, force: true do |t|
     t.integer "playlist_id"
     t.integer "user_id"
@@ -365,11 +387,11 @@ ActiveRecord::Schema.define(version: 20140724211357) do
   end
 
   create_table "searches", force: true do |t|
-    t.string   "query",      null: false
+    t.string   "query",                              null: false
     t.integer  "user_id"
-    t.string   "page",       null: false
-    t.integer  "latitude"
-    t.integer  "longitude"
+    t.string   "page",                               null: false
+    t.decimal  "latitude",   precision: 8, scale: 5
+    t.decimal  "longitude",  precision: 8, scale: 5
     t.string   "locale"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -480,5 +502,14 @@ ActiveRecord::Schema.define(version: 20140724211357) do
     t.datetime "created_at"
     t.datetime "updated_at"
   end
+
+  create_table "wikipedia_links", force: true do |t|
+    t.integer "resource_id"
+    t.string  "resource_type"
+    t.string  "locale"
+    t.string  "page"
+  end
+
+  add_index "wikipedia_links", ["resource_id", "resource_type"], name: "index_wikipedia_links_on_resource_id_and_resource_type"
 
 end
