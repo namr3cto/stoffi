@@ -58,18 +58,18 @@ module Backend::Lastfm
 					hit = { type: resource_to_type(resource) }
 					case resource
 					when 'artist' then
-						hit[:popularity] = h['listeners']
+						hit[:popularity] = h['listeners'].to_f
 						hit[:name] = h['name']
 					
 					when 'album' then
 						hit[:name] = h['name']
 						
 					when 'track' then
-						hit[:popularity] = h['listeners']
+						hit[:popularity] = h['listeners'].to_f
 						hit[:name] = h['name']
 						
 					when 'event' then
-						hit[:popularity] = h['attendance']
+						hit[:popularity] = h['attendance'].to_f
 						hit[:name] = h['title']
 						
 					else
