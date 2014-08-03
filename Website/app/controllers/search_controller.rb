@@ -28,8 +28,8 @@ class SearchController < ApplicationController
 	respond_to :html, :mobile, :embedded, :json, :xml
 	
 	# Some weights and score points
-	WEIGHT_SIMILARITY = 1
-	WEIGHT_POPULARITY = 5
+	WEIGHT_SIMILARITY = 5
+	WEIGHT_POPULARITY = 3
 	
 	def index
 		redirect_to :action => :index and return if params[:format] == "mobile"
@@ -123,7 +123,7 @@ class SearchController < ApplicationController
 		end
 		
 		hits.each do |h|
-			h[:distance] = distance(query, h[:name])
+			h[:distance] = distance(query, h[:fullname])
 			h[:score] = h[:distance] * WEIGHT_SIMILARITY + h[:popularity] * WEIGHT_POPULARITY
 		end
 		
@@ -134,32 +134,40 @@ class SearchController < ApplicationController
 	end
 	
 	def parse_hits(hits)
-		parsed_hits = []
-		parsed_artists = {}
+		parsed_hits = { artist: {}, song: {}, album: {}, event: {}, genre: {}}
 		hits.each do |hit|
-			case hit[:type]
-			when :artist then
+			begin
+				hit[:fullname] ||= hit[:name]
+				case hit[:type]
+				when :artist then
 				
-				# some artists are named "Foo feat. Bar" so we split
-				# the name and divide the popularity among them
-				artists = Artist.split_name(hit[:name])
-				popularity_pot = hit[:popularity] / artists.count.to_f
-				artists.each do |name|
-					if parsed_artists.has_key? name
-						parsed_artists[name][:popularity] += hit[:popularity]#popularity_pot
-					else
-						parsed_artists[name] = {
-							popularity: popularity_pot,
-							name: name,
-							type: :artists
-						}
+					# some artists are named "Foo feat. Bar" so we split
+					# the name and divide the popularity among them
+					artists = Artist.split_name(hit[:name])
+					popularity_pot = hit[:popularity] / artists.count.to_f
+					artists.each do |name|
+						h = hit.dup
+						h[:popularity] = popularity_pot
+						add_parsed_hit(:artist, parsed_hits, h)
 					end
+				
+				when :song then
+					# songs usually contain the name of the artist in their title
+					# so we do our best to extract the artist and the name of the
+					# song from the song title 
+					artist,title = Song.parse_title(hit[:name])
+					hit[:name] = title
+					add_parsed_hit(:song, parsed_hits, hit, true)
+				
+				else
+	 				parsed_hits[hit[:type]] << hit
 				end
-			else
-				parsed_hits << hit
+			rescue
 			end
 		end
-		parsed_hits.concat parsed_artists.values
+		
+		# flatten structure into an array
+		parsed_hits = parsed_hits.collect { |k,v| v.values }.flatten
 			
 		# turn absolute popularity into relative popularity
 		pop = parsed_hits.select { |x| x[:popularity] != nil }.collect { |x| x[:popularity] }
@@ -174,6 +182,17 @@ class SearchController < ApplicationController
 		end
 		
 		return parsed_hits
+	end
+	
+	def add_parsed_hit(type, collection, hit, allow_dups = false)
+		# duplicates: random key, otherwise use name
+		key = allow_dups ? (0...16).map { (65 + rand(26)).chr }.join : hit[:name]
+		
+		if collection[type].has_key? key
+			collection[type][key][:popularity] += hit[:popularity]
+		else
+			collection[type][key] = hit
+		end
 	end
 		
 	# calculate the 'distance' between two lists of words

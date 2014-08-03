@@ -65,7 +65,7 @@ class Backend::Lastfm
 						
 					when 'track' then
 						hit[:popularity] = h['listeners'].to_f
-						hit[:name] = h['name']
+						hit[:name] = "#{h['artist']} - #{h['name']}"
 						
 					when 'event' then
 						hit[:popularity] = h['attendance'].to_f
