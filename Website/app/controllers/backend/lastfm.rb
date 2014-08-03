@@ -11,8 +11,7 @@
 # Copyright::	Copyright (c) 2014 Simplare
 # License::		GNU General Public License (stoffiplayer.com/license)
 
-module Backend::Lastfm
-	extend ActiveSupport::Concern
+class Backend::Lastfm
 	
 	# Search for a query in a given set of categories
 	def self.search(query, categories)

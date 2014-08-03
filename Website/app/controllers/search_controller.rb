@@ -20,12 +20,12 @@
 # Copyright::	Copyright (c) 2013 Simplare
 # License::		GNU General Public License (stoffiplayer.com/license)
 
-require 'backend/lastfm'
+#require 'backend/lastfm'
+#require 'backend/youtube'
+#require 'backend/soundcloud'
 
 class SearchController < ApplicationController
 	respond_to :html, :mobile, :embedded, :json, :xml
-	
-	include Backend::Lastfm
 	
 	# Some weights and score points
 	WEIGHT_SIMILARITY = 1
@@ -35,6 +35,7 @@ class SearchController < ApplicationController
 		redirect_to :action => :index and return if params[:format] == "mobile"
 		@query = query_param
 		@categories = category_param
+		@sources = source_param
 		#save_search unless @query.to_s.empty?
 		@title = e(params[:q])
 		@description = t("index.description")
@@ -42,7 +43,7 @@ class SearchController < ApplicationController
 		render and return if request.format == :html
 			
 		# API call, so we call fetch and return the results
-		@results = get_results(@query, @categories)
+		@results = get_results(@query, @categories, @sources)
 		respond_with(@results)
 	end
 
@@ -64,7 +65,7 @@ class SearchController < ApplicationController
 	def fetch
 		@query = query_param
 		respond_with({ error: 'query cannot be empty' }) if @query.to_s.empty?
-		@results = get_results(@query, category_param)
+		@results = get_results(@query, category_param, source_param)
 		respond_with(@results)
 	end
 	
@@ -81,8 +82,18 @@ class SearchController < ApplicationController
 		c.split(/[\|,]/)
 	end
 	
+	def source_param
+		default = 'soundcloud|youtube|jamendo'
+		c = (params[:s] || params[:src] || params[:sources] || params[:source] || default)
+		c.split(/[\|,]/)
+	end
+	
 	def limit_param
 		[50, (params[:l] || params[:limit] || "5").to_i].min
+	end
+	
+	def offset_param
+		[50, (params[:o] || params[:offset] || "0").to_i].min
 	end
 	
 	def save_search
@@ -103,9 +114,13 @@ class SearchController < ApplicationController
 		end
 	end
 	
-	def get_results(query, categories)
+	def get_results(query, categories, sources)
 		hits = []
 		hits.concat(parse_hits(Backend::Lastfm.search(query, categories)))
+		
+		if sources.include? 'youtube'
+			hits.concat(parse_hits(Backend::Youtube.search(query, categories)))
+		end
 		
 		hits.each do |h|
 			h[:distance] = distance(query, h[:name])
@@ -119,7 +134,6 @@ class SearchController < ApplicationController
 	end
 	
 	def parse_hits(hits)
-		
 		parsed_hits = []
 		parsed_artists = {}
 		hits.each do |hit|
@@ -141,14 +155,23 @@ class SearchController < ApplicationController
 						}
 					end
 				end
+			else
+				parsed_hits << hit
 			end
 		end
 		parsed_hits.concat parsed_artists.values
 			
 		# turn absolute popularity into relative popularity
-		max_popularity = parsed_hits.collect { |x| x[:popularity] }.max
+		pop = parsed_hits.select { |x| x[:popularity] != nil }.collect { |x| x[:popularity] }
+		avg_popularity = pop.inject(0) { |s,x| s+= x } / pop.length
+		max_popularity = pop.max
 		max_popularity = 1 if max_popularity == 0
-		parsed_hits.collect { |x| x[:popularity] /= max_popularity }
+		parsed_hits.collect do |x|
+			if x[:popularity] == nil
+				x[:popularity] = avg_popularity
+			end
+			x[:popularity] /= max_popularity
+		end
 		
 		return parsed_hits
 	end

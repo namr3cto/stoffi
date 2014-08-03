@@ -29,5 +29,7 @@ module Stoffi
 
     # oauth-plugin requires Rack Filter
     config.middleware.use OAuth::Rack::OAuthFilter
+
+    config.autoload_paths += %W(#{config.root}/app/controllers/backend/*)
   end
 end
