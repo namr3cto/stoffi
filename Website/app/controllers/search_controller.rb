@@ -83,7 +83,7 @@ class SearchController < ApplicationController
 	end
 	
 	def source_param
-		default = 'soundcloud|youtube|jamendo'
+		default = 'soundcloud|youtube|jamendo|lastfm'
 		c = (params[:s] || params[:src] || params[:sources] || params[:source] || default)
 		c.split(/[\|,]/)
 	end
@@ -116,11 +116,21 @@ class SearchController < ApplicationController
 	
 	def get_results(query, categories, sources)
 		hits = []
-		hits.concat(parse_hits(Backend::Lastfm.search(query, categories)))
 		
-		if sources.include? 'youtube'
-			hits.concat(parse_hits(Backend::Youtube.search(query, categories)))
-		end
+		hits.concat(parse(Backend::Lastfm.search(query, categories))) if sources.include? 'lastfm'
+		hits.concat(parse(Backend::Youtube.search(query, categories))) if sources.include? 'youtube'
+		#hits.concat(parse(Backend::Soundcloud.search(query, categories))) if sources.include? 'soundcloud'
+		#hits.concat(parse(Backend::Jamendo.search(query, categories))) if sources.include? 'jamendo'
+		
+		hits = rank(hits, query)
+		
+		results = { hits: hits.collect {|h| { name: h[:name], type: h[:type], fullname: h[:fullname], score: h[:score], distance: h[:distance], popularity: h[:popularity] } } }
+		results
+	end
+	
+	def rank(hits, query)
+		# some hits have no popularity, so we try to fix that
+		#fill_nil_popularity(hits)
 		
 		hits.each do |h|
 			h[:distance] = distance(query, h[:fullname])
@@ -128,9 +138,20 @@ class SearchController < ApplicationController
 		end
 		
 		hits = hits.sort_by { |h| h[:score] }.reverse
+	end
+	
+	def parse(hits)
+		# parse hits (extract artists and song titles, for example) and
+		# put into a structure, separated by type
+		parsed_hits = parse_hits(hits)
 		
-		results = { hits: hits.collect {|h| { name: h[:name], type: h[:type] } } }
-		results
+		# flatten structure into an array
+		parsed_hits = parsed_hits.collect { |k,v| v.values }.flatten
+			
+		# turn absolute popularity into relative popularity
+		normalize_popularity(parsed_hits)
+		
+		return parsed_hits
 	end
 	
 	def parse_hits(hits)
@@ -157,31 +178,56 @@ class SearchController < ApplicationController
 					# song from the song title 
 					artist,title = Song.parse_title(hit[:name])
 					hit[:name] = title
+					hit[:artists] = Artist.split_name(hit[:artist]) if hit[:artist]
 					add_parsed_hit(:song, parsed_hits, hit, true)
+					
+				when :album
+					hit[:artists] = Artist.split_name(hit[:artist]) if hit[:artist]
+					add_parsed_hit(:album, parsed_hits, hit, true)
 				
 				else
-	 				parsed_hits[hit[:type]] << hit
+					add_parsed_hit(:album, parsed_hits, hit, true)
 				end
 			rescue
 			end
 		end
-		
-		# flatten structure into an array
-		parsed_hits = parsed_hits.collect { |k,v| v.values }.flatten
-			
-		# turn absolute popularity into relative popularity
-		pop = parsed_hits.select { |x| x[:popularity] != nil }.collect { |x| x[:popularity] }
-		avg_popularity = pop.inject(0) { |s,x| s+= x } / pop.length
-		max_popularity = pop.max
+		return parsed_hits
+	end
+	
+	def fill_nil_popularity(hits)
+		artists = hits.collect { |h| h[:type] == :artist }
+		hits.each do |h|
+			next unless h[:popularity] == nil
+			case h[:type]
+			when :song, :album
+				next unless h[:artists]
+				h[:artists].each do |a|
+					if artists.has_key? a
+						h[:popularity] += artists[a][:popularity].to_f
+					end
+				end
+			end
+		end
+	end
+	
+	def normalize_popularity(hits)
+		pop = hits.select { |x| x[:popularity] != nil }.collect { |x| x[:popularity] }
+		avg_popularity = 0
+		max_popularity = 0
+		if pop.length > 0
+			avg_popularity = pop.inject(0) { |s,x| s+= x } / pop.length
+			max_popularity = pop.max
+		end
 		max_popularity = 1 if max_popularity == 0
-		parsed_hits.collect do |x|
+		hits.collect do |x|
 			if x[:popularity] == nil
 				x[:popularity] = avg_popularity
 			end
+			#else
 			x[:popularity] /= max_popularity
+			#end
 		end
-		
-		return parsed_hits
+		hits
 	end
 	
 	def add_parsed_hit(type, collection, hit, allow_dups = false)
