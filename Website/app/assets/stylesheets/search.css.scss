@@ -30,15 +30,23 @@
 	
 	#result-list
 	{
+	    margin-top: 50px;
 	    .exact
 	    {
-	        img
+	        .image
 	        {
 	            position: absolute;
-	            height: 120px;
-	            clip: rect(0px,120px,120px,0px);
 	            margin-left: 100px;
-            }
+	            height: 120px;
+	            border: 1px solid black;
+	            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+	            img
+	            {
+	                position: relative;
+	                height: 120px;
+	                clip: rect(0px,120px,120px,0px);
+	            }
+	        }
 	        .banner
 	        {
 	            height: 120px;
@@ -56,7 +64,7 @@
                 
                 .statistics
                 {
-                    color: gray;
+                    color: rgba(0,75,150,0.5);
                     font-style: italic;
                     .key { text-decoration: underline; color: black; }
                 }
@@ -91,6 +99,35 @@
                 padding: 5px 0px;
                 margin: 5px 0px 15px;
                 min-height: 100px;
+            }
+            
+            dl
+            {
+                margin-bottom: 10px;
+                dt, dd
+                {
+                    float: left;
+                    padding: 5px 0px;
+                    margin: 0;
+                    font-size: 10pt;
+                    font-style: normal;
+                }
+                dt
+                {
+                    clear: left;
+                    width: 150px;
+                    color: rgba(0,75,150,0.5);
+                }
+                dd
+                {
+                    float: left;
+                }
+            }
+            p
+            {
+                font-style: normal;
+                font-size: 10pt;
+                color: black;
             }
         }
 	}
