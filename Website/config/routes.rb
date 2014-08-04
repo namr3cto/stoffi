@@ -144,10 +144,6 @@ Stoffi::Application.routes.draw do
 		get   "/oauth",                   :to => "oauth#index",             :as => :oauth
 		
 		get "/auth/:provider/callback" => "links#create"
-		
-		get "/contribute" => "contribute#index"
-		get "/contribute/translate", :to => "languages#index", :as => :translate
-		get "/contribute(/:action)" => "contribute", :as => :xxcontribute
 
 		get "/search",       :to => "search#index",     :as => :search
 		get '/search/suggest'
