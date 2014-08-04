@@ -17,5 +17,12 @@
 
 <% if @query.to_s.empty? %>
 	<%= javascript_tag "$('#search').val('')"%>
+<% else %>
+	<%
+	js_query = escape_javascript(@query)
+	js_cat = escape_javascript(@categories.join(','))
+	js_src = escape_javascript(@sources.join(','))
+	%>
+	<%= javascript_tag "search('#{js_query}', '#{js_cat}', '#{js_src}')" %>
 <% end %>
 <%= javascript_tag 'toggleSearchMode()' %>
