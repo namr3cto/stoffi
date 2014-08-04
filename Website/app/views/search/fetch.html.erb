@@ -1,59 +1,78 @@
-<div class='white full box' id='search-pane'>
-	<div class='center'>
-		<%= image_tag 'gfx/logos/blue_on_transparent_128.png', class: 'large-logo' %>
-	</div>
-	<%= form_tag search_path, class: 'search-form', id: 'search-form', method: :get do %>
-		<%= image_tag 'gfx/logos/blue_on_transparent_32.png', class: 'small-logo', style: 'display:none;' %>
-		<%= text_field_tag 'q', '', placeholder: t('search.placeholder'), class: 'search', id: 'search',
-		                   value: @query %>
+	<ul id='result-list'>
+	
+	<% if @results[:exact].has_key? :artist %>
+		<%
+		artist = @results[:exact][:artist]
+		p = WikipediaLink.find_page(artist[:name], I18n.locale, :artist)
+		s = WikipediaLink.summary(p)
+		if s and s[:info]
+			%>
+	<li class='exact artist'>
+		<div class='image'>
+			<%=image_tag artist[:images][:small] %>
+		</div>
+		<div class='banner'>
+			<span class='title'>
+				<%=artist[:name]%>
+			</span>
+			<br/>
+			<span class='statistics'>
+				Listened to 3,141 times by 242 fans
+			</span>
+			<br/>
+			<span class='tabs'>
+				<a class='active tab'>Info</a>
+				<a class='tab'>Albums</a>
+				<a class='tab'>Songs</a>
+				<a class='tab'>Events</a>
+				<a class='tab'>Fans</a>
+			</span>
+		</div>
+		<div class='content' style='padding-left: 100px'>
+			<%
+			infos = 0
+			max_infos = 5
+			info_order = ['origin', 'genre', 'years_active', 'label', 'current_members',
+			'past_members', 'birth_date', 'death_date', 'birth_place', 'death_place',
+			'alias', 'hometown', 'parents', 'spouse', 'children', 'tools',
+			'instrument', 'residence', 'education', 'relations', 'relatives',
+			'resting_place', 'death_cause', 'net_worth']
+			%>
+			<dl>
+			<% info_order.each do |k| %>
+				<% v = s[:info][k] %>
+				<% next if v.to_s.empty? %>
+				<dt><%=k.gsub('_',' ').capitalize%></dt>
+				<dd><%=raw v%></dd>
+				<%
+				infos += 1
+				break if infos >= max_infos
+				%>
+			<% end %>
+			</dl>
+			<p class='clear'>&nbsp;</p>
+			<p><%=raw s[:intro]%></p>
+		</div>
+		
+	</li>
+		<% end %>
 	<% end %>
 	
-	<div id='search-results'>
-		<ul id='result-list'>
-			
-			<% if @results.has_key? :exact_artist %>
-			<li class='exact artist'>
-				<%=image_tag @results[:exact_artist][:image] %>
-				<div class='banner'>
-					<span class='title'>
-						<%=@results[:exact_artist][:name]%>
-					</span>
-					<br/>
-					<span class='statistics'>
-						Listened to 3,141 times by 242 fans
-					</span>
-					<br/>
-					<span class='tabs'>
-						<a class='active tab'>Info</a>
-						<a class='tab'>Albums</a>
-						<a class='tab'>Songs</a>
-						<a class='tab'>Events</a>
-						<a class='tab'>Fans</a>
-					</span>
-				</div>
-				<div class='content'>
-					<%= Artist.find(@results[:exact_artist][:id]).info %>
-				</div>
-				
-			</li>
-			<% end %>
-			
-			<% @results[:hits].each do |hit| %>
-			
-			<% if hit.has_key? :artist %>
-				<li class='artist'><%=hit[:artist][:name]%></li>
-			<% elsif hit.has_key? :album %>
-				<li class='artist'><%=hit[:album][:name]%></li>
-			<% elsif hit.has_key? :song %>
-				<li class='artist'><%=hit[:song][:name]%></li>
-			<% elsif hit.has_key? :genre %>
-				<li class='artist'><%=hit[:genre][:name]%></li>
-			<% end %>
-			
-			<% end %>
-		</ul>
-	</div>
-</div>
-
-<%= javascript_tag "$('#search').val('bob marley')"%>
-<%= javascript_tag 'toggleSearchMode()' %>
+	<% @results[:hits].each do |hit| %>
+	
+	<%
+	case hit[:type]
+	when :artist then %>
+		<li class='artist'>artist: <%=hit[:name]%></li>
+	<% when :album then %>
+		<li class='artist'>album: <%=hit[:name]%></li>
+	<% when :song then %>
+		<li class='artist'>song: <%=hit[:name]%></li>
+	<% when :genre then %>
+		<li class='artist'>genre: <%=hit[:name]%></li>
+	<% when :event then %>
+		<li class='artist'>event: <%=hit[:name]%></li>
+	<% end %>
+	
+	<% end %>
+</ul>

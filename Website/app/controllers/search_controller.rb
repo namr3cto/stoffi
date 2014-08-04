@@ -66,7 +66,7 @@ class SearchController < ApplicationController
 		@query = query_param
 		respond_with({ error: 'query cannot be empty' }) if @query.to_s.empty?
 		@results = get_results(@query, category_param, source_param)
-		respond_with(@results)
+		respond_with(@results, :layout => false)
 	end
 	
 	private
@@ -124,7 +124,20 @@ class SearchController < ApplicationController
 		
 		hits = rank(hits, query)
 		
-		results = { hits: hits.collect {|h| { name: h[:name], type: h[:type], fullname: h[:fullname], score: h[:score], distance: h[:distance], popularity: h[:popularity] } } }
+		results = { hits: hits.collect { |h|
+			{
+				name: h[:name],
+				type: h[:type],
+				images: h[:images]
+			}
+		} }
+		results[:exact] = {}
+		
+		results[:hits].each do |h|
+			next if h[:name].downcase != query.downcase
+			results[:exact][h[:type]] ||= h
+		end
+		
 		results
 	end
 	
