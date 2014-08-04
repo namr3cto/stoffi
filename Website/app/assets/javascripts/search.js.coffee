@@ -14,6 +14,14 @@
         $('.small-logo').show()
         $('#loading-search').show()
         
+@search = (query, categories, sources) ->
+    url = "/search/fetch?q=#{query}&c=#{categories}&s=#{sources}"
+    div = $('#search-results')
+    req = $.get url
+    req.success (html) -> div.html(html)
+    req.error (jqXHR, status, error) ->
+        div.html("<p>#{status}</p><p>#{error}</p>")
+        
 ready = ->
     $('#search').autocomplete({
         source: "/search/suggest.json",
