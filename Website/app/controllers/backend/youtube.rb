@@ -31,20 +31,20 @@ module Backend::Youtube
 			item = {
 				name: i['snippet']['title'],
 				popularity: i['statistics']['viewCount'].to_f,
-				images: [],
+				images: {},
 				type: :song
 			}
 			i['snippet']['thumbnails'].keys.each do |t|
 				u = i['snippet']['thumbnails'][t]['url']
 				s = case t
-				when 'default' then 'tiny'
-				when 'medium' then 'small'
-				when 'high' then 'medium'
-				when 'standard' then 'large'
-				when 'maxres' then 'huge'
-				else 'unknown'
+				when 'default' then :tiny
+				when 'medium' then :small
+				when 'high' then :medium
+				when 'standard' then :large
+				when 'maxres' then :huge
+				else :unknown
 				end
-				item[:images] << { size: s, url: u }
+				item[:images][s] = u
 			end
 			items << item
 		end

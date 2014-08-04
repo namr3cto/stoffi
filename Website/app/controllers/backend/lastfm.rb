@@ -54,7 +54,7 @@ class Backend::Lastfm
 		begin
 			get_hits(resource, query) do |h|
 				begin
-					hit = { type: resource_to_type(resource) }
+					hit = { type: resource_to_type(resource), images: {} }
 					case resource
 					when 'artist' then
 						hit[:popularity] = h['listeners'].to_f
@@ -62,26 +62,54 @@ class Backend::Lastfm
 					
 					when 'album' then
 						hit[:name] = h['name']
+						hit[:artist] = h['artist']
+						hit[:fullname] = "#{h['name']} by #{h['artist']}"
 						
 					when 'track' then
 						hit[:popularity] = h['listeners'].to_f
 						hit[:name] = "#{h['artist']} - #{h['name']}"
+						hit[:artist] = h['artist']
 						
 					when 'event' then
 						hit[:popularity] = h['attendance'].to_f
 						hit[:name] = h['title']
+						a = h['artists']['artist']
+						a = [a] unless a.is_a? Array
+						hit[:artists] = a
+						hit[:fullname] = "#{hit[:artists].join(', ')} @ hit[:name]"
+						geopoint = h['venue']['location']['geo:point']
+						long = geopoint['geo:long'].to_f
+						lat = geopoint['geo:lat'].to_f
+						hit[:location] = { longitude: long, latitude: lat }
+						hit[:city] = h['venue']['location']['city']
 						
 					else
 						hit = nil
 					end
 					
+					if h['image']
+						h['image'].each do |i|
+							u = i['#text']
+							s = case i['size']
+							when 'small' then :tiny
+							when 'medium' then :small
+							when 'large' then :medium
+							when 'extralarge' then :large
+							else :unknown
+							end
+							hit[:images][s] = u
+						end
+					end
+					
 					hits << hit if hit
 					
 				rescue Exception => e
+					raise e
 					Rails.logger.error "error parsing hit #{h.inspect}: #{e.message}"
 				end
 			end
 		rescue Exception => e
+			raise e
 			Rails.logger.error "error searching for resource #{resource}: #{e.message}"
 		end
 		hits
@@ -91,10 +119,13 @@ class Backend::Lastfm
 	def self.get_hits(resource, query)
 		begin
 			response = req("method=#{resource}.search&#{resource}=#{query}")
+			return if response['results']['opensearch:totalResults'] == '0'
 			hits = response['results']["#{resource}matches"][resource]
 			hits.each { |h| yield h }
 		rescue Exception => e
+			Rails.logger.debug response.inspect
 			Rails.logger.error "error getting hits for resource #{resource}: #{e.message}"
+			raise e
 		end
 	end
 	
