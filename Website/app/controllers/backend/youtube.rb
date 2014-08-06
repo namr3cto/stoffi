@@ -21,11 +21,18 @@ module Backend::Youtube
 	# Search for a query in a given set of categories
 	def self.search(query, categories)
 		return [] unless categories.include? 'songs'
-		response = req("search?type=video&part=#{SEARCH_PARTS}&fields=#{SEARCH_FIELDS}&q=#{query}&maxResults=20")
-		Rails.logger.debug response.inspect
+		
+		path  = 'search?type=video&maxResults=20&videoCategoryId=10'
+		path += '&videoEmbeddable=true'
+		path += "&part=#{SEARCH_PARTS}&fields=#{SEARCH_FIELDS}"
+		path += "&q=#{query}"
+		response = req(path)
 		ids = response['items'].collect { |i| i['id']['videoId'] }.join(',')
-		Rails.logger.debug ids.inspect
-		response = req("videos?part=#{DETAILS_PARTS}&fields=#{DETAILS_FIELDS}&id=#{ids}")
+		
+		path  = 'videos'
+		path += "?part=#{DETAILS_PARTS}&fields=#{DETAILS_FIELDS}"
+		path += "&id=#{ids}"
+		response = req(path)
 		items = []
 		response['items'].each do |i|
 			item = {
