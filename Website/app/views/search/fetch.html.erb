@@ -1,32 +1,41 @@
-	<ul id='result-list'>
+<ul id='result-list'>
 	
 	<% if @results[:exact].has_key? :artist %>
 		<%
-		artist = @results[:exact][:artist]
+		artist = @results[:exact][:artist] %>
+		<% if false%>
 		p = WikipediaLink.find_page(artist[:name], I18n.locale, :artist)
 		s = WikipediaLink.summary(p)
 		if s and s[:info]
-			%>
+		<% end %>
 	<li class='exact artist'>
 		<div class='image'>
-			<%=image_tag artist[:images][:small] %>
+			<%
+			img = "assets/media/artist.png"
+			[:medium, :large, :small, :huge, :tiny, :unknown].each do |s|
+				unless artist[:images][s].to_s.empty?
+					img = artist[:images][s]
+					break
+				end
+			end
+			%>
+			<%=image_tag img %>
 		</div>
 		<div class='banner'>
-			<span class='title'>
+			<h3>
 				<%=artist[:name]%>
-			</span>
-			<br/>
-			<span class='statistics'>
+			</h3>
+			<p class='statistics'>
 				Listened to 3,141 times by 242 fans
-			</span>
+			</p>
 			<br/>
-			<span class='tabs'>
+			<p class='tabs'>
 				<a class='active tab'>Info</a>
 				<a class='tab'>Albums</a>
 				<a class='tab'>Songs</a>
 				<a class='tab'>Events</a>
 				<a class='tab'>Fans</a>
-			</span>
+			</p>
 		</div>
 		<div class='content' style='padding-left: 100px'>
 			<%
@@ -40,10 +49,10 @@
 			%>
 			<dl>
 			<% info_order.each do |k| %>
-				<% v = s[:info][k] %>
-				<% next if v.to_s.empty? %>
+				<%#v = s[:info][k] %>
+				<%#next if v.to_s.empty? %>
 				<dt><%=k.gsub('_',' ').capitalize%></dt>
-				<dd><%=raw v%></dd>
+				<dd><%=raw "Lorem ipsum" %></dd>
 				<%
 				infos += 1
 				break if infos >= max_infos
@@ -51,28 +60,87 @@
 			<% end %>
 			</dl>
 			<p class='clear'>&nbsp;</p>
-			<p><%=raw s[:intro]%></p>
+			<p><%=raw 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' %></p>
 		</div>
 		
 	</li>
-		<% end %>
+		<%#end %>
 	<% end %>
 	
 	<% @results[:hits].each do |hit| %>
-	
-	<%
-	case hit[:type]
-	when :artist then %>
-		<li class='artist'>artist: <%=hit[:name]%></li>
-	<% when :album then %>
-		<li class='artist'>album: <%=hit[:name]%></li>
-	<% when :song then %>
-		<li class='artist'>song: <%=hit[:name]%></li>
-	<% when :genre then %>
-		<li class='artist'>genre: <%=hit[:name]%></li>
-	<% when :event then %>
-		<li class='artist'>event: <%=hit[:name]%></li>
-	<% end %>
-	
+		<%
+		one_liner = (hit[:type] == :song and hit[:images].empty?)
+		cname = "clickable #{hit[:name]}"
+		cname += ' one-line' if one_liner
+		%>
+		<li class='<%=cname%>' data-type='hit'>
+			<%
+			img = "assets/media/artist.png"
+			[:small, :medium, :tiny, :large, :huge, :unknown].each do |s|
+				unless hit[:images][s].to_s.empty?
+					img = hit[:images][s]
+					break
+				end
+			end
+			%>
+			<% unless one_liner %>
+			<div class='image'>
+				<img src='<%=img%>'/>
+			</div>
+			<% end %>
+			<div class='content'>
+				<% if one_liner  %>
+					<a class='button'>&#9654;</a>
+				<% end %>
+				
+				<h3><%=hit[:name] %></h3>
+				<%
+				hit[:artists] ||= []
+				artists = hit[:artists].collect {|a| "<a>#{a}</a>" }
+				a_txt = ""
+				if artists.length == 1
+					a_txt = "#{artists[0]}"
+				elsif artists.length == 2
+					a_txt = "#{artists.join(' & ')}"
+				elsif artists.length > 2
+					a_txt = "#{artists[0..-2].join(', ')}"
+					a_txt += " & #{artists[-1]}"
+				end
+				%>
+				
+				<% case hit[:type]
+				when :song then %>
+				<% a_txt = " by #{a_txt}" unless a_txt.empty? %>
+				<% if one_liner %>
+				<span><%=raw a_txt%></span>
+				<% else %>
+				<p>A song<%=raw a_txt%></p>
+				<p><a class='button'>&#9654;</a></p>
+				<% end %>
+				
+				<% when :artist then %>
+				<p>Genres: <a>hip hop</a>, <a>rap</a>, <a>electropop</a></p>
+				<p>Songs: <a>A Song</a>, <a>Something</a>, <a>Something Else</a>, <a>Here Comes Another Song</a>, <a>This Song is Cool</a></p>
+				
+				<% when :album then %>
+				<% a_txt = " by #{a_txt}" unless a_txt.empty? %>
+				<p>An album <%=raw a_txt%></p>
+				<p>Songs: <a>Relapse</a>, <a>Something</a>, <a>Something Else</a>, <a>Here Comes Another Song</a>, <a>This Song is Cool</a></p>
+				
+				<% when :event then %>
+				<% a_txt = " with #{a_txt}" unless a_txt.empty? %>
+				<p>An event <%=raw a_txt%></p>
+				<p>In <%=hit[:city]%> at Aug 4th, 13:37<p>
+					
+				<% end %>
+				
+			</div>
+	</li>
 	<% end %>
 </ul>
+
+<script>
+// TODO: can someone please help me move this into search.js.coffee?
+$("[data-type='hit'] img").load(function() { resizeImage($(this), 64); });
+$(".exact img").load(function() { resizeImage($(this), 120); });
+</script>
