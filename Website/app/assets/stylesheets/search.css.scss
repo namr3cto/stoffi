@@ -1,3 +1,5 @@
+@import 'colors';
+
 #search-pane
 {
     .large-logo
@@ -35,15 +37,11 @@
 	    {
 	        .image
 	        {
-	            position: absolute;
 	            margin-left: 100px;
 	            height: 120px;
-	            border: 1px solid black;
-	            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+	            width: 120px;
 	            img
 	            {
-	                position: relative;
-	                height: 120px;
 	                clip: rect(0px,120px,120px,0px);
 	            }
 	        }
@@ -54,18 +52,16 @@
                 vertical-align: bottom;
                 padding-left: 230px;
                 
-                .title
+                h3
                 {
                     font-size: 24pt;
-                    font-weight: bold;
-                    font-style: normal;
-                    color: black;
                 }
                 
                 .statistics
                 {
                     color: rgba(0,75,150,0.5);
                     font-style: italic;
+                    font-size: 12pt;
                     .key { text-decoration: underline; color: black; }
                 }
                 
@@ -128,6 +124,90 @@
                 font-style: normal;
                 font-size: 10pt;
                 color: black;
+            }
+        }
+        
+        li
+        {
+            margin: 25px 0px;
+            .image
+            {
+	            position: absolute;
+	            border: 1px solid black;
+	            box-shadow: 2px 2px 2px rgba(0,0,0,0.2);
+	            height: 64px;
+	            width: 64px;
+                img
+                {
+	                position: absolute;
+	                clip: rect(0px,64px,64px,0px);
+                }
+            }
+            
+            h3, p
+            {
+                overflow: hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+            }
+            
+            h3
+            {
+                font-size: 12pt;
+                font-weight: bold;
+                font-style: normal;
+                color: black;
+                margin: 0;
+            }
+            
+            p
+            {
+                margin: 3px 0px;
+                font-size: 10pt;
+                color: rgba(0,75,150,0.5);
+                font-style: italic;
+                
+                .key { text-decoration: underline; color: black; }
+                a { color: $grayed_primary; }
+            }
+            
+            a.button
+            {
+                font-style: normal;
+                color: black;
+                font-size: 8pt;
+                padding: 0px 3px;
+                margin: 2px 5px 2px 0px;
+                &:hover { text-decoration: none; }
+            }
+            
+            .content
+            {
+                margin-left: 74px;
+            }
+            
+            &.one-line
+            {
+                margin: 10px 0px;
+                .content
+                {
+                    margin-left: 0;
+                    h3
+                    {
+                        overflow: visible;
+                        display: inline-block;
+                        font-size: 10pt;
+                    }
+                    
+                    span
+                    {
+                        font-size: 10pt;
+                        color: $grayed_primary;
+                        font-style: normal;
+                        a { color: $grayed_primary; }
+                    }
+                }
+                
             }
         }
 	}

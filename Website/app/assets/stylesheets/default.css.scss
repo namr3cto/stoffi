@@ -62,6 +62,7 @@ span { img { margin: 0; vertical-align: middle; } }
 .right { text-align: right; }
 .center { text-align: center; }
 .interactive:hover { cursor: pointer; }
+.clickable:hover { cursor: pointer; }
 .error { color: darken(red, 20%); margin: 10px 0px; }
 .down { text-transform: lowercase; }
 .up { text-transform: uppercase; }
