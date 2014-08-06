@@ -18,9 +18,20 @@
     url = "/search/fetch?q=#{query}&c=#{categories}&s=#{sources}"
     div = $('#search-results')
     req = $.get url
-    req.success (html) -> div.html(html)
+    req.success (html) ->
+        div.html(html)
     req.error (jqXHR, status, error) ->
         div.html("<p>#{status}</p><p>#{error}</p>")
+    
+@resizeImage = (image, size) ->
+    if image.height() > image.width()
+        image.width(size)
+    else
+        image.height(size)
+        l = (image.width() - size) / 2
+        r = size + l
+        image.css('clip', "rect(0px,#{r}px,#{size}px,#{l}px)")
+        image.css('margin-left', "-#{l}px")
         
 ready = ->
     $('#search').autocomplete({
