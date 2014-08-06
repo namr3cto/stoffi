@@ -125,11 +125,7 @@ class SearchController < ApplicationController
 		hits = rank(hits, query)
 		
 		results = { hits: hits.collect { |h|
-			{
-				name: h[:name],
-				type: h[:type],
-				images: h[:images]
-			}
+			h.except(:distance, :score)
 		} }
 		results[:exact] = {}
 		
@@ -182,6 +178,7 @@ class SearchController < ApplicationController
 					artists.each do |name|
 						h = hit.dup
 						h[:popularity] = popularity_pot
+						h[:name] = name
 						add_parsed_hit(:artist, parsed_hits, h)
 					end
 				
@@ -191,6 +188,7 @@ class SearchController < ApplicationController
 					# song from the song title 
 					artist,title = Song.parse_title(hit[:name])
 					hit[:name] = title
+					hit[:artist] ||= artist
 					hit[:artists] = Artist.split_name(hit[:artist]) if hit[:artist]
 					add_parsed_hit(:song, parsed_hits, hit, true)
 					
@@ -245,7 +243,7 @@ class SearchController < ApplicationController
 	
 	def add_parsed_hit(type, collection, hit, allow_dups = false)
 		# duplicates: random key, otherwise use name
-		key = allow_dups ? (0...16).map { (65 + rand(26)).chr }.join : hit[:name]
+		key = allow_dups ? (0...16).map { (65 + rand(26)).chr }.join : hit[:name].downcase
 		
 		if collection[type].has_key? key
 			collection[type][key][:popularity] += hit[:popularity]
