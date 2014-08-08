@@ -21,7 +21,6 @@ class User < ActiveRecord::Base
 		 
 	has_many :links, :dependent => :destroy
 	has_many :devices, :dependent => :destroy
-	has_many :sources, :dependent => :destroy
 	has_many :configurations, :dependent => :destroy
 	has_many :playlists, :dependent => :destroy
 	has_many :shares, :dependent => :destroy

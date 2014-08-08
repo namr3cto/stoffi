@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140802070900) do
+ActiveRecord::Schema.define(version: 20140807172958) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -424,7 +424,6 @@ ActiveRecord::Schema.define(version: 20140802070900) do
     t.string   "title"
     t.string   "genre"
     t.float    "length"
-    t.string   "path"
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
@@ -447,14 +446,18 @@ ActiveRecord::Schema.define(version: 20140802070900) do
   add_index "songs_users", ["user_id", "song_id"], name: "by_song_and_user", unique: true
 
   create_table "sources", force: true do |t|
-    t.integer  "user_id"
-    t.integer  "configuration_id"
-    t.string   "type"
-    t.string   "data"
-    t.boolean  "include"
+    t.string   "name"
+    t.string   "foreign_id"
+    t.string   "foreign_url"
+    t.integer  "resource_id"
+    t.string   "resource_type"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.decimal  "length"
   end
+
+  add_index "sources", ["foreign_url"], name: "index_sources_on_foreign_url", unique: true
+  add_index "sources", ["resource_id", "resource_type"], name: "index_sources_on_resource_id_and_resource_type"
 
   create_table "translations", force: true do |t|
     t.integer  "language_id"

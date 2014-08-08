@@ -234,9 +234,13 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def current_user
-		user = super
-		return current_token.user unless user or not current_token
-		user
+		begin
+			user = super
+			return current_token.user unless user or not current_token
+			user
+		rescue
+			nil
+		end
 	end
 	
 	def process_me(id)

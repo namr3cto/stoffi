@@ -22,6 +22,9 @@ class Search < ActiveRecord::Base
 				weight *= score_weights[:user]
 			end
 			
+			longitude ||= 0
+			latitude ||= 0
+			
 			d = Haversine.distance(
 				longitude, latitude, search.longitude, search.latitude).to_meters / 10000
 			d = 0.001 if d == 0

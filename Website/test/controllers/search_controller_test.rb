@@ -7,7 +7,7 @@ class SearchControllerTest < ActionController::TestCase
   end
 
   test "should get suggest" do
-    get :suggest
+    get :suggest, format: :json
     assert_response :success
   end
 

@@ -256,6 +256,7 @@ class Artist < ActiveRecord::Base
 	
 	# Split an artist name when it contains words like: and, feat, vs
 	def self.split_name(name)
+		return [] if name.to_s.empty?
 		name.split(/(?:\s+(?:&|feat(?:uring|s)?|ft|vs|and)(?:\s+|\.\s*)|\s*[,\+]\s*)/i)
 	end
 end

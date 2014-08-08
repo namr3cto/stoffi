@@ -1,25 +1,25 @@
 require 'test_helper'
 
 class UserTest < ActiveSupport::TestCase
-  test "should create user" do
+	test "should create user" do
 		passwd = "foobar"
-    assert_difference('User.count', 1, "Didn't create user") do
-      User.create(:email => "foo@bar.com", :password => passwd, :password_confirmation => passwd)
-    end
-  end
+		assert_difference('User.count', 1, "Didn't create user") do
+			User.create(:email => "foo@bar.com", :password => passwd, :password_confirmation => passwd)
+		end
+	end
 
-  test "should not save user with short password" do
+	test "should not save user with short password" do
 		passwd = "foo"
-    assert_no_difference('User.count', "Created user with short password") do
-      User.create(:email => "foo@bar.com", :password => passwd, :password_confirmation => passwd)
-    end
-  end
+		assert_no_difference('User.count', "Created user with short password") do
+			User.create(:email => "foo@bar.com", :password => passwd, :password_confirmation => passwd)
+		end
+	end
 
-  test "should not save user without password" do
-    assert_no_difference('User.count', "Created user without password") do
-      User.create(:email => "foo@bar.com")
-    end
-  end
+	test "should not save user without password" do
+		assert_no_difference('User.count', "Created user without password") do
+			User.create(:email => "foo@bar.com")
+		end
+	end
 
 	test "should destroy user" do
 		alice = users(:alice)

@@ -78,9 +78,9 @@ class PlaylistsControllerTest < ActionController::TestCase
 			post :create, {:playlist => @playlist.attributes, :songs => songs}
 		end
 		
-		assert_not_nil assigns(:playlist)
-		assert_redirected_to playlist_path(assigns(:playlist))
-		assert_equal 3, assigns(:playlist).songs.count
+		assert_not_nil assigns(:playlist), 'Did not assign @playlist'
+		assert_redirected_to playlist_path(assigns(:playlist)), 'Did not redirect to playlist'
+		assert_equal 3, assigns(:playlist).songs.count, 'Did not merge songs'
 	end
 
 	test "should get edit" do

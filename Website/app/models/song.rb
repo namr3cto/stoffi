@@ -21,60 +21,13 @@ class Song < ActiveRecord::Base
 	has_and_belongs_to_many :users, :uniq => true
 	has_and_belongs_to_many :playlists, :uniq => true
 	has_many :listens
-	has_many :shares, :as => :object
-	
-	# validations
-	validates_presence_of :path
-	
-	scope :top5,
-		select("songs.id, songs.title, songs.path, count(listens.id) AS listens_count").
-		joins(:listens).
-		group("songs.title").
-		order("listens_count DESC").
-		limit(5)
-	
-	# The URL of the song if it exists on an external service.
-	def source
-		if youtube?
-			return "http://www.youtube.com/v/" + youtube_id + "?fs=1"
-		else
-			return ""
-		end
-	end
+	has_many :shares, as: :object
+	has_many :sources, as: :resource
 	
 	# The art of the song.
 	def picture(size = :medium)
-		return "https://img.youtube.com/vi/" + youtube_id + "/default.jpg" if youtube?
-		return art_url if (art_url.to_s != "" and art_url.to_s.downcase != "null")
-		return "http://beta.stoffiplayer.com/assets/media/disc.png"
-	end
-	
-	# The ID of the song on YouTube if it's on YouTube.
-	def youtube_id
-		if youtube?
-			return path["stoffi:track:youtube:".length .. -1]
-		else
-			return ""
-		end
-	end
-	
-	# Whether or not the song is on YouTube.
-	def youtube?
-		return path && path.starts_with?("stoffi:track:youtube:")
-	end
-	
-	# The ID of the song on SoundCloud if it's on SoundCloud.
-	def soundcloud_id
-		if soundcloud?
-			return path["stoffi:track:soundcloud:".length .. -1]
-		else
-			return ""
-		end
-	end
-	
-	# Whether or not the song is on SoundCloud.
-	def soundcloud?
-		return path && path.starts_with?("stoffi:track:soundcloud:")
+		return art_url unless art_url.to_s.empty? or art_url.to_s.downcase == "null"
+		return "/assets/media/disc.png"
 	end
 	
 	# A prettified description of the song.
@@ -90,13 +43,6 @@ class Song < ActiveRecord::Base
 		s = title
 		s = "#{artist.name} - #{s}" if artist
 		return s
-	end
-	
-	# The URL for opening the song in Stoffi Music Player.
-	def play
-		return "stoffi:track:youtube:#{youtube_id}" if youtube?
-		return "stoffi:track:soundcloud:#{soundcloud_id}" if soundcloud?
-		return url
 	end
 	
 	# The artist of the song.
@@ -121,6 +67,12 @@ class Song < ActiveRecord::Base
 		s+= "on Stoffi"
 	end
 	
+	def xpath
+		return nil if sources.length == 0
+		src = sources.first
+		"stoffi:track:#{src.name}:#{src.foreign_id}"
+	end
+	
 	# The options to use when the song is serialized.
 	def serialize_options
 		{
@@ -143,151 +95,101 @@ class Song < ActiveRecord::Base
 	def self.search_files(search, limit = 5)
 		if search
 			search = e(search)
-			self.where("title LIKE ? AND path NOT LIKE 'stoffi:track:%'", "%#{search}%").
+			self.join(:sources).where("songs.title LIKE ? AND sources.name 'local'", "%#{search}%").
 			limit(limit)
 		else
 			scoped
 		end
 	end
 	
-	# Returns a song matching a value.
+	# Returns a song matching a hash of values, describing the song.
 	#
-	# The value can be the ID (integer) or the name (string) of the song.
-	# The song will be created if it is not found (unless <tt>value</tt> is an ID).
+	# The value should be a hash with the following structure:
+	#  title: the name of the song
+	#  path: the path of the song (required)
+	#  length: the length of the song, in seconds
+	#  artist: the name of the artist
+	#    or
+	#  artists: an array with each artist
+	#  album: the name of the album to which the song belongs
+	#  art_url: a url to an image for the song
+	#
+	# The song will be created if it is not found
 	def self.get(current_user, value)
-		value = self.find(value) if value.is_a?(Integer)
-		if value.is_a?(Hash)
-			p = value
+		raise 'missing path key in hash' unless value.has_key? :path
+		begin
+			v = value
+			v[:path] = fix_old_path(v[:path])
+			p = Source.parse_path(v[:path])
 			
-			if p.key? :path
-				if p[:path].starts_with? "youtube://"
-					id = p[:path]["youtube://".length .. -1]
-					p[:path] = "stoffi:track:youtube:#{id}"
-				
-				elsif p[:path].starts_with? "soundcloud://"
-					id = p[:path]["soundcloud://".length .. -1]
-					p[:path] = "stoffi:track:soundcloud:#{id}"
-					
-				end
+			case p[:source]
+			when :local, :url
+				song = find_by_path_and_length(p, v[:length].to_f)
+				song = create_from_hash(v) unless song.is_a? Song
+			else
+				song = get_by_path(p)
 			end
 			
-			value = self.get_by_path(p[:path])
-			
-			# try to get local file by looking for path and length.
-			# however, length is a float so we use a +- 0.01 interval to match lenth
-			unless value.is_a? Song
-				l = p[:length].to_f
-				value = self.where(path: p[:path]).where("#{l-0.01} < length and length < #{l+0.01}").first
+			if current_user and song and not current_user.songs.include? song
+				current_user.songs << song
 			end
+			return song
 			
-			unless value.is_a?(Song)
-			
-				# fix artist, album objects
-				if p[:artist].to_s != ""
-					logger.debug "trying to find matching artist: #{p[:artist]}"
-					artist = Artist.get(p[:artist])
-					p.delete(:artist)
-				end
-				if p[:album].to_s != ""
-					album = Album.get(p[:album])
-					p.delete(:album)
-				end
-				
-				# fix params
-				p[:length] = p[:length].to_f if p[:length]
-				p[:score] = p[:score].to_i if p[:score]
-				
-				value = Song.new
-				
-				value.art_url = p[:art_url] if p[:art_url]
-				value.foreign_url = p[:foreign_url] if p[:foreign_url]
-				value.length = p[:length] if p[:length]
-				value.score = p[:score] if p[:score]
-				value.title = p[:title] if p[:title]
-				value.path = p[:path] if p[:path]
-				
-				if value.save
-					value.artists << artist if artist and not artist.songs.exists?(value.id)
-					value.albums << album if album and albums.songs.exists?(value.id)
-					artist.albums << album if artist and album and artist.albums.exists?(album.id)
-				end
-			end
+		rescue StandardError => e
+			raise e
+			logger.error "could not get song: #{e.message}"
 		end
-		if current_user and value.is_a?(Song) and not current_user.songs.exists?(value.id)
-			current_user.songs << value
-		end
-		return value if value.is_a?(Song)
-		return nil
 	end
 	
 	# Finds a song given its path.
 	#
 	# If no song is found but exists on an external service then it will be created and saved to the database.
 	def self.get_by_path(path)
+		# ensure backwards compatibility
+		path = parse_path(path) if path.is_a? String
+		
 		begin
 			song = nil
-			if path.start_with? "stoffi:track:" or path.start_with? "http://" or path.start_with? "https://"
-				song = find_by(path: path)
-			end
-			unless song
-				if path.start_with? "stoffi:track:youtube:"
-					song = create(:path => path)
-					
-					http = Net::HTTP.new("gdata.youtube.com", 443)
-					http.use_ssl = true
-					data = http.get("/feeds/api/videos/#{song.youtube_id}?v=2&alt=json", {})
-					feed = JSON.parse(data.body)
-					
-					artist, title = parse_title(feed['entry']['title']['$t'])
-					artist = feed['entry']['author'][0]['name']['$t'] if artist.to_s == ''
-					artist = Artist.get(artist) if artist.to_s != ''
-					
-					id = feed['entry']['media$group']['yt$videoid']['$t']
-					
-					song.foreign_url = "https://www.youtube.com/watch?v=#{id}"
-					song.title = title
-					song.length = feed['entry']['media$group']['yt$duration']['seconds']
-					song.art_url = feed['entry']['media$group']['media$thumbnail'][0]['url']
-					
-					artist = Artist.get(artist)
-					
-					song.artists << artist if artist
 			
-				elsif path.start_with? "stoffi:track:soundcloud:"
-					song = create(:path => path)
-					
-					client_id = "2ad7603ebaa9cd252eabd8dd293e9c40"
-					http = Net::HTTP.new("api.soundcloud.com", 443)
-					http.use_ssl = true
-					data = http.get("/tracks/#{song.soundcloud_id}.json?client_id=#{client_id}", {})
-					track = JSON.parse(data.body)
-					
-					artist, title = parse_title(track['title'])
-					artist = track['user']['username'] if artist.to_s == ''
-					artist = Artist.get(artist) if artist.to_s != ''
-					
-					song.foreign_url = track['permalink_url']
-					song.title = title
-					song.length = track['duration'].to_f / 1000.0
-					song.genre = track['genre']
-					song.art_url = track['artwork_url']
-					
-					song.artists << artist if artist
-				end
-				
+			unless [:local, :url].include? path[:source]
+				src = Source.find_by(name: path[:source], foreign_id: path[:id])
+				song = src.resource if src
 			end
-			song.save if song
-			return song
-		rescue
-			return nil
+			
+			return song if song.is_a? Song
+			
+			case path[:source]
+			when :youtube
+				songs = Backend::Youtube.get_songs([path[:id]])
+			when :soundcloud
+				songs = Backend::Soundcloud.get_songs([path[:id]])
+			end
+			
+			if songs.is_a? Array and songs.length > 0
+				return create_from_hash(songs[0])
+			end
+		rescue StandardError => e
+			raise e
 		end
+		return nil
+	end
+	
+	def self.find_by_path_and_length(path, length)
+		w = "? < length and length < ? and name = ? and foreign_id = ?"
+		low = length-0.01
+		upp = length+0.01
+		sources = Source.where(w, low, upp, path[:source], path[:id])
+		l = sources.length
+		return nil if l == 0
+		return sources[0].resource if l == 1
+		raise "multiple sources matching length: #{length} and path: #{path}"
 	end
 	
 	# Returns a top list of songs with most plays.
 	#
 	# If <tt>user</tt> is supplied then only listens of that user will be considered.
 	def self.top(limit = 5, user = nil)
-		self.select("songs.id, songs.title, songs.art_url, songs.path, count(listens.id) AS listens_count").
+		self.select("songs.id, songs.title, songs.art_url, count(listens.id) AS listens_count").
 		joins("LEFT JOIN listens ON listens.song_id = songs.id").
 		where(user == nil ? "" : "listens.user_id = #{user.id}").
 		group("songs.id").
@@ -297,6 +199,7 @@ class Song < ActiveRecord::Base
 	
 	# Extracts the title and artists from a string.
 	def self.parse_title(str)
+		return "", "" if str.to_s.empty?
 		
 		artist, title = split_title(str)
 		
@@ -315,6 +218,79 @@ class Song < ActiveRecord::Base
 	end
 	
 	private
+	
+	def self.create_from_hash(hash)
+		s = hash
+		song = nil
+		begin
+			artists = extract_artists(s)
+			artist, title = parse_title(s[:name] || s[:title])
+			artists = [artist] unless artists.empty?
+		
+			song = Song.new
+			song.title = title
+			song.genre = s[:genre]
+			
+			# TODO: create image objects instead
+			song.art_url = s[:art_url]
+			
+			if song.save
+				unless s[:album].to_s.empty?
+					album = Album.get(s[:album])
+					song.albums << album if album
+				end
+				
+				artists.each do |a|
+					_a = Artist.get(a) unless a.to_s.empty?
+					song.artists << _a if _a
+					_a.albums << album if album and not _a.albums.include?(album)
+				end
+				
+				src = Source.get_by_path(s[:path])
+				if src
+					src.foreign_url = s[:foreign_url] || s[:url]
+					src.length = s[:length].to_f if s[:length]
+					#src.popularity = s[:popularity]
+					song.sources << src
+				end
+			end
+		rescue StandardError => e
+			raise e
+			logger.error "could not create song from hash: #{e.message}"
+		end
+		return song
+	end
+	
+	def self.extract_artists(song)
+		artists = []
+		if song.has_key? :artists
+			artists = v[:artists]
+		elsif song.has_key? :artist
+			artists = Artist.split_name(song[:artist])
+		end
+		retval = []
+		artists.each do |a|
+			artist = Artist.get(a)
+			retval << artist if artist
+		end
+		song.delete(:artist)
+		song.delete(:artists)
+		return retval
+	end
+	
+	def self.fix_old_path(path)
+		if path.starts_with? "youtube://"
+			id = path["youtube://".length .. -1]
+			return "stoffi:track:youtube:#{id}"
+		
+		elsif path.starts_with? "soundcloud://"
+			id = path["soundcloud://".length .. -1]
+			return "stoffi:track:soundcloud:#{id}"
+			
+		else
+			return path
+		end
+	end
 	
 	def self.split_title(str)
 		# remove meta phrases

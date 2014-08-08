@@ -118,7 +118,6 @@ gem "wikicloth"
 #gem "truncate_html"
 
 gem "deep_merge"
-
 gem "htmlentities"
-
 gem 'haversine'
+gem 'ruby-duration'

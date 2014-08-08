@@ -57,7 +57,7 @@ class SearchController < ApplicationController
 			lat = pos[:latitude]
 			loc = I18n.locale.to_s
 			user = current_user.id if user_signed_in? else -1
-			@suggestions = Search.suggest(q, page, long, lat, loc, user)
+			@suggestions = Search.suggest(@query, page, long, lat, loc, user)
 		end
 		respond_with(@suggestions)
 	end

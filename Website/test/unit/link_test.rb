@@ -144,7 +144,6 @@ class LinkTest < ActiveSupport::TestCase
 			:link => share.resource.url,
 			:name => share.resource.title,
 			:caption => "by #{share.resource.artist.name}",
-			:source => share.resource.source,
 			:picture => share.resource.picture
 		}}
 		OAuth2::AccessToken.any_instance.expects(:post).with('/me/feed', params).returns(@response)

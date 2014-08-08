@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+not_afraid_local:
+  name: local
+  foreign_id: /path/to/file.mp3
+  resource: not_afraid (Song)
+  length: 123.0
+  
+one_love_youtube:
+  name: youtube
+  foreign_id: abc
+  foreign_url: http://foo.com/abc
+  resource: one_love (Song)
+
+no_woman_no_cry_youtube:
+  name: youtube
+  foreign_id: xyz
+  foreign_url: http://foo.com/xyz
+  resource: no_woman_no_cry (Song)
+
+no_woman_no_cry_soundcloud:
+  name: soundcloud
+  foreign_id: 123
+  foreign_url: http://bar.com/123
+  resource: no_woman_no_cry (Song)

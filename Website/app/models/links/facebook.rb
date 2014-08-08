@@ -19,7 +19,7 @@ module Links::Facebook
 		l = s.resource.url
 		n = s.resource.title
 		c = "by #{s.resource.artist.name}"
-		o = s.resource.source
+		#o = s.resource.source
 		p = s.resource.picture
 	
 		post('/me/feed', :params =>
@@ -28,7 +28,7 @@ module Links::Facebook
 			:link => l,
 			:name => n,
 			:caption => c,
-			:source => o,
+			#:source => o,
 			:picture => p
 		})
 	end
