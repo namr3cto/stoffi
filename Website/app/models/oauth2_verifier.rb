@@ -16,7 +16,7 @@ class Oauth2Verifier < OauthToken
 	# Exchanges the token by invalidating the current token and creating a new one.
 	def exchange!(params={})
 		OauthToken.transaction do
-			token = Oauth2Token.create! :user=>user,:client_application=>client_application, :scope => scope
+			token = Oauth2Token.create! user: user,client_application: client_application, scope: scope
 			invalidate!
 			token
 		end

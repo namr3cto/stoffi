@@ -10,8 +10,8 @@
 
 class LinksController < ApplicationController
 
-	oauthenticate :only => [:index, :show, :update, :destroy]
-	oauthenticate :interactive => true, :only => [:edit]
+	oauthenticate only: [:index, :show, :update, :destroy]
+	oauthenticate interactive: true, only: [:edit]
 	respond_to :html, :mobile, :embedded, :xml, :json
 	
 	# GET /links
@@ -25,21 +25,21 @@ class LinksController < ApplicationController
 				path = "#{request.protocol}#{request.host_with_port}/auth/#{ln}"
 				@new_links <<
 				{
-					:display => n,
-					:kind => :link,
-					:url => path
+					display: n,
+					kind: :link,
+					url: path
 				}
 			end
 		end
 		
-		@all = { :connected => @links, :not_connected => @new_links }
+		@all = { connected: @links, not_connected: @new_links }
 		
 		respond_with @links do |format|
 			format.html
 			format.mobile
 			format.embedded
-			format.xml { render :xml => @all }
-			format.json { render :json => @all }
+			format.xml { render xml: @all }
+			format.json { render json: @all }
 		end
 	end
 
@@ -62,7 +62,7 @@ class LinksController < ApplicationController
 
 	# POST /links
 	def create
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format].to_s)
+		render status: :forbidden and return if ["xml","json"].include?(params[:format].to_s)
 		auth = request.env["omniauth.auth"]
 		
 		if current_user != nil
@@ -96,14 +96,14 @@ class LinksController < ApplicationController
 				format.html { redirect_to request.env['omniauth.origin'] || settings_path }
 				format.mobile { redirect_to request.env['omniauth.origin'] || settings_path }
 				format.embedded { redirect_to request.env['omniauth.origin'] || dashboard_path }
-				format.xml  { render :xml => @link, :status => :created, :location => @link }
-				format.json { render :json => @link, :status => :created, :location => @link }
+				format.xml  { render xml: @link, status: :created, location: @link }
+				format.json { render json: @link, status: :created, location: @link }
 			else
 				format.html { redirect_to request.env['omniauth.origin'] || login_path }
 				format.mobile { redirect_to request.env['omniauth.origin'] || login_path }
 				format.embedded { redirect_to request.env['omniauth.origin'] || login_path }
-				format.xml  { render :xml => @link.errors, :status => :unprocessable_entity }
-				format.json { render :json => @link.errors, :status => :unprocessable_entity }
+				format.xml  { render xml: @link.errors, status: :unprocessable_entity }
+				format.json { render json: @link.errors, status: :unprocessable_entity }
 			end
 		end
 	end
@@ -116,17 +116,17 @@ class LinksController < ApplicationController
 
 		respond_with(@link) do |format|
 			if success
-				format.html { redirect_to(settings_path, :notice => 'Link was successfully updated.') }
-				format.mobile { redirect_to(settings_path, :notice => 'Link was successfully updated.') }
-				format.embedded { redirect_to(settings_path, :notice => 'Link was successfully updated.') }
+				format.html { redirect_to(settings_path, notice: 'Link was successfully updated.') }
+				format.mobile { redirect_to(settings_path, notice: 'Link was successfully updated.') }
+				format.embedded { redirect_to(settings_path, notice: 'Link was successfully updated.') }
 				format.xml  { head :ok }
 				format.json { head :ok }
 			else
-				format.html { render :action => "edit" }
-				format.mobile { render :action => "edit" }
-				format.embedded { render :action => "edit" }
-				format.xml  { render :xml => @link.errors, :status => :unprocessable_entity }
-				format.json { render :json => @link.errors, :status => :unprocessable_entity }
+				format.html { render action: "edit" }
+				format.mobile { render action: "edit" }
+				format.embedded { render action: "edit" }
+				format.xml  { render xml: @link.errors, status: :unprocessable_entity }
+				format.json { render json: @link.errors, status: :unprocessable_entity }
 			end
 		end
 	end

@@ -1,5 +1,5 @@
 class Source < ActiveRecord::Base
-	belongs_to :resource, :polymorphic => true
+	belongs_to :resource, polymorphic: true
 	
 	def self.parse_path(path)
 		raise 'path cannot be nil' unless path

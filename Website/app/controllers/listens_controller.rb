@@ -65,12 +65,12 @@ class ListensController < ApplicationController
 		album    = Album.get(params[:album])                     if params[:album].present?
 		song = Song.get(current_user,
 		{
-			:title => params[:track][:title],
-			:path => params[:track][:path],
-			:length => params[:track][:length],
-			:foreign_url => params[:track][:foreign_url],
-			:art_url => params[:track][:art_url],
-			:genre => params[:track][:genre]
+			title: params[:track][:title],
+			path: params[:track][:path],
+			length: params[:track][:length],
+			foreign_url: params[:track][:foreign_url],
+			art_url: params[:track][:art_url],
+			genre: params[:track][:genre]
 		}) if params[:track]
 		
 		album.songs << song if song && album && album.songs.find(song.id) == nil

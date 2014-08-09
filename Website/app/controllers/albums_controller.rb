@@ -10,7 +10,7 @@
  
 class AlbumsController < ApplicationController
 
-	oauthenticate :interactive => true, :except => [ :index, :show ]
+	oauthenticate interactive: true, except: [ :index, :show ]
 	respond_to :html, :mobile, :embedded, :xml, :json
 	
 	# GET /albums
@@ -32,7 +32,7 @@ class AlbumsController < ApplicationController
 		l, o = pagination_params
 		@album = Album.find(params[:id])
 		@album.paginate_songs(l, o)
-		respond_with(@album, :methods => [ :paginated_songs ])
+		respond_with(@album, methods: [ :paginated_songs ])
 	end
 
 	# GET /albums/new
@@ -53,7 +53,7 @@ class AlbumsController < ApplicationController
 
 	# PUT /albums/1
 	def update
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 		@album = Album.find(params[:id])
 		@album.update_attributes(params[:album])
 		respond_with @album
@@ -61,7 +61,7 @@ class AlbumsController < ApplicationController
 
 	# DELETE /albums/1
 	def destroy
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 		@album = Album.find(params[:id])
 		@album.destroy
 		respond_with @album

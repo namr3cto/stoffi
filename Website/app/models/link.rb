@@ -19,7 +19,7 @@ class Link < ActiveRecord::Base
 	include Base
 
 	belongs_to :user
-	has_many :backlogs, :dependent => :destroy, :class_name => "LinkBacklog"
+	has_many :backlogs, dependent: :destroy, class_name: "LinkBacklog"
 	
 	validates :provider, presence: true
 	
@@ -28,10 +28,10 @@ class Link < ActiveRecord::Base
 		exp = auth['credentials']['expires_at']
 		exp = DateTime.strptime("#{exp}",'%s') if exp
 		self.update_attributes(
-			:access_token => auth['credentials']['token'],
-			:access_token_secret => auth['credentials']['secret'],
-			:refresh_token => auth['credentials']['refresh_token'],
-			:token_expires_at => exp
+			access_token: auth['credentials']['token'],
+			access_token_secret: auth['credentials']['secret'],
+			refresh_token: auth['credentials']['refresh_token'],
+			token_expires_at: exp
 		)
 		
 		# retry pending submissions
@@ -56,29 +56,29 @@ class Link < ActiveRecord::Base
 	# The list of services currently supported.
 	def self.available
 		[
-			{ :name => "Twitter" },
-			{ :name => "Facebook" },
-			{ :name => "Google", :link_name => "google_oauth2" },
-			{ :name => "Vimeo" },
-			{ :name => "SoundCloud" },
-			{ :name => "Last.fm", :link_name => "lastfm" },
-			{ :name => "MySpace" },
-			{ :name => "Yahoo" },
-			{ :name => "Weibo" },
-			{ :name => "vKontakte" },
-			{ :name => "LinkedIn" },
-			{ :name => "Windows Live", :link_name => "windowslive" }
+			{ name: "Twitter" },
+			{ name: "Facebook" },
+			{ name: "Google", link_name: "google_oauth2" },
+			{ name: "Vimeo" },
+			{ name: "SoundCloud" },
+			{ name: "Last.fm", link_name: "lastfm" },
+			{ name: "MySpace" },
+			{ name: "Yahoo" },
+			{ name: "Weibo" },
+			{ name: "vKontakte" },
+			{ name: "LinkedIn" },
+			{ name: "Windows Live", link_name: "windowslive" }
 		]
 	end
 	
 	# Whether or not a user profile picture can be extracted from the third party account.
 	def picture?
-		["twitter", "facebook", "google_oauth2", "lastfm", "vimeo"].include?(provider)
+		provider.in? ["twitter", "facebook", "google_oauth2", "lastfm", "vimeo"]
 	end
 	
 	# Whether or not the third party has a social button.
 	def can_button?
-		["twitter", "google_oauth2"].include?(provider)
+		provider.in? ["twitter", "google_oauth2"]
 	end
 	
 	# Whether or not to show a social button.
@@ -88,7 +88,7 @@ class Link < ActiveRecord::Base
 	
 	# Whether or not stuff can be shared with the third party account.
 	def can_share?
-		["facebook", "twitter", "lastfm"].include?(provider)
+		provider.in? ["facebook", "twitter", "lastfm"]
 	end
 
 	# Whether or not to share stuff with the third party account.
@@ -98,7 +98,7 @@ class Link < ActiveRecord::Base
 	
 	# Whether or not listens can be shared with the third party account.
 	def can_listen?
-		["facebook", "lastfm"].include?(provider)
+		provider.in? ["facebook", "lastfm"]
 	end
 	
 	# Whether or not to share listens with the third party account.
@@ -108,7 +108,7 @@ class Link < ActiveRecord::Base
 	
 	# Whether or not donations can be shared with the third party account.
 	def can_donate?
-		["facebook", "twitter"].include?(provider)
+		provider.in? ["facebook", "twitter"]
 	end
 	
 	# Whether or not to share donations with the third party account.
@@ -118,7 +118,7 @@ class Link < ActiveRecord::Base
 	
 	# Whether or not playlists can be kept and synchronized with the third party account.
 	def can_create_playlist?
-		["facebook", "lastfm"].include?(provider)
+		provider.in? ["facebook", "lastfm"]
 	end
 	
 	# Whether or not to keep and synchronize playlists with the third party account.
@@ -185,7 +185,7 @@ class Link < ActiveRecord::Base
 				return response['person']['picture_url']
 				
 			end
-		rescue Exception => e
+		rescue StandardError => e
 			logger.debug "error fetching pictures from #{provider}"
 			logger.debug e.to_yaml
 		end
@@ -200,33 +200,33 @@ class Link < ActiveRecord::Base
 			case provider
 			when "facebook"
 				response = get("/me?fields=name,username")
-				r = { :fullname => response['name'] }
+				r = { fullname: response['name'] }
 				r[:username] = response['username'] if response['username'] != nil
 				return r
 				
 			when "twitter"
 				response = get("/1.1/users/show.json?user_id=#{uid}")
 				return {
-					:username => response['screen_name'],
-					:fullname => response['name']
+					username: response['screen_name'],
+					fullname: response['name']
 				}
 				
 			when "google_oauth2"
 				response = get("/oauth2/v1/userinfo")
 				return {
-					:fullname => response['name'],
-					:username => response['email'].split('@',2)[0]
+					fullname: response['name'],
+					username: response['email'].split('@',2)[0]
 				}
 				
 			when "vimeo"
 				response = get("/api/v2/#{uid}/info.json")
-				return { :fullname => response['display_name'] }
+				return { fullname: response['display_name'] }
 				
 			when "lastfm"
 				response = get("/2.0/?method=user.getinfo&format=json&user=#{uid}&api_key=#{creds[:id]}")
 				return {
-					:username => response['user']['name'],
-					:fullname => response['user']['realname']
+					username: response['user']['name'],
+					fullname: response['user']['realname']
 				}
 				
 			end
@@ -465,12 +465,12 @@ class Link < ActiveRecord::Base
 	# The options to use when the link is serialized.
 	def serialize_options
 		{
-			:except =>
+			except:
 			[
 				:access_token_secret, :access_token, :uid, :created_at,
 				:refresh_token, :token_expires_at, :user_id, :updated_at
 			],
-			:methods =>
+			methods:
 			[
 				:kind, :display, :url, :connectURL,
 				:can_button, :can_share, :can_listen, :can_donate, :can_create_playlist,
@@ -511,26 +511,26 @@ class Link < ActiveRecord::Base
 			http.use_ssl = true
 			res, data = http.post("/o/oauth2/token", 
 			{
-				:refresh_token => refresh_token,
-				:client_id => creds[:id],
-				:client_secret => creds[:key],
-				:grant_type => 'refresh_token'
+				refresh_token: refresh_token,
+				client_id: creds[:id],
+				client_secret: creds[:key],
+				grant_type: 'refresh_token'
 			}.map { |k,v| "#{k}=#{v}" }.join('&'))
 			response = JSON.parse(data)
 			exp = response['expires_in'].seconds.from_now
-			update_attributes({ :token_expires_at => exp, :access_token => response['access_token']})
+			update_attributes({ token_expires_at: exp, access_token: response['access_token']})
 		end
 		
 		if provider == "twitter"
 			client = OAuth::Consumer.new(creds[:id], creds[:key],
 				{
-					:site => creds[:url],
-					:ssl => {:ca_path => "/etc/ssl/certs"},
-					:scheme => :header
+					site: creds[:url],
+					ssl: {ca_path: "/etc/ssl/certs"},
+					scheme: :header
 				})
 			token_hash = {
-				:oauth_token => access_token,
-				:oauth_token_secret => access_token_secret
+				oauth_token: access_token,
+				oauth_token_secret: access_token_secret
 			}
 			token = OAuth::AccessToken.from_hash(client, token_hash)
 			logger.debug params.inspect
@@ -538,8 +538,8 @@ class Link < ActiveRecord::Base
 			#raise "fooo: " + resp.body.to_s
 			return JSON.parse(resp.body)
 		else
-			client = OAuth2::Client.new(creds[:id], creds[:key], :site => creds[:url], :ssl => {:ca_path => "/etc/ssl/certs"})
-			token = OAuth2::AccessToken.new(client, access_token, :header_format => "OAuth %s")
+			client = OAuth2::Client.new(creds[:id], creds[:key], site: creds[:url], ssl: {ca_path: "/etc/ssl/certs"})
+			token = OAuth2::AccessToken.new(client, access_token, header_format: "OAuth %s")
 	
 			case method
 			when :get

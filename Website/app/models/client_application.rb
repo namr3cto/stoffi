@@ -17,19 +17,21 @@ class ClientApplication < ActiveRecord::Base
 	
 	# associations
 	belongs_to :user
-	has_many :tokens, :class_name => "OauthToken"
-	has_many :access_tokens
-	has_many :oauth2_verifiers
-	has_many :oauth_tokens
+	with_options dependent: :destroy do |assoc|
+		assoc.has_many :tokens, class_name: "OauthToken"
+		assoc.has_many :access_tokens
+		assoc.has_many :oauth2_verifiers
+		assoc.has_many :oauth_tokens
+	end
 	
 	# validations
 	validates_presence_of :name, :website, :key, :secret
 	validates_uniqueness_of :key
-	before_validation :generate_keys, :on => :create
+	before_validation :generate_keys, on: :create
 
-	validates_format_of :website, :with => /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i
-	validates_format_of :support_url, :with => /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i, :allow_blank=>true
-	validates_format_of :callback_url, :with => /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i, :allow_blank=>true
+	validates_format_of :website, with: /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i
+	validates_format_of :support_url, with: /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i, :allow_blank=>true
+	validates_format_of :callback_url, with: /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i, :allow_blank=>true
 
 	attr_accessor :token_callback_url
 	
@@ -49,7 +51,7 @@ class ClientApplication < ActiveRecord::Base
 
 	# Gets an authorized token given a token key.
 	def self.find_token(token_key)
-		token = OauthToken.find_by(token: token_key, :include => :client_application)
+		token = OauthToken.find_by(token: token_key, include: :client_application)
 		if token && token.authorized?
 			token
 		else
@@ -83,7 +85,7 @@ class ClientApplication < ActiveRecord::Base
 	#
 	# Note: If our application requires passing in extra parameters handle it here
 	def create_request_token(params={})
-		RequestToken.create :client_application => self, :callback_url=>self.token_callback_url
+		RequestToken.create client_application: self, callback_url: self.token_callback_url
 	end
 	
 	# The large icon of the app (64x64).
@@ -111,12 +113,12 @@ class ClientApplication < ActiveRecord::Base
 	# The options to use when the app is serialized.
 	def serialize_options
 		{
-			:except => :secret,
-			:methods => [ :kind, :display, :url ]
+			except: :secret,
+			methods: [ :kind, :display, :url ]
 		}
 	end
 
-protected
+	protected
 
 	# Generate the public and secret API keys for the app.
 	def generate_keys

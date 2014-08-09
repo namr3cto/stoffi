@@ -9,9 +9,9 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class OauthClientsController < ApplicationController
-	oauthenticate :only => [:index, :show]
-	oauthenticate :interactive => true
-	before_filter :get_app, :only => [:edit, :update, :destroy]
+	oauthenticate only: [:index, :show]
+	oauthenticate interactive: true
+	before_filter :get_app, only: [:edit, :update, :destroy]
 	before_filter :no_mobile
 	respond_to :html, :mobile, :xml, :json
 	

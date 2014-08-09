@@ -13,5 +13,5 @@
 # a third party link.
 class LinkBacklog < ActiveRecord::Base
 	belongs_to :link
-	belongs_to :resource, :polymorphic => true
+	belongs_to :resource, polymorphic: true
 end

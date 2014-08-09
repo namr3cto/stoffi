@@ -16,14 +16,9 @@ class Configuration < ActiveRecord::Base
 	
 	# associations
 	belongs_to :user
-	has_many :tracks
 	has_many :playlists
-	has_many :keyboard_shortcut_profiles
-	has_many :equalizer_profiles
 	has_many :devices
-	belongs_to :current_track, :class_name => 'Song'
-	belongs_to :current_shortcut_profile, :class_name => 'KeyboardShortcutProfile'
-	belongs_to :current_equalizer_profile, :class_name => 'EqualizerProfile'
+	belongs_to :current_track, class_name: 'Song'
 	
 	# The text to display on the repeat button.
 	def repeat_text

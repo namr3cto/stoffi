@@ -9,7 +9,7 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class PlaylistsController < ApplicationController
-	oauthenticate :except => [ :index, :show ]
+	oauthenticate except: [ :index, :show ]
 	
 	respond_to :html, :mobile, :embedded, :json, :xml
 	
@@ -58,10 +58,10 @@ class PlaylistsController < ApplicationController
 		
 		@channels = ["user_#{id}"]
 		
-		@title = t "playlists.by.title", :username => @user.name.possessive
-		@description = t "playlists.by.description", :username => @user.name
+		@title = t "playlists.by.title", username: @user.name.possessive
+		@description = t "playlists.by.description", username: @user.name
 		
-		respond_with(@playlists, :include => [ :songs ])
+		respond_with(@playlists, include: [ :songs ])
 	end
 
 	# GET /playlists/1
@@ -76,38 +76,38 @@ class PlaylistsController < ApplicationController
 		
 		@channels = ["user_#{@playlist.user.id}"]
 		@title = @playlist.name
-		@description = t "playlist.description", :name => d(@playlist.name), :username => d(@playlist.user.name)
+		@description = t "playlist.description", name: d(@playlist.name), username: d(@playlist.user.name)
 		
 		t=0
 		@head_prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#"
 		@meta_tags =
 		[
-			{ :property => "og:title", :content => d(@playlist.name) },
-			{ :property => "og:type", :content => "music.playlist" },
-			{ :property => "og:image", :content => @playlist.picture },
-			{ :property => "og:url", :content => playlist_url(@playlist) },
-			{ :property => "og:description", :content => @description },
-			{ :property => "og:audio", :content => playlist_url(@playlist, :protocol => "playlist") },
-			{ :property => "og:audio:type", :content => "audio/vnd.facebook.bridge" },
-			{ :property => "og:site_name", :content => "Stoffi" },
-			{ :property => "fb:app_id", :content => "243125052401100" },
-			{ :property => "music:creator", :content => profile_url(@playlist.user) },
+			{ property: "og:title", content: d(@playlist.name) },
+			{ property: "og:type", content: "music.playlist" },
+			{ property: "og:image", content: @playlist.picture },
+			{ property: "og:url", content: playlist_url(@playlist) },
+			{ property: "og:description", content: @description },
+			{ property: "og:audio", content: playlist_url(@playlist, protocol: "playlist") },
+			{ property: "og:audio:type", content: "audio/vnd.facebook.bridge" },
+			{ property: "og:site_name", content: "Stoffi" },
+			{ property: "fb:app_id", content: "243125052401100" },
+			{ property: "music:creator", content: profile_url(@playlist.user) },
 		] |
-			@playlist.songs.map { |song| { :property => "music:song", :content => song_url(song) } }
+			@playlist.songs.map { |song| { property: "music:song", content: song_url(song) } }
 			
 		@playlist.paginate_songs(l, o)
-		respond_with(@playlist, :methods => [ :paginated_songs ])
+		respond_with(@playlist, methods: [ :paginated_songs ])
 	end
 
 	# GET /playlists/new
 	def new
-		redirect_to :action => :index and return if params[:format] == "mobile"
+		redirect_to action: :index and return if params[:format] == "mobile"
 		respond_with(@playlist = current_user.playlists.new)
 	end
 
 	# GET /playlists/1/edit
 	def edit
-		redirect_to :action => :show, :id => params[:id] and return if params[:format] == "mobile"
+		redirect_to action: :show, id: params[:id] and return if params[:format] == "mobile"
 		not_found('playlist') and return unless owns(Playlist, params[:id])
 		@playlist = current_user.playlists.find(params[:id])
 		@title = "Edit #{@playlist.name}"
@@ -139,14 +139,14 @@ class PlaylistsController < ApplicationController
 					songs.each do |track|
 						song = Song.get(current_user,
 						{
-							:title => track['title'],
-							:path => track['path'],
-							:length => track['length'],
-							:foreign_url => track['foreign_url'],
-							:art_url => track['art_url'],
-							:genre => track['genre'],
-							:artist => track['artist'],
-							:album => track['album']
+							title: track['title'],
+							path: track['path'],
+							length: track['length'],
+							foreign_url: track['foreign_url'],
+							art_url: track['art_url'],
+							genre: track['genre'],
+							artist: track['artist'],
+							album: track['album']
 						})
 						if song and not @playlist.songs.exists?(song.id)
 							@playlist.songs << song
@@ -206,14 +206,14 @@ class PlaylistsController < ApplicationController
 				songs['added'].each do |track|
 					song = Song.get(current_user,
 					{
-						:title => track['title'],
-						:path => track['path'],
-						:length => track['length'],
-						:foreign_url => track['foreign_url'],
-						:art_url => track['art_url'],
-						:genre => track['genre'],
-						:artist => track['artist'],
-						:album => track['album']
+						title: track['title'],
+						path: track['path'],
+						length: track['length'],
+						foreign_url: track['foreign_url'],
+						art_url: track['art_url'],
+						genre: track['genre'],
+						artist: track['artist'],
+						album: track['album']
 					})
 					
 					if song and not @playlist.songs.exists?(song.id)

@@ -31,7 +31,7 @@ class OauthController < ApplicationController
 							@redirect_url.query + "&oauth_token=#{@token.token}&oauth_verifier=#{@token.verifier}"
 						redirect_to @redirect_url.to_s
 					else
-						render :action => "authorize_success"
+						render action: "authorize_success"
 					end
 					return
 				end

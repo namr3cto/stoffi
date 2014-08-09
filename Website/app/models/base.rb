@@ -81,7 +81,7 @@ module Base
 	# The options to use when serializing the resource.
 	def serialize_options
 		{
-			:methods => [ :kind, :display, :url ]
+			methods: [ :kind, :display, :url ]
 		}
 	end
 	

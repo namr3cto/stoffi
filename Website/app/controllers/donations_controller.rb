@@ -19,11 +19,11 @@ class DonationsController < ApplicationController
 		@description = t("donations.description")
 		@artists = Artist.top(5, :supported)
 		@users = User.top(5, :supporters)
-		@pending = Donation.where(:status => :pending)
-		@revoked = Donation.where(:status => :revoked)
+		@pending = Donation.where(status: :pending)
+		@revoked = Donation.where(status: :revoked)
 		@charity = Donation.pending_charity_sum
 		
-		redirect_to :action => :new and return if params[:format] == "mobile"
+		redirect_to action: :new and return if params[:format] == "mobile"
 		
 		@channels = []
 		@pending.each { |d| @channels << "user_#{d.user_id}" }
@@ -54,26 +54,26 @@ class DonationsController < ApplicationController
 	# GET /donations/1
 	def show
 		@donation = Donation.find(params[:id])
-		@title = t("donation.title", :artist => @donation.artist.name, :amount => number_to_currency(@donation.amount))
+		@title = t("donation.title", artist: @donation.artist.name, amount: number_to_currency(@donation.amount))
 		@description = t("donation.description")
-		respond_with(@donation, :include => [ :user, :artist ])
+		respond_with(@donation, include: [ :user, :artist ])
 	end
 
 	# GET /donations/new
 	def new
 		@artist = Artist.find(params[:artist_id]) if params[:artist_id]
-		render :layout => params[:ajax] == nil
+		render layout: params[:ajax] == nil
 	end
 
 	# GET /donations/1/edit
 	def edit
-		render :text => "todo" and return
+		render text: "todo" and return
 		respond_with(@donation = Donation.find(params[:id]))
 	end
 
 	# POST /donations
 	def create
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 	
 		# donation creation by user
 		if params[:create] != nil
@@ -85,14 +85,14 @@ class DonationsController < ApplicationController
 			# cannot accept for this artist
 			if artist.undonatable
 				logger.info "Undonatable"
-				flash[:error] = t "donate.donatable_status.#{artist.donatable_status}", :artist => artist.name
-				@artists = Donation.artists.paginate(:per_page => 5, :page => params[:artist_page])
+				flash[:error] = t "donate.donatable_status.#{artist.donatable_status}", artist: artist.name
+				@artists = Donation.artists.paginate(per_page: 5, page: params[:artist_page])
 				@pending = Donation.pending_artists
-				@revoked = Donation.where(:status => :revoked)
-				redirect_to params[:ret], :flash => { :error => flash[:error] } and return if params[:ret]
+				@revoked = Donation.where(status: :revoked)
+				redirect_to params[:ret], flash: { error: flash[:error] } and return if params[:ret]
 				respond_to do |format|
-					format.html { render :action => "index" }
-					format.mobile { render :action => "new" }
+					format.html { render action: "index" }
+					format.mobile { render action: "new" }
 				end
 			
 			# either not full or artist already has some donations
@@ -106,7 +106,7 @@ class DonationsController < ApplicationController
 				@cmd = "_donations"
 				@return = params[:ret]
 				@cancel_return = params[:cnc]
-				@notify_url = donations_url(:format => :json)
+				@notify_url = donations_url(format: :json)
 				@no_shipping = 1
 				@rm = 1
 				@cbt = t("paypal.return")
@@ -119,18 +119,18 @@ class DonationsController < ApplicationController
 				@amount = params[:amount]
 				@currency_code = params[:currency_code]
 				
-				render :partial => "redirect"
+				render partial: "redirect"
 			
 			# too many pending artists
 			else
 				logger.info "Too many pending artists"
 				flash[:error] = t "donate.full_notice"
-				@artists = Donation.artists.paginate(:per_page => 5, :page => params[:artist_page])
+				@artists = Donation.artists.paginate(per_page: 5, page: params[:artist_page])
 				@pending = Donation.pending_artists
-				@revoked = Donation.where(:status => :revoked)
+				@revoked = Donation.where(status: :revoked)
 				respond_to do |format|
-					format.html { render :action => "index" }
-					format.mobile { render :action => "new" }
+					format.html { render action: "index" }
+					format.mobile { render action: "new" }
 				end
 			end
 		
@@ -167,14 +167,14 @@ class DonationsController < ApplicationController
 
 			# create donation
 			@donation = Donation.new(
-				:artist_id => artist.id,
-				:artist_percentage => dist[:artist],
-				:stoffi_percentage => dist[:stoffi],
-				:charity_percentage => dist[:charity],
-				:amount => params[:payment_gross].to_i,
-				:return_policy => h['r'].to_i,
-				:email => params[:payer_email],
-				:message => params[:item_name]
+				artist_id: artist.id,
+				artist_percentage: dist[:artist],
+				stoffi_percentage: dist[:stoffi],
+				charity_percentage: dist[:charity],
+				amount: params[:payment_gross].to_i,
+				return_policy: h['r'].to_i,
+				email: params[:payer_email],
+				message: params[:item_name]
 			)
 			@donation.user_id = h['u'] if h['u']
 			success = @donation.save
@@ -195,13 +195,13 @@ class DonationsController < ApplicationController
 				logger.info "no user"
 			end
 			
-			render :text => "OK"
+			render text: "OK"
 		end
 	end
 
 	# PUT /donations/1
 	def update
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 		@donation = Donation.find(params[:id])
 		
 		# users can only update status to "revoked"
@@ -223,7 +223,7 @@ class DonationsController < ApplicationController
 
 	# DELETE /donations/1
 	def destroy
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 		@donation = Donation.find(params[:id])
 		SyncController.send('delete', @donation, request)
 		@donation.destroy
@@ -253,9 +253,9 @@ class DonationsController < ApplicationController
 		to_charity *= ratio
 		
 		return {
-			:artist => to_artist,
-			:stoffi => to_stoffi,
-			:charity => to_charity
+			artist: to_artist,
+			stoffi: to_stoffi,
+			charity: to_charity
 		}
 	end
 end

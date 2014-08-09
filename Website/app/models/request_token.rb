@@ -33,7 +33,7 @@ class RequestToken < OauthToken
 				client_application.id
 		).first
 			if (token != nil)
-		access_token = AccessToken.create(:user => user, :client_application => client_application)
+		access_token = AccessToken.create(user: user, client_application: client_application)
 		end
 			
 			invalidate!

@@ -17,7 +17,7 @@ class Device < ActiveRecord::Base
 	
 	# associations
 	belongs_to :configuration
-	belongs_to :app, :foreign_key => :client_application_id, :class_name => "ClientApplication"
+	belongs_to :app, foreign_key: :client_application_id, class_name: "ClientApplication"
 	belongs_to :user
 	
 	# Whether or not the device is currently online.
@@ -40,8 +40,8 @@ class Device < ActiveRecord::Base
 	# The options to use when the device is serialized.
 	def serialize_options
 		{
-			:except => :last_ip,
-			:methods => [ :kind, :display, :url ]
+			except: :last_ip,
+			methods: [ :kind, :display, :url ]
 		}
 	end
 	

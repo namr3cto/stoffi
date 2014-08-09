@@ -36,11 +36,11 @@ class TranslationsController < ApplicationController
 
 		respond_with @translation do |format|
 			if @translation.save
-				format.html { redirect_to @translation.language, :notice => 'Translation was successfully created.' }
-				format.json { render :json => @translation, :status => :created, :location => @translation }
+				format.html { redirect_to @translation.language, notice: 'Translation was successfully created.' }
+				format.json { render json: @translation, status: :created, location: @translation }
 			else
-				format.html { render :action => "new" }
-				format.json { render :json => @translation.errors, :status => :unprocessable_entity }
+				format.html { render action: "new" }
+				format.json { render json: @translation.errors, status: :unprocessable_entity }
 			end
 		end
 	end
@@ -52,11 +52,11 @@ class TranslationsController < ApplicationController
 
 		respond_with @translation do |format|
 			if @translation.update_attributes(params[:translation])
-				format.html { redirect_to @translation, :notice => 'Translation was successfully updated.' }
+				format.html { redirect_to @translation, notice: 'Translation was successfully updated.' }
 				format.json { head :ok }
 			else
-				format.html { render :action => "edit" }
-				format.json { render :json => @translation.errors, :status => :unprocessable_entity }
+				format.html { render action: "edit" }
+				format.json { render json: @translation.errors, status: :unprocessable_entity }
 			end
 		end
 	end

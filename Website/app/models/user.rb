@@ -19,19 +19,21 @@ class User < ActiveRecord::Base
 	devise :database_authenticatable, :registerable, 
 	       :recoverable, :rememberable, :trackable, :validatable, :lockable
 		 
-	has_many :links, :dependent => :destroy
-	has_many :devices, :dependent => :destroy
-	has_many :configurations, :dependent => :destroy
-	has_many :playlists, :dependent => :destroy
-	has_many :shares, :dependent => :destroy
-	has_many :listens, :dependent => :destroy
-	has_many :votes, :dependent => :destroy
+	with_options dependent: :destroy do |assoc|
+		assoc.has_many :links
+		assoc.has_many :devices
+		assoc.has_many :configurations
+		assoc.has_many :playlists
+		assoc.has_many :shares
+		assoc.has_many :listens
+		assoc.has_many :votes
+		assoc.has_many :apps, class_name: "ClientApplication"
+		assoc.has_many :tokens, -> { order "authorized_at desc" }, class_name: "OauthToken"
+	end
 	has_many :translations
 	has_many :donations
-	has_many :apps, :class_name => "ClientApplication", :dependent => :destroy
-	has_many :tokens, -> { order "authorized_at desc" }, class_name: "OauthToken", dependent: :destroy
-	has_and_belongs_to_many :songs, :uniq => true
-	has_and_belongs_to_many :playlist_subscriptions, :class_name => "Playlist", :join_table => "playlist_subscribers", :uniq => true
+	has_and_belongs_to_many :songs, uniq: true
+	has_and_belongs_to_many :playlist_subscriptions, class_name: "Playlist", join_table: "playlist_subscribers", uniq: true
 
 	# Setup accessible (or protected) attributes for your model
 	#attr_accessible :email, :password, :password_confirmation, :remember_me, :unique_token, :id,
@@ -167,10 +169,10 @@ class User < ActiveRecord::Base
 			d = auth['credentials']['expires_at']
 			d = DateTime.strptime("#{d}",'%s') if d
 			link.update_attributes(
-				:access_token => auth['credentials']['token'],
-				:access_token_secret => auth['credentials']['secret'],
-				:refresh_token => auth['credentials']['refresh_token'],
-				:token_expires_at => d
+				access_token: auth['credentials']['token'],
+				access_token_secret: auth['credentials']['secret'],
+				refresh_token: auth['credentials']['refresh_token'],
+				token_expires_at: d
 			)
 			return link.user
 		
@@ -192,12 +194,12 @@ class User < ActiveRecord::Base
 	
 		# create user
 		user = User.new(
-			:email => email,
-			:password => pass,
-			:password_confirmation => pass,
-			:has_password => false
+			email: email,
+			password: pass,
+			password_confirmation: pass,
+			has_password: false
 		)
-		user.save(:validate => false)
+		user.save(validate: false)
 		
 		# create link
 		user.create_link(auth)
@@ -284,12 +286,12 @@ class User < ActiveRecord::Base
 		exp = auth['credentials']['expires_at']
 		exp = DateTime.strptime("#{exp}",'%s') if exp
 		links.create(
-			:provider => auth['provider'],
-			:uid => auth['uid'],
-			:access_token => auth['credentials']['token'],
-			:access_token_secret => auth['credentials']['secret'],
-			:refresh_token => auth['credentials']['refresh_token'],
-			:token_expires_at => exp
+			provider: auth['provider'],
+			uid: auth['uid'],
+			access_token: auth['credentials']['token'],
+			access_token_secret: auth['credentials']['secret'],
+			refresh_token: auth['credentials']['refresh_token'],
+			token_expires_at: exp
 		)
 	end
 	
@@ -307,13 +309,12 @@ class User < ActiveRecord::Base
 	# The options to use when the user is serialized.
 	def serialize_options
 		{
-			:except =>
-			[
+			except: [
 				:has_password, :created_at, :unique_token, :updated_at, :custom_name,
 				:admin, :show_ads, :name_source, :image, :email
 				
 			],
-			:methods => [ :kind, :display, :url ]
+			methods: [ :kind, :display, :url ]
 		}
 	end
 end

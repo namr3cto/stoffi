@@ -19,8 +19,8 @@ class Listen < ActiveRecord::Base
 	belongs_to :song
 	belongs_to :playlist
 	belongs_to :device
-	#belongs_to :album
-	has_many :link_backlogs, :as => :resource, :dependent => :destroy
+	belongs_to :album
+	has_many :link_backlogs, as: :resource, dependent: :destroy
 	
 	# The string to display to users for representing the resource.
 	def display
@@ -30,9 +30,9 @@ class Listen < ActiveRecord::Base
 	# The options to use when the listen is serialized.
 	def serialize_options
 		{
-			:except => [ :device_id ],
-			:include => [ :song, :playlist ],
-			:methods => [ :kind, :display, :url ]
+			except: [ :device_id ],
+			include: [ :song, :playlist ],
+			methods: [ :kind, :display, :url ]
 		}
 	end
 end

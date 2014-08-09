@@ -153,7 +153,7 @@ class SyncController < ApplicationController
 		session_id = request.env['HTTP_X_SESSION_ID']
 		logger.info "publish except #{session_id}"
 		begin
-			Juggernaut.publish(channels, cmd, :except => session_id)
+			Juggernaut.publish(channels, cmd, except: session_id)
 		rescue
 			logger.error "could not publish onto realtime channel"
 		end

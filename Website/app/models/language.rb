@@ -10,7 +10,7 @@
 
 # Describes a language to which Stoffi has been (at least partly) translated.
 class Language < ActiveRecord::Base
-	has_many :translations
+	has_many :translations, dependent: :destroy
 
 	# The flag of the language.
 	def flag

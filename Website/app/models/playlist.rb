@@ -13,17 +13,17 @@ class Playlist < ActiveRecord::Base
 	include Base
 	extend StaticBase
 
-	has_and_belongs_to_many :songs, :uniq => true do
+	has_and_belongs_to_many :songs, uniq: true do
 		def page(limit=25, offset=0)
-			all(:limit => limit, :offset => offset)
+			all(limit: limit, offset: offset)
 		end
 	end
 	
-	has_many :listens, :through => :songs
-	has_many :shares, :as => :object
-	has_and_belongs_to_many :subscribers, :class_name => "User", :join_table => "playlist_subscribers", :uniq => true
+	has_many :listens, through: :songs
+	has_many :shares, as: :object
+	has_and_belongs_to_many :subscribers, class_name: "User", join_table: "playlist_subscribers", uniq: true
 	belongs_to :user
-	has_many :link_backlogs, :as => :resource, :dependent => :destroy
+	has_many :link_backlogs, as: :resource, dependent: :destroy
 	
 	validates :name, presence: true
 	validates :user, presence: true

@@ -17,7 +17,7 @@ class Donation < ActiveRecord::Base
 	# associations
 	belongs_to :artist
 	belongs_to :user
-	has_many :link_backlogs, :as => :resource, :dependent => :destroy
+	has_many :link_backlogs, as: :resource, dependent: :destroy
 	
 	# Gets the list of artists to whom there are pending donations, ordered by the amount of donations which is pending.
 	def self.pending_artists

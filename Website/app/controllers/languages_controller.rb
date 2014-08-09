@@ -17,7 +17,7 @@ class LanguagesController < ApplicationController
 	def show
 		@language = Language.find(params[:id])
 		@translatees = Admin::Translatee.all
-		@title = t("translate.show_title", :language => t("languages.#{@language.english_name.downcase}"))
+		@title = t("translate.show_title", language: t("languages.#{@language.english_name.downcase}"))
 		
 		respond_with @language
 	end
@@ -41,11 +41,11 @@ class LanguagesController < ApplicationController
 
 		respond_with @language do |format|
 			if @language.save
-				format.html { redirect_to @language, :notice => 'Language was successfully created.' }
-				format.json { render :json => @language, :status => :created, :location => @language }
+				format.html { redirect_to @language, notice: 'Language was successfully created.' }
+				format.json { render json: @language, status: :created, location: @language }
 			else
-				format.html { render :action => "new" }
-				format.json { render :json => @language.errors, :status => :unprocessable_entity }
+				format.html { render action: "new" }
+				format.json { render json: @language.errors, status: :unprocessable_entity }
 			end
 		end
 	end
@@ -57,11 +57,11 @@ class LanguagesController < ApplicationController
 
 		respond_with @language do |format|
 			if @language.update_attributes(params[:language])
-				format.html { redirect_to @language, :notice => 'Language was successfully updated.' }
+				format.html { redirect_to @language, notice: 'Language was successfully updated.' }
 				format.json { head :ok }
 			else
-				format.html { render :action => "edit" }
-				format.json { render :json => @language.errors, :status => :unprocessable_entity }
+				format.html { render action: "edit" }
+				format.json { render json: @language.errors, status: :unprocessable_entity }
 			end
 		end
 	end

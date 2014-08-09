@@ -9,9 +9,9 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class Users::RegistrationsController < Devise::RegistrationsController
-	before_filter :get_profile_id, :only => [ :show, :playlists ]
+	before_filter :get_profile_id, only: [ :show, :playlists ]
 
-	oauthenticate :except => [ :new, :create, :show ]
+	oauthenticate except: [ :new, :create, :show ]
 
 	def new
 		@title = t "join.title"
@@ -50,26 +50,26 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		
 		@configuration = current_user.configurations.first
 		
-		render :layout => (params[:format] == 'embedded' ? 'empty' : true)
+		render layout: (params[:format] == 'embedded' ? 'empty' : true)
 	end
 	
 	def edit
 		if params[:format] == :mobile
-			redirect_to :action => :dashboard and return
+			redirect_to action: :dashboard and return
 		end
 		
 		prepare_settings
 	
 		respond_to do |format|
-			format.html { render :action => "edit" }
-			format.mobile { render :action => "edit" }
-			format.embedded { render :action => "dashboard" }
+			format.html { render action: "edit" }
+			format.mobile { render action: "edit" }
+			format.embedded { render action: "dashboard" }
 		end
 	end
 	
 	def settings
 		if params[:format] == :mobile
-			redirect_to :action => :dashboard and return
+			redirect_to action: :dashboard and return
 		end
 		
 		@user = User.find(current_user.id)
@@ -88,7 +88,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		end
 		
 		if success
-			sign_in @user, :bypass => true
+			sign_in @user, bypass: true
 			redirect_to after_update_path_for(@user)
 		else
 			prepare_settings
@@ -97,7 +97,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	end
 	
 	def update
-		render :text => params[:edit_password] and return
+		render text: params[:edit_password] and return
 		super
 	end
 	
@@ -106,7 +106,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		
 		name = d(@user.name)
 		@title = name.titleize
-		@description = t "profile.description", :usernames => name.possessive
+		@description = t "profile.description", usernames: name.possessive
 		@channels = ["user_#{@user.id}"]
 		
 		@donations = @user.donations.order('created_at DESC').limit(5)
@@ -119,36 +119,36 @@ class Users::RegistrationsController < Devise::RegistrationsController
 			
 		@meta_tags =
 		[
-			{ :property => "og:title", :content => name },
-			{ :property => "og:type", :content => "profile" },
-			{ :property => "og:image", :content => @user.picture },
-			{ :property => "og:url", :content => profile_url(@user) },
-			{ :property => "og:description", :content => @description },
-			{ :property => "og:site_name", :content => "Stoffi" },
-			{ :property => "fb:app_id", :content => "243125052401100" },
+			{ property: "og:title", content: name },
+			{ property: "og:type", content: "profile" },
+			{ property: "og:image", content: @user.picture },
+			{ property: "og:url", content: profile_url(@user) },
+			{ property: "og:description", content: @description },
+			{ property: "og:site_name", content: "Stoffi" },
+			{ property: "fb:app_id", content: "243125052401100" },
 		]
 		
 		# name
 		if name.index " "
 			fullname = name.split(" ",2) # can we do better split than this?
-			@meta_tags << { :property => "profile:first_name", :content => fullname[0] }
-			@meta_tags << { :property => "profile:last_name", :content => fullname[1] }
+			@meta_tags << { property: "profile:first_name", content: fullname[0] }
+			@meta_tags << { property: "profile:last_name", content: fullname[1] }
 		else
-			@meta_tags << { :property => "profile:username", :content => name }
+			@meta_tags << { property: "profile:username", content: name }
 		end
 		
 		# encrypted uid
 		e_fb_uid = @user.encrypted_uid('facebook')
 		if e_fb_uid != nil
-			@meta_tags << { :property => "fb:profile_id", :content => e_fb_uid }
+			@meta_tags << { property: "fb:profile_id", content: e_fb_uid }
 		end
 		
 		respond_to do |format|
 			format.html { render }
 			format.mobile { render }
 			format.embedded { render }
-			format.xml { render :xml => @user, :include => :links }
-			format.json { render :json => @user, :include => :links }
+			format.xml { render xml: @user, include: :links }
+			format.json { render json: @user, include: :links }
 		end
 	end
 	
@@ -193,14 +193,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
 			ln = link[:link_name] || n.downcase
 			if current_user.links.find_by(provider: ln) == nil
 				img = "auth/#{n.downcase}_14_white"
-				title = t("auth.link", :service => n)
+				title = t("auth.link", service: n)
 				path = "/auth/#{ln}"
 				@new_links <<
 				{
-					:name => n,
-					:img => img,
-					:title => title,
-					:path => path
+					name: n,
+					img: img,
+					title: title,
+					path: path
 				}
 			end
 		end

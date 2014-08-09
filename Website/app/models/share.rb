@@ -15,11 +15,11 @@ class Share < ActiveRecord::Base
 	include Base
 	
 	# associations
-	belongs_to :resource, :polymorphic => true
+	belongs_to :resource, polymorphic: true
 	belongs_to :playlist
 	belongs_to :user
 	belongs_to :device
-	has_many :link_backlogs, :as => :resource, :dependent => :destroy
+	has_many :link_backlogs, as: :resource, dependent: :destroy
 	
 	# The string to display to users for representing the resource.
 	def display
@@ -29,8 +29,8 @@ class Share < ActiveRecord::Base
 	# The options to use when the share is serialized.
 	def serialize_options
 		{
-			:include => [ object == "song" ? :song : :playlist ],
-			:methods => [ :kind, :display, :url ]
+			include: [ object == "song" ? :song : :playlist ],
+			methods: [ :kind, :display, :url ]
 		}
 	end
 end

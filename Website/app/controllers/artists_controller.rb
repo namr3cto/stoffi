@@ -10,8 +10,8 @@
 
 class ArtistsController < ApplicationController
 
-	oauthenticate :interactive => true, :except => [ :index, :show ]
-	before_filter :ensure_admin, :except => [ :index, :show ]
+	oauthenticate interactive: true, except: [ :index, :show ]
+	before_filter :ensure_admin, except: [ :index, :show ]
 	respond_to :html, :mobile, :embedded, :xml, :json
 	
 	# GET /artists
@@ -25,26 +25,26 @@ class ArtistsController < ApplicationController
 		l, o = pagination_params
 		@artist = Artist.find(params[:id])
 		@title = @artist.name
-		@description = t "artist.description", :artist => d(@artist.name)
+		@description = t "artist.description", artist: d(@artist.name)
 		@head_prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#"
 		@meta_tags =
 		[
-			{ :property => "og:title", :content => d(@artist.name) },
-			{ :property => "og:type", :content => "stoffiplayer:artist" },
-			{ :property => "og:image", :content => @artist.picture },
-			{ :property => "og:url", :content => @artist.url },
-			{ :property => "og:site_name", :content => "Stoffi" },
-			{ :property => "fb:app_id", :content => "243125052401100" },
-			{ :property => "og:description", :content => t("artist.short_description", :artist => d(@artist.name)) },
-			{ :property => "stoffiplayer:donations", :content => @artist.donations.count },
-			{ :property => "stoffiplayer:support_generated", :content => "$#{@artist.donated_sum}" },
-			{ :property => "stoffiplayer:charity_generated", :content => "$#{@artist.charity_sum}" }
+			{ property: "og:title", content: d(@artist.name) },
+			{ property: "og:type", content: "stoffiplayer:artist" },
+			{ property: "og:image", content: @artist.picture },
+			{ property: "og:url", content: @artist.url },
+			{ property: "og:site_name", content: "Stoffi" },
+			{ property: "fb:app_id", content: "243125052401100" },
+			{ property: "og:description", content: t("artist.short_description", artist: d(@artist.name)) },
+			{ property: "stoffiplayer:donations", content: @artist.donations.count },
+			{ property: "stoffiplayer:support_generated", content: "$#{@artist.donated_sum}" },
+			{ property: "stoffiplayer:charity_generated", content: "$#{@artist.charity_sum}" }
 		]
 		
 		@donations = @artist.donations
 
 		@artist.paginate_songs(l, o)
-		respond_with(@artist, :methods => [ :paginated_songs ])
+		respond_with(@artist, methods: [ :paginated_songs ])
 	end
 
 	# GET /artists/new
@@ -82,10 +82,10 @@ class ArtistsController < ApplicationController
 			@artist.donations.each do |donation|
 				unless donation.update_attributes(params[:donation])
 					respond_to do |format|
-						format.html { render :action => "edit" }
-						format.xml  { render :xml => donation.errors, :status => :unprocessable_entity }
-						format.json { render :json => donation.errors, :status => :unprocessable_entity }
-						format.yaml { render :text => donation.errors.to_yaml, :content_type => 'text/yaml', :status => :unprocessable_entity }
+						format.html { render action: "edit" }
+						format.xml  { render xml: donation.errors, status: :unprocessable_entity }
+						format.json { render json: donation.errors, status: :unprocessable_entity }
+						format.yaml { render text: donation.errors.to_yaml, content_type: 'text/yaml', status: :unprocessable_entity }
 					end and return
 				end
 			end
@@ -99,7 +99,7 @@ class ArtistsController < ApplicationController
 
 	# DELETE /artists/1
 	def destroy
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 		@artist = Artist.find(params[:id])
 		@artist.destroy
 		respond_with(@artist)

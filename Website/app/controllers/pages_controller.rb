@@ -9,7 +9,7 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class PagesController < ApplicationController
-	oauthenticate :only => [ :remote ]
+	oauthenticate only: [ :remote ]
 	
 	before_filter :set_title_and_description
 	respond_to :html, :mobile, :embedded, :json, :xml
@@ -18,7 +18,7 @@ class PagesController < ApplicationController
 	end
 
 	def old
-		render :layout => false
+		render layout: false
 	end
 	
 	def index
@@ -66,7 +66,7 @@ class PagesController < ApplicationController
 	end
 
 	def tour
-		redirect_to :action => :index and return if params[:format] == "mobile"
+		redirect_to action: :index and return if params[:format] == "mobile"
 	end
 
 	def about
@@ -96,7 +96,7 @@ class PagesController < ApplicationController
 		@title = t("remote.title")
 		@description = t("remote.description")
 		
-		render "configurations/show", :layout => (params[:format] != "mobile" ? true : 'empty')
+		render "configurations/show", layout: (params[:format] != "mobile" ? true : 'empty')
 	end
 
 	def language
@@ -109,48 +109,48 @@ class PagesController < ApplicationController
 	def donate
 		logger.info "redirecting donate shortcut"
 		respond_with do |format|
-			format.html { redirect_to donations_url, :flash => flash }
-			format.mobile { redirect_to new_donation_url, :flash => flash }
+			format.html { redirect_to donations_url, flash: flash }
+			format.mobile { redirect_to new_donation_url, flash: flash }
 		end
 	end
   
 	def mail				
 		if !params[:name] or params[:name].length < 2
 				flash[:error] = t("contact.errors.name")
-				render :action => 'contact'
+				render action: 'contact'
 				
 		elsif !params[:email] or params[:email].match(/^([a-z0-9_.\-]+)@([a-z0-9\-.]+)\.([a-z.]+)$/i).nil?
 				flash[:error] = t("contact.errors.email")
-				render :action => 'contact'
+				render action: 'contact'
 				
 		elsif !params[:subject] or params[:subject].length < 4
 				flash[:error] = t("contact.errors.subject") 
-				render :action => 'contact'
+				render action: 'contact'
 				
 		elsif !params[:message] or params[:message].length < 20
 				flash[:error] = t("contact.errors.message")
-				render :action => 'contact'
+				render action: 'contact'
 
 		elsif !verify_recaptcha
 			flash[:error] = t("contact.errors.captcha")
-			render :action => 'contact'
+			render action: 'contact'
 			
 		else
-			Mailer.contact(:domain => "beta.stoffiplayer.com",
-			               :subject => params[:subject],
-			               :from => params[:email],
-			               :name => params[:name],
-			               :message => params[:message]).deliver
-			redirect_to :action => 'contact', :sent => 'success'
+			Mailer.contact(domain: "beta.stoffiplayer.com",
+			               subject: params[:subject],
+			               from: params[:email],
+			               name: params[:name],
+			               message: params[:message]).deliver
+			redirect_to action: 'contact', sent: 'success'
 		end
 	end
 
 	def facebook
-		render :layout => "facebook"
+		render layout: "facebook"
 	end
 
 	def channel
-		render :layout => false
+		render layout: false
 	end
 	
 	private

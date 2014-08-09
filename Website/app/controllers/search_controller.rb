@@ -32,7 +32,7 @@ class SearchController < ApplicationController
 	WEIGHT_POPULARITY = 3
 	
 	def index
-		redirect_to :action => :index and return if params[:format] == "mobile"
+		redirect_to action: :index and return if params[:format] == "mobile"
 		@query = query_param
 		@categories = category_param
 		@sources = source_param
@@ -66,7 +66,7 @@ class SearchController < ApplicationController
 		@query = query_param
 		respond_with({ error: 'query cannot be empty' }) if @query.blank?
 		@results = get_results(@query, category_param, source_param)
-		respond_with(@results, :layout => false)
+		respond_with(@results, layout: false)
 	end
 	
 	private

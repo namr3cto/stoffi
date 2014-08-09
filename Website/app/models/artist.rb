@@ -16,10 +16,12 @@ class Artist < ActiveRecord::Base
 	include Base
 	
 	# associations
-	has_and_belongs_to_many :albums, uniq: true
-	has_and_belongs_to_many :songs, uniq: true
-	has_and_belongs_to_many :artists, join_table: :performances, uniq: true
-	has_many :wikipedia_links, as: :resource
+	with_options uniq: true do |assoc|
+		assoc.has_and_belongs_to_many :albums
+		assoc.has_and_belongs_to_many :songs
+		assoc.has_and_belongs_to_many :artists, join_table: :performances
+	end
+	has_many :wikipedia_links, as: :resource, dependent: :destroy
 	has_many :listens, through: :songs
 	has_many :donations
 	
@@ -186,8 +188,8 @@ class Artist < ActiveRecord::Base
 	# The options to use when the artist is serialized.
 	def serialize_options
 		{
-			:methods => [ :kind, :display, :url, :info, :photo ],
-			:except => [ :picture ]
+			methods: [ :kind, :display, :url, :info, :photo ],
+			except: [ :picture ]
 		}
 	end
 	

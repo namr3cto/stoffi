@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
 	
 	def not_found(resource)
 		@resource = resource
-		render file: "#{Rails.root}/public/404", status: :not_found, :formats => [:html, :mobile]
+		render file: "#{Rails.root}/public/404", status: :not_found, formats: [:html, :mobile]
 	end
 	
 	# authenticate a user if the correct parameters are given
@@ -119,18 +119,18 @@ class ApplicationController < ActionController::Base
 						@current_device = Device.find(params[:device_id])
 						@current_device.poke(current_client_application, request.ip)
 					rescue
-						error = { :message => "Invalid device ID. It either doesn't exist or is not owned by current user.", :code => 2 }
+						error = { message: "Invalid device ID. It either doesn't exist or is not owned by current user.", code: 2 }
 					end
 				else
-					error = { :message => "Missing device ID. Every request must have a device_id parameter.", :code => 1 }
+					error = { message: "Missing device ID. Every request must have a device_id parameter.", code: 1 }
 				end
 			end
 			if error
 				logger.debug "returning error: #{error[:message]}"
 				respond_to do |format|
-					format.xml  { render :xml => error, :status => :unprocessable_entity }
-					format.json { render :json => error, :status => :unprocessable_entity }
-					format.yaml { render :text => error.to_yaml, :content_type => 'text/yaml', :status => :unprocessable_entity }
+					format.xml  { render xml: error, status: :unprocessable_entity }
+					format.json { render json: error, status: :unprocessable_entity }
+					format.yaml { render text: error.to_yaml, content_type: 'text/yaml', status: :unprocessable_entity }
 				end
 				return
 			end
@@ -209,7 +209,7 @@ class ApplicationController < ActionController::Base
 		else
 			if [:json, :xml].include? request.format.to_sym
 				format = request.format.to_sym.to_s
-				error = { :message => "authentication error", :code => 401 }
+				error = { message: "authentication error", code: 401 }
 				self.status = 401
 				self.content_type = request.format
 				self.response_body = eval("error.to_#{format}")
@@ -254,7 +254,7 @@ class ApplicationController < ActionController::Base
 	end
 		
 	def default_url_options(options={})
-		{ :l => base_path }
+		{ l: base_path }
 	end
 	
 	def verify_authenticity_token
@@ -270,12 +270,12 @@ class ApplicationController < ActionController::Base
 		set_locale
 		saved = stored_location_for(resource)
 		return saved if saved
-		return dashboard_path(:format => params[:format], :l => base_path)
+		return dashboard_path(format: params[:format], l: base_path)
 	end
 	
 	def after_sign_out_path_for(resource_or_scope)
 		set_locale
-		request.referer || login_path(:format => params[:format], :l => base_path)
+		request.referer || login_path(format: params[:format], l: base_path)
 	end
 	
 	def base_path
@@ -569,7 +569,7 @@ class ApplicationController < ActionController::Base
 				
 				if old
 					logger.info "render warning of old browser instead of requested page"
-					render("pages/old", :l => I18n.locale, :layout => false) and return
+					render("pages/old", l: I18n.locale, layout: false) and return
 				end
 			rescue
 			end
@@ -632,7 +632,7 @@ class ApplicationController < ActionController::Base
 	def https_get(url)
 		json = {}
 		uri = URI(url)
-		Net::HTTP.start(uri.host, uri.port, :use_ssl => uri.scheme == 'https') do |http|
+		Net::HTTP.start(uri.host, uri.port, use_ssl: uri.scheme == 'https') do |http|
 			request = Net::HTTP::Get.new uri.to_s
 			res = http.request request
 			data = res.body

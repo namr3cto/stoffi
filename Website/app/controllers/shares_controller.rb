@@ -10,8 +10,8 @@
 
 class SharesController < ApplicationController
 
-	oauthenticate :only => [ :index, :show, :new, :create ]
-	oauthenticate :interactive => true, :only => [ :edit, :update, :destroy ]
+	oauthenticate only: [ :index, :show, :new, :create ]
+	oauthenticate interactive: true, only: [ :edit, :update, :destroy ]
 	respond_to :html, :mobile, :embedded, :xml, :json
 	
 	# GET /shares
@@ -69,14 +69,14 @@ class SharesController < ApplicationController
 		album    = Album.get(params[:album])                     if params[:album].to_s != ""
 		song = Song.get(current_user,
 		{
-			:title => params[:track][:title],
-			:path => params[:track][:path],
-			:length => params[:track][:length],
-			:foreign_url => params[:track][:foreign_url],
-			:art_url => params[:track][:art_url],
-			:genre => params[:track][:genre],
-			:artist => params[:track][:artist],
-			:album => params[:track][:album]
+			title: params[:track][:title],
+			path: params[:track][:path],
+			length: params[:track][:length],
+			foreign_url: params[:track][:foreign_url],
+			art_url: params[:track][:art_url],
+			genre: params[:track][:genre],
+			artist: params[:track][:artist],
+			album: params[:track][:album]
 		}) if params[:track]
 		
 		playlist.songs << song if song && playlist && playlist.songs.find(song.id) == nil
@@ -96,7 +96,7 @@ class SharesController < ApplicationController
 
 	# PUT /shares/1
 	def update
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 		@share = current_user.shares.find(params[:id])
 		success = @share.update_attributes(params[:share])
 		SyncController.send('update', @share, request) if success
@@ -105,7 +105,7 @@ class SharesController < ApplicationController
 
 	# DELETE /shares/1
 	def destroy
-		render :status => :forbidden and return if ["xml","json"].include?(params[:format])
+		render status: :forbidden and return if ["xml","json"].include?(params[:format])
 		@share = current_user.shares.find(params[:id])
 		SyncController.send('delete', @share, request)
 		@share.destroy

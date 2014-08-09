@@ -15,8 +15,8 @@ class Album < ActiveRecord::Base
 	include Base
 	
 	# associations
-	has_and_belongs_to_many :artist, :uniq => true
-	has_and_belongs_to_many :songs, :uniq => true
+	has_and_belongs_to_many :artist, uniq: true
+	has_and_belongs_to_many :songs, uniq: true
 	
 	# Returns an album matching a value.
 	#

@@ -16,10 +16,10 @@ class Song < ActiveRecord::Base
 	include Base
 
 	# associations
-	has_and_belongs_to_many :albums, :uniq => true
-	has_and_belongs_to_many :artists, :uniq => true
-	has_and_belongs_to_many :users, :uniq => true
-	has_and_belongs_to_many :playlists, :uniq => true
+	has_and_belongs_to_many :albums, uniq: true
+	has_and_belongs_to_many :artists, uniq: true
+	has_and_belongs_to_many :users, uniq: true
+	has_and_belongs_to_many :playlists, uniq: true
 	has_many :listens
 	has_many :shares, as: :object
 	has_many :sources, as: :resource
@@ -76,7 +76,7 @@ class Song < ActiveRecord::Base
 	# The options to use when the song is serialized.
 	def serialize_options
 		{
-			:methods => [ :kind, :display, :url, :picture ]
+			methods: [ :kind, :display, :url, :picture ]
 		}
 	end
 	

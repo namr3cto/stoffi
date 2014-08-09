@@ -10,8 +10,8 @@
 
 class SongsController < ApplicationController
 
-	oauthenticate :interactive => true, :except => [ :index, :show ]
-	before_filter :ensure_admin, :except => [ :index, :show, :create, :destroy ]
+	oauthenticate interactive: true, except: [ :index, :show ]
+	before_filter :ensure_admin, except: [ :index, :show, :create, :destroy ]
 	respond_to :html, :mobile, :embedded, :xml, :json
 	
 	# GET /songs
@@ -33,28 +33,28 @@ class SongsController < ApplicationController
 		@song = Song.find(params[:id])
 		@title = CGI.unescapeHTML(@song.pretty_name)
 		if @song.artist
-			@description = t "songs.description", :song => @song.title, :artist => @song.artist.name
+			@description = t "songs.description", song: @song.title, artist: @song.artist.name
 		else
-			@description = t "songs.description_without_artist", :song => @song.title
+			@description = t "songs.description_without_artist", song: @song.title
 		end
 		@head_prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#"
 		@meta_tags =
 		[
-			{ :property => "og:title", :content => d(@song.title) },
-			{ :property => "og:type", :content => "music.song" },
-			{ :property => "og:image", :content => @song.picture },
-			{ :property => "og:url", :content => @song.url },
-			{ :property => "og:description", :content => d(@description) },
-			{ :property => "og:site_name", :content => "Stoffi" },
-			{ :property => "fb:app_id", :content => "243125052401100" },
-			{ :property => "music:duration", :content => @song.length.to_i },
-			{ :property => "og:audio", :content => @song.play },
-			{ :property => "og:audio:type", :content => "audio/vnd.facebook.bridge" }
+			{ property: "og:title", content: d(@song.title) },
+			{ property: "og:type", content: "music.song" },
+			{ property: "og:image", content: @song.picture },
+			{ property: "og:url", content: @song.url },
+			{ property: "og:description", content: d(@description) },
+			{ property: "og:site_name", content: "Stoffi" },
+			{ property: "fb:app_id", content: "243125052401100" },
+			{ property: "music:duration", content: @song.length.to_i },
+			{ property: "og:audio", content: @song.play },
+			{ property: "og:audio:type", content: "audio/vnd.facebook.bridge" }
 		] |
-			@song.artists.map { |artist| { :property => "music:musician", :content => artist.url } } |
-			@song.albums.map { |album| { :property => "music:album", :content => album.url } }
+			@song.artists.map { |artist| { property: "music:musician", content: artist.url } } |
+			@song.albums.map { |album| { property: "music:album", content: album.url } }
 
-		respond_with(@song, :include => :artists)
+		respond_with(@song, include: :artists)
 	end
 
 	# GET /songs/new
