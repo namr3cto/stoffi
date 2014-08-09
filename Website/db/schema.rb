@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140807172958) do
+ActiveRecord::Schema.define(version: 20140809085826) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -232,6 +232,19 @@ ActiveRecord::Schema.define(version: 20140807172958) do
     t.integer "history_id"
     t.integer "song_id"
   end
+
+  create_table "images", force: true do |t|
+    t.string   "url"
+    t.integer  "resource_id"
+    t.string   "resource_type"
+    t.integer  "width"
+    t.integer  "height"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "images", ["resource_id", "resource_type"], name: "index_images_on_resource_id_and_resource_type"
+  add_index "images", ["url"], name: "index_images_on_url", unique: true
 
   create_table "keyboard_shortcut_profiles", force: true do |t|
     t.string   "name"
