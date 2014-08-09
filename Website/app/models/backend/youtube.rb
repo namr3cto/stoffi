@@ -15,8 +15,8 @@ module Backend::Youtube
 	
 	SEARCH_PARTS = "id"
 	SEARCH_FIELDS = "items(id/videoId)"
-	DETAILS_PARTS = "snippet,statistics,contentDetails"
-	DETAILS_FIELDS = "items(snippet(title,thumbnails),statistics/viewCount,contentDetails/duration)"
+	DETAILS_PARTS = "id,snippet,statistics,contentDetails"
+	DETAILS_FIELDS = "items(id,snippet(title,thumbnails),statistics/viewCount,contentDetails/duration)"
 	
 	# Search for a query in a given set of categories
 	def self.search(query, categories)
@@ -46,7 +46,7 @@ module Backend::Youtube
 				begin
 					id = i['id']
 					begin
-						dur = Duration.new(i['contentDetails']).total.to_f
+						dur = Duration.new(i['contentDetails']['duration']).total.to_f
 					rescue
 						dur = 0.0
 					end
