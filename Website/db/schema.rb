@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140809085826) do
+ActiveRecord::Schema.define(version: 20140809153957) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -467,6 +467,7 @@ ActiveRecord::Schema.define(version: 20140809085826) do
     t.datetime "created_at"
     t.datetime "updated_at"
     t.decimal  "length"
+    t.integer  "popularity",    default: 0
   end
 
   add_index "sources", ["foreign_url"], name: "index_sources_on_foreign_url", unique: true
