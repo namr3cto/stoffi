@@ -1,11 +1,5 @@
 # -*- encoding : utf-8 -*-
 module DonationsHelper
-	def donation_item(donation, options = {})
-		@donation = donation
-		@options = options
-		render :partial => "donations/item"
-	end
-	
 	def too_many_donations?
 		Donation.pending_artists_count >= @site_config.pending_donations_limit
 	end

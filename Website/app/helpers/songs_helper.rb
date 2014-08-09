@@ -17,13 +17,4 @@ module SongsHelper
 		end
 		return l
 	end
-	
-	def song_link(song, options = {})
-	end
-	
-	def song_item(song, options = {})
-		@song = song
-		@options = { :artist => true }.merge(options)
-		render :partial => "songs/item"
-	end
 end
