@@ -16,7 +16,7 @@
 </div>
 
 <% if @query.to_s.empty? %>
-	<%= javascript_tag "$('#search').val('bob marley')"%>
+	<%= javascript_tag "$('#search').val('')"%>
 <% else %>
 	<%
 	js_query = escape_javascript(@query)
