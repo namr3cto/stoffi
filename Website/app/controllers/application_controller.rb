@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
 			request.env['HTTP_X_DEVICE_ID']
 		].each do |f|
 			logger.info "checking for device id"
-			if not f.to_s.empty?
+			if f.present?
 				logger.info "found device id: " + f.to_s
 				begin
 					@current_device = Device.find(f)

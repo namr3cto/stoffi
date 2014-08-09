@@ -1,9 +1,8 @@
 <%
-a = !@artist.to_s.empty?
-aid = a ? @artist.id : 0
-anm = a ? @artist.name : t("donations.artist")
-cnc = a ? artist_url(@artist) : donate_url
-ret = a ? artist_url(@artist) : money_url
+aid = @artist ? @artist.id : 0
+anm = @artist ? @artist.name : t("donations.artist")
+cnc = @artist ? artist_url(@artist) : donate_url
+ret = @artist ? artist_url(@artist) : money_url
 %>
 
 <script>
@@ -59,9 +58,9 @@ $(document).ready(function()
 	});
 });
 </script>
-<h1><%=d(@artist.to_s.empty? ? t("donations.title") : t("donations.title_with_artist", :artist => @artist.name)) %></h1>
+<h1><%=d(@artist.blank? ? t("donations.title") : t("donations.title_with_artist", :artist => @artist.name)) %></h1>
 
-<% if too_many_donations? && (@artist.to_s.empty? || @artist.pending == 0) %>
+<% if too_many_donations? and (@artist.blank? or @artist.pending == 0) %>
 	<%= t "donations.full_text_html" %>
 
 <% else %>
@@ -73,19 +72,19 @@ $(document).ready(function()
 		<%= hidden_field_tag "cnc", cnc %>
 
 		<div class="message">
-			<% if @artist.to_s.empty? %>
-				<%= t "donations.front_text_html" %>
-			<% else %>
+			<% if @artist %>
 				<%= t "donations.long_text_html", :receiver => d(@artist.name) %>
+			<% else %>
+				<%= t "donations.front_text_html" %>
 			<% end %>
 		</div>
 		
-		<% e = flash[:error].to_s != "" %>
+		<% e = flash[:error].present? %>
 		<div class="notice" id="notice"<%=" style='display:none';".html_safe unless e %>>
 			<%= flash[:error] if e %>
 		</div>
 		
-		<% if @artist.to_s.empty? %>
+		<% if @artist.blank? %>
 			<div>
 				<%= label_tag "item_name", t("donations.artist") %>
 				<%= text_field_tag "item_name", "" %>

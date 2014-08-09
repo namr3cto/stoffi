@@ -54,7 +54,7 @@ class Playlist < ActiveRecord::Base
 	end
 	
 	def dynamic?
-		not filter.to_s.empty?
+		filter.present?
 	end
 	
 	def self.get(current_user, value)

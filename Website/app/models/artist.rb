@@ -38,10 +38,10 @@ class Artist < ActiveRecord::Base
 	# The picture is saved to the database so searching will only occur the first time this method is called.
 	def picture
 		s = super
-		return s if s.to_s != ""
+		return s if s.present?
 		
 		# try to find image
-		if name.to_s != ""
+		if name.present?
 			pic = nil
 			begin
 				key = Rails.application.secret.oa_cred[:lastfm][:id]
@@ -58,7 +58,7 @@ class Artist < ActiveRecord::Base
 					break if img['size'] == 'large'
 				end
 				
-				pic = Artist.default_pic if pic.to_s == ""
+				pic = Artist.default_pic if pic.blank?
 				
 			rescue => err
 				logger.error "could not retrieve artist image: " + err.to_s
@@ -75,23 +75,23 @@ class Artist < ActiveRecord::Base
 	end
 	
 	# Whether or not the artist has a Twitter account.
-	def twitter?; twitter.to_s != "" end
+	def twitter?; twitter.present? end
 	# Whether or not the artist has a Facebook page or account.
-	def facebook?; facebook.to_s != "" end
+	def facebook?; facebook.present? end
 	# Whether or not the artist has a Google+ account.
-	def googleplus?; googleplus.to_s != "" end
+	def googleplus?; googleplus.present? end
 	# Whether or not the artist has a MySpace account.
-	def myspace?; myspace.to_s != "" end
+	def myspace?; myspace.present? end
 	# Whether or not the artist has a YouTube channel or account.
-	def youtube?; youtube.to_s != "" end
+	def youtube?; youtube.present? end
 	# Whether or not the artist has a SoundCloud account.
-	def soundcloud?; soundcloud.to_s != "" end
+	def soundcloud?; soundcloud.present? end
 	# Whether or not the artist has a Spotify presence.
-	def spotify?; spotify.to_s != "" end
+	def spotify?; spotify.present? end
 	# Whether or not the artist has a Last.fm presence.
-	def lastfm?; lastfm.to_s != "" end
+	def lastfm?; lastfm.present? end
 	# Whether or not the artist has a website.
-	def website?; website.to_s != "" end
+	def website?; website.present? end
 	
 	# The URL to the artist's Twitter account.
 	def twitter_url; "https://twitter.com/#{twitter}" end
@@ -126,7 +126,7 @@ class Artist < ActiveRecord::Base
 	
 	# Whether the artist is unknown.
 	def unknown?
-		return name.to_s == ""
+		return name.blank?
 	end
 	
 	# The string to display to users for representing the resource.
@@ -161,7 +161,7 @@ class Artist < ActiveRecord::Base
 	
 	# Whether or not it's not possible to send any donations to the artist.
 	def undonatable
-		unknown? || donatable_status.to_s == ""
+		unknown? || donatable_status.blank?
 	end
 	
 	# Paginates the songs of the artist. Should be called before <tt>paginated_songs</tt> is called.
@@ -256,7 +256,7 @@ class Artist < ActiveRecord::Base
 	
 	# Split an artist name when it contains words like: and, feat, vs
 	def self.split_name(name)
-		return [] if name.to_s.empty?
+		return [] if name.blank?
 		name.split(/(?:\s+(?:&|feat(?:uring|s)?|ft|vs|and)(?:\s+|\.\s*)|\s*[,\+]\s*)/i)
 	end
 end

@@ -2,14 +2,14 @@
 	<h1><%= t "join.title" %></h1>
 
 	<%= form_for(resource,:as => resource_name, :url => registration_path(resource_name)) do |f| %>
-		<% if any_errors?(resource) || !flash[:alert].to_s.empty? %>
+		<% if any_errors?(resource) || flash[:alert].present? %>
 			<div class="alert">
 				<%= pretty_error(resource) %>
 				<%= flash[:alert] %>
 			</div>
 		<% end %>
 		
-		<% unless flash[:notice].to_s.empty? %>
+		<% if flash[:notice].present? %>
 			<div class="notice"><%=h flash[:notice] %></div>
 		<% end %>
 

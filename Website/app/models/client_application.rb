@@ -88,13 +88,13 @@ class ClientApplication < ActiveRecord::Base
 	
 	# The large icon of the app (64x64).
 	def large_icon
-		return icon_64 unless icon_64.to_s.empty?
+		return icon_64 if icon_64.present?
 		"/assets/gfx/app_default_icon_64.png"
 	end
 	
 	# The small icon of the app (16x16).
 	def small_icon
-		return icon_16 unless icon_16.to_s.empty?
+		return icon_16 if icon_16.present?
 		"/assets/gfx/app_default_icon_16.png"
 	end
 	

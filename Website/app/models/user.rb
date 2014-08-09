@@ -45,24 +45,26 @@ class User < ActiveRecord::Base
 	# # Look at the email.
 	# # Return a default name.
 	def name
-		s = name_source.to_s
+		if name_source.present?
+			providers = ["twitter","facebook","google_oauth2","lastfm","vimeo"]
+			p,v = name_source.split("::",2)
+			return name_source unless p.in? providers
+			l = self.links.find_by(provider: p)
+			if l
+				names = l.names
+				return names[v.to_sym] if names.is_a? Hash and v and names[v.to_sym]
+			end
+		end
 		
-		return User.default_name if email.to_s == "" and s == "" and custom_name.to_s == ""
-		return email.split('@')[0].titleize if s == "" and custom_name.to_s == ""
-		return custom_name if s == ""
+		return custom_name if custom_name.present?
+		return email.split('@')[0].titleize if email.present?
+		User.default_name
 		
-		p,v = s.split("::",2)
-		return s unless ["twitter","facebook","google_oauth2","lastfm","vimeo"].include? p
-		l = self.links.find_by(provider: p)
-		return User.default_name unless l
-		names = l.names
-		return User.default_name unless (names.is_a?(Hash) and v and names[v.to_sym])
-		names[v.to_sym]
 	end
 	
 	# The default picture of a user.
 	def self.default_pic(size = nil)
-		size = "_#{size.to_s}" unless size.to_s.empty?
+		size = "_#{size}" if size.present?
 		"/assets/gfx/user#{size}.png"
 	end
 	
@@ -219,7 +221,7 @@ class User < ActiveRecord::Base
 		
 		result = if has_no_password? || valid_password?(current_password)
 			r = update_attributes(params)
-			update_attribute(:has_password, true) unless params[:password].to_s.blank?
+			update_attribute(:has_password, true) if params[:password].present?
 			r
 		else
 			self.errors.add(:current_password, current_password.blank? ? :blank : :invalid)

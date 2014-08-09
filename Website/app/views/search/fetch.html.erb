@@ -13,7 +13,7 @@
 			<%
 			img = "assets/media/artist.png"
 			[:medium, :large, :small, :huge, :tiny, :unknown].each do |s|
-				unless artist[:images][s].to_s.empty?
+				if artist[:images][s].present?
 					img = artist[:images][s]
 					break
 				end
@@ -50,9 +50,9 @@
 			<dl>
 			<% info_order.each do |k| %>
 				<%#v = s[:info][k] %>
-				<%#next if v.to_s.empty? %>
+				<%#next if v.blank? %>
 				<dt><%=k.gsub('_',' ').capitalize%></dt>
-				<dd><%=raw "Lorem ipsum" %></dd>
+				<dd><%== "Lorem ipsum" %></dd>
 				<%
 				infos += 1
 				break if infos >= max_infos
@@ -60,7 +60,7 @@
 			<% end %>
 			</dl>
 			<p class='clear'>&nbsp;</p>
-			<p><%=raw 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' %></p>
+			<p><%== 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' %></p>
 		</div>
 		
 	</li>
@@ -77,7 +77,7 @@
 			<%
 			img = "assets/media/artist.png"
 			[:small, :medium, :tiny, :large, :huge, :unknown].each do |s|
-				unless hit[:images][s].to_s.empty?
+				if hit[:images][s].present?
 					img = hit[:images][s]
 					break
 				end
@@ -112,9 +112,9 @@
 				when :song then %>
 				<% a_txt = " by #{a_txt}" unless a_txt.empty? %>
 				<% if one_liner %>
-				<span><%=raw a_txt%></span>
+				<span><%== a_txt%></span>
 				<% else %>
-				<p>A song<%=raw a_txt%></p>
+				<p>A song<%== a_txt%></p>
 				<p><a class='button'>&#9654;</a></p>
 				<% end %>
 				
@@ -124,12 +124,12 @@
 				
 				<% when :album then %>
 				<% a_txt = " by #{a_txt}" unless a_txt.empty? %>
-				<p>An album <%=raw a_txt%></p>
+				<p>An album <%== a_txt%></p>
 				<p>Songs: <a>Relapse</a>, <a>Something</a>, <a>Something Else</a>, <a>Here Comes Another Song</a>, <a>This Song is Cool</a></p>
 				
 				<% when :event then %>
 				<% a_txt = " with #{a_txt}" unless a_txt.empty? %>
-				<p>An event <%=raw a_txt%></p>
+				<p>An event <%== a_txt%></p>
 				<p>In <%=hit[:city]%> at Aug 4th, 13:37<p>
 					
 				<% end %>

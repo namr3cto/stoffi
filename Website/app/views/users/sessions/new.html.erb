@@ -4,7 +4,7 @@
 	<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
 	
 		<% [:alert, :notice].each do |t| %>
-			<%=raw "<div class='#{t}'>#{h(flash[t])}</div>" unless flash[t].to_s.empty? %>
+			<%== "<div class='#{t}'>#{h(flash[t])}</div>" if flash[t].present? %>
 		<% end %>
 	
 		<div>

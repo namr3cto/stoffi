@@ -60,9 +60,9 @@ class ListensController < ApplicationController
 	def create
 		@listen = current_user.listens.new(params[:listen])
 		
-		playlist = Playlist.get(current_user, params[:playlist]) if not params[:playlist].to_s.empty?
-		artist   = Artist.get(params[:track][:artist])           if params[:track] and not params[:track][:artist].to_s.empty?
-		album    = Album.get(params[:album])                     if not params[:album].to_s.empty?
+		playlist = Playlist.get(current_user, params[:playlist]) if params[:playlist].present?
+		artist   = Artist.get(params[:track][:artist])           if params[:track] and params[:track][:artist].present?
+		album    = Album.get(params[:album])                     if params[:album].present?
 		song = Song.get(current_user,
 		{
 			:title => params[:track][:title],

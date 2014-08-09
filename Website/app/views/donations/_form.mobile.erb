@@ -1,5 +1,5 @@
 <%
-a = !@artist.to_s.empty?
+a = @artist.present?
 aid = a ? @artist.id : 0
 anm = a ? @artist.name : t("donations.artist")
 cnc = a ? artist_url(@artist) : donate_url
@@ -63,7 +63,7 @@ $(function()
 </script>
 
 
-<% if too_many_donations? && (@artist.to_s.empty? || @artist.pending == 0) %>
+<% if too_many_donations? %>
 	<%= t "donations.full_text_html" %>
 
 <% else %>
@@ -74,7 +74,7 @@ $(function()
 		<%= hidden_field_tag "ret", ret %>
 		<%= hidden_field_tag "cnc", cnc %>
 		
-		<% e = flash[:error].to_s != "" %>
+		<% e = flash[:error].present? %>
 		<div class="error" id="notice"<%= "style='display:none;'".html_safe unless e %>>
 			<%= flash[:error] if e %>
 		</div>

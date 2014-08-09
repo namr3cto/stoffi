@@ -71,10 +71,10 @@ module Base
 	
 	# The path to use when creating links using <tt>url_for</tt> to the resource.
 	def to_param
-		if display.to_s.empty?
+		if display.blank?
 			id.to_s
 		else
-			"#{id}-#{d(display).gsub(/[^a-z0-9]+/i, '-')}"
+			"#{id}-#{display.parameterize}"
 		end
 	end
 

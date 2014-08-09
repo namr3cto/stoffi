@@ -36,7 +36,7 @@ class SearchController < ApplicationController
 		@query = query_param
 		@categories = category_param
 		@sources = source_param
-		#save_search unless @query.to_s.empty?
+		#save_search @query.present?
 		@title = e(params[:q])
 		@description = t("index.description")
 		
@@ -50,7 +50,7 @@ class SearchController < ApplicationController
 	def suggest
 		@query = query_param
 		@suggestions = []
-		unless @query.to_s.empty?
+		if @query.present?
 			page = request.referer
 			pos = origin_position(request.remote_ip)
 			long = pos[:longitude]
@@ -64,7 +64,7 @@ class SearchController < ApplicationController
 	
 	def fetch
 		@query = query_param
-		respond_with({ error: 'query cannot be empty' }) if @query.to_s.empty?
+		respond_with({ error: 'query cannot be empty' }) if @query.blank?
 		@results = get_results(@query, category_param, source_param)
 		respond_with(@results, :layout => false)
 	end

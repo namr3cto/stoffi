@@ -15,7 +15,7 @@
 	</div>
 </div>
 
-<% if @query.to_s.empty? %>
+<% if @query.blank? %>
 	<%= javascript_tag "$('#search').val('')"%>
 <% else %>
 	<%

@@ -26,7 +26,7 @@ class Song < ActiveRecord::Base
 	
 	# The art of the song.
 	def picture(size = :medium)
-		return art_url unless art_url.to_s.empty? or art_url.to_s.downcase == "null"
+		return art_url if art_url.present? and not art_url.to_s.downcase == "null"
 		return "/assets/media/disc.png"
 	end
 	
@@ -199,7 +199,7 @@ class Song < ActiveRecord::Base
 	
 	# Extracts the title and artists from a string.
 	def self.parse_title(str)
-		return "", "" if str.to_s.empty?
+		return "", "" if str.blank?
 		
 		artist, title = split_title(str)
 		
@@ -235,13 +235,13 @@ class Song < ActiveRecord::Base
 			song.art_url = s[:art_url]
 			
 			if song.save
-				unless s[:album].to_s.empty?
+				if s[:album].present?
 					album = Album.get(s[:album])
 					song.albums << album if album
 				end
 				
 				artists.each do |a|
-					_a = Artist.get(a) unless a.to_s.empty?
+					_a = Artist.get(a) if a.present?
 					song.artists << _a if _a
 					_a.albums << album if album and not _a.albums.include?(album)
 				end
