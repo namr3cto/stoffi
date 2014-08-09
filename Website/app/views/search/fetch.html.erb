@@ -11,7 +11,7 @@
 	<li class='exact artist'>
 		<div class='image'>
 			<%
-			img = "assets/media/artist.png"
+			img = "media/artist.png"
 			[:medium, :large, :small, :huge, :tiny, :unknown].each do |s|
 				if artist[:images][s].present?
 					img = artist[:images][s]
@@ -75,7 +75,7 @@
 		%>
 		<li class='<%=cname%>' data-type='hit'>
 			<%
-			img = "assets/media/artist.png"
+			img = "media/artist.png"
 			[:small, :medium, :tiny, :large, :huge, :unknown].each do |s|
 				if hit[:images][s].present?
 					img = hit[:images][s]
@@ -85,7 +85,7 @@
 			%>
 			<% unless one_liner %>
 			<div class='image'>
-				<img src='<%=img%>'/>
+				<%= image_tag img %>
 			</div>
 			<% end %>
 			<div class='content'>
