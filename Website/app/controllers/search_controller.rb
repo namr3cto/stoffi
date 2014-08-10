@@ -106,6 +106,7 @@ class SearchController < ApplicationController
 			s.latitude = pos[:latitude]
 			s.locale = I18n.locale.to_s
 			s.categories = category_param
+			s.sources = source_param
 			s.page = request.referer || ""
 			s.user = current_user if user_signed_in?
 			s.save
@@ -115,14 +116,21 @@ class SearchController < ApplicationController
 	end
 	
 	def get_results(query, categories, sources)
-		hits = []
 		
-		hits.concat(parse(Backend::Lastfm.search(query, categories))) if sources.include? 'lastfm'
-		hits.concat(parse(Backend::Youtube.search(query, categories))) if sources.include? 'youtube'
-		#hits.concat(parse(Backend::Soundcloud.search(query, categories))) if sources.include? 'soundcloud'
-		#hits.concat(parse(Backend::Jamendo.search(query, categories))) if sources.include? 'jamendo'
+		hits = []
+		if Search.latest_search(query, categories, sources) > 1.week.ago
+			hits.concat(parse(Backend::Lastfm.search(query, categories))) if sources.include? 'lastfm'
+			hits.concat(parse(Backend::Youtube.search(query, categories))) if sources.include? 'youtube'
+			#hits.concat(parse(Backend::Soundcloud.search(query, categories))) if sources.include? 'soundcloud'
+			#hits.concat(parse(Backend::Jamendo.search(query, categories))) if sources.include? 'jamendo'
+			save_hits(hits)
+		else
+			hits = search_in_db(query, categories, sources)
+		end
 		
 		hits = rank(hits, query)
+		
+		# turns hits into an array of objects
 		
 		results = { hits: hits.collect { |h|
 			h.except(:distance, :score)
@@ -203,6 +211,32 @@ class SearchController < ApplicationController
 			end
 		end
 		return parsed_hits
+	end
+	
+	def save_hits(hits)
+		retval = []
+		hits.each do |hit|
+			begin
+				x = nil
+				case hit[:type]
+				when :song
+					x = Song.get(hit)
+				when :artist
+					x = Artist.get(hit)
+				when :album
+					x = Album.get(hit)
+				when :event
+					x = Event.get(hit)
+				#when :genre
+				#	x = Genre.get(hit)
+				else
+					raise "Unknown hit type: #{hit[:type]}"
+				end
+				retval << x if x
+			rescue
+			end
+		end
+		return retval
 	end
 	
 	def fill_nil_popularity(hits)
