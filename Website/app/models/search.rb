@@ -36,6 +36,13 @@ class Search < ActiveRecord::Base
 		return terms.sort_by { |x| x[:score] }.reverse[0..limit-1]
 	end
 	
+	def self.latest_search(query, categories, sources)
+		s = where(query: query, categories: categories, sources: sources)
+			.order(:updated_at).limit(1)
+		return s.updated_at if s
+		return Time.now
+	end
+	
 	private
 	def self.score_weights
 		{
