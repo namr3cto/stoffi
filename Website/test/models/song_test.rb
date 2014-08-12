@@ -81,7 +81,7 @@ class SongTest < ActiveSupport::TestCase
 	test "should add new song to user" do
 		user = users(:alice)
 		assert_difference('user.songs.count', 1, "Didn't add song to user") do
-			s = Song.get(user, {path: "foo"})
+			s = Song.get(user, {path: "foo.mp3"})
 		end
 	end
 	
@@ -126,6 +126,28 @@ class SongTest < ActiveSupport::TestCase
 		end
 	end
 	
+	test "should get song from search result" do
+		hit = {
+			fullname: "Eminem - Relapse",
+			name: "Relapse",
+			type: :song,
+			artist: "Eminem",
+			artists: ["Eminem"],
+			popularity: 123,
+			length: 92,
+			path: 'stoffi:track:youtube:foo',
+		}
+		s = nil
+		assert_difference('Song.count', 1, "Didn't create song") do
+			s = Song.get(nil, hit, false)
+		end
+		assert_equal 'Relapse', s.title, "Didn't create song with correct title"
+		assert_equal 1, s.artists.count, "Didn't assign any artist to song"
+		assert_equal 'Eminem', s.artists[0].name, "Didn't assign song to correct artist"
+		assert_equal 123, s.sources[0].popularity, "Didn't assign correct popularity"
+		assert_equal 92, s.sources[0].length, "Didn't assign correct length"
+	end
+	
 	test "should parse title" do
 		artist, title = Song.parse_title("foobar - a great song")
 		assert_equal "foobar", artist
@@ -154,5 +176,32 @@ class SongTest < ActiveSupport::TestCase
 		artist, title = Song.parse_title("foobar \"a great song\"")
 		assert_equal "foobar", artist
 		assert_equal "a great song", title
+	end
+	
+	test "should extract artist from hash" do
+		name = 'Damian Marley'
+		song = { artist: name }
+		assert_difference('Artist.count', 1, "Didn't create artist") do
+			Song.extract_artists(song)
+		end
+		a = Artist.last
+		assert_equal name, a.name, "Latest artist didn't get the correct name"
+	end
+	
+	test "should extract existing artist from hash" do
+		name = 'Eminem'
+		song = { artist: name }
+		assert_no_difference('Artist.count', "Created new artist") do
+			Song.extract_artists(song)
+		end
+	end
+	
+	test "should extract artists from hash" do
+		song = { artists: ['Eminem', 'Damian Marley', 'Stephen Marley'], artist: 'Foo' }
+		assert_difference('Artist.count', 2, "Didn't create two artists") do
+			Song.extract_artists(song)
+		end
+		a = Artist.last
+		assert_equal 'Stephen Marley', a.name, "Latest artist didn't get the correct name"
 	end
 end

@@ -50,8 +50,8 @@ class PlaylistsControllerTest < ActionController::TestCase
 		Link.any_instance.stubs(:create_playlist).returns(nil)
 		sign_in @user
 		songs = [
-			{:path => "foo"},
-			{:path => "bar"},
+			{:path => "foo.mp3"},
+			{:path => "bar.wav"},
 		]
 		assert_difference('Playlist.count') do
 			post :create, { :playlist => { :name => "Something" }, :songs => songs }
@@ -72,7 +72,7 @@ class PlaylistsControllerTest < ActionController::TestCase
 		sign_in @user
 		songs = [
 			{:path => "stoffi:track:youtube:abc"},
-			{:path => "foo"},
+			{:path => "foo.mp3"},
 		]
 		assert_no_difference('Playlist.count') do
 			post :create, {:playlist => @playlist.attributes, :songs => songs}
