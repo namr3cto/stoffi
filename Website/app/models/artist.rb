@@ -21,7 +21,11 @@ class Artist < ActiveRecord::Base
 		assoc.has_and_belongs_to_many :songs
 		assoc.has_and_belongs_to_many :artists, join_table: :performances
 	end
-	has_many :wikipedia_links, as: :resource, dependent: :destroy
+	with_options as: :resource, dependent: :destroy do |assoc|
+		assoc.has_many :wikipedia_links
+		assoc.has_many :sources
+		assoc.has_many :images
+	end
 	has_many :listens, through: :songs
 	has_many :donations
 	
@@ -166,6 +170,23 @@ class Artist < ActiveRecord::Base
 		unknown? || donatable_status.blank?
 	end
 	
+	def images=(hash)
+		return unless hash.key?(:images)
+		imgs = Image.create_by_hashes(hash[:images])
+		images << imgs
+	end
+	
+	def source=(hash)
+		return unless hash.key?(:source) and hash.key?(:id)
+		return unless sources.where(name: hash[:source]).empty?
+		src = Source.new
+		src.name = hash[:source]
+		src.foreign_id = hash[:id]
+		src.foreign_url = hash[:url]
+		src.popularity = hash[:popularity]
+		sources << src if src.save
+	end
+	
 	# Paginates the songs of the artist. Should be called before <tt>paginated_songs</tt> is called.
 	#
 	#   artist.paginate_songs(10, 30)
@@ -210,14 +231,19 @@ class Artist < ActiveRecord::Base
 	
 	# Returns an artist matching a value.
 	#
-	# The value can be the ID (integer) or the name (string) of the artist.
-	# The artist will be created if it is not found (unless <tt>value</tt> is an ID).
-	def self.get(value)
-		value = self.find(value) if value.is_a?(Integer)
-		if value.is_a?(String)
+	# The value can be the name (string) of the artist or by a hash describing
+	# the artist.
+	#
+	# The artist will be created if it is not found.
+	def self.get(value)		
+		if value.is_a? String
 			name = value
-			value = self.find_by(name: name.sub("&","&#38;"))
-			value = self.find_or_create_by(name: name) unless value.is_a?(Artist)
+			value = find_by(name: name.sub("&","&#38;"))
+			value = find_or_create_by(name: name) unless value.is_a?(Artist)
+			
+		elsif value.is_a? Hash
+			value = get_by_hash(value)
+			
 		end
 		return value if value.is_a?(Artist)
 		return nil
@@ -259,6 +285,21 @@ class Artist < ActiveRecord::Base
 	# Split an artist name when it contains words like: and, feat, vs
 	def self.split_name(name)
 		return [] if name.blank?
-		name.split(/(?:\s+(?:&|feat(?:uring|s)?|ft|vs|and)(?:\s+|\.\s*)|\s*[,\+]\s*)/i)
+		name.split(/(?:\s+(?:&|feat(?:uring|s)?|ft|vs|and|with)(?:\s+|\.\s*)|\s*[,\+]\s*)/i)
+	end
+	
+	private
+	
+	def self.get_by_hash(hash)
+		raise 'Missing :name key in hash' unless hash.has_key? :name
+		begin
+			artist = find_or_create_by(name: hash[:name])
+			artist.images = hash
+			artist.source = hash
+			return artist
+		rescue StandardError => e
+			raise e
+		end
+		return nil
 	end
 end
