@@ -3,6 +3,7 @@ class Image < ActiveRecord::Base
 	
 	def self.create_by_hashes(hashes)
 		images = []
+		return images unless hashes.is_a? Array
 		hashes.each do |hash|
 			begin
 				# Fill missing size attributes

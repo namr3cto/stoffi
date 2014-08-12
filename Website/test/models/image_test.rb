@@ -32,6 +32,11 @@ class ImageTest < ActiveSupport::TestCase
 		end
 	end
 	
+	test 'should handle nil value' do
+		images = Image.create_by_hashes(nil)
+		assert_equal [], images, "Didn't return an empty array"
+	end
+	
 	test 'should fill in missing size' do
 		url = 'http://foobar.com/image.jpg'
 		path = File.join(Rails.root, 'test/fixtures/image_32x32.png')
