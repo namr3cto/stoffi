@@ -54,7 +54,13 @@ class Backend::Lastfm
 		begin
 			get_hits(resource, query) do |h|
 				begin
-					hit = { type: resource_to_type(resource), images: {} }
+					hit = {
+						type: resource_to_type(resource),
+						images: [],
+						source: :lastfm,
+						url: h['url'],
+						id: h['id']
+					}
 					case resource
 					when 'artist' then
 						hit[:popularity] = h['listeners'].to_f
@@ -89,15 +95,7 @@ class Backend::Lastfm
 					
 					if h['image']
 						h['image'].each do |i|
-							u = i['#text']
-							s = case i['size']
-							when 'small' then :tiny
-							when 'medium' then :small
-							when 'large' then :medium
-							when 'extralarge' then :large
-							else :unknown
-							end
-							hit[:images][s] = u
+							hit[:images] << { url: i['#text'] }
 						end
 					end
 					

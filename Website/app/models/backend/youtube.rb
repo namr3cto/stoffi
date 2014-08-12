@@ -56,20 +56,15 @@ module Backend::Youtube
 						popularity: i['statistics']['viewCount'].to_f,
 						length: dur,
 						path: 'stoffi:track:youtube:'+id,
-						images: {},
-						type: :song
+						images: [],
+						type: :song,
+						source: :youtube,
 					}
 					i['snippet']['thumbnails'].keys.each do |t|
 						u = i['snippet']['thumbnails'][t]['url']
-						s = case t
-						when 'default' then :tiny
-						when 'medium' then :small
-						when 'high' then :medium
-						when 'standard' then :large
-						when 'maxres' then :huge
-						else :unknown
-						end
-						song[:images][s] = u
+						w = i['snippet']['thumbnails'][t]['width']
+						h = i['snippet']['thumbnails'][t]['height']
+						song[:images] << { url: u, width: w, height: h }
 					end
 					songs << song
 				rescue StandardError => e
