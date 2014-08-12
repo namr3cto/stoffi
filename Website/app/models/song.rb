@@ -23,6 +23,7 @@ class Song < ActiveRecord::Base
 	has_many :listens
 	has_many :shares, as: :object
 	has_many :sources, as: :resource
+	has_many :images, as: :resource
 	
 	# The art of the song.
 	def picture(size = :medium)
@@ -114,8 +115,13 @@ class Song < ActiveRecord::Base
 	#  album: the name of the album to which the song belongs
 	#  art_url: a url to an image for the song
 	#
+	# If ask_backend is true and the path points to an external
+	# service such as YouTube or SoundCloud, then that service
+	# will be queried for info instead of using what is provided
+	# in the hash value.
+	#
 	# The song will be created if it is not found
-	def self.get(current_user, value)
+	def self.get(current_user, value, ask_backend = true)
 		raise 'missing path key in hash' unless value.has_key? :path
 		begin
 			v = value
@@ -127,7 +133,12 @@ class Song < ActiveRecord::Base
 				song = find_by_path_and_length(p, v[:length].to_f)
 				song = create_from_hash(v) unless song.is_a? Song
 			else
-				song = get_by_path(p)
+				if ask_backend
+					song = get_by_path(p)
+				else
+					song = find_by_path(p)
+					song = create_from_hash(v) unless song.is_a? Song
+				end
 			end
 			
 			if current_user and song and not current_user.songs.include? song
@@ -149,13 +160,7 @@ class Song < ActiveRecord::Base
 		path = parse_path(path) if path.is_a? String
 		
 		begin
-			song = nil
-			
-			unless [:local, :url].include? path[:source]
-				src = Source.find_by(name: path[:source], foreign_id: path[:id])
-				song = src.resource if src
-			end
-			
+			song = find_by_path(path)
 			return song if song.is_a? Song
 			
 			case path[:source]
@@ -171,6 +176,13 @@ class Song < ActiveRecord::Base
 		rescue StandardError => e
 			raise e
 		end
+		return nil
+	end
+	
+	def self.find_by_path(path)
+	 	return nil if path[:source].in? [:local, :url]
+		src = Source.find_by_path(path)
+		return src.resource if src
 		return nil
 	end
 	
@@ -217,42 +229,38 @@ class Song < ActiveRecord::Base
 		return artist, title
 	end
 	
-	private
-	
 	def self.create_from_hash(hash)
 		s = hash
 		song = nil
 		begin
 			artists = extract_artists(s)
 			artist, title = parse_title(s[:name] || s[:title])
-			artists = [artist] unless artists.empty?
+			artists = [artist] if artists.empty?
 		
 			song = Song.new
 			song.title = title
 			song.genre = s[:genre]
-			
-			# TODO: create image objects instead
-			song.art_url = s[:art_url]
+			song.images << Image.create_by_hashes(s[:images])
 			
 			if song.save
+				logger.debug 'song was saved successfully'
 				if s[:album].present?
 					album = Album.get(s[:album])
 					song.albums << album if album
 				end
 				
+				logger.debug artists.inspect
 				artists.each do |a|
 					_a = Artist.get(a) if a.present?
 					song.artists << _a if _a
 					_a.albums << album if album and not _a.albums.include?(album)
 				end
 				
-				src = Source.get_by_path(s[:path])
-				if src
-					src.foreign_url = s[:foreign_url] || s[:url]
-					src.length = s[:length].to_f if s[:length]
-					#src.popularity = s[:popularity]
-					song.sources << src
-				end
+				src = Source.find_or_create_by_path(s[:path])
+				src.foreign_url = s[:foreign_url] || s[:url]
+				src.length = s[:length].to_f if s[:length]
+				src.popularity = s[:popularity]
+				song.sources << src
 			end
 		rescue StandardError => e
 			raise e
@@ -261,10 +269,12 @@ class Song < ActiveRecord::Base
 		return song
 	end
 	
+	private
+	
 	def self.extract_artists(song)
 		artists = []
 		if song.has_key? :artists
-			artists = v[:artists]
+			artists = song[:artists]
 		elsif song.has_key? :artist
 			artists = Artist.split_name(song[:artist])
 		end
