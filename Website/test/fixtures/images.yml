@@ -1,11 +1,37 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  url: MyString
-  width: 1
-  height: 1
+tiny:
+  url: http://bar.com/tiny.jpg
+  resource: not_afraid (Song)
+  width: 16
+  height: 16
 
-two:
-  url: MyString2
-  width: 1
-  height: 1
+tiny:
+  url: http://foo.com/tiny.jpg
+  resource: one_love (Song)
+  width: 32
+  height: 32
+  
+small:
+  url: http://foo.com/small.jpg
+  resource: one_love (Song)
+  width: 64
+  height: 64
+  
+medium:
+  url: http://foo.com/medium.jpg
+  resource: one_love (Song)
+  width: 128
+  height: 128
+  
+large:
+  url: http://foo.com/large.jpg
+  resource: one_love (Song)
+  width: 256
+  height: 256
+
+huge:
+  resource: one_love (Song)
+  url: http://foo.com/huge.jpg
+  width: 512
+  height: 512

@@ -121,3 +121,4 @@ gem "deep_merge"
 gem "htmlentities"
 gem 'haversine'
 gem 'ruby-duration'
+gem 'fastimage'
