@@ -3,7 +3,6 @@ class Source < ActiveRecord::Base
 	
 	def self.parse_path(path)
 		raise 'path cannot be nil' unless path
-		begin
 		if path.start_with? 'stoffi:'
 			parts = path.split(':', 4)
 			{
@@ -15,11 +14,9 @@ class Source < ActiveRecord::Base
 			ext = File.extname(path)
 			src = :local
 			src = :url if path.start_with? 'http://' or path.start_with? 'https://'
-			resource = 'song' if ext.in? SONG_EXT or (ext.empty? and src == :url)
-			resource = 'playlist' if ext.in? PLAYLIST_EXT
+			resource = 'Song' if ext.in? SONG_EXT or (ext.empty? and src == :url)
+			resource = 'Playlist' if ext.in? PLAYLIST_EXT
 			{ source: src, id: path, resource: resource }
-		end
-		rescue
 		end
 	end
 	
