@@ -28,16 +28,35 @@ class Backend::Lastfm
 		return hits.inject([]) { |a,(k,v)| a.concat v }
 	end
 	
+	def self.get_songs(ids)
+		ids.each do |id|
+		end
+	end
+	
+	def self.get_info(name, category)
+		resource = category_to_resource(category)
+		hit = nil
+		case resource
+		when 'artist', 'event'
+			hit = get_resource_info(resource, "#{resource}=#{name}")
+		else
+			parts = name.split("\t")
+			raise "Need to specify artist" if parts.length < 2
+			name = parts[0]
+			artist = parts[1]
+			query = "artist=#{artist}&#{resource}=#{name}"
+			hit = get_resource_info(resource, query)
+		end
+		return parse_hit(hit, resource)
+	end
+	
 	private
 	
 	# Turn a category into a resource
 	def self.category_to_resource(category)
-		case category
-		when 'artists' then 'artist'
-		when 'albums' then 'album'
-		when 'songs' then 'track'
-		when 'events' then 'event'
-		end
+		category = category.singularize
+		return 'track' if category == 'song'
+		return category
 	end
 	
 	# Turn a resource into a type
@@ -54,63 +73,81 @@ class Backend::Lastfm
 		begin
 			get_hits(resource, query) do |h|
 				begin
-					hit = {
-						type: resource_to_type(resource),
-						images: [],
-						source: :lastfm,
-						url: h['url'],
-						id: h['id']
-					}
-					case resource
-					when 'artist' then
-						hit[:popularity] = h['listeners'].to_f
-						hit[:name] = h['name']
-					
-					when 'album' then
-						hit[:name] = h['name']
-						hit[:artist] = h['artist']
-						hit[:fullname] = "#{h['name']} by #{h['artist']}"
-						
-					when 'track' then
-						hit[:popularity] = h['listeners'].to_f
-						hit[:name] = h['name']
-						hit[:artist] = h['artist']
-						
-					when 'event' then
-						hit[:popularity] = h['attendance'].to_f
-						hit[:name] = h['title']
-						a = h['artists']['artist']
-						a = [a] unless a.is_a? Array
-						hit[:artists] = a
-						hit[:fullname] = "#{hit[:artists].join(', ')} @ hit[:name]"
-						geopoint = h['venue']['location']['geo:point']
-						long = geopoint['geo:long'].to_f
-						lat = geopoint['geo:lat'].to_f
-						hit[:location] = { longitude: long, latitude: lat }
-						hit[:city] = h['venue']['location']['city']
-						
-					else
-						hit = nil
-					end
-					
-					if h['image']
-						h['image'].each do |i|
-							hit[:images] << { url: i['#text'] }
-						end
-					end
-					
+					hit = parse_hit(h, resource)
 					hits << hit if hit
 					
-				rescue Exception => e
-					raise e
+				rescue StandardError => e
 					Rails.logger.error "error parsing hit #{h.inspect}: #{e.message}"
 				end
 			end
-		rescue Exception => e
-			raise e
+		rescue StandardError => e
 			Rails.logger.error "error searching for resource #{resource}: #{e.message}"
 		end
 		hits
+	end
+	
+	def self.parse_hit(hit, resource)
+		return nil unless hit
+		retval = {
+			type: resource_to_type(resource),
+			images: [],
+			source: :lastfm,
+			url: hit['url'],
+		}
+		case resource
+		when 'artist' then
+			retval[:popularity] = hit['listeners'].to_f
+			retval[:name] = hit['name']
+			retval[:id] = hit['name']
+		
+		when 'album' then
+			retval[:name] = hit['name']
+			retval[:artist] = hit['artist']
+			retval[:fullname] = "#{hit['name']} by #{hit['artist']}"
+			retval[:id] = "#{retval[:name]}\t#{retval[:artist]}"
+			
+		when 'track' then
+			retval[:popularity] = hit['listeners'].to_f
+			retval[:name] = hit['name']
+			retval[:artist] = hit['artist']
+			retval[:id] = "#{retval[:name]}\t#{retval[:artist]}"
+			
+		when 'event' then
+			retval[:popularity] = hit['attendance'].to_f
+			retval[:name] = hit['title']
+			a = hit['artists']['artist']
+			a = [a] unless a.is_a? Array
+			retval[:artists] = a
+			retval[:fullname] = "#{retval[:artists].join(', ')} @ #{retval[:name]}"
+			geopoint = hit['venue']['location']['geo:point']
+			long = geopoint['geo:long'].to_f
+			lat = geopoint['geo:lat'].to_f
+			retval[:location] = { longitude: long, latitude: lat }
+			retval[:city] = hit['venue']['location']['city']
+			retval[:id] = hit['id']
+			
+		else
+			return nil
+		end
+					
+		if hit['image']
+			hit['image'].each do |i|
+				retval[:images] << { url: i['#text'] }
+			end
+		end
+		
+		return retval
+	end
+	
+	# Extract the array of hits from a search response
+	def self.get_resource_info(resource, query)
+		begin
+			response = req("method=#{resource}.getInfo&#{query}")
+			return response[resource] if response[resource]
+		rescue StandardError => e
+			Rails.logger.debug response.inspect
+			Rails.logger.error "error getting hits for resource #{resource}: #{e.message}"
+		end
 	end
 	
 	# Extract the array of hits from a search response
@@ -120,10 +157,9 @@ class Backend::Lastfm
 			return if response['results']['opensearch:totalResults'] == '0'
 			hits = response['results']["#{resource}matches"][resource]
 			hits.each { |h| yield h }
-		rescue Exception => e
+		rescue StandardError => e
 			Rails.logger.debug response.inspect
 			Rails.logger.error "error getting hits for resource #{resource}: #{e.message}"
-			raise e
 		end
 	end
 	
@@ -139,7 +175,7 @@ class Backend::Lastfm
 			data = http.get(url.request_uri)
 			feed = JSON.parse(data.body)
 			return feed
-		rescue Exception => e
+		rescue StandardError => e
 			Rails.logger.error "error making request: #{e.message}"
 		end
 	end
