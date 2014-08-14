@@ -1,6 +1,6 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
+Bob_Marley:
   query: Bob Marley
   user: bob
   page: /home
@@ -8,7 +8,7 @@ one:
   longitude: 50
   locale: us
 
-two:
+bob_marley:
   query: bob marley
   user: bob
   page: /home
@@ -16,7 +16,7 @@ two:
   longitude: 50
   locale: us
 
-three:
+Bob_Sinclair:
   query: Bob Sinclair
   user: alice
   page: /home
@@ -24,7 +24,7 @@ three:
   longitude: 50
   locale: us
 
-four:
+Bob_Dylan:
   query: Bob Dylan
   user: bob
   page: /home
@@ -32,21 +32,21 @@ four:
   longitude: 30
   locale: us
 
-five:
+Elvis_Presley:
   query: Elvis Presley
   page: /home
   latitude: 50
   longitude: 50
   locale: us
 
-five:
+Bobby_Brown:
   query: Bobby Brown
   page: /artists
   latitude: 50
   longitude: 50
   locale: us
 
-six:
+Bob_Andersson:
   query: Bob Andersson
   page: /home
   latitude: 50
