@@ -32,14 +32,13 @@ class Search < ActiveRecord::Base
 			
 			terms << {query: search.query, score: search.hits.to_f * weight.to_f}
 		end
-		
 		return terms.sort_by { |x| x[:score] }.reverse[0..limit-1]
 	end
 	
 	def self.latest_search(query, categories, sources)
 		s = where(query: query, categories: categories, sources: sources)
 			.order(:updated_at).limit(1)
-		return s.updated_at if s
+		return s.first.updated_at if s and s.first
 		return Time.now
 	end
 	
@@ -48,7 +47,7 @@ class Search < ActiveRecord::Base
 		{
 			# multiply hits with this number if the search occured
 			# on the same page
-			page: 2,
+			page: 2.5,
 			
 			# multiply hits with this number if the searcher is using
 			# the same locale setting
