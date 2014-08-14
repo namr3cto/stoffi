@@ -1,6 +1,8 @@
 class Image < ActiveRecord::Base
 	belongs_to :resource, polymorphic: true
 	
+	validates :url, uniqueness: true
+	
 	def self.create_by_hashes(hashes)
 		images = []
 		return images unless hashes.is_a? Array
@@ -12,7 +14,6 @@ class Image < ActiveRecord::Base
 					hash[:width] = size[0]
 					hash[:height] = size[1]
 				end
-			
 				images << Image.create(
 					url: hash[:url],
 					width: hash[:width].to_i,
