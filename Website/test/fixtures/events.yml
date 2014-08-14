@@ -1,23 +1,21 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
-  venue: MyString
-  latitude: 9.99
-  longitude: 9.99
-  from: 2014-08-02 08:59:33
-  until: 2014-08-02 08:59:33
+festival:
+  name: Foo Festival
+  venue: MyCity
+  latitude: 10.0
+  longitude: 10.0
+  start: 2014-08-02 08:59:33
+  stop: 2014-08-02 18:59:33
   content: MyText
-  image: MyString
-  type: 
+  category: festival
 
-two:
-  name: MyString
-  venue: MyString
-  latitude: 9.99
-  longitude: 9.99
-  from: 2014-08-02 08:59:33
-  until: 2014-08-02 08:59:33
+concert:
+  name: Foo Concert
+  venue: NewCity
+  latitude: 50.0
+  longitude: 50.0
+  start: 2014-08-02 08:59:33
+  stop: 2014-08-02 18:59:33
   content: MyText
-  image: MyString
-  type: 
+  category: concert

@@ -22,12 +22,12 @@
 
 <p>
   <strong>From:</strong>
-  <%= @event.from %>
+  <%= @event.start %>
 </p>
 
 <p>
   <strong>Until:</strong>
-  <%= @event.until %>
+  <%= @event.stop %>
 </p>
 
 <p>
@@ -36,13 +36,8 @@
 </p>
 
 <p>
-  <strong>Image:</strong>
-  <%= @event.image %>
-</p>
-
-<p>
-  <strong>Type:</strong>
-  <%= @event.type %>
+  <strong>Category:</strong>
+  <%= @event.category %>
 </p>
 
 <%= link_to 'Edit', edit_event_path(@event) %> |

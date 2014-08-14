@@ -28,24 +28,20 @@
     <%= f.text_field :longitude %>
   </div>
   <div class="field">
-    <%= f.label :from %><br>
-    <%= f.datetime_select :from %>
+    <%= f.label :start %><br>
+    <%= f.datetime_select :start %>
   </div>
   <div class="field">
-    <%= f.label :until %><br>
-    <%= f.datetime_select :until %>
+    <%= f.label :stop %><br>
+    <%= f.datetime_select :stop %>
   </div>
   <div class="field">
     <%= f.label :content %><br>
     <%= f.text_area :content %>
   </div>
   <div class="field">
-    <%= f.label :image %><br>
-    <%= f.text_field :image %>
-  </div>
-  <div class="field">
-    <%= f.label :type %><br>
-    <%= f.text_field :type %>
+    <%= f.label :category %><br>
+    <%= f.text_field :category %>
   </div>
   <div class="actions">
     <%= f.submit %>
