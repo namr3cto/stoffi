@@ -28,6 +28,25 @@ class Source < ActiveRecord::Base
 		find_by(path_to_find_hash(path))
 	end
 	
+	def self.find_or_create_by_hash(hash)
+		x = find_by_hash(hash)
+		x = create_by_hash(hash) unless x
+		x
+	end
+	
+	def self.find_by_hash(hash)
+		find_by(name: hash[:source], foreign_id: hash[:id], resource_type: hash[:type])
+	end
+	
+	def self.create_by_hash(hash)
+		create(
+			name: hash[:source],
+			foreign_id: hash[:id],
+			foreign_url: hash[:url],
+			popularity: hash[:popularity]
+		)
+	end
+	
 	private
 	
 	def self.parse_resource(resource)
