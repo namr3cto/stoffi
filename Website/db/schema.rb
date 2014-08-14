@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140810164116) do
+ActiveRecord::Schema.define(version: 20140814153642) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -213,11 +213,10 @@ ActiveRecord::Schema.define(version: 20140810164116) do
     t.string   "venue"
     t.decimal  "latitude"
     t.decimal  "longitude"
-    t.datetime "from"
-    t.datetime "until"
+    t.datetime "start"
+    t.datetime "stop"
     t.text     "content"
-    t.string   "image"
-    t.string   "type"
+    t.string   "category"
     t.datetime "created_at"
     t.datetime "updated_at"
   end
