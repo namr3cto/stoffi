@@ -64,8 +64,4 @@ class ImageTest < ActiveSupport::TestCase
 		img = song.images.get_size([:invalid, :another, :large, :tiny])
 		assert_equal images(:large), img, "Didn't get the correct image"
 	end
-	
-  # test "the truth" do
-  #   assert true
-  # end
 end
