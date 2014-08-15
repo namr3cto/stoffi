@@ -15,8 +15,86 @@ class Album < ActiveRecord::Base
 	include Base
 	
 	# associations
-	has_and_belongs_to_many :artist, uniq: true
-	has_and_belongs_to_many :songs, uniq: true
+	with_options uniq: true do |assoc|
+		assoc.has_and_belongs_to_many :artists
+		assoc.has_and_belongs_to_many :songs
+	end
+	
+	with_options as: :resource, dependent: :destroy do |assoc|
+		assoc.has_many :sources
+		assoc.has_many :images
+	end
+	
+	validates :title, presence: true
+	
+	def self.find_or_create_by_hash(hash)
+		validate_hash(hash)
+		album = find_by_hash(hash)
+		album = create_by_hash(hash) unless album
+		
+		source = Source.find_or_create_by_hash(hash)
+		album.sources << source if source and not album.sources.include? source
+		
+		if hash.key? :images
+			images = Image.create_by_hashes(hash[:images])
+			album.images << images
+		end
+			
+		logger.debug hash.inspect
+		if hash.key? :songs
+			hash[:songs].each do |song|
+				song = Song.get(nil, song)
+				album.songs << song if song
+			end
+		end
+		
+		return album
+	end
+	
+	def self.find_by_hash(hash)
+		validate_hash(hash)
+		anum = 1
+		astr = hash[:artist]
+		if hash.key? :artists
+			anum = hash[:artists].length
+			astr = hash[:artists].join(',')
+		end
+		
+		where(title: hash[:name]).each do |a|
+			next unless a.artists.length == anum
+			return a if a.artists.collect{|x|x.name}.join(',') == astr
+		end
+		return nil
+	end
+	
+	def self.create_by_hash(hash)
+		validate_hash(hash)
+		begin
+			album = create(
+				title: hash[:name],
+				year: hash[:year]
+			)
+			
+			artists = hash[:artists]
+			artists = [hash[:artist]] unless artists
+			artists.each do |artist|
+				artist = Artist.find_or_create_by(name: artist)
+				album.artists << artist if artist
+			end
+			
+			return album
+			
+		rescue StandardError => e
+			raise e
+		end
+	end
+	
+	private
+	
+	def self.validate_hash(hash)
+		raise "Missing name in hash" unless hash.key? :name
+		raise "Missing artists in hash" unless hash.key?(:artists) or hash.key?(:artist)
+	end
 	
 	# Returns an album matching a value.
 	#
@@ -52,4 +130,6 @@ class Album < ActiveRecord::Base
 	def paginated_songs
 		return @paginated_songs
 	end
+	
+	
 end
