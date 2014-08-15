@@ -1,4 +1,19 @@
+# -*- encoding : utf-8 -*-
+# The model of the event resource.
+#
+# This code is part of the Stoffi Music Player Project.
+# Visit our website at: stoffiplayer.com
+#
+# Author::		Christoffer Brodd-Reijer (christoffer@stoffiplayer.com)
+# Copyright::	Copyright (c) 2014 Simplare
+# License::		GNU General Public License (stoffiplayer.com/license)
+
+require 'base'
+
+# Describes an event where artists have performances
 class Event < ActiveRecord::Base
+	include Base
+	
 	has_and_belongs_to_many :artists, join_table: :performances
 	
 	with_options as: :resource, dependent: :destroy do |assoc|
@@ -11,17 +26,15 @@ class Event < ActiveRecord::Base
 	validates :name, uniqueness: { scope: [ :start, :venue ] }
 	
 	def self.find_or_create_by_hash(hash)
+		validate_hash(hash)
 		event = find_by_hash(hash)
 		event = create_by_hash(hash) unless event
 		
 		source = Source.find_or_create_by_hash(hash)
 		event.sources << source if source and not event.sources.include? source
 		
-		logger.debug 'check if images'
 		if hash.key? :images
-			logger.debug '----------- images -------------'
 			images = Image.create_by_hashes(hash[:images])
-			logger.debug images.inspect
 			event.images << images
 		end
 		
@@ -29,6 +42,7 @@ class Event < ActiveRecord::Base
 	end
 	
 	def self.find_by_hash(hash)
+		validate_hash(hash)
 		date = hash[:start_date]
 		date = Date.parse(date) if date.is_a? String
 		d_upper = date + 1.hour
@@ -38,6 +52,7 @@ class Event < ActiveRecord::Base
 	end
 	
 	def self.create_by_hash(hash)
+		validate_hash(hash)
 		begin
 			event = create(
 				name: hash[:name],
@@ -61,8 +76,11 @@ class Event < ActiveRecord::Base
 			end
 			return event
 		rescue StandardError => e
-			raise e
 		end
+	end
+	
+	def display
+		name
 	end
 	
 	private
