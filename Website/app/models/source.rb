@@ -47,6 +47,13 @@ class Source < ActiveRecord::Base
 		)
 	end
 	
+	def path
+		case name
+		when 'local', 'url' then foreign_id
+		else "stoffi:#{resource_type.underscore}:#{name}:#{foreign_id}"
+		end
+	end
+	
 	private
 	
 	def self.parse_resource(resource)
