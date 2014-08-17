@@ -3,10 +3,9 @@ class Search < ActiveRecord::Base
 	
 	def self.suggest(query, page, longitude, latitude, locale, user_id = -1, limit = 10)
 		terms = []
-		
 		self.select("*, count(*) as hits").where("lower(query) like ?", [query.downcase+'%']).
 		     group("lower(query)").order("hits desc").find_each do |search|
-			
+			logger.debug search.inspect
 			weight = 1.0
 			debug = {}
 			
@@ -31,12 +30,17 @@ class Search < ActiveRecord::Base
 			weight *= eval(score_weights[:distance].sub('x', d.to_s)).to_f
 			
 			terms << {query: search.query, score: search.hits.to_f * weight.to_f}
+			x = {query: search.query, score: search.hits.to_f * weight.to_f}
+			logger.debug x.inspect
 		end
 		return terms.sort_by { |x| x[:score] }.reverse[0..limit-1]
 	end
 	
 	def self.latest_search(query, categories, sources)
-		s = where(query: query, categories: categories, sources: sources)
+		#categories = ['albums', 'artists', 'events', 'devices', 'playlists', 'songs']
+		cat = categories.sort.join('|')
+		src = sources.sort.join('|')
+		s = where(query: query, categories: cat, sources: src)
 			.order(:updated_at).limit(1)
 		return s.first.updated_at if s and s.first
 		return Time.now

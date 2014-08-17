@@ -122,3 +122,5 @@ gem "htmlentities"
 gem 'haversine'
 gem 'ruby-duration'
 gem 'fastimage'
+gem 'sunspot_rails'
+gem 'sunspot_solr'

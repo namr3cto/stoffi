@@ -79,6 +79,11 @@ class Event < ActiveRecord::Base
 		end
 	end
 	
+	searchable do
+		text :name, boost: 5
+		text :content, :category
+	end
+	
 	def display
 		name
 	end

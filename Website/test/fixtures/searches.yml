@@ -7,6 +7,8 @@ Bob_Marley:
   latitude: 50
   longitude: 50
   locale: us
+  categories: albums|artists|devices|events|playlists|songs
+  sources: jamendo|lastfm|soundcloud|youtube
 
 bob_marley:
   query: bob marley
@@ -15,6 +17,8 @@ bob_marley:
   latitude: 50
   longitude: 50
   locale: us
+  categories: albums|artists|devices|events|playlists|songs
+  sources: jamendo|lastfm|soundcloud|youtube
 
 Bob_Sinclair:
   query: Bob Sinclair
@@ -31,6 +35,8 @@ Bob_Dylan:
   latitude: 30
   longitude: 30
   locale: us
+  categories: artists
+  sources: lastfm
 
 Elvis_Presley:
   query: Elvis Presley

@@ -27,6 +27,18 @@ class Album < ActiveRecord::Base
 	
 	validates :title, presence: true
 	
+	searchable do
+		text :title, boost: 5
+		text :artists do
+			artists.map(&:name)
+		end
+	end
+	
+	# The string to display to users for representing the resource.
+	def display
+		title
+	end
+	
 	def self.find_or_create_by_hash(hash)
 		validate_hash(hash)
 		album = find_by_hash(hash)
@@ -89,13 +101,6 @@ class Album < ActiveRecord::Base
 		end
 	end
 	
-	private
-	
-	def self.validate_hash(hash)
-		raise "Missing name in hash" unless hash.key? :name
-		raise "Missing artists in hash" unless hash.key?(:artists) or hash.key?(:artist)
-	end
-	
 	# Returns an album matching a value.
 	#
 	# The value can be the ID (integer) or the name (string) of the artist.
@@ -105,11 +110,6 @@ class Album < ActiveRecord::Base
 		value = find_or_create_by(title: value) if value.is_a?(String)
 		return value if value.is_a?(Playlist)
 		return nil
-	end
-	
-	# The string to display to users for representing the resource.
-	def display
-		title
 	end
 	
 	# Paginates the songs of the album. Should be called before <tt>paginated_songs</tt> is called.
@@ -131,5 +131,11 @@ class Album < ActiveRecord::Base
 		return @paginated_songs
 	end
 	
+	private
+	
+	def self.validate_hash(hash)
+		raise "Missing name in hash" unless hash.key? :name
+		raise "Missing artists in hash" unless hash.key?(:artists) or hash.key?(:artist)
+	end
 	
 end

@@ -36,13 +36,13 @@ class SearchController < ApplicationController
 		@query = query_param
 		@categories = category_param
 		@sources = source_param
-		#save_search @query.present?
+		save_search if @query.present?
 		@title = e(params[:q])
 		@description = t("index.description")
 		
 		render and return if request.format == :html
 			
-		# API call, so we call fetch and return the results
+		# request is API call, so we call fetch and return the results
 		@results = get_results(@query, @categories, @sources)
 		respond_with(@results)
 	end
@@ -56,7 +56,7 @@ class SearchController < ApplicationController
 			long = pos[:longitude]
 			lat = pos[:latitude]
 			loc = I18n.locale.to_s
-			user = current_user.id if user_signed_in? else -1
+			user = user_signed_in? ? current_user.id : -1
 			@suggestions = Search.suggest(@query, page, long, lat, loc, user)
 		end
 		respond_with(@suggestions)
@@ -96,34 +96,15 @@ class SearchController < ApplicationController
 		[50, (params[:o] || params[:offset] || "0").to_i].min
 	end
 	
-	def save_search
-		begin
-			logger.debug "saving query #{query_param}"
-			pos = origin_position(request.remote_ip)
-			s = Search.new
-			s.query = query_param
-			s.longitude = pos[:longitude]
-			s.latitude = pos[:latitude]
-			s.locale = I18n.locale.to_s
-			s.categories = category_param
-			s.sources = source_param
-			s.page = request.referer || ""
-			s.user = current_user if user_signed_in?
-			s.save
-		rescue
-			logger.error "could not save search for #{query_param}"
-		end
-	end
-	
 	def get_results(query, categories, sources)
 		
 		hits = []
-		if Search.latest_search(query, categories, sources) > 1.week.ago
+		if Search.latest_search(query, categories, sources) < 1.week.ago
 			hits.concat(parse(Backend::Lastfm.search(query, categories))) if sources.include? 'lastfm'
 			hits.concat(parse(Backend::Youtube.search(query, categories))) if sources.include? 'youtube'
 			#hits.concat(parse(Backend::Soundcloud.search(query, categories))) if sources.include? 'soundcloud'
 			#hits.concat(parse(Backend::Jamendo.search(query, categories))) if sources.include? 'jamendo'
-			save_hits(hits)
+			hits = save_hits(hits)
 		else
 			hits = search_in_db(query, categories, sources)
 		end
@@ -138,25 +119,31 @@ class SearchController < ApplicationController
 		results[:exact] = {}
 		
 		results[:hits].each do |h|
-			next if h[:name].downcase != query.downcase
-			results[:exact][h[:type]] ||= h
+			next if h[:object].display.downcase != query.downcase
+			results[:exact][h[:object].class.to_s.underscore.to_sym] ||= h
 		end
 		
 		results
 	end
 	
+	# Rank an array of hits according to a query, putting the most
+	# relevant hit at the start of the array
 	def rank(hits, query)
-		# some hits have no popularity, so we try to fix that
-		#fill_nil_popularity(hits)
+		hits = fill_meta(hits)
 		
 		hits.each do |h|
-			h[:distance] = distance(query, h[:fullname])
-			h[:score] = h[:distance] * WEIGHT_SIMILARITY + h[:popularity] * WEIGHT_POPULARITY
+			h[:distance] = distance(query, h[:object].display)
+			h[:score] = h[:distance] * WEIGHT_SIMILARITY + 
+			            h[:popularity] * WEIGHT_POPULARITY
 		end
 		
-		hits = hits.sort_by { |h| h[:score] }.reverse
+		hits = hits.sort_by { |h| -1 * h[:score] }
 	end
 	
+	# Parse an array of hits, as reported by backends, into an array
+	# where artists has been parsed and split if needed, song titles
+	# have been parsed and split into song title and artist name, and
+	# popularity has been normalized.
 	def parse(hits)
 		# parse hits (extract artists and song titles, for example) and
 		# put into a structure, separated by type
@@ -164,19 +151,19 @@ class SearchController < ApplicationController
 		
 		# flatten structure into an array
 		parsed_hits = parsed_hits.collect { |k,v| v.values }.flatten
-			
-		# turn absolute popularity into relative popularity
-		normalize_popularity(parsed_hits)
 		
 		return parsed_hits
 	end
 	
+	# Parse an array of hits, as reported by backends, into a hash
+	# of results where hits separated by type and some values are
+	# parsed (such as song titles and artist names)
 	def parse_hits(hits)
 		parsed_hits = { artist: {}, song: {}, album: {}, event: {}, genre: {}}
 		hits.each do |hit|
 			begin
 				hit[:fullname] ||= hit[:name]
-				case hit[:type]
+				case hit[:object]
 				when :artist then
 				
 					# some artists are named "Foo feat. Bar" so we split
@@ -213,6 +200,38 @@ class SearchController < ApplicationController
 		return parsed_hits
 	end
 	
+	def search_in_db(query, categories, sources)
+		retval = []
+		if 'artists'.in? categories
+			retval += Artist.search {
+				keywords(query, minimum_matches: 1)
+			}.results
+		end
+		if 'albums'.in? categories
+			retval += Album.search {
+				keywords(query, minimum_matches: 1)
+			}.results
+		end
+		if 'events'.in? categories
+			retval += Event.search {
+				keywords(query, minimum_matches: 1)
+			}.results
+		end
+		if 'songs'.in? categories
+			retval += Song.search {
+				keywords(query, minimum_matches: 1)
+				with(:locations, sources)
+			}.results
+		end
+		logger.debug retval.inspect
+		return retval
+	end
+	
+	# Save a hash of hits to the database.
+	#
+	# The saved objects should function as full replacements of the
+	# actual hits, which allows us to use the database as a cache,
+	# minimizing the need to send queries to the backends.
 	def save_hits(hits)
 		retval = []
 		hits.each do |hit|
@@ -224,60 +243,82 @@ class SearchController < ApplicationController
 				when :artist
 					x = Artist.get(hit)
 				when :album
-					x = Album.get(hit)
+					x = Album.find_or_create_by_hash(hit)
 				when :event
-					x = Event.get(hit)
+					x = Event.find_or_create_by_hash(hit)
 				#when :genre
 				#	x = Genre.get(hit)
 				else
 					raise "Unknown hit type: #{hit[:type]}"
 				end
+				
 				retval << x if x
-			rescue
+				
+			rescue StandardError => e
+				raise e
 			end
 		end
 		return retval
 	end
 	
-	def fill_nil_popularity(hits)
-		artists = hits.collect { |h| h[:type] == :artist }
+	# Save a search
+	#
+	# This is later used for auto-complete suggestions, and
+	# for knowing when a cache is dirty
+	def save_search
+		begin
+			logger.debug "saving query #{query_param}"
+			pos = origin_position(request.remote_ip)
+			s = Search.new
+			s.query = query_param
+			s.longitude = pos[:longitude]
+			s.latitude = pos[:latitude]
+			s.locale = I18n.locale.to_s
+			s.categories = category_param.sort.join('|')
+			s.sources = source_param.sort.join('|')
+			s.page = request.referer || ""
+			s.user = current_user if user_signed_in?
+			s.save
+		rescue
+			logger.error "could not save search for #{query_param}"
+		end
+	end
+	
+	# Fill in meta data for objects such as popularity
+	def fill_meta(hits)
+		sources = hits.collect { |h| h.sources.to_a }.flatten
+		popularity = {}
+		sources.each do |s|
+			popularity[s.resource_type] = {} unless popularity.key? s.resource_type
+			if popularity[s.resource_type].key? s.name
+				popularity[s.resource_type][s.name][:max] += s.popularity
+				popularity[s.resource_type][s.name][:len] += 1
+			else
+				popularity[s.resource_type][s.name] = { max: s.popularity, len: 1 }
+			end
+		end
+		popularity.each do |k,v|
+			popularity[k][:avg] = (v[:max] || 0) / (v[:len] || 1)
+		end
+		
+		retval = []
 		hits.each do |h|
-			next unless h[:popularity] == nil
-			case h[:type]
-			when :song, :album
-				next unless h[:artists]
-				h[:artists].each do |a|
-					if artists.has_key? a
-						h[:popularity] += artists[a][:popularity].to_f
-					end
-				end
+			o = { object: h, popularity: 0 }
+			h.sources.each do |s|
+				p = popularity[s.resource_type][s.name]
+				o[:popularity] = (s.popularity || p[:avg]) / (p[:max] || 1)
 			end
+			retval << o
 		end
+		return retval
 	end
 	
-	def normalize_popularity(hits)
-		pop = hits.select { |x| x[:popularity] != nil }.collect { |x| x[:popularity] }
-		avg_popularity = 0
-		max_popularity = 0
-		if pop.length > 0
-			avg_popularity = pop.inject(0) { |s,x| s+= x } / pop.length
-			max_popularity = pop.max
-		end
-		max_popularity = 1 if max_popularity == 0
-		hits.collect do |x|
-			if x[:popularity] == nil
-				x[:popularity] = avg_popularity
-			end
-			#else
-			x[:popularity] /= max_popularity
-			#end
-		end
-		hits
-	end
-	
+	# Add a hit, as reported from a backend, into a hash of hits
+	# where the key is either the name (allow_dups = false) or a
+	# random string
 	def add_parsed_hit(type, collection, hit, allow_dups = false)
 		# duplicates: random key, otherwise use name
-		key = allow_dups ? (0...16).map { (65 + rand(26)).chr }.join : hit[:name].downcase
+		key = allow_dups ? (0...16).map {(65+rand(26)).chr}.join : hit[:name].downcase
 		
 		if collection[type].has_key? key
 			collection[type][key][:popularity] += hit[:popularity]

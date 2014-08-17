@@ -33,51 +33,13 @@ class Artist < ActiveRecord::Base
 	validates_uniqueness_of :name
 	validates_presence_of :name
 	
+	searchable do
+		text :name
+	end
+	
 	# Defines the default picture to use when no picture of the artist can be found.
 	def self.default_pic
 		"/assets/media/artist.png"
-	end
-	
-	# Returns the picture of the artist.
-	#
-	# Will try to find a picture on Last.fm, if none is found then a default picture will be returned.
-	# The picture is saved to the database so searching will only occur the first time this method is called.
-	def picture
-		s = super
-		return s if s.present?
-		
-		# try to find image
-		if name.present?
-			pic = nil
-			begin
-				key = Rails.application.secret.oa_cred[:lastfm][:id]
-				q = CGI.escapeHTML(e(name)).gsub(/\s/, "%20")
-				url_base = "ws.audioscrobbler.com"
-				url_path = "/2.0?method=artist.info&format=json&api_key=#{key}&artist=#{q}"
-				logger.info "fetching artist image for #{name} from http://#{url_base}#{url_path}"
-				http = Net::HTTP.new(url_base)
-				res, data = http.get(url_path, nil)
-				feed = JSON.parse(data)
-				logger.debug "searching for image of size: large"
-				feed['artist']['image'].each do |img|
-					pic = img['#text']
-					break if img['size'] == 'large'
-				end
-				
-				pic = Artist.default_pic if pic.blank?
-				
-			rescue => err
-				logger.error "could not retrieve artist image: " + err.to_s
-				pic = Artist.default_pic
-			end
-				
-			if pic
-				update_attribute(:picture, pic)
-				return pic
-			end
-		end
-		
-		return Artist.default_pic
 	end
 	
 	# Whether or not the artist has a Twitter account.
@@ -212,21 +174,6 @@ class Artist < ActiveRecord::Base
 			methods: [ :kind, :display, :url, :info, :photo ],
 			except: [ :picture ]
 		}
-	end
-	
-	# Searches for artists.
-	def self.search(search, limit = 5)
-		if search
-			search = e(search)
-			self.select("artists.id, artists.name, artists.picture, count(listens.id) AS listens_count").
-			joins(:songs).
-			joins("LEFT JOIN listens ON listens.song_id = songs.id").
-			where("artists.name LIKE ?", "%#{search}%").
-			group("artists.id").
-			limit(limit)
-		else
-			scoped
-		end
 	end
 	
 	# Returns an artist matching a value.

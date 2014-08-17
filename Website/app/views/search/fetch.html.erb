@@ -2,28 +2,19 @@
 	
 	<% if @results[:exact].has_key? :artist %>
 		<%
-		artist = @results[:exact][:artist] %>
+		artist = @results[:exact][:artist][:object] %>
 		<% if false%>
-		p = WikipediaLink.find_page(artist[:name], I18n.locale, :artist)
+		p = WikipediaLink.find_page(artist.name, I18n.locale, :artist)
 		s = WikipediaLink.summary(p)
 		if s and s[:info]
 		<% end %>
 	<li class='exact artist'>
 		<div class='image'>
-			<%
-			img = "media/artist.png"
-			[:medium, :large, :small, :huge, :tiny, :unknown].each do |s|
-				if artist[:images][s].present?
-					img = artist[:images][s]
-					break
-				end
-			end
-			%>
-			<%=image_tag img %>
+			<%=image_tag artist.images.get_size(:large) %>
 		</div>
 		<div class='banner'>
 			<h3>
-				<%=artist[:name]%>
+				<%=artist.display %>
 			</h3>
 			<p class='statistics'>
 				Listened to 3,141 times by 242 fans
@@ -69,19 +60,13 @@
 	
 	<% @results[:hits].each do |hit| %>
 		<%
-		one_liner = (hit[:type] == :song and hit[:images].empty?)
-		cname = "clickable #{hit[:name]}"
+		one_liner = (hit[:object].class == Song and hit[:object].images.empty?)
+		cname = "clickable #{hit[:object].class.to_s.underscore}"
 		cname += ' one-line' if one_liner
 		%>
 		<li class='<%=cname%>' data-type='hit'>
 			<%
-			img = "media/artist.png"
-			[:small, :medium, :tiny, :large, :huge, :unknown].each do |s|
-				if hit[:images][s].present?
-					img = hit[:images][s]
-					break
-				end
-			end
+			img = hit[:object].images.get_size(:medium)
 			%>
 			<% unless one_liner %>
 			<div class='image'>
@@ -93,24 +78,11 @@
 					<a class='button'>&#9654;</a>
 				<% end %>
 				
-				<h3><%=hit[:name] %></h3>
-				<%
-				hit[:artists] ||= []
-				artists = hit[:artists].collect {|a| "<a>#{a}</a>" }
-				a_txt = ""
-				if artists.length == 1
-					a_txt = "#{artists[0]}"
-				elsif artists.length == 2
-					a_txt = "#{artists.join(' & ')}"
-				elsif artists.length > 2
-					a_txt = "#{artists[0..-2].join(', ')}"
-					a_txt += " & #{artists[-1]}"
-				end
-				%>
+				<h3><%=hit[:object].display %></h3>
 				
-				<% case hit[:type]
+				<% case hit[:object].class.to_s.underscore.to_sym
 				when :song then %>
-				<% a_txt = " by #{a_txt}" unless a_txt.empty? %>
+				<% a_txt = " by #{a_txt}" if a_txt.present? %>
 				<% if one_liner %>
 				<span><%== a_txt%></span>
 				<% else %>
@@ -123,14 +95,14 @@
 				<p>Songs: <a>A Song</a>, <a>Something</a>, <a>Something Else</a>, <a>Here Comes Another Song</a>, <a>This Song is Cool</a></p>
 				
 				<% when :album then %>
-				<% a_txt = " by #{a_txt}" unless a_txt.empty? %>
+				<% a_txt = " by #{a_txt}" if a_txt.present? %>
 				<p>An album <%== a_txt%></p>
 				<p>Songs: <a>Relapse</a>, <a>Something</a>, <a>Something Else</a>, <a>Here Comes Another Song</a>, <a>This Song is Cool</a></p>
 				
 				<% when :event then %>
-				<% a_txt = " with #{a_txt}" unless a_txt.empty? %>
+				<% a_txt = " with #{a_txt}" if a_txt.present? %>
 				<p>An event <%== a_txt%></p>
-				<p>In <%=hit[:city]%> at Aug 4th, 13:37<p>
+				<p>In <%=hit[:object].venue%> at Aug 4th, 13:37<p>
 					
 				<% end %>
 				

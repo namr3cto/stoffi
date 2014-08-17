@@ -25,6 +25,16 @@ class Song < ActiveRecord::Base
 	has_many :sources, as: :resource
 	has_many :images, as: :resource
 	
+	searchable do
+		text :title, boost: 5
+		text :artists do
+			artists.map(&:name)
+		end
+		string :locations, multiple: true do
+			locations.map { |location| location }
+		end
+	end
+	
 	# The art of the song.
 	def picture(size = :medium)
 		return art_url if art_url.present? and not art_url.to_s.downcase == "null"
@@ -74,22 +84,15 @@ class Song < ActiveRecord::Base
 		"stoffi:track:#{src.name}:#{src.foreign_id}"
 	end
 	
+	def locations
+		sources.collect { |x| x.name }.uniq.reject { |x| x.to_s.empty? }
+	end
+	
 	# The options to use when the song is serialized.
 	def serialize_options
 		{
 			methods: [ :kind, :display, :url, :picture ]
 		}
-	end
-	
-	# Searches for songs.
-	def self.search(search, limit = 5)
-		if search
-			search = e(search)
-			self.where("title LIKE ?", "%#{search}%").
-			limit(limit)
-		else
-			scoped
-		end
 	end
 	
 	# Searches for songs which are files.
