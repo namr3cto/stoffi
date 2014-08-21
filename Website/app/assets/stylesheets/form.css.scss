@@ -62,30 +62,6 @@ form
 		padding: 0px 0px 10px;
 	}
 
-	div.notice
-	{
-		color: rgba(0,100,0,0.5);
-		background: url(/assets/gfx/notice.png), rgba(100,255,100,0.1);
-		background-position: 15px 10px;
-		background-repeat: no-repeat;
-		border: 1px solid rgba(0,100,0,0.5);
-		font-size: 12pt;
-		margin: 10px 0px;
-		padding: 10px 50px;
-	}
-
-	div.alert
-	{
-		color: rgba(100,0,0,0.5);
-		background: url(/assets/gfx/error.png), rgba(255,100,100,0.1);
-		background-position: 15px 10px;
-		background-repeat: no-repeat;
-		border: 1px solid rgba(150,0,0,0.5);
-		font-size: 12pt;
-		margin: 10px 0px;
-		padding: 10px 50px;
-	}
-
 	.field_with_errors
 	{
 		input
