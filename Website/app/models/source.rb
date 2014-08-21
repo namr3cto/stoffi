@@ -1,5 +1,30 @@
 class Source < ActiveRecord::Base
 	belongs_to :resource, polymorphic: true
+
+	after_save :reindex_resources
+	before_destroy :reindex_resources
+
+	def reindex_resources
+		Sunspot.index(resource) if resource
+	end
+	
+	def self.parse_hash(path)
+		if path.start_with? 'stoffi:'
+			parts = path.split(':', 4)
+			{
+				resource: parse_resource(parts[1]),
+				source: parts[2].to_sym,
+				id: parts[3],
+			}
+		else
+			ext = File.extname(path)
+			src = :local
+			src = :url if path.start_with? 'http://' or path.start_with? 'https://'
+			resource = 'Song' if ext.in? SONG_EXT or (ext.empty? and src == :url)
+			resource = 'Playlist' if ext.in? PLAYLIST_EXT
+			{ source: src, id: path, resource: resource }
+		end
+	end
 	
 	def self.parse_path(path)
 		raise 'path cannot be nil' unless path
@@ -54,13 +79,6 @@ class Source < ActiveRecord::Base
 		end
 	end
 	
-	private
-	
-	def self.parse_resource(resource)
-		resource = 'song' if resource == 'track'
-		resource.singularize.camelize
-	end
-	
 	def self.path_to_find_hash(path)
 		path = parse_path(path) if path.is_a? String
 		{
@@ -68,6 +86,13 @@ class Source < ActiveRecord::Base
 			foreign_id: path[:id],
 			resource_type: parse_resource(path[:resource])
 		}
+	end
+	
+	private
+	
+	def self.parse_resource(resource)
+		resource = 'song' if resource == 'track'
+		resource.to_s.singularize.camelize
 	end
 	
 	SONG_EXT = ['.aac', '.ac3', '.aif', '.aiff', '.ape', '.apl', '.bwf', '.flac',
