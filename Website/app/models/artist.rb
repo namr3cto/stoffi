@@ -185,8 +185,9 @@ class Artist < ActiveRecord::Base
 	def self.get(value)		
 		if value.is_a? String
 			name = value
-			value = find_by(name: name.sub("&","&#38;"))
-			value = find_or_create_by(name: name) unless value.is_a?(Artist)
+			value = find_by_name(name.sub("&","&#38;"))
+			value = find_by_name(name) unless value
+			value = create(name: name) unless value
 			
 		elsif value.is_a? Hash
 			value = get_by_hash(value)
@@ -238,15 +239,28 @@ class Artist < ActiveRecord::Base
 	private
 	
 	def self.get_by_hash(hash)
-		raise 'Missing :name key in hash' unless hash.has_key? :name
 		begin
-			artist = find_or_create_by(name: hash[:name])
+		
+			# look for same source
+			logger.debug 'looking for source'
+			source = Source.find_by_hash(hash)
+			return source.resource if source
+			
+			# look for same name
+			logger.debug 'no source found, getting by name'
+			artist = find_by_name(hash[:name])
+			artist = create(name: hash[:name]) unless artist
 			artist.images = hash
 			artist.source = hash
 			return artist
+			
 		rescue StandardError => e
-			raise e
+			raise e # TODO: remove this after debugging
 		end
 		return nil
+	end
+	
+	def self.find_by_name(name)
+		where("lower(name)=?", name.downcase).first
 	end
 end
