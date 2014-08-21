@@ -31,7 +31,7 @@ class Song < ActiveRecord::Base
 			artists.map(&:name)
 		end
 		string :locations, multiple: true do
-			locations.map { |location| location }
+			sources.map(&:name)
 		end
 	end
 	
@@ -125,11 +125,21 @@ class Song < ActiveRecord::Base
 	#
 	# The song will be created if it is not found
 	def self.get(current_user, value, ask_backend = true)
-		raise 'missing path key in hash' unless value.has_key? :path
+		v = value
+		unless v.key?(:path) or (v.key?(:source) and v.key?(:id) and v.key?(:type))
+			raise "need either :path or :source, :id, and :type keys in hash"
+		end
 		begin
-			v = value
-			v[:path] = fix_old_path(v[:path])
-			p = Source.parse_path(v[:path])
+			if v[:path]
+				v[:path] = fix_old_path(v[:path])
+				p = Source.parse_path(v[:path])
+			else
+				p = {
+					name: v[:source],
+					foreign_id: v[:id],
+					resource: v[:type]
+				}
+			end
 			
 			case p[:source]
 			when :local, :url
@@ -220,6 +230,7 @@ class Song < ActiveRecord::Base
 		
 		# remove enclosings
 		["'.*'", "\".*\"", "\\(.*\\)", "\\[.*\\]"].each do |e|
+			e = "/^#{e}$/"
 			artist = artist[1..-2] if artist.match(e)
 			title = title[1..-2] if title.match(e)
 		end
@@ -259,7 +270,11 @@ class Song < ActiveRecord::Base
 					_a.albums << album if album and not _a.albums.include?(album)
 				end
 				
-				src = Source.find_or_create_by_path(s[:path])
+				if s.key? :path
+					src = Source.find_or_create_by_path(s[:path])
+				else
+					src = Source.find_or_create_by_hash(s)
+				end
 				src.foreign_url = s[:foreign_url] || s[:url]
 				src.length = s[:length].to_f if s[:length]
 				src.popularity = s[:popularity]
@@ -306,6 +321,7 @@ class Song < ActiveRecord::Base
 	end
 	
 	def self.split_title(str)
+		
 		# remove meta phrases
 		meta = ["official video", "lyrics", "with lyrics",
 		"hq", "hd", "official", "official audio", "alternate official video"]
