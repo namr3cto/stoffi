@@ -2,6 +2,7 @@ require 'test_helper'
 
 class SongTest < ActiveSupport::TestCase
 	def setup
+		WebMock.disable_net_connect!(allow_localhost: true)
 		@youtube_json = {
 			'items' => [
 				{
@@ -58,7 +59,7 @@ class SongTest < ActiveSupport::TestCase
 			s = Song.get(nil, {title: 'foobar', path: '/foo/bar.mp3'})
 			assert_equal "foobar", s.title, "Didn't set the correct title"
 			assert_equal '/foo/bar.mp3', s.sources.first.foreign_id, "Didn't set the source id"
-			assert_equal 'local', s.sources.first.name, "Didn't set the source name"
+			assert_equal :local, s.sources.first.name, "Didn't set the source name"
 		end
 	end
 	
@@ -176,6 +177,10 @@ class SongTest < ActiveSupport::TestCase
 		artist, title = Song.parse_title("foobar \"a great song\"")
 		assert_equal "foobar", artist
 		assert_equal "a great song", title
+		
+		artist, title = Song.parse_title("foo (bar)")
+		assert_equal "", artist
+		assert_equal "foo (bar)", title
 	end
 	
 	test "should extract artist from hash" do
