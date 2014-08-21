@@ -43,12 +43,20 @@ class Event < ActiveRecord::Base
 	
 	def self.find_by_hash(hash)
 		validate_hash(hash)
+		
+		# look for same name, same city and same start date (within an hour)
 		date = hash[:start_date]
 		date = Date.parse(date) if date.is_a? String
 		d_upper = date + 1.hour
 		d_lower = date - 1.hour
-		where("name = ? and venue = ? and start between ? and ?",
-			hash[:name], hash[:city], d_lower, d_upper).first
+		event = where("lower(name) = ? and lower(venue) = ? and start between ? and ?",
+			hash[:name].to_s.downcase, hash[:city].to_s.downcase, d_lower, d_upper).first
+		return event if event
+		
+		# look for same source
+		source = Source.find_by_hash(hash)
+		return source.resource if source
+		return nil
 	end
 	
 	def self.create_by_hash(hash)
