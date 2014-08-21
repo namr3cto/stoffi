@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140814201915) do
+ActiveRecord::Schema.define(version: 20140818075915) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -469,7 +469,6 @@ ActiveRecord::Schema.define(version: 20140814201915) do
     t.integer  "popularity",    default: 0
   end
 
-  add_index "sources", ["foreign_url"], name: "index_sources_on_foreign_url", unique: true
   add_index "sources", ["resource_id", "resource_type"], name: "index_sources_on_resource_id_and_resource_type"
 
   create_table "translations", force: true do |t|
