@@ -42,8 +42,9 @@ class Album < ActiveRecord::Base
 	def self.find_or_create_by_hash(hash)
 		validate_hash(hash)
 		album = find_by_hash(hash)
-		album = create_by_hash(hash) unless album
+		return album if album
 		
+		album = create_by_hash(hash)
 		source = Source.find_or_create_by_hash(hash)
 		album.sources << source if source and not album.sources.include? source
 		
@@ -65,17 +66,24 @@ class Album < ActiveRecord::Base
 	
 	def self.find_by_hash(hash)
 		validate_hash(hash)
+		
+		# look for same title and set of artists
 		anum = 1
 		astr = hash[:artist]
 		if hash.key? :artists
 			anum = hash[:artists].length
 			astr = hash[:artists].join(',')
 		end
-		
 		where(title: hash[:name]).each do |a|
 			next unless a.artists.length == anum
 			return a if a.artists.collect{|x|x.name}.join(',') == astr
 		end
+		
+		# look for same source
+		source = Source.find_by_hash(hash)
+		return source.resource if source
+		
+		# nothing found
 		return nil
 	end
 	
