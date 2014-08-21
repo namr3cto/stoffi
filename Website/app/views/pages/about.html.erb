@@ -32,7 +32,7 @@
 			<ul>
 				<% team = ["Maggie Man", "Hylton Clarke", "Tianwen Zhang", "Tom Sokolinski", "Fredrik Gadnell", "Carl Carenvall", "Mark Tibblin", "Francesco Roberto", "Ryan Zeigler", "Fredrik Weinestad", "Balog Tamás"] %>
 				<% team.each do |mate| %>
-					<li title="<%=t "about.team.#{mate.downcase.gsub(' ','_')}"%>"><%=mate%></li>
+					<li title="<%=t "about.team.#{mate.parameterize('_')}"%>"><%=mate%></li>
 				<% end %>
 			</ul>
 		</div>
