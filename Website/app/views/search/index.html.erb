@@ -17,15 +17,3 @@
 		</div>
 	</div>
 </div>
-
-<% if false and @query.blank? %>
-	<%= javascript_tag "$('#search').val('')"%>
-<% elsif false %>
-	<%
-	js_query = escape_javascript(@query)
-	js_cat = escape_javascript(@categories.join('|'))
-	js_src = escape_javascript(@sources.join('|'))
-	%>
-	<%= javascript_tag "search('#{js_query}', '#{js_cat}', '#{js_src}')" %>
-<% end %>
-<%= javascript_tag 'toggleSearchMode()' %>
