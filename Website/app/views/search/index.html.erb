@@ -2,26 +2,29 @@
 	<div class='center'>
 		<%= image_tag 'gfx/logos/blue_on_transparent_128.png', class: 'large-logo' %>
 	</div>
+	<%= hidden_field :search, :id, value: @search.id %>
+	<%= hidden_field :search, :query, value: @search.query %>
 	<%= form_tag search_path, class: 'search-form', id: 'search-form', method: :get do %>
 		<%= image_tag 'gfx/logos/blue_on_transparent_32.png', class: 'small-logo', style: 'display:none;' %>
 		<%= text_field_tag 'q', '', placeholder: t('search.placeholder'), class: 'search', id: 'search',
-		                   value: @query %>
+		                   value: @search.query %>
 	<% end %>
 	
 	<div id='search-results'>
 		<div class='center' id='loading-search' style='display:none;'>
-			<%= image_tag 'gfx/ajax_loading_large_white.gif', class: 'loading' %>
+			<%= image_tag 'gfx/ajax_loading_large_white.gif', class: 'loading',
+				data: { loading: true  } %>
 		</div>
 	</div>
 </div>
 
-<% if @query.blank? %>
+<% if false and @query.blank? %>
 	<%= javascript_tag "$('#search').val('')"%>
-<% else %>
+<% elsif false %>
 	<%
 	js_query = escape_javascript(@query)
-	js_cat = escape_javascript(@categories.join(','))
-	js_src = escape_javascript(@sources.join(','))
+	js_cat = escape_javascript(@categories.join('|'))
+	js_src = escape_javascript(@sources.join('|'))
 	%>
 	<%= javascript_tag "search('#{js_query}', '#{js_cat}', '#{js_src}')" %>
 <% end %>

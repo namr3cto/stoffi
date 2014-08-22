@@ -2,7 +2,7 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
-@toggleSearchMode = () ->
+toggleSearchMode = () ->
     v = $('#search').val()
     
     if $('#search').val() == ''
@@ -14,14 +14,14 @@
         $('.small-logo').show()
         $('#loading-search').show()
         
-@search = (query, categories, sources) ->
-    url = "/search/fetch?q=#{query}&c=#{categories}&s=#{sources}"
+search = (id) ->
+    url = "/search/fetch?id=#{id}"
     div = $('#search-results')
     req = $.get url
     req.success (html) ->
         div.html(html)
     req.error (jqXHR, status, error) ->
-        div.html("<p>#{status}</p><p>#{error}</p>")
+        div.html("<div class='alert'>#{error}</div>")
     
 @resizeImage = (image, size) ->
     if image.height() > image.width()
@@ -48,6 +48,15 @@ ready = ->
         l = $('#search').val().length
         str = item.query[0..l-1] + '<b>' + item.query[l..]
         $('<li>'+str+'</b></li>').appendTo(ul)
+    if $('#search_query').val() == ''
+        $('#search').val('')
+    toggleSearchMode()
 
 $(document).ready(ready)
 $(document).on('page:load', ready)
+
+$ ->
+    $("img[data-loading='true']").load () ->
+        id = $('#search_id').val()
+        if id != ''
+            search(id)

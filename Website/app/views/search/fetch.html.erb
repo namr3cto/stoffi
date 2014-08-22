@@ -1,3 +1,4 @@
+<p class='stats'>Found 123 results across <%=@search.sources.length%> places in <%=@results[:benchmark].real.round(2)%> seconds.</p>
 <ul id='result-list'>
 	
 	<% if @results[:exact].has_key? :artist %>
@@ -10,7 +11,8 @@
 		<% end %>
 	<li class='exact artist'>
 		<div class='image'>
-			<%=image_tag artist.images.get_size(:large) %>
+			<% img = artist.images.get_size(:large) %>
+			<%=image_tag img.url if img %>
 		</div>
 		<div class='banner'>
 			<h3>
@@ -70,7 +72,7 @@
 			%>
 			<% unless one_liner %>
 			<div class='image'>
-				<%= image_tag img %>
+				<%= image_tag img.url if img %>
 			</div>
 			<% end %>
 			<div class='content'>
