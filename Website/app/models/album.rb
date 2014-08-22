@@ -13,6 +13,7 @@ require 'base'
 # Describes an album, created by one or more artists, containing songs.
 class Album < ActiveRecord::Base
 	include Base
+	include Imageable
 	
 	# associations
 	with_options uniq: true do |assoc|
@@ -33,6 +34,8 @@ class Album < ActiveRecord::Base
 			artists.map(&:name)
 		end
 	end
+	
+	self.default_image = "/assets/media/disc.png"
 	
 	# The string to display to users for representing the resource.
 	def display

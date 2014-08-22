@@ -13,6 +13,7 @@ require 'base'
 # Describes an event where artists have performances
 class Event < ActiveRecord::Base
 	include Base
+	include Imageable
 	
 	has_and_belongs_to_many :artists, join_table: :performances
 	
@@ -24,6 +25,8 @@ class Event < ActiveRecord::Base
 	validates :name, :venue, :start, :longitude, :latitude, presence: true
 	validates :longitude, :latitude, numericality: true
 	validates :name, uniqueness: { scope: [ :start, :venue ] }
+	
+	self.default_image = "/assets/media/artist.png"
 	
 	def self.find_or_create_by_hash(hash)
 		validate_hash(hash)

@@ -14,6 +14,7 @@ require 'base'
 class Artist < ActiveRecord::Base
 	extend StaticBase
 	include Base
+	include Imageable
 	
 	# associations
 	with_options uniq: true do |assoc|
@@ -37,10 +38,7 @@ class Artist < ActiveRecord::Base
 		text :name
 	end
 	
-	# Defines the default picture to use when no picture of the artist can be found.
-	def self.default_pic
-		"/assets/media/artist.png"
-	end
+	self.default_image = "/assets/media/artist.png"
 	
 	# Whether or not the artist has a Twitter account.
 	def twitter?; twitter.present? end

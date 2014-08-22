@@ -14,6 +14,7 @@ require 'base'
 class Song < ActiveRecord::Base
 	extend StaticBase
 	include Base
+	include Imageable
 
 	# associations
 	has_and_belongs_to_many :albums, uniq: true
@@ -25,6 +26,8 @@ class Song < ActiveRecord::Base
 	has_many :sources, as: :resource
 	has_many :images, as: :resource
 	
+	self.default_image = "/assets/media/disc.png"
+	
 	searchable do
 		text :title, boost: 5
 		text :artists do
@@ -33,37 +36,6 @@ class Song < ActiveRecord::Base
 		string :locations, multiple: true do
 			sources.map(&:name)
 		end
-	end
-	
-	# The art of the song.
-	def picture(size = :medium)
-		return art_url if art_url.present? and not art_url.to_s.downcase == "null"
-		return "/assets/media/disc.png"
-	end
-	
-	# A prettified description of the song.
-	def pretty_name
-		# TODO: internationalize
-		s = title
-		s += " by #{artist.name}" if artist
-		return s
-	end
-	
-	# The full name of the song, including the artist.
-	def full_name
-		s = title
-		s = "#{artist.name} - #{s}" if artist
-		return s
-	end
-	
-	# The artist of the song.
-	def artist
-		artists == nil ? nil : artists.first
-	end
-	
-	# The album of the song.
-	def album
-		albums == nil ? nil : albums.first
 	end
 	
 	# The string to display to users for representing the resource.
