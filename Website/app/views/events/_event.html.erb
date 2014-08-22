@@ -1,0 +1,21 @@
+<li class='clickable event' data-type='hit'>
+	<div class='image'>
+		<%= image_tag event.image, alt: event.title %>
+	</div>
+	<div class='content'>
+		<h3><%= event.display %></h3>
+		
+		<%
+		if event.artists.empty?
+			a_txt = ""
+		else
+			a_txt = event.artists.map { |x| link_to(x.name, x) }.to_sentence
+			a_txt = " with #{a_txt}"
+		end
+		%>
+		<p>An event<%==a_txt%>
+		
+		<p>In <%= event.venue %> at <%= event.start_date %></p>
+		
+	</div>
+</li>

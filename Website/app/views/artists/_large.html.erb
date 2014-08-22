@@ -1,0 +1,52 @@
+<% if false %>
+p = WikipediaLink.find_page(artist.name, I18n.locale, :artist)
+s = WikipediaLink.summary(p)
+if s and s[:info]
+<% end %>
+<li class='exact artist'>
+	<div class='image'>
+		<%=image_tag artist.image(:large), alt: artist.name %>
+	</div>
+	<div class='banner'>
+		<h3>
+			<%=artist.display %>
+		</h3>
+		<p class='statistics'>
+			Listened to 3,141 times by 242 fans
+		</p>
+		<br/>
+		<p class='tabs'>
+			<a class='active tab'>Info</a>
+			<a class='tab'>Albums</a>
+			<a class='tab'>Songs</a>
+			<a class='tab'>Events</a>
+			<a class='tab'>Fans</a>
+		</p>
+	</div>
+	<div class='content' style='padding-left: 100px'>
+		<%
+		infos = 0
+		max_infos = 5
+		info_order = ['origin', 'genre', 'years_active', 'label', 'current_members',
+		'past_members', 'birth_date', 'death_date', 'birth_place', 'death_place',
+		'alias', 'hometown', 'parents', 'spouse', 'children', 'tools',
+		'instrument', 'residence', 'education', 'relations', 'relatives',
+		'resting_place', 'death_cause', 'net_worth']
+		%>
+		<dl>
+		<% info_order.each do |k| %>
+			<%#v = s[:info][k] %>
+			<%#next if v.blank? %>
+			<dt><%=k.gsub('_',' ').capitalize%></dt>
+			<dd><%== "Lorem ipsum" %></dd>
+			<%
+			infos += 1
+			break if infos >= max_infos
+			%>
+		<% end %>
+		</dl>
+		<p class='clear'>&nbsp;</p>
+		<p><%== 'Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.' %></p>
+	</div>
+
+</li>

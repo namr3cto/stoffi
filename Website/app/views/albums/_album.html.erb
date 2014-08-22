@@ -1,0 +1,23 @@
+<li class='clickable album' data-type='hit'>
+	<div class='image'>
+		<%= image_tag album.image, alt: album.title %>
+	</div>
+	<div class='content'>
+		<h3><%= album.display %></h3>
+		
+		<%
+		if album.artists.empty?
+			a_txt = ""
+		else
+			a_txt = album.artists.map { |x| link_to(x.name, x) }.to_sentence
+			a_txt = " by #{a_txt}"
+		end
+		%>
+		<p>An album<%==a_txt%>
+		
+		<% unless album.songs.empty? %>
+			<p>Songs: <%== album.songs.map { |x| link_to(x.title, x) }.to_sentence %></p>
+		<% end %>
+		
+	</div>
+</li>

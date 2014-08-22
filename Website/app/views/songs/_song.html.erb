@@ -1,0 +1,33 @@
+<% one_liner = song.images.empty? %>
+
+<li class='clickable song <%=' one-line' if one_liner %>' data-type='hit'>
+	<% unless one_liner %>
+		<div class='image'>
+			<%= image_tag song.image, alt: song.title %>
+		</div>
+	<% end %>
+	
+	<div class='content'>
+		<% if one_liner %>
+			<a class='button'>&#9654;</a>
+		<% end %>
+		
+		<h3><%= song.display %></h3>
+		
+		<%
+		if song.artists.empty?
+			a_txt = ""
+		else
+			a_txt = song.artists.map { |x| link_to(x.name, x) }.to_sentence
+			a_txt = " by #{a_txt}"
+		end
+		%>
+		<% if one_liner %>
+			<p><%==a_txt%></p>
+		<% else %>
+			<p>A song<%==a_txt%></p>
+			<p><a class='button'>&#9654;</a></p>
+		<% end %>
+		
+	</div>
+</li>
