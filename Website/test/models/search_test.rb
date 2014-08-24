@@ -31,12 +31,25 @@ class SearchTest < ActiveSupport::TestCase
 		assert_equal "Bobby Brown", s[0][:query], "first suggestion wasn't correct"
 	end
 	
-	test "should get latest search" do
-		s = searches(:bob_marley)
-		s.update_attribute(:updated_at, 2.days.ago)
-		date = Search.latest_search(s.query, s.categories, s.sources)
-		assert_equal s.updated_at, date, "Didn't get the correct date"
-		date = Search.latest_search('foo', '', '')
-		assert date > 1.minute.ago, "Didn't get Time.now for invalid query"
+	test "should get previous search" do
+		searches = Search.order(updated_at: :desc)
+		s0 = searches[0]
+		s1 = searches[1]
+		
+		s0.updated_at = 1.second.ago
+		s1.updated_at = 5.seconds.ago
+		s1.categories = s0.categories
+		s1.sources = s0.sources
+		s1.query = s0.query
+		s0.save!
+		s1.save!
+		Rails.logger.debug s0.inspect
+		Rails.logger.debug s1.inspect
+		assert_equal s1.updated_at, s0.previous_at, "Didn't get the correct date"
+	end
+	
+	test "should get previous search from first search" do
+		searches = Search.order(:updated_at)
+		assert searches.first.previous_at < searches.first.updated_at, "Didn't get the correct date"
 	end
 end
