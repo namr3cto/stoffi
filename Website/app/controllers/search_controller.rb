@@ -36,13 +36,6 @@ class SearchController < ApplicationController
 		Image.delete_all
 		Source.delete_all
 	end
-	
-	def foo	
-		#hits = Backend::Lastfm.search('bob marley', ['artists'])[0..0]
-		hits = [{:type=>:artist, :images=>[{:url=>"http://userserve-ak.last.fm/serve/34/2225962.jpg"}, {:url=>"http://userserve-ak.last.fm/serve/64/2225962.jpg"}, {:url=>"http://userserve-ak.last.fm/serve/126/2225962.jpg"}, {:url=>"http://userserve-ak.last.fm/serve/252/2225962.jpg"}, {:url=>"http://userserve-ak.last.fm/serve/_/2225962/Bob+Marley.jpg"}], :source=>:lastfm, :url=>"http://www.last.fm/music/Bob+Marley", :popularity=>1969393.0, :name=>"Bob Marley", :id=>"Bob Marley"}]
-		hits = parse(hits)
-		hits = save_hits(hits)
-	end
 
 	def suggest
 		@query = query_param
