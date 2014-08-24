@@ -43,10 +43,7 @@ class SearchControllerTest < ActionController::TestCase
 				}
 			}
 		}
-		WebMock.disable_net_connect!(allow_localhost: true)
-		url = /.*img\.com.*jpg/
-		path = File.join(Rails.root, 'test/fixtures/image_32x32.png')
-		stub_request(:get, url).to_return(:body => File.new(path), :status => 200)
+		super
 	end	
 
 	test "should get index" do
@@ -63,17 +60,16 @@ class SearchControllerTest < ActionController::TestCase
 		stub_request(:any, /.*ws.audioscrobbler.com.*method=artist\.search.*/).
 			to_return(:body => @artists.to_json, :status => 200)
 		s = searches(:Bob_Dylan)
-		s.update_attribute(:updated_at, 2.weeks.ago)
-		get :fetch, { format: :html, q: s.query , c: s.categories, s: s.sources}
+		s.update_attribute(:updated_at, 2.years.ago)
+		get :fetch, { format: :html, id: s.id }
 		assert_response :success
 		assert_not_nil assigns(:results)
-		assert_requested :get, /.*ws.audioscrobbler.com.*method=artist\.search.*/
 	end
 
 	test "should get fetch cached" do
-		s = searches(:bob_marley)
-		s.update_attribute(:updated_at, 1.hours.ago)
-		get :fetch, { format: :html, q: s.query }
+		s = searches(:Bob_Dylan)
+		s.update_attribute(:updated_at, 2.minutes.ago)
+		get :fetch, { format: :html, id: s.id }
 		assert_response :success
 		assert_not_nil assigns(:results)
 	end
