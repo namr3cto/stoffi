@@ -45,9 +45,8 @@ class Album < ActiveRecord::Base
 	def self.find_or_create_by_hash(hash)
 		validate_hash(hash)
 		album = find_by_hash(hash)
-		return album if album
+		album = create_by_hash(hash) unless album
 		
-		album = create_by_hash(hash)
 		source = Source.find_or_create_by_hash(hash)
 		album.sources << source if source and not album.sources.include? source
 		
