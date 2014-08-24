@@ -294,6 +294,9 @@ class Song < ActiveRecord::Base
 		str = str.split.join(" ")
 		
 		# split on - : ~ by
+		# ex: Eminem - Not Afraid
+		#     Eminem: Not Afraid
+		#     Not Afraid, by Eminem
 		separators = []
 		["-", ":", "~"].each {|s| separators.concat [" "+s, s+" ", " "+s+" "]}
 		separators.map! { |s| [s, true] } # true is for left=artist
@@ -303,27 +306,14 @@ class Song < ActiveRecord::Base
 			next unless str.include? sep[0]
 			
 			s = str.split(sep[0], 2)
-			artist = s[sep[1]?0:1]
-			title = s[sep[1]?1:0]
+			artist = s[sep[1]?0:1].strip
+			title = s[sep[1]?1:0].strip
 			
-			# stuff that gives us a hint that the string is an artist
-			["by ", "ft ", "ft.", "feat ", "feat.", "with "].each do |artistText|
-				
-				# remove prefix
-				if artist.downcase.starts_with? artistText
-					return artist[artistText.length..-1], title
-					
-				# swap and remove prefix
-				elsif title.downcase.starts_with? artistText
-					return title, artist[artistText.length..-1]
-					
-				# swap
-				elsif title.downcase.include?(" "+artistText)
-					return title, artist
-				end
-			end
+			# stuff that adds additional artists at the end
+			parts = title.split(/\s+(?:by|ft|feat|featuring|with)(?:\s+|\.\s*)/)
+			return artist,title if parts.length == 1
 			
-			return artist, title
+			return ([artist] << parts[1..-1]).join(', '), parts[0]
 		end
 		
 		# title in quotes

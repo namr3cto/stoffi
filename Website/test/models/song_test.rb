@@ -181,6 +181,10 @@ class SongTest < ActiveSupport::TestCase
 		artist, title = Song.parse_title("foo (bar)")
 		assert_equal "", artist
 		assert_equal "foo (bar)", title
+		
+		artist, title = Song.parse_title("foo - a great song ft. bar")
+		assert_equal "foo, bar", artist
+		assert_equal "a great song", title
 	end
 	
 	test "should extract artist from hash" do
