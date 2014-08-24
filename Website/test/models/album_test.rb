@@ -19,6 +19,8 @@ class AlbumTest < ActiveSupport::TestCase
 			url: 'http://foo.com/album1',
 			type: :album
 		}
+		
+		super
 	end
 	
 	test "should create album" do

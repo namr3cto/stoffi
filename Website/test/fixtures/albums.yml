@@ -8,3 +8,7 @@ recovery:
   title: Recovery
   artists: eminem
   year: 2013
+  
+best_of_bob_marley:
+  title: The Best of Bob Marley
+  songs: one_love, no_woman_no_cry, jamming, exodus

@@ -84,7 +84,7 @@ class PlaylistsController < ApplicationController
 		[
 			{ property: "og:title", content: d(@playlist.name) },
 			{ property: "og:type", content: "music.playlist" },
-			{ property: "og:image", content: @playlist.picture },
+			{ property: "og:image", content: @playlist.image },
 			{ property: "og:url", content: playlist_url(@playlist) },
 			{ property: "og:description", content: @description },
 			{ property: "og:audio", content: playlist_url(@playlist, protocol: "playlist") },

@@ -67,17 +67,6 @@ class Song < ActiveRecord::Base
 		}
 	end
 	
-	# Searches for songs which are files.
-	def self.search_files(search, limit = 5)
-		if search
-			search = e(search)
-			self.join(:sources).where("songs.title LIKE ? AND sources.name 'local'", "%#{search}%").
-			limit(limit)
-		else
-			scoped
-		end
-	end
-	
 	# Returns a song matching a hash of values, describing the song.
 	#
 	# The value should be a hash with the following structure:
@@ -184,11 +173,11 @@ class Song < ActiveRecord::Base
 	
 	# Returns a top list of songs with most plays.
 	#
-	# If <tt>user</tt> is supplied then only listens of that user will be considered.
-	def self.top(limit = 5, user = nil)
-		self.select("songs.id, songs.title, songs.art_url, count(listens.id) AS listens_count").
+	# If <tt>options[:for]</tt> is supplied then only listens of that user will be considered.
+	def self.top(limit = 5, options = {})
+		self.select("*, count(listens.id) AS listens_count").
 		joins("LEFT JOIN listens ON listens.song_id = songs.id").
-		where(user == nil ? "" : "listens.user_id = #{user.id}").
+		where(options[:for] == nil ? "" : "listens.user_id = #{options[:for].id}").
 		group("songs.id").
 		order("listens_count DESC").
 		limit(limit)

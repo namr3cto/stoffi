@@ -5,7 +5,7 @@
 			<ul class="horizontal" data-list="playlists">
 				<% @personal.each do |playlist| %>
 					<%= item playlist.name, playlist, "playlist-#{playlist.id}-name",
-							:image => playlist.picture %>
+							:image => playlist.image %>
 				<% end %>
 			</ul>
 			<p class="message" data-field="no-playlists"<%= "style='display:none;'".html_safe if @personal.length > 0 %>>
@@ -17,7 +17,7 @@
 		<ul class="horizontal" data-list="global-playlists">
 			<% @global.each do |playlist| %>
 				<%= item playlist.name, playlist, "playlist-#{playlist.id}-name",
-						:image => playlist.picture %>
+						:image => playlist.image %>
 			<% end %>
 		</ul>
 		<p class="message" data-field="no-global-playlists"<%= "style='display:none;'".html_safe if @global.length > 0 %>>

@@ -33,8 +33,8 @@ class Playlist < ActiveRecord::Base
 		name
 	end
 	
-	def picture
-		"#{base_url}/assets/media/disc.png"
+	def image
+		"/assets/media/disc.png"
 		#songs.count == 0 ? "/assets/media/disc.png" : songs.first.picture
 	end
 	

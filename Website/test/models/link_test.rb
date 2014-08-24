@@ -53,12 +53,18 @@ class LinkTest < ActiveSupport::TestCase
 		end
 		@playlists_response.playlist = playlists(:bar)
 		
+		@empty_response = Object.new
+		def @empty_response.parsed
+			{ "data" => [] }
+		end
+		
 		creds = {
 			:id => "foobar",
 			:key => "somekey",
 			:url => "http://example.com"
 		}
 		Link.any_instance.stubs(:creds).returns(creds)
+		super
 	end
 	
 	def prepareLastFMRequest(link, verb, params)
@@ -139,12 +145,13 @@ class LinkTest < ActiveSupport::TestCase
 
 	test "should share song on facebook" do
 		share = shares(:alice_one_love)
+		a = share.resource.artists.collect {|x| x.name }.to_sentence
 		params = {:params => {
-			:message => "#{share.resource.title} by #{share.resource.artist.name}",
+			:message => "#{share.resource.title} by #{a}",
 			:link => share.resource.url,
 			:name => share.resource.title,
-			:caption => "by #{share.resource.artist.name}",
-			:picture => share.resource.picture
+			:caption => "by #{a}",
+			:picture => share.resource.image
 		}}
 		OAuth2::AccessToken.any_instance.expects(:post).with('/me/feed', params).returns(@response)
 		links(:alice_facebook).share(share)
@@ -158,7 +165,7 @@ class LinkTest < ActiveSupport::TestCase
 			:link => share.resource.url,
 			:name => share.resource.name,
 			:caption => "A playlist on Stoffi",
-			:picture => share.resource.picture
+			:picture => share.resource.image
 		}}
 		OAuth2::AccessToken.any_instance.expects(:post).with('/me/feed', params).returns(@response)
 		links(:alice_facebook).share(share)
@@ -166,8 +173,9 @@ class LinkTest < ActiveSupport::TestCase
 
 	test "should share song on twitter" do
 		share = shares(:alice_one_love)
+		a = share.resource.artists.collect {|x| x.name }.to_sentence
 		params = {
-			:status => "#{share.resource.title} by #{share.resource.artist.name} #{share.resource.url}",
+			:status => "#{share.resource.title} by #{a} #{share.resource.url}",
 		}
 		url = "http://example.com/1.1/statuses/update.json"
 		OAuth::AccessToken.any_instance.expects(:request).with(:post, url, params).returns(@response)
@@ -201,7 +209,7 @@ class LinkTest < ActiveSupport::TestCase
 		listen = listens(:alice_one_love)
 		link = links(:alice_lastfm)
 		params = {
-			:artist => listen.song.artist.name,
+			:artist => listen.song.artists.collect { |x| x.name }.to_sentence,
 			:track => listen.song.title,
 			:duration => listen.song.length.to_i,
 			:timestamp => listen.created_at.to_i,
@@ -238,6 +246,7 @@ class LinkTest < ActiveSupport::TestCase
 		# delete listen
 		url = "/bar"
 		OAuth2::AccessToken.any_instance.expects(:delete).with(url).returns(@response)
+		listen.update_attribute(:ended_at, listen.created_at + 2.seconds)
 		links(:alice_facebook).end_listen(listen)
 	end
 
@@ -245,7 +254,7 @@ class LinkTest < ActiveSupport::TestCase
 		listen = listens(:alice_one_love)
 		link = links(:alice_lastfm)
 		params = {
-			:artist => listen.song.artist.name,
+			:artist => listen.song.artists.collect { |x| x.name }.to_sentence,
 			:track => listen.song.title,
 			:duration => listen.song.length.to_i,
 			:timestamp => listen.created_at.to_i,
@@ -295,8 +304,9 @@ class LinkTest < ActiveSupport::TestCase
 		playlist = playlists(:foo)
 		
 		# find playlist
-		url = "/me/music.playlists?limit=25&offset=0"
-		OAuth2::AccessToken.any_instance.expects(:get).with(url).returns(@playlists_response)
+		url = "/me/music.playlists?limit=25&offset="
+		OAuth2::AccessToken.any_instance.expects(:get).with(url+"0").returns(@playlists_response)
+		OAuth2::AccessToken.any_instance.expects(:get).with(url+"25").returns(@empty_response)
 		
 		# create playlist
 		params = { :params => { :playlist => playlist.url } }

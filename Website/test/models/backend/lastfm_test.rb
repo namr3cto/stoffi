@@ -249,6 +249,7 @@ class LastfmTest < ActiveSupport::TestCase
 			to_return(:body => @song_invalid_artist.to_json, :status => 200)
 		stub_request(:any, /.*ws.audioscrobbler.com.*event=bar.*method=event\.getInfo.*/).
 			to_return(:body => @event_invalid.to_json, :status => 200)
+		super
 	end
 	
 	test 'search for artists' do

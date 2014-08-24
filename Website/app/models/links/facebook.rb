@@ -18,9 +18,9 @@ module Links::Facebook
 		
 		l = s.resource.url
 		n = s.resource.title
-		c = "by #{s.resource.artist.name}"
+		c = "by #{s.resource.artists.collect { |x| x.name }.to_sentence}"
 		#o = s.resource.source
-		p = s.resource.picture
+		p = s.resource.image
 	
 		post('/me/feed', :params =>
 		{
@@ -42,7 +42,7 @@ module Links::Facebook
 		l = p.url
 		n = p.name
 		c = "A playlist on Stoffi"
-		i = p.picture
+		i = p.image
 		
 		post('/me/feed', :params =>
 		{
@@ -61,11 +61,9 @@ module Links::Facebook
 			:end_time => l.ended_at, 
 			:start_time => l.created_at
 		}
-		if l.playlist
-			params[:playlist] = l.playlist.url
-		#elsif l.album
-		#	params[:album] = l.album.url
-		end
+		
+		params[:playlist] = l.playlist.url if l.playlist
+		params[:album] = l.album.url if l.album
 		logger.debug "starting listen on facebook"
 		logger.debug params.inspect
 		post('/me/music.listens', :params => params)
@@ -179,7 +177,7 @@ module Links::Facebook
 				offset += batch_size
 			end
 			
-		rescue Exception => e
+		rescue StandardError => e
 			logger.warn "could not find playlist '#{url}' on facebook"
 			logger.warn e.inspect
 		end
@@ -216,7 +214,7 @@ module Links::Facebook
 				offset += batch_size
 			end
 			
-		rescue Exception => e
+		rescue StandardError => e
 			logger.warn "could not find listen '#{url}' on facebook"
 			logger.warn e.inspect
 		end

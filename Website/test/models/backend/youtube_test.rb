@@ -60,6 +60,7 @@ class YoutubeTest < ActiveSupport::TestCase
 			to_return(:body => @search.to_json, :status => 200)
 		stub_request(:any, /https:\/\/www.googleapis.com\/youtube\/v3\/videos.*/).
 			to_return(:body => @videos.to_json, :status => 200)
+		super
 	end
 	
 	test 'should get songs' do

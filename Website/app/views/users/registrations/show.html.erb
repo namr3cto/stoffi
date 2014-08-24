@@ -48,7 +48,7 @@
 		<% if @songs.length > 0 %>
 			<ul class="horizontal">
 				<% @songs.each do |song| %>
-					<%= item song.title, song, "song_#{song.id}", :image => song.picture %>
+					<%= item song.title, song, "song_#{song.id}", :image => song.image %>
 				<% end %>
 			</ul>
 		<% else %>
@@ -75,7 +75,7 @@
 		<% if @artists.length > 0 %>
 			<ul class="horizontal">
 				<% @artists.each do |artist| %>
-					<%= item artist.name, artist, "artist-#{artist.id}-name", :image => artist.picture %>
+					<%= item artist.name, artist, "artist-#{artist.id}-name", :image => artist.image %>
 				<% end %>
 			</ul>
 		<% else %>
@@ -86,7 +86,7 @@
 		<% if @listens.length > 0 %>
 			<ul class="horizontal">
 				<% @listens.each do |listen| %>
-					<%= item listen.song.title, listen, "song-#{listen.song.id}-title", :url => url_for(listen.song), :image => listen.song.picture %>
+					<%= item listen.song.title, listen, "song-#{listen.song.id}-title", :url => url_for(listen.song), :image => listen.song.image %>
 				<% end %>
 			</ul>
 		<% else %>

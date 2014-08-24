@@ -6,7 +6,7 @@
 		<% if @songs.length > 0 %>
 			<ul class="horizontal">
 				<% @songs.each do |song| %>
-					<%= item song.title, song, "song-#{song.id}-title", :image => song.picture %>
+					<%= item song.title, song, "song-#{song.id}-title", :image => song.image %>
 				<% end %>
 			</ul>
 		<% else %>
@@ -33,7 +33,7 @@
 		<% if @artists.length > 0 %>
 			<ul class="horizontal">
 				<% @artists.each do |artist| %>
-					<%= item artist.name, artist, "artist-#{artist.id}-name", :image => artist.picture %>
+					<%= item artist.name, artist, "artist-#{artist.id}-name", :image => artist.image %>
 				<% end %>
 			</ul>
 		<% else %>
@@ -43,7 +43,7 @@
 		<h1><%=t "dashboard.listens.title" %></h1>
 		<ul class="horizontal" data-list="listens" data-maxLength="10">
 			<% @listens.each do |listen| %>
-				<%= item listen.song.title, listen, "song-#{listen.song.id}-title", :url => url_for(listen.song), :image => listen.song.picture %>
+				<%= item listen.song.title, listen, "song-#{listen.song.id}-title", :url => url_for(listen.song), :image => listen.song.image %>
 			<% end %>
 		</ul>
 		<p class="message" data-field="no-listens"<%= "style='display:none;'".html_safe if @listens.length > 0 %>>

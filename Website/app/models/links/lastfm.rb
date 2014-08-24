@@ -27,12 +27,12 @@ module Links::Lastfm
 	def start_listen_on_lastfm(l)
 		params =
 		{
-			:artist => l.song.artist.name,
+			:artist => l.song.artists.collect { |x| x.name }.to_sentence,
 			:track => l.song.title,
 			:duration => l.song.length.to_i,
 			:timestamp => l.created_at.to_i
 		}
-		#params[:album] = l.album.name if l.album
+		params[:album] = l.album.name if l.album
 		
 		resp = req('track.updateNowPlaying', :post, params)
 		raise resp["message"] if resp["error"]
@@ -42,13 +42,13 @@ module Links::Lastfm
 	def end_listen_on_lastfm(l)
 		params =
 		{
-			:artist => l.song.artist.name,
+			:artist => l.song.artists.collect { |x| x.name }.to_sentence,
 			:track => l.song.title,
 			:duration => l.song.length.to_i,
 			:timestamp => l.created_at.to_i
 			#:timestamp => Time.now.to_i
 		}
-		#params[:album] = l.album.name if l.album
+		params[:album] = l.album.name if l.album
 		
 		resp = req('track.scrobble', :post, params)
 		raise resp["message"] if resp["error"]

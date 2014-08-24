@@ -2,7 +2,6 @@ require 'test_helper'
 
 class SongTest < ActiveSupport::TestCase
 	def setup
-		WebMock.disable_net_connect!(allow_localhost: true)
 		@youtube_json = {
 			'items' => [
 				{
@@ -36,6 +35,7 @@ class SongTest < ActiveSupport::TestCase
 				"name" => "someuser"
 			}
 		}
+		super
 	end
 	
 	def stub_youtube
@@ -50,7 +50,7 @@ class SongTest < ActiveSupport::TestCase
 	
 	test "should create song" do
 		assert_difference('Song.count', 1, "Didn't create song") do
-		p = Song.create()
+			p = Song.create()
 		end
 	end
 	
@@ -208,5 +208,10 @@ class SongTest < ActiveSupport::TestCase
 		end
 		a = Artist.last
 		assert_equal 'Stephen Marley', a.name, "Latest artist didn't get the correct name"
+	end
+	
+	test "should get top songs" do
+		songs = Song.top
+		assert_equal 5, songs.length, "Didn't return five songs"
 	end
 end

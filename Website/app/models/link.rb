@@ -257,7 +257,7 @@ class Link < ActiveRecord::Base
 			msg = s.message
 			if msg.to_s == ""
 				msg = s.resource.title
-				a = s.resource.artist.name
+				a = s.resource.artists.collect { |x| x.name }.to_sentence
 				msg += " by #{a}" unless a.to_s == ""
 			end
 			logger.debug "share message: #{msg}"

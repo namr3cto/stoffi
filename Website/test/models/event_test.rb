@@ -1,11 +1,6 @@
 require 'test_helper'
 
 class EventTest < ActiveSupport::TestCase
-	def setup
-		path = File.join(Rails.root, 'test/fixtures/image_32x32.png')
-		stub_request(:get, 'http://foo.com/img1.jpg').to_return(:body => File.new(path), :status => 200)
-		stub_request(:get, 'http://foo.com/img2.jpg').to_return(:body => File.new(path), :status => 200)
-	end
 	
 	test "should create event" do
 		e = nil
