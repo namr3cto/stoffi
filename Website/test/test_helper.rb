@@ -15,10 +15,23 @@ class ActiveSupport::TestCase
 	# Add more helper methods to be used by all tests here...
 	def setup
 		Rails.cache.clear
+		WebMock.disable_net_connect!(allow_localhost: true)
+		url = /http:\/\/.*\.jpe?g/
+		path = File.join(Rails.root, 'test/fixtures/image_32x32.png')
+		stub_request(:get, url).to_return(:body => File.new(path), :status => 200)
 	end
 
 	def teardown
 		Rails.cache.clear
+	end
+end
+
+class ActionController::TestCase
+	def setup
+		WebMock.disable_net_connect!(allow_localhost: true)
+		url = /http:\/\/.*\.jpe?g/
+		path = File.join(Rails.root, 'test/fixtures/image_32x32.png')
+		stub_request(:get, url).to_return(:body => File.new(path), :status => 200)
 	end
 end
 
