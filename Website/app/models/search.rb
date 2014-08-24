@@ -40,7 +40,7 @@ class Search < ActiveRecord::Base
 		results = {}
 		time = Benchmark.measure do
 			hits = []
-			if previous_search < CACHE_EXPIRATION.ago
+			if previous_at < CACHE_EXPIRATION.ago
 				logger.info "fill db from backends"
 				hits += Backend::Lastfm.search(query, categories) if sources.include? 'lastfm'
 				hits += Backend::Youtube.search(query, categories) if sources.include? 'youtube'
@@ -64,12 +64,22 @@ class Search < ActiveRecord::Base
 		results
 	end
 	
-	def sources
-		super.split(/[\|,]/)
+	def previous_at
+		begin
+			s = Search.where(query: query, categories: categories, sources: sources)
+				.order(updated_at: :desc).offset(1).limit(1)
+			return s.first.updated_at if s and s.first
+		rescue StandardError => e
+		end
+		(updated_at - CACHE_EXPIRATION - 1.second)
 	end
 	
-	def categories
-		super.split(/[\|,]/)
+	def categories_array
+		categories.to_s.split('|').sort
+	end
+	
+	def sources_array
+		sources.to_s.split('|').sort
 	end
 	
 	private
@@ -98,18 +108,6 @@ class Search < ActiveRecord::Base
 	
 	# This is w_d, it is evaluated where x is the distance in 10 km
 	SCORE_WEIGHT_DISTANCE = '[5, 10.0/x].min' # w_d
-	
-	def previous_search
-		begin
-			cat = categories.sort.join('|')
-			src = sources.sort.join('|')
-			s = Search.where(query: query, categories: cat, sources: src)
-				.order(updated_at: :desc).offset(1).limit(1)
-			return s.first.updated_at if s and s.first
-		rescue
-		end
-		(CACHE_EXPIRATION + 1.day).ago
-	end
 	
 	# Rank an array of hits according to a query, putting the most
 	# relevant hit at the start of the array
