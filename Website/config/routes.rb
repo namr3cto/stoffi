@@ -79,7 +79,7 @@ Stoffi::Application.routes.draw do
 		get "/foo",        :to => "pages#foo",        :as => :foo
 
 		resources :translations, :languages, :votes
-		resources :songs, :artists, :events
+		resources :songs, :artists, :events, :genres
 		resources :links, :devices
 		resources :oauth_clients, :path => "apps", :as => :client_application
 		resources :oauth_clients, :path => "apps", :as => :oauth_clients
