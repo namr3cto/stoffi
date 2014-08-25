@@ -57,18 +57,19 @@ class SearchControllerTest < ActionController::TestCase
 	end
 
 	test "should get fetch" do
-		stub_request(:any, /.*ws.audioscrobbler.com.*method=artist\.search.*/).
-			to_return(:body => @artists.to_json, :status => 200)
-		s = searches(:Bob_Dylan)
-		s.update_attribute(:updated_at, 2.years.ago)
+		backend_stub = stub_request(:any, /.*ws.audioscrobbler.com.*method=artist\.search.*/).
+			to_return(:body => @artists.to_json, :status => 200).times(1)
+		s = searches(:bob_marley)
+		searches(:Bob_Marley).update_attribute(:updated_at, 2.years.ago)
 		get :fetch, { format: :html, id: s.id }
 		assert_response :success
 		assert_not_nil assigns(:results)
+		remove_request_stub(backend_stub)
 	end
 
 	test "should get fetch cached" do
-		s = searches(:Bob_Dylan)
-		s.update_attribute(:updated_at, 2.minutes.ago)
+		s = searches(:bob_marley)
+		searches(:Bob_Marley).update_attribute(:updated_at, 2.minutes.ago)
 		get :fetch, { format: :html, id: s.id }
 		assert_response :success
 		assert_not_nil assigns(:results)
