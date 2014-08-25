@@ -88,6 +88,11 @@ class Source < ActiveRecord::Base
 		}
 	end
 	
+	def normalized_popularity
+		max = Source.where(name: name, resource_type: resource_type).maximum(:popularity) || 1
+		(popularity || 0).to_f / max
+	end
+	
 	private
 	
 	def self.parse_resource(resource)
