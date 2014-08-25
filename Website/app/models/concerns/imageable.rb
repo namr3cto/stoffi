@@ -12,4 +12,10 @@ module Imageable
 		return img.url if img
 		return default_image
 	end
+	
+	def images_hash=(hash)
+		return unless hash.key?(:images)
+		imgs = Image.create_by_hashes(hash[:images])
+		images << imgs
+	end
 end
