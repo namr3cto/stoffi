@@ -1,12 +1,13 @@
 <p class='stats'>Found 123 results across <%=@search.sources.length%> places in <%=@results[:benchmark].real.round(2)%> seconds.</p>
 <ul id='result-list'>
 	
-	<% if @results[:exact].has_key? :artist %>
-		<% a = @results[:exact][:artist][:object] %>
-		<%= render(partial: 'artists/large', object: a, as: :artist) %>
+	<% if @results.key? :exact %>
+		<% o = @results[:exact] %>
+		<% c = o.class.to_s.tableize %>
+		<%= render(partial: "#{c}/large", object: o, as: c.singularize.to_sym) %>
 	<% end %>
 	
-	<% hits = @results[:hits].collect { |x| x[:object] }.compact %>
+	<% hits = @results[:hits] %>
 	<%= render(hits) || "No results found" %>
 </ul>
 

@@ -49,16 +49,15 @@ class Search < ActiveRecord::Base
 			end
 			hits = search_in_db(query, categories, sources)
 			hits = rank(hits, query)
-		
-			results = { hits: hits.collect { |h|
-				h.except(:distance, :score)
-			} }
-			results[:exact] = {}
-		
-			results[:hits].each do |h|
-				next if h[:object].display.downcase != query.downcase
-				results[:exact][h[:object].class.to_s.underscore.to_sym] ||= h
+			
+			exact = find_exact(hits)
+			if exact
+				results[:exact] = exact
+				hits.reject! { |x| x[:object] == exact }
 			end
+		
+			results[:hits] = hits.collect { |h| h[:object] }
+		
 		end
 		results[:benchmark] = time
 		results
@@ -66,7 +65,7 @@ class Search < ActiveRecord::Base
 	
 	def previous_at
 		begin
-			s = Search.where(query: query, categories: categories, sources: sources)
+			s = Search.where('lower(query) = ?', query.downcase).where(categories: categories, sources: sources)
 				.order(updated_at: :desc).offset(1).limit(1)
 			return s.first.updated_at if s and s.first
 		rescue StandardError => e
@@ -152,8 +151,6 @@ class Search < ActiveRecord::Base
 					# some artists are named "Foo feat. Bar" so we split
 					# the name and divide the popularity among them
 					artists = Artist.split_name(hit[:name])
-					logger.debug "Artist.split_name('#{hit[:name]}')"
-					logger.debug artists.inspect
 					popularity_pot = hit[:popularity] / artists.count.to_f
 					artists.each do |name|
 						h = hit.dup
@@ -185,6 +182,25 @@ class Search < ActiveRecord::Base
 		return parsed_hits
 	end
 	
+	def strip(str)
+		str.downcase.gsub(/[^\w\s]/, '').squish.split.sort.join(' ')
+	end
+	
+	def find_exact(hits)	
+		exacts = []
+		q = strip(query)
+		hits.each do |h|
+			o = h[:object]
+			if strip(o.display) == q or (o.is_a?(Song) and strip(o.fullname) == q)
+				exacts << h
+			end
+		end
+		if exacts.length > 0
+			return exacts.sort_by { |h| -1 * h[:popularity] }[0][:object]
+		end
+		return nil
+	end
+	
 	def search_in_db(query, categories, sources)
 		retval = []
 		if 'artists'.in? categories
@@ -205,7 +221,7 @@ class Search < ActiveRecord::Base
 		if 'songs'.in? categories
 			retval += Song.search {
 				keywords(query, minimum_matches: 1)
-				with(:locations, sources)
+				with(:locations, sources_array)
 			}.results
 		end
 		return retval.uniq
@@ -260,7 +276,7 @@ class Search < ActiveRecord::Base
 			end
 		end
 		popularity.each do |k,v|
-			popularity[k][:avg] = (v[:max] || 0) / (v[:len] || 1)
+			popularity[k][:avg] = (v[:max] || 0).to_f / (v[:len] || 1)
 		end
 		
 		retval = []
@@ -269,7 +285,7 @@ class Search < ActiveRecord::Base
 			h.sources.each do |s|
 				p = popularity[s.resource_type][s.name]
 				d = p[:max].to_i == 0 ? 1 : p[:max].to_i
-				o[:popularity] = (s.popularity || p[:avg].to_i) / d
+				o[:popularity] = (s.popularity || p[:avg].to_i).to_f / d
 			end
 			retval << o
 		end
