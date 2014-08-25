@@ -14,11 +14,14 @@ require 'base'
 class Album < ActiveRecord::Base
 	include Base
 	include Imageable
+	include Sourceable
+	include Genreable
 	
 	# associations
 	with_options uniq: true do |assoc|
 		assoc.has_and_belongs_to_many :artists
 		assoc.has_and_belongs_to_many :songs
+		assoc.has_and_belongs_to_many :genres, through: :songs
 	end
 	
 	with_options as: :resource, dependent: :destroy do |assoc|

@@ -15,12 +15,15 @@ class Artist < ActiveRecord::Base
 	extend StaticBase
 	include Base
 	include Imageable
+	include Sourceable
+	include Genreable
 	
 	# associations
 	with_options uniq: true do |assoc|
 		assoc.has_and_belongs_to_many :albums
 		assoc.has_and_belongs_to_many :songs
 		assoc.has_and_belongs_to_many :artists, join_table: :performances
+		assoc.has_and_belongs_to_many :genres, through: :songs
 	end
 	with_options as: :resource, dependent: :destroy do |assoc|
 		assoc.has_many :wikipedia_links
@@ -130,23 +133,6 @@ class Artist < ActiveRecord::Base
 		unknown? || donatable_status.blank?
 	end
 	
-	def images=(hash)
-		return unless hash.key?(:images)
-		imgs = Image.create_by_hashes(hash[:images])
-		images << imgs
-	end
-	
-	def source=(hash)
-		return unless hash.key?(:source) and hash.key?(:id)
-		return unless sources.where(name: hash[:source]).empty?
-		src = Source.new
-		src.name = hash[:source]
-		src.foreign_id = hash[:id]
-		src.foreign_url = hash[:url]
-		src.popularity = hash[:popularity]
-		sources << src if src.save
-	end
-	
 	# Paginates the songs of the artist. Should be called before <tt>paginated_songs</tt> is called.
 	#
 	#   artist.paginate_songs(10, 30)
@@ -248,7 +234,7 @@ class Artist < ActiveRecord::Base
 			logger.debug 'no source found, getting by name'
 			artist = find_by_name(hash[:name])
 			artist = create(name: hash[:name]) unless artist
-			artist.images = hash
+			artist.images_hash = hash
 			artist.source = hash
 			return artist
 			

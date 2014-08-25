@@ -15,24 +15,29 @@ class Song < ActiveRecord::Base
 	extend StaticBase
 	include Base
 	include Imageable
+	include Sourceable
+	include Genreable
 
 	# associations
-	has_and_belongs_to_many :albums, uniq: true
-	has_and_belongs_to_many :artists, uniq: true
-	has_and_belongs_to_many :users, uniq: true
-	has_and_belongs_to_many :playlists, uniq: true
+	with_options uniq: true do |assoc|
+		assoc.has_and_belongs_to_many :albums
+		assoc.has_and_belongs_to_many :artists
+		assoc.has_and_belongs_to_many :users
+		assoc.has_and_belongs_to_many :playlists
+		assoc.has_and_belongs_to_many :genres
+	end
+	with_options as: :resource do |assoc|
+		assoc.has_many :sources, as: :resource
+		assoc.has_many :images, as: :resource
+	end
 	has_many :listens
 	has_many :shares, as: :object
-	has_many :sources, as: :resource
-	has_many :images, as: :resource
 	
 	self.default_image = "/assets/media/disc.png"
 	
 	searchable do
 		text :title, boost: 5
-		text :artists do
-			artists.map(&:name)
-		end
+		text :artist_names
 		string :locations, multiple: true do
 			sources.map(&:name)
 		end
@@ -43,21 +48,25 @@ class Song < ActiveRecord::Base
 		title
 	end
 	
+	def artist_names
+		artists.collect { |a| a.name }.to_sentence
+	end
+	
 	# A long description of the song.
 	def description
 		s = "#{title}, a song "
-		s+= "by #{artist.name} " if artist
+		s+= "by #{artist_names} " if artists.length > 0
 		s+= "on Stoffi"
+	end
+	
+	def fullname
+		"#{artist_names} - #{title}"
 	end
 	
 	def xpath
 		return nil if sources.length == 0
 		src = sources.first
 		"stoffi:track:#{src.name}:#{src.foreign_id}"
-	end
-	
-	def locations
-		sources.collect { |x| x.name }.uniq.reject { |x| x.to_s.empty? }
 	end
 	
 	# The options to use when the song is serialized.
