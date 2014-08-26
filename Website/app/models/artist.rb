@@ -39,6 +39,9 @@ class Artist < ActiveRecord::Base
 	
 	searchable do
 		text :name
+		string :locations, multiple: true do
+			sources.map(&:name)
+		end
 	end
 	
 	self.default_image = "/assets/media/artist.png"

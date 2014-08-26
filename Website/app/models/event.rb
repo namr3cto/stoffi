@@ -28,6 +28,14 @@ class Event < ActiveRecord::Base
 	
 	self.default_image = "/assets/media/artist.png"
 	
+	searchable do
+		text :name, boost: 5
+		text :content, :category
+		string :locations, multiple: true do
+			sources.map(&:name)
+		end
+	end
+	
 	def self.find_or_create_by_hash(hash)
 		validate_hash(hash)
 		event = find_by_hash(hash)
@@ -88,11 +96,6 @@ class Event < ActiveRecord::Base
 			return event
 		rescue StandardError => e
 		end
-	end
-	
-	searchable do
-		text :name, boost: 5
-		text :content, :category
 	end
 	
 	def display

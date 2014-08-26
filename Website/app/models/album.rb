@@ -8,8 +8,6 @@
 # Copyright::	Copyright (c) 2013 Simplare
 # License::		GNU General Public License (stoffiplayer.com/license)
 
-require 'base'
-
 # Describes an album, created by one or more artists, containing songs.
 class Album < ActiveRecord::Base
 	include Base
@@ -35,6 +33,9 @@ class Album < ActiveRecord::Base
 		text :title, boost: 5
 		text :artists do
 			artists.map(&:name)
+		end
+		string :locations, multiple: true do
+			sources.map(&:name)
 		end
 	end
 	
