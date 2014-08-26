@@ -39,7 +39,7 @@ class EventTest < ActiveSupport::TestCase
 		assert_equal hash[:popularity].to_f, s.popularity, "Didn't set source popularity"
 		assert_equal hash[:id], s.foreign_id, "Didn't set source id"
 		assert_equal hash[:url], s.foreign_url, "Didn't set source url"
-		assert_equal hash[:source].to_s, s.name, "Didn't set source name"
+		assert_equal hash[:source], s.name, "Didn't set source name"
 	end
 	
 	test "should find event" do

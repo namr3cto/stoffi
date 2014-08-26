@@ -48,7 +48,7 @@ class SourceTest < ActiveSupport::TestCase
 		assert_equal hash[:images][1][:url], a.images.get_size(:small).url, "Didn't set images"
 		assert_equal 1, a.sources.count, "Didn't set source"
 		assert_equal hash[:popularity], a.sources[0].popularity, "Didn't set popularity"
-		assert_equal hash[:source].to_s, a.sources[0].name, "Didn't set source name"
+		assert_equal hash[:source], a.sources[0].name, "Didn't set source name"
 	end
 	
 	test "should split name" do
