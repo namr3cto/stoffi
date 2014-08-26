@@ -97,10 +97,9 @@ end
 				<% if l == I18n.locale %>
 					<a><%= disp %></a>
 				<% else %>
-					<%=link_to_language disp, :l => l %>
+					<%=link_to_language disp, params.merge(l: l) %>
 				<% end %>
 			</li>
 		<% end %>
 	</ul>
 </div>
-<div id="search-menu"></div>
