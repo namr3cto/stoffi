@@ -36,7 +36,7 @@ class Search < ActiveRecord::Base
 		return terms.sort_by { |x| x[:score] }.reverse[0..limit-1]
 	end
 	
-	def do
+	def do(page = 1, limit = 5)
 		results = {}
 		time = Benchmark.measure do
 			hits = []
@@ -47,14 +47,22 @@ class Search < ActiveRecord::Base
 				hits = parse(hits)
 				hits = save_hits(hits)
 			end
-			hits = search_in_db(query, categories, sources)
-			hits = rank(hits, query)
+			search = search_in_db(page, limit)
+			results[:total_hits] = search.total
+			results[:total_pages] = search.results.total_pages
+			results[:first_page] = search.results.first_page?
+			results[:last_page] = search.results.last_page?
+			results[:previous_page] = search.results.previous_page
+			results[:next_page] = search.results.next_page
+			results[:out_of_bounds] = search.results.out_of_bounds?
+			results[:offset] = search.results.offset
+			hits = rank(search.results.uniq)
 			
-			exact = find_exact(hits)
-			if exact
-				results[:exact] = exact
-				hits.reject! { |x| x[:object] == exact }
-			end
+			#exact = find_exact(hits) if page == 1
+			#if exact
+			#	results[:exact] = exact
+			#	hits.reject! { |x| x[:object] == exact }
+			#end
 		
 			results[:hits] = hits.collect { |h| h[:object] }
 		
@@ -81,7 +89,7 @@ class Search < ActiveRecord::Base
 		sources.to_s.split('|').sort
 	end
 	
-	private
+	#private
 	
 	# The time a search is cached to ease pressure on backends
 	CACHE_EXPIRATION = 1.week
@@ -110,7 +118,7 @@ class Search < ActiveRecord::Base
 	
 	# Rank an array of hits according to a query, putting the most
 	# relevant hit at the start of the array
-	def rank(hits, query)
+	def rank(hits)
 		hits = fill_meta(hits)
 		
 		hits.each do |h|
@@ -201,30 +209,13 @@ class Search < ActiveRecord::Base
 		return nil
 	end
 	
-	def search_in_db(query, categories, sources)
-		retval = []
-		if 'artists'.in? categories
-			retval += Artist.search {
-				keywords(query, minimum_matches: 1)
-			}.results
+	def search_in_db(page, limit)
+		objects = categories_array.map { |x| x.classify.constantize }
+		Sunspot.search(objects) do |q|
+			q.keywords(query, minimum_matches: 1)
+			q.with(:locations, sources_array)
+			q.paginate(page: page, per_page: limit)
 		end
-		if 'albums'.in? categories
-			retval += Album.search {
-				keywords(query, minimum_matches: 1)
-			}.results
-		end
-		if 'events'.in? categories
-			retval += Event.search {
-				keywords(query, minimum_matches: 1)
-			}.results
-		end
-		if 'songs'.in? categories
-			retval += Song.search {
-				keywords(query, minimum_matches: 1)
-				with(:locations, sources_array)
-			}.results
-		end
-		return retval.uniq
 	end
 	
 	# Save a hash of hits to the database.

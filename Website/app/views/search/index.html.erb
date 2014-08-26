@@ -10,10 +10,10 @@
 		                   value: @search.query %>
 	<% end %>
 	
+	<div class='center' id='loading-search' style='display:none;'>
+		<%= image_tag 'gfx/ajax_loading_large_white.gif', class: 'loading',
+			data: { loading: true  } %>
+	</div>
 	<div id='search-results'>
-		<div class='center' id='loading-search' style='display:none;'>
-			<%= image_tag 'gfx/ajax_loading_large_white.gif', class: 'loading',
-				data: { loading: true  } %>
-		</div>
 	</div>
 </div>

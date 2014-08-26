@@ -1,4 +1,4 @@
-<p class='stats'>Found 123 results across <%=@search.sources.length%> places in <%=@results[:benchmark].real.round(2)%> seconds.</p>
+<p class='stats'>Found <%=@results[:total_hits] %> results across <%=@search.sources_array.length%> places in <%=@results[:benchmark].real.round(2)%> seconds.</p>
 <ul id='result-list'>
 	
 	<% if @results.key? :exact %>
@@ -11,8 +11,30 @@
 	<%= render(hits) || "No results found" %>
 </ul>
 
+<div id='paginator'>
+	<%= paginate @paginatable_array, param_name: :p, remote: true %>
+</div>
+
 <script>
 // TODO: can someone please help me move this into search.js.coffee?
 $("[data-type='hit'] img").load(function() { resizeImage($(this), 64); });
 $(".exact img").load(function() { resizeImage($(this), 120); });
+
+$('#paginator a').on('click', function(e)
+{
+	$('#loading-search').show();
+	$('#search-results').hide();
+});
+
+$('#paginator a').on('ajax:success', function(e, data, status, xhr)
+{
+	$('#loading-search').hide();
+	$('#search-results').html(data)
+	$('#search-results').show();
+	
+}).on('ajax:error', function(e, xhr, status, error)
+{
+	$('#loading-search').hide();
+	//$('#search-results').html("<div class='alert'>#{error}</div>")
+})	
 </script>

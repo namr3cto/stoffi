@@ -66,13 +66,15 @@ class SearchController < ApplicationController
 		respond_with(@search) and return if request.format == :html
 			
 		# request is API call, so we call fetch and return the results
-		respond_with(@search.do)
+		respond_with(@search.do(page_param, limit_param))
 	end
 	
 	def fetch
 		@search = Search.find(params[:id])
 		head :unprocessable_entity and return if @search.query.blank?
-		@results = @search.do
+		@results = @search.do(page_param, limit_param)
+		@paginatable_array = Kaminari.paginate_array(@results[:hits], total_count: @results[:total_hits])
+			.page(page_param).per(limit_param)
 		respond_with(@results, layout: false)
 	end
 	
@@ -84,7 +86,7 @@ class SearchController < ApplicationController
 	end
 	
 	def category_param
-		default = 'artists|songs|devices|playlists|events|albums'
+		default = 'artists|songs|genres|events|albums'
 		c = (params[:c] || params[:cat] || params[:categories] || params[:category] || default)
 		c.split(/[\|,]/)
 	end
@@ -96,11 +98,11 @@ class SearchController < ApplicationController
 	end
 	
 	def limit_param
-		[50, (params[:l] || params[:limit] || "5").to_i].min
+		[50, (params[:limit] || "20").to_i].min
 	end
 	
-	def offset_param
-		[50, (params[:o] || params[:offset] || "0").to_i].min
+	def page_param
+		(params[:p] || params[:page] || "1").to_i
 	end
 	
 	# Save a search
