@@ -15,3 +15,11 @@ us:
         zero: No %{model} found
     page_gap: ! '&hellip;'
     previous_label: ! '&#8592; Previous'
+    
+  views:
+    pagination:
+      first: "&laquo; First"
+      last: "Last &raquo;"
+      previous: "&#8592; Previous"
+      next: "Next &#8594;"
+      truncate: "&hellip;"

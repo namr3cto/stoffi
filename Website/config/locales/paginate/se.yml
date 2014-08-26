@@ -14,3 +14,11 @@ se:
         zero: Ingen %{model} hittades
     page_gap: ! '&hellip;'
     previous_label: ! 'Förra'
+    
+  views:
+    pagination:
+      first: "&laquo; Första"
+      last: "Sista &raquo;"
+      previous: "&#8592; Föregående"
+      next: "Nästa &#8594;"
+      truncate: "&hellip;"
