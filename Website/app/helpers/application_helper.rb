@@ -107,9 +107,11 @@ module ApplicationHelper
 	
 	def lang2host(lang)
 		host = request.host.split('.')
-		case lang
-		when 'cn' then host[-1] = 'cn'
-		else host[-1] = 'com'
+		unless host[-1] == 'dev'
+			case lang
+			when 'cn' then host[-1] = 'cn'
+			else host[-1] = 'com'
+			end
 		end
 		host.join('.')
 	end
