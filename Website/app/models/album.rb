@@ -14,6 +14,7 @@ class Album < ActiveRecord::Base
 	include Imageable
 	include Sourceable
 	include Genreable
+	include Rankable
 	
 	# associations
 	with_options uniq: true do |assoc|
@@ -52,22 +53,6 @@ class Album < ActiveRecord::Base
 		p = super
 		p += songs.inject(p) { |sum,x| sum + x.popularity } if songs.count > 0 and p == 0
 		p
-	end
-	
-	# Returns albums sorted by number of listens and popularity
-	#
-	# options:
-	#   for: If this is specified, listens only for this user are
-	#        counted
-	def self.top(options = {})
-		x = self.select("albums.*, sum(sources.popularity) as popularity_count, count(listens.id) as listens_count").
-		joins(:songs).
-		joins("left join sources on sources.resource_id = albums.id and sources.resource_type = 'Album'").
-		joins("left join listens on listens.song_id = songs.id")
-		
-		x = x.where("listens.user_id = ?", options[:for].id) if options[:for].is_a? User
-		
-		x.group("albums.id").order("listens_count DESC, popularity_count DESC")
 	end
 	
 	def self.find_or_create_by_hash(hash)

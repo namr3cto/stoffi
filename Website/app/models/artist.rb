@@ -17,6 +17,7 @@ class Artist < ActiveRecord::Base
 	include Imageable
 	include Sourceable
 	include Genreable
+	include Rankable
 	
 	# associations
 	with_options uniq: true do |assoc|
@@ -182,39 +183,6 @@ class Artist < ActiveRecord::Base
 		end
 		return value if value.is_a?(Artist)
 		return nil
-	end
-	
-	# Returns a top list of artists.
-	#
-	# The argument <tt>type</tt> can be:
-	#
-	# :played:: The most played artists.
-	# :supported:: The artist with the most donations.
-	#
-	# If <tt>user</tt> is supplied then only listens or donations of that user will be considered.
-	def self.top(limit = 5, type = :played, user = nil)
-		case type
-		when :supported
-			self.select("artists.id, artists.name, artists.picture, sum(donations.amount) AS c").
-			joins(:donations).
-			where(user == nil ? "" : "donations.user_id = #{user.id}").
-			where("donations.status != 'returned' AND donations.status != 'failed' AND donations.status != 'revoked'").
-			group("artists.id").
-			order("c DESC")
-			
-		when :played
-			self.select("artists.id, artists.name, artists.picture, count(listens.id) AS c").
-			joins(:songs).
-			joins("LEFT JOIN listens ON listens.song_id = songs.id").
-			where(user == nil ? "" : "listens.user_id = #{user.id}").
-			where("artists.name != '' AND artists.name IS NOT NULL").
-			group("artists.id").
-			order("c DESC").
-			limit(limit)
-		
-		else
-			raise "Unsupported type"
-		end
 	end
 	
 	# Split an artist name when it contains words like: and, feat, vs

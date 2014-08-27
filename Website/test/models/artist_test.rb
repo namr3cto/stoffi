@@ -65,4 +65,11 @@ class SourceTest < ActiveSupport::TestCase
 		a = Artist.split_name("")
 		assert_equal [], a
 	end
+	
+	test "should get top artists" do
+		a = Artist.top.limit 3
+		assert_equal 3, a.length, "Didn't get three artists"
+		assert a[0].listens.count >= a[1].listens.count, "Top artists not in order (first and second)"
+		assert a[1].listens.count >= a[2].listens.count, "Top artists not in order (second and third)"
+	end
 end
