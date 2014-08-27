@@ -2,15 +2,15 @@ alice_one_love:
   user: alice
   song: one_love
   created_at: <%= 4.minutes.ago %>
-  ended_at: <%= 3.minute.ago %>
+  ended_at: <%= 3.minutes.ago %>
 
 alice_not_afraid:
   user: alice
   song: not_afraid
   created_at: <%= 3.minutes.ago %>
-  ended_at: <%= 2.minute.ago %>
+  ended_at: <%= 2.minutes.ago %>
 
-alice_not_afraid:
+alice_not_afraid2:
   user: alice
   song: not_afraid
   created_at: <%= 2.minutes.ago %>
@@ -20,35 +20,41 @@ bob_not_afraid:
   user: bob
   song: not_afraid
   created_at: <%= 4.minutes.ago %>
-  ended_at: <%= 3.minute.ago %>
+  ended_at: <%= 3.minutes.ago %>
 
 bob_no_woman_no_cry:
   user: bob
   song: no_woman_no_cry
   created_at: <%= 6.minutes.ago %>
-  ended_at: <%= 5.minute.ago %>
-
-bob_no_woman_no_cry:
-  user: bob
-  song: no_woman_no_cry
-  created_at: <%= 3.minutes.ago %>
-  ended_at: <%= 2.minute.ago %>
-  
-charlie_not_afraid:
-  user: charlie
-  song: not_afraid
-  created_at: <%= 6.minutes.ago %>
-  ended_at: <%= 5.minute.ago %>
+  ended_at: <%= 5.minutes.ago %>
   
 charlie_jamming:
   user: charlie
   song: jamming
+  created_at: <%= 6.minutes.ago %>
+  ended_at: <%= 5.minutes.ago %>
+  
+charlie_jamming2:
+  user: charlie
+  song: jamming
   created_at: <%= 7.minutes.ago %>
-  ended_at: <%= 6.minute.ago %>
+  ended_at: <%= 6.minutes.ago %>
   
 charlie_exodus:
   user: charlie
   song: exodus
   created_at: <%= 8.minutes.ago %>
-  ended_at: <%= 7.minute.ago %>
+  ended_at: <%= 7.minutes.ago %>
+  
+charlie_one_love:
+  user: charlie
+  song: one_love
+  created_at: <%= 9.minutes.ago %>
+  ended_at: <%= 8.minutes.ago %>
+  
+charlie_no_woman_no_cry:
+  user: charlie
+  song: no_woman_no_cry
+  created_at: <%= 10.minutes.ago %>
+  ended_at: <%= 9.minutes.ago %>
   

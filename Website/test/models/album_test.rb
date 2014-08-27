@@ -59,11 +59,15 @@ class AlbumTest < ActiveSupport::TestCase
 		@hash[:name] = a.title
 		@hash.delete(:artist)
 		@hash[:artists] = []
+		artists_before = a.artists.count
 		a.artists.each { |artist| @hash[:artists] << artist.name }
 		assert_no_difference 'Album.count', "Created new album" do
+		assert_no_difference 'Artist.count', "Created more artists" do
 			album = Album.find_or_create_by_hash(@hash)
 		end
+		end
 		assert_equal a, album, "Didn't return correct album"
+		assert_equal artists_before, album.artists.count, "Changed number of artists"
 		
 		s = a.sources.where(name: :lastfm).first
 		assert s, "Didn't set source"
@@ -93,6 +97,51 @@ class AlbumTest < ActiveSupport::TestCase
 			album = Album.find_or_create_by_hash(@hash)
 		end
 		end
-		assert_equal 2, album.songs.count, "Didn't assign both songs"
+		assert_equal 4, album.songs.count, "Didn't assign both songs"
+	end
+
+		test "should not re-add existing songs" do
+			a = albums(:recovery)
+			s = songs(:one_love)
+			@hash[:name] = a.title
+			@hash[:artist] = a.artists.first.name
+			@hash[:songs] = [
+				{
+					name: 'Foo',
+					artist: 'Bar',
+					length: 123,
+					path: 'foo.mp3'
+				},
+				{ path: s.sources.first.path }
+			]
+			album = Album.find_or_create_by_hash(@hash)
+			assert_equal 3, album.songs.count, "Didn't assign the song"
+		end
+	
+	test "should get top albums" do
+		a = Album.top.limit(3)
+		assert_equal 3, a.length, "Didn't return three top albums"
+		assert_instance_of Album, a.first, "Didn't return albums"
+		assert a[0].listens.count >= a[1].listens.count, "Top albums not in order (first and second)"
+		assert a[1].listens.count == a[2].listens.count, "Top albums not in order (second and third, listens)"
+		assert a[1].popularity > a[2].popularity, "Top albums not in order (second and third, popularity)"
+	end
+	
+	test "should get popularity" do
+		a = albums(:best_of_bob_marley)
+		p = 0
+		a.songs.each do |s|
+			s.sources.each do |src|
+				p += src.normalized_popularity
+			end
+		end
+		assert_equal p, a.popularity, "Popularity isn't the combined popularity of the songs"
+		
+		a = albums(:recovery)
+		p = 0
+		a.sources.each do |s|
+			p += s.normalized_popularity
+		end
+		assert_equal p, a.popularity, "Popularity isn't the combined popularity of the sources"
 	end
 end

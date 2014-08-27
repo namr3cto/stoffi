@@ -27,3 +27,17 @@ no_woman_no_cry_soundcloud:
   foreign_url: http://bar.com/123
   resource: no_woman_no_cry (Song)
   popularity: 65
+
+relapse_lastfm:
+  name: soundcloud
+  foreign_id: 123
+  foreign_url: http://bar.com/123
+  resource: relapse (Album)
+  popularity: 65
+
+recovery_lastfm:
+  name: soundcloud
+  foreign_id: 321
+  foreign_url: http://bar.com/321
+  resource: recovery (Album)
+  popularity: 66

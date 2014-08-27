@@ -1,13 +1,14 @@
 relapse:
   title: Relapse
-  songs: not_afraid, one_love
+  songs: not_afraid, exodus
   artists: bob_marley, eminem
   year: 2014
     
 recovery:
   title: Recovery
   artists: eminem
-  year: 2013
+  songs: one_love, no_woman_no_cry
+  year: 2010
   
 best_of_bob_marley:
   title: The Best of Bob Marley
