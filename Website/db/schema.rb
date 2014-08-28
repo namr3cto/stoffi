@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140825053540) do
+ActiveRecord::Schema.define(version: 20140828212043) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -82,6 +82,13 @@ ActiveRecord::Schema.define(version: 20140825053540) do
   end
 
   add_index "artists", ["name"], name: "by_name", unique: true
+
+  create_table "artists_genres", id: false, force: true do |t|
+    t.integer "artist_id", null: false
+    t.integer "genre_id",  null: false
+  end
+
+  add_index "artists_genres", ["genre_id", "artist_id"], name: "index_artists_genres_on_genre_id_and_artist_id", unique: true
 
   create_table "artists_songs", id: false, force: true do |t|
     t.integer "artist_id"
