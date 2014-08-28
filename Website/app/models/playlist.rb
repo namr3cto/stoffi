@@ -11,7 +11,7 @@
 require 'base'
 class Playlist < ActiveRecord::Base
 	include Base
-	extend StaticBase
+	include Rankable
 
 	has_and_belongs_to_many :songs, uniq: true do
 		def page(limit=25, offset=0)

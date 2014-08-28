@@ -1,0 +1,24 @@
+<li class='clickable genre' data-type='hit'>
+	<div class='image'>
+		<%= image_tag genre.image, alt: genre %>
+	</div>
+	<div class='content'>
+		<h3><%= genre %></h3>
+		
+		<% lines = 0 %>
+		<% limit = 3 %>
+		<% if genre.songs.top? %>
+			<% lines += 1 %>
+			<p>Songs: <%= top_list(genre.songs, limit: limit) %></p>
+		<% end %>
+		
+		<% if genre.artists.top? %>
+			<% lines += 1 %>
+			<p>Artists: <%= top_list(genre.artists, limit: limit) %></p>
+		<% end %>
+		
+		<% if genre.albums.top? and lines >= 2 %>
+			<p>Albums: <%= top_list(genre.albums, limit: limit) %></p>
+		<% end %>
+	</div>
+</li>

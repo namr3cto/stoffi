@@ -18,4 +18,14 @@ module Imageable
 		imgs = Image.create_by_hashes(hash[:images])
 		images << imgs
 	end
+	
+	module ClassMethods
+		
+		def find_or_create_by_hash(hash)
+			o = super(hash)
+			o.images << Image.create_by_hashes(hash[:images]).reject { |i| o.images.include? i } if hash.key? :images
+			o
+		end
+		
+	end
 end

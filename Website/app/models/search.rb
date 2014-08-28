@@ -237,8 +237,8 @@ class Search < ActiveRecord::Base
 					x = Album.find_or_create_by_hash(hit)
 				when :event
 					x = Event.find_or_create_by_hash(hit)
-				#when :genre
-				#	x = Genre.get(hit)
+				when :genre
+					x = Genre.find_or_create_by_hash(hit)
 				else
 					raise "Unknown hit type: #{hit[:type]}"
 				end

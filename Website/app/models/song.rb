@@ -12,7 +12,6 @@ require 'base'
 
 # Describes a song in the database.
 class Song < ActiveRecord::Base
-	extend StaticBase
 	include Base
 	include Imageable
 	include Sourceable

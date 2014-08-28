@@ -23,4 +23,23 @@ module Sourceable
 	def locations
 		sources.map(&:name).uniq.reject { |x| x.to_s.empty? }.sort
 	end
+	
+	module ClassMethods
+		
+		def find_or_create_by_hash(hash)
+			validate_hash(hash)
+			o = super(hash)
+			s = Source.find_or_create_by_hash(hash)
+			o.sources << s unless o.sources.include? s
+			o
+		end
+		
+		private
+		
+		def validate_hash(hash)
+			super
+			raise "Sourceable model #{name} requires :source key in hash" unless hash.key? :source
+		end
+		
+	end
 end

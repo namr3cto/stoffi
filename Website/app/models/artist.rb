@@ -12,7 +12,6 @@ require 'base'
 
 # Describes an artist in the database.
 class Artist < ActiveRecord::Base
-	extend StaticBase
 	include Base
 	include Imageable
 	include Sourceable

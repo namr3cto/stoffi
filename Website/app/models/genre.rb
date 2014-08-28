@@ -23,6 +23,7 @@ class Genre < ActiveRecord::Base
 	end
 	
 	validates :name, presence: true
+	validates :name, uniqueness: true
 	
 	searchable do
 		text :name

@@ -13,7 +13,6 @@ require 'base'
 # Describe a device used to access the API.
 class Device < ActiveRecord::Base
 	include Base
-	extend StaticBase
 	
 	# associations
 	belongs_to :configuration
