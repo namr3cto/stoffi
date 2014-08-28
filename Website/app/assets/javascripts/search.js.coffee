@@ -27,7 +27,7 @@ display_results = (html) ->
 	$('#search-results').html(html)
 		
 display_error = (error) ->
-	$('loading-search').hide()
+	$('#loading-search').hide()
 	$('#search-results').html("<div class='alert'>#{error}</div>")
 	
 @resizeImage = (image, size) ->
