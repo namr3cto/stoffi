@@ -1,6 +1,6 @@
 require 'test_helper'
 
-class YoutubeTest < ActiveSupport::TestCase
+class SoundcloudTest < ActiveSupport::TestCase
 	def setup
 		@songs = [
 			{
