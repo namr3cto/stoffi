@@ -17,6 +17,7 @@ class Song < ActiveRecord::Base
 	include Imageable
 	include Sourceable
 	include Genreable
+	include Rankable
 
 	# associations
 	with_options uniq: true do |assoc|
@@ -178,18 +179,6 @@ class Song < ActiveRecord::Base
 		return nil if l == 0
 		return sources[0].resource if l == 1
 		raise "multiple sources matching length: #{length} and path: #{path}"
-	end
-	
-	# Returns a top list of songs with most plays.
-	#
-	# If <tt>options[:for]</tt> is supplied then only listens of that user will be considered.
-	def self.top(limit = 5, options = {})
-		self.select("*, count(listens.id) AS listens_count").
-		joins("LEFT JOIN listens ON listens.song_id = songs.id").
-		where(options[:for] == nil ? "" : "listens.user_id = #{options[:for].id}").
-		group("songs.id").
-		order("listens_count DESC").
-		limit(limit)
 	end
 	
 	# Extracts the title and artists from a string.

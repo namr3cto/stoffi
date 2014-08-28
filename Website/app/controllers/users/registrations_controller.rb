@@ -42,8 +42,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		@description = t "dashboard.description"
 		
 		@donations = current_user.donations.order('created_at DESC').limit(5)
-		@artists = Artist.top(10, :played, current_user)
-		@songs = Song.top(10, current_user)
+		@artists = Artist.top(for: current_user).limit 10
+		@songs = Song.top(for: current_user).limit 10
 		@listens = current_user.listens.order('created_at DESC').limit(10)
 		@devices = current_user.devices.order('updated_at DESC')
 		@playlists = current_user.playlists.order(:name)
@@ -110,8 +110,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		@channels = ["user_#{@user.id}"]
 		
 		@donations = @user.donations.order('created_at DESC').limit(5)
-		@artists = Artist.top(10, :played, @user)
-		@songs = Song.top(10, @user)
+		@artists = Artist.top(for: @user).limit 10
+		@songs = Song.top(for: @user).limit 10
 		@listens = @user.listens.order('created_at DESC').limit(10)
 		@playlists = @user.playlists.where(
 			current_user == @user ? "":"is_public = 1"

@@ -1,6 +1,6 @@
 <%
-top_songs = Song.top(5)
-top_artists = Artist.top(5)
+top_songs = Song.top.limit(5)
+top_artists = Artist.top.limit(5)
 %>
 
 <% if top_songs.length > 0 %>

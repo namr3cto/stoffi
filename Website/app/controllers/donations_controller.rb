@@ -17,8 +17,8 @@ class DonationsController < ApplicationController
 		l, o = pagination_params
 		@title = t("donations.title")
 		@description = t("donations.description")
-		@artists = Artist.top(5, :supported)
-		@users = User.top(5, :supporters)
+		@artists = Artist.limit 5
+		@users = User.limit 5
 		@pending = Donation.where(status: :pending)
 		@revoked = Donation.where(status: :revoked)
 		@charity = Donation.pending_charity_sum
