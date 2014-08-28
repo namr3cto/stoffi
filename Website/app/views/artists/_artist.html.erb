@@ -1,9 +1,9 @@
 <li class='clickable artist' data-type='hit'>
 	<div class='image'>
-		<%= image_tag artist.image, alt: artist.name %>
+		<%= image_tag artist.image, alt: artist %>
 	</div>
 	<div class='content'>
-		<h3><%= artist.display %></h3>
+		<h3><%= artist %></h3>
 		
 		<% lines = 0 %>
 		<% if artist.genres.top? %>

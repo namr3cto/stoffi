@@ -15,12 +15,7 @@
 		<h3><%= song.display %></h3>
 		
 		<%
-		if song.artists.empty?
-			a_txt = ""
-		else
-			a_txt = song.artists.map { |x| link_to(x.name, x) }.to_sentence
-			a_txt = " by #{a_txt}"
-		end
+		a_txt = song.artists.top? ? " by #{link_to_association(song.artists)}" : ""
 		%>
 		<% if one_liner %>
 			<p><%==a_txt%></p>

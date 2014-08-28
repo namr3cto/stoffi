@@ -3,8 +3,8 @@ module RankableHelper
 		options = { limit: 5, links: true }.merge(options)
 		x = resource.top.limit(options[:limit])
 		x = x.map do |a|
-			options[:links] ? link_to(h(a.display), a) : a.display
+			options[:links] ? link_to(h(a), a) : a
 		end.to_sentence
-		x.html_safe
+		x.to_s.html_safe
 	end
 end
