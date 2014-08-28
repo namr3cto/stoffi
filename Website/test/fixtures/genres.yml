@@ -1,7 +1,13 @@
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
-one:
-  name: MyString
+reggae:
+  name: Reggae
 
-two:
-  name: MyString
+reggaeton:
+  name: Reggaeton
+
+ska:
+  name: Ska
+
+rap:
+  name: Rap

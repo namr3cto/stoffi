@@ -2,22 +2,27 @@ not_afraid:
     title: Not Afraid
     artists: eminem
     length: 123
+    genres: rap
 
 one_love:
     title: One Love
     artists: bob_marley
+    genres: reggae, ska
     
 no_woman_no_cry:
     title: No Woman No Cry
     artists: bob_marley
+    genres: reggae
     
 jamming:
     title: Jamming
     artists: bob_marley
+    genres: reggae
     
 exodus:
     title: Exodus
     artists: bob_marley
+    genres: ska
     
 spies:
     title: Spies
