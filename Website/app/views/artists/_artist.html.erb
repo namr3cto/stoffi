@@ -6,18 +6,18 @@
 		<h3><%= artist.display %></h3>
 		
 		<% lines = 0 %>
-		<% unless true or artist.genres.empty? %>
+		<% if artist.genres.top? %>
 			<% lines += 1 %>
-			<p>Genres: <%= artist.genres.map { |x| link_to(x.title, x) }.to_sentence %></p>
+			<p>Genres: <%= top_list(artist.genres, limit: 3) %></p>
 		<% end %>
 		
-		<% unless artist.songs.empty? %>
+		<% if artist.songs.top? %>
 			<% lines += 1 %>
-			<p>Songs: <%== artist.songs.map { |x| link_to(x.title, x) }.to_sentence %></p>
+			<p>Songs: <%= top_list(artist.songs, limit: 3) %></p>
 		<% end %>
 		
-		<% unless artist.songs.empty? and lines >= 2 %>
-			<p>Albums: <%== artist.albums.map { |x| link_to(x.title, x) }.to_sentence %></p>
+		<% if artist.albums.top? and lines >= 2 %>
+			<p>Albums: <%= top_list(artist.albums, limit: 3) %></p>
 		<% end %>
 	</div>
 </li>
