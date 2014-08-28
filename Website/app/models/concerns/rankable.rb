@@ -22,13 +22,15 @@ module Rankable
 			end
 		    inner_select = inner_select.where("listens.user_id = ?", options[:for].id) if options[:for].is_a? User
 
-			inner_select = "(#{inner_select.to_sql}) as #{tname}"
-
 			select("#{tname}.*,#{tname}.listens_count,SUM(sources.popularity) AS popularity_count").
-				from(inner_select).
+				from(inner_select, tname).
 				joins("LEFT JOIN sources ON sources.resource_id = #{tname}.id AND sources.resource_type = '#{self.name}'").
 				group("#{tname}.id").
 				order("listens_count DESC, popularity_count DESC")
+		end
+		
+		def top?
+			self.name == 'Song' ? any? : joins(:songs).any?
 		end
 		
 	end
