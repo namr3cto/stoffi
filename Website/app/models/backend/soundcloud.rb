@@ -14,7 +14,24 @@ class Backend::Soundcloud
 	extend ActiveSupport::Concern
 	
 	def self.search(query, categories)
-		return [] #unless categories.include? 'songs'
+		songs = []
+		return songs unless categories.include? 'songs'
+		begin
+			tracks = req("tracks.json?q=#{query}")
+			tracks.each do |track|
+				begin
+					song = parse_track(track)
+					songs << song if song
+				rescue StandardError => e
+					Rails.logger.error "error parsing track: #{e.message}"
+					raise e
+				end
+			end
+		rescue StandardError => e
+			Rails.logger.error "error searching soundcloud: #{e.message}"
+			raise e
+		end
+		return songs
 	end
 	
 	def self.get_songs(ids)
@@ -22,35 +39,38 @@ class Backend::Soundcloud
 		ids.each do |id|
 			begin
 				track = req("tracks/#{id}.json")
-				song = {
-					name: track['title'],
-					url: track['permalink_url'],
-					popularity: track['playback_count'].to_f,
-					length: track['duration'].to_f / 1000.0,
-					images: [],
-					user: track['user']['username'],
-					stream: track['stream_url'],
-					path: 'stoffi:track:soundcloud:'+id,
-					type: :song,
-					source: :youtube,
-				}
-				if track['artwork_url']
-					song[:images] << {
-						url: track['artwork_url'],
-						width: 100,
-						height: 100
-					}
-				end
-				songs << song
+				songs << parse_track(track)
 			rescue StandardError => e
-				raise e
-				logger.error "error parsing soundcloud json track: #{e.message}"
+				Rails.logger.error "error parsing soundcloud json track: #{e.message}"
 			end
 		end
 		return songs
 	end
 	
 	private
+	
+	def self.parse_track(track)
+		song = {
+			name: track['title'],
+			url: track['permalink_url'],
+			popularity: track['playback_count'].to_f,
+			length: track['duration'].to_f / 1000.0,
+			images: [],
+			user: track['user']['username'],
+			stream: track['stream_url'],
+			path: 'stoffi:track:soundcloud:'+track['id'].to_s,
+			type: :song,
+			source: :youtube,
+		}
+		if track['artwork_url']
+			song[:images] << {
+				url: track['artwork_url'],
+				width: 100,
+				height: 100
+			}
+		end
+		return song
+	end
 	
 	def self.req(query)
 		begin
