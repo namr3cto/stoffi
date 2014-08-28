@@ -56,6 +56,7 @@ class Backend::Soundcloud
 			popularity: track['playback_count'].to_f,
 			length: track['duration'].to_f / 1000.0,
 			images: [],
+			genre: track['genre'],
 			user: track['user']['username'],
 			stream: track['stream_url'],
 			path: 'stoffi:track:soundcloud:'+track['id'].to_s,
