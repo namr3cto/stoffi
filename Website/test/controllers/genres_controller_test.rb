@@ -2,7 +2,7 @@ require 'test_helper'
 
 class GenresControllerTest < ActionController::TestCase
   setup do
-    @genre = genres(:one)
+    @genre = genres(:reggae)
   end
 
   test "should get index" do
