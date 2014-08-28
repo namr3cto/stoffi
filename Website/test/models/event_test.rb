@@ -43,7 +43,7 @@ class EventTest < ActiveSupport::TestCase
 	end
 	
 	test "should find event" do
-		e = events(:festival)
+		e = events(:concert2)
 		hash = {
 			name: e.name,
 			location: { longitude: e.longitude, latitude: e.latitude },
@@ -71,5 +71,13 @@ class EventTest < ActiveSupport::TestCase
 		assert_equal hash[:id], s.foreign_id, "Didn't set source id"
 		assert_equal hash[:url], s.foreign_url, "Didn't set source url"
 		assert_equal hash[:source].to_s, s.name, "Didn't set source name"
+	end
+	
+	test "should get top events" do
+		e = Event.top.limit(3)
+		assert_equal 3, e.length, "Didn't return three top events"
+		assert e[0].listens.count == e[1].listens.count, "Top events not in order (first and second, listens)"
+		assert e[0].popularity    >= e[1].popularity, "Top events not in order (first and second, popularity)"
+		assert e[1].listens.count >= e[2].listens.count, "Top events not in order (second and third)"
 	end
 end

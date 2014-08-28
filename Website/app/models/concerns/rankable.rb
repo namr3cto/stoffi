@@ -15,7 +15,11 @@ module Rankable
 				joins("LEFT JOIN listens ON listens.song_id = songs.id").
 				group("#{tname}.id")
 		
-		    inner_select = inner_select.joins(:songs) unless self.name == 'Song'
+			if self.name == 'Event'
+		    	inner_select = inner_select.joins(artists: :songs)
+			elsif self.name != 'Song'
+		    	inner_select = inner_select.joins(:songs)
+			end
 		    inner_select = inner_select.where("listens.user_id = ?", options[:for].id) if options[:for].is_a? User
 
 			inner_select = "(#{inner_select.to_sql}) as #{tname}"

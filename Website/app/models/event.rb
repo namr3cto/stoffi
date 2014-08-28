@@ -14,13 +14,11 @@ require 'base'
 class Event < ActiveRecord::Base
 	include Base
 	include Imageable
+	include Sourceable
+	include Rankable
 	
 	has_and_belongs_to_many :artists, join_table: :performances
-	
-	with_options as: :resource, dependent: :destroy do |assoc|
-		assoc.has_many :sources
-		assoc.has_many :images
-	end
+	has_many :listens, through: :artists
 	
 	validates :name, :venue, :start, :longitude, :latitude, presence: true
 	validates :longitude, :latitude, numericality: true
