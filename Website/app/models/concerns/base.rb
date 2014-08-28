@@ -53,6 +53,9 @@ end
 # The collection of member function for each model.
 module Base
 	extend StaticBase
+	
+	# What to print when cast to a string.
+	alias_attribute :to_s, :display
 
 	# The type of the resource.
 	def kind
