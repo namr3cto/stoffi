@@ -100,23 +100,23 @@ class AlbumTest < ActiveSupport::TestCase
 		assert_equal 4, album.songs.count, "Didn't assign both songs"
 	end
 
-		test "should not re-add existing songs" do
-			a = albums(:recovery)
-			s = songs(:one_love)
-			@hash[:name] = a.title
-			@hash[:artist] = a.artists.first.name
-			@hash[:songs] = [
-				{
-					name: 'Foo',
-					artist: 'Bar',
-					length: 123,
-					path: 'foo.mp3'
-				},
-				{ path: s.sources.first.path }
-			]
-			album = Album.find_or_create_by_hash(@hash)
-			assert_equal 3, album.songs.count, "Didn't assign the song"
-		end
+	test "should not re-add existing songs" do
+		a = albums(:recovery)
+		s = songs(:one_love)
+		@hash[:name] = a.title
+		@hash[:artist] = a.artists.first.name
+		@hash[:songs] = [
+			{
+				name: 'Foo',
+				artist: 'Bar',
+				length: 123,
+				path: 'foo.mp3'
+			},
+			{ path: s.sources.first.path }
+		]
+		album = Album.find_or_create_by_hash(@hash)
+		assert_equal 3, album.songs.count, "Didn't assign the song"
+	end
 	
 	test "should get top albums" do
 		a = Album.top.limit(3)
