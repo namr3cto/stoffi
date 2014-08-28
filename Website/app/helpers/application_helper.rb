@@ -3,6 +3,10 @@ require 'htmlentities'
 
 module ApplicationHelper
 	
+	def link_to_association(resources)
+		resources.map { |r| link_to h(r), r }.to_sentence.html_safe
+	end
+	
 	def h(str)
 		if str.is_a? String
 			str = html_escape(d(str))
