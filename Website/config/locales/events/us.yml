@@ -1,0 +1,5 @@
+us:
+  events:
+    label: "Events: "
+    description: "An event with %{artists}"
+    location: "In %{city} at %{time}"

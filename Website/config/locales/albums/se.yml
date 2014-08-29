@@ -1,0 +1,4 @@
+se:
+  albums:
+    label: "Album: "
+    description: "Av %{artists}"

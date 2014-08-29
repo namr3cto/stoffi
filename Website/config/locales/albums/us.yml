@@ -1,0 +1,6 @@
+us:
+  albums:
+    label: "Albums: "
+    description:
+      full: "An album by %{artists}"
+    description: "By %{artists}"
