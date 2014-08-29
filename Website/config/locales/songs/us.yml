@@ -1,3 +1,6 @@
 us:
   songs:
-    by: "Created by"
+    label: "Songs: "
+    description:
+      long: "A song by %{artists}"
+      short: "by %{artists}"

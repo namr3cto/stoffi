@@ -3,6 +3,8 @@ se:
     points: "Fan-poäng"
     unknown: "Okänd artist"
     listens: "Spelningar"
+    label: "Artister: "
+    
     songs:
       title: "Låtar"
       remove: "Ta bort %{artist} som skapare av %{song}"

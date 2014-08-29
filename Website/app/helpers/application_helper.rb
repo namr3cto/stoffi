@@ -7,6 +7,13 @@ module ApplicationHelper
 		resources.map { |r| link_to h(r), r }.to_sentence.html_safe
 	end
 	
+	def to_words(number)
+		l = case I18n.locale
+		when :us, :uk then :en
+		else I18n.locale end
+		I18n.with_locale(l) { number.to_words }
+	end
+	
 	def h(str)
 		if str.is_a? String
 			str = html_escape(d(str))

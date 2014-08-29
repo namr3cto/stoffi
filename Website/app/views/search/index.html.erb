@@ -14,6 +14,6 @@
 		<%= image_tag 'gfx/ajax_loading_large_white.gif', class: 'loading',
 			data: { loading: true  } %>
 	</div>
-	<div id='search-results'>
-	</div>
+	<%= render 'shared/alert', { title: t('search.error') } %>
+	<div id='search-results'></div>
 </div>

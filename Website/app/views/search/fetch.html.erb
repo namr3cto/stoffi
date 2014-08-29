@@ -1,4 +1,9 @@
-<p class='stats'>Found <%=@results[:total_hits] %> results across <%=@search.sources_array.length%> places in <%=@results[:benchmark].real.round(2)%> seconds.</p>
+<p class='stats'>
+	<%= t 'search.stats.number', count: @results[:total_hits] %>
+	<%= t 'search.stats.places', count: @results[:total_sources], 
+	    	p: to_words(@results[:total_sources]) %>
+	<%= t 'search.stats.time', count: @results[:benchmark].real.round(2) %>
+</p>
 <ul id='result-list'>
 	
 	<% if @results.key? :exact %>
@@ -8,7 +13,7 @@
 	<% end %>
 	
 	<% hits = @results[:hits] %>
-	<%= render(hits) || "No results found" %>
+	<%= render(hits) || t('search.empty') %>
 </ul>
 
 <div id='paginator'>
@@ -29,12 +34,15 @@ $('#paginator a').on('click', function(e)
 $('#paginator a').on('ajax:success', function(e, data, status, xhr)
 {
 	$('#loading-search').hide();
+	$('#alert').hide()
 	$('#search-results').html(data)
 	$('#search-results').show();
 	
 }).on('ajax:error', function(e, xhr, status, error)
 {
-	$('#loading-search').hide();
-	//$('#search-results').html("<div class='alert'>#{error}</div>")
+	$('#loading-search').hide()
+	$('#search-results').hide()
+	$('#alert_message').html(error)
+	$('#alert').show()
 })	
 </script>

@@ -1,7 +1,10 @@
 se:
   search:
-    placeholder: "Sök"
+    placeholder: "Sök efter artister, album, låtar och genrer"
+    empty: "Miss! Prova att söka på något annat."
+    error: "Hoppsan! Det blev knas med din sökning."
     categories:
+      all: "Allting"
       artists: "Artister"
       songs: "Låtar"
       albums: "Album"
@@ -11,6 +14,13 @@ se:
       files: "Filer"
       soundcloud: "SoundCloud"
       youtube: "YouTube"
-      
-    summary:
-      missing: "Kunde inte hitta någon information om %{artist}"
+    stats:
+      number:
+        one: "Fick en träff"
+        other: "Fick %{count} träffar"
+      places:
+        one: " från ett ställe"
+        other: " från %{p} ställen"
+      time:
+        one: " på en sekund."
+        other: " på %{count} sekunder."

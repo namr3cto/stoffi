@@ -3,6 +3,8 @@ us:
     points: "Fan points"
     unknown: "Unknown artist"
     listens: "Plays"
+    label: "Artists: "
+    
     songs:
       title: "Songs"
       remove: "Remove %{artist} as maker of %{song}"

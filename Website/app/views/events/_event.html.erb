@@ -4,7 +4,7 @@
 	</div>
 	<div class='content'>
 		<h3><%= event %></h3>
-		<p>An event<%==" with #{top_list(event.artists, limit: 3)}" if event.artists.top?%>
-		<p>In <%= event.venue %> at <%= event.start_date %></p>
+		<p><%==t('event.description', artists: top_list(event.artists, limit: 3)) if event.artists.top?%>
+		<p><%=t 'event.location', city: event.venue, :time event.start_date %></p>
 	</div>
 </li>

@@ -1,3 +1,6 @@
 se:
   songs:
-    by: "Skapad av"
+    label: "Låtar: "
+    description: 
+      long: "En låt av %{artists}"
+      short: "av %{artists}"

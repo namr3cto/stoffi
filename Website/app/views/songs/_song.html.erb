@@ -14,13 +14,13 @@
 		
 		<h3><%= song.display %></h3>
 		
-		<%
-		a_txt = song.artists.top? ? " by #{link_to_association(song.artists)}" : ""
-		%>
-		<% if one_liner %>
-			<p><%==a_txt%></p>
-		<% else %>
-			<p>A song<%==a_txt%></p>
+	 	<% if song.artists.top? %>
+			<p>
+				<%==t("songs.description.#{one_liner ? 'short' : 'long'}", artists: link_to_association(song.artists))%>
+			</p>
+		<% end %>
+		
+		<% unless one_liner %>
 			<p><a class='button'>&#9654;</a></p>
 		<% end %>
 		

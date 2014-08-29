@@ -48,6 +48,7 @@ class Search < ActiveRecord::Base
 				hits = save_hits(hits)
 			end
 			search = search_in_db(page, limit)
+			results[:total_sources] = sources_array.length
 			results[:total_hits] = search.total
 			results[:total_pages] = search.results.total_pages
 			results[:first_page] = search.results.first_page?

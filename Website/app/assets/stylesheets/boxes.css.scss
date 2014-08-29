@@ -1,6 +1,4 @@
-$color1: lighten(#FECB00, 10%);
-$color2: lighten(#005293, 20%);
-$color3: lighten(#009352, 10%);
+@import 'colors';
 
 .box
 {
@@ -146,13 +144,13 @@ $color3: lighten(#009352, 10%);
 		color: rgba(0,0,0,0.5);
 		&:hover { color: rgba(0,0,0,0.7); }
 	}
-	background-color: $color1;
+	background-color: $secondary;
 }
 
 .blue
 {
 	color: white;
-	background-color: $color2;
+	background-color: $primary;
 	
 	a
 	{
@@ -172,8 +170,8 @@ $color3: lighten(#009352, 10%);
 	-o-transition: all 0.5s;
 	transition: all 0.5s;
 	
-	&.gold:hover { background-color: darken($color1, 12%); }
-	&.blue:hover { background-color: darken($color2, 12%); }
+	&.gold:hover { background-color: darken($secondary, 12%); }
+	&.blue:hover { background-color: darken($primary, 12%); }
 }
 
 .green
@@ -258,24 +256,33 @@ $color3: lighten(#009352, 10%);
 
 div.notice
 {
-	color: rgba(0,100,0,0.5);
-	background: url(/assets/gfx/notice.png), rgba(100,255,100,0.1);
-	background-position: 15px 10px;
-	background-repeat: no-repeat;
-	border: 1px solid rgba(0,100,0,0.5);
-	font-size: 12pt;
-	margin: 10px 0px;
-	padding: 10px 50px;
+	color: $notice;
+	background: url(/assets/gfx/error.png), lighten($notice, 20%);
+	border: 1px solid $notice;
+	h2 { color: $notice; }
 }
 
 div.alert
 {
-	color: rgba(100,0,0,0.5);
-	background: url(/assets/gfx/error.png), rgba(255,100,100,0.1);
+	color: $alert;
+	background: url(/assets/gfx/error.png), lighten($alert, 70%);
+	border: 1px solid $alert;
+	h2 { color: $alert; }
+}
+
+div.alert, div.notice
+{
 	background-position: 15px 10px;
 	background-repeat: no-repeat;
-	border: 1px solid rgba(150,0,0,0.5);
 	font-size: 12pt;
 	margin: 10px 0px;
 	padding: 10px 50px;
+	h2
+	{
+		margin: 0;
+		font-style: normal;
+		font-weight: bold;
+	}
+	p { margin: 5px 0px; }
+	&.large { background-position: 15px 18px; }
 }

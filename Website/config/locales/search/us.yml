@@ -1,7 +1,10 @@
 us:
   search:
     placeholder: "Search for artists, albums, songs or genres"
+    empty: "Miss! Try searching for something else."
+    error: "Oops! There was a problem with your search."
     categories:
+      all: "Everything"
       artists: "Artists"
       songs: "Songs"
       albums: "Albums"
@@ -12,5 +15,13 @@ us:
       soundcloud: "SoundCloud"
       youtube: "YouTube"
       
-    summary:
-      missing: "Could not find any information about %{artist}"
+    stats:
+      number:
+        one: "Got one hit"
+        other: "Got %{count} hits"
+      places: 
+        one: " across one place"
+        other: " across %{p} places"
+      time:
+        one: " in one second."
+        other: " in %{count} seconds."

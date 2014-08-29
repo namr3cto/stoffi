@@ -1,2 +1,10 @@
-$primary: #008bf9;
+$alert:          rgba(100,0,0,0.5);
+$notice:         rgba(0,100,0,0.5);
+
+/* TODO: cleaned up */
 $grayed-primary: rgba(0,75,150,0.5);
+$primary:        #008bf9;
+$secondary:      lighten(#FECB00, 10%);
+$color3:         lighten(#009352, 10%);
+
+/* $primary: lighten(#005293, 20%); */
