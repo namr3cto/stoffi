@@ -61,9 +61,19 @@ ready = ->
 	if $('#search_query').val() == ''
 		$('#search').val('')
 	toggleSearchMode()
-
+	
 $(document).ready(ready)
 $(document).on('page:load', ready)
+
+$(document).on 'click', '#search-pane [data-category]', (event) ->
+	if $('#search_query').val() != ''
+		return
+	event.preventDefault()
+	c = $(@).data('category')
+	l = $(@).children('a').attr('href')
+	$('#search-pane [data-category]').not("[data-category='#{c}']").removeClass('selected')
+	$(@).addClass('selected')
+	$('#search-form').attr('action', l)
 
 $ ->
 	$("img[data-loading='true']").load () ->
