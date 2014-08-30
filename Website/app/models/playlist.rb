@@ -20,6 +20,7 @@ class Playlist < ActiveRecord::Base
 	end
 	
 	has_many :listens, through: :songs
+	has_many :artists, through: :songs
 	has_many :shares, as: :object
 	has_and_belongs_to_many :subscribers, class_name: "User", join_table: "playlist_subscribers", uniq: true
 	belongs_to :user
@@ -28,6 +29,16 @@ class Playlist < ActiveRecord::Base
 	validates :name, presence: true
 	validates :user, presence: true
 	validates :name, uniqueness: { scope: :user_id, case_sensitive: false } 
+	
+	searchable do
+		text :name, boost: 5
+		text :artists do
+			artists.map(&:name)
+		end
+		text :songs do
+			songs.map(&:title)
+		end
+	end
 	
 	def display
 		name

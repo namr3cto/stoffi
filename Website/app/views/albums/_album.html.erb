@@ -6,7 +6,7 @@
 		<h3><%= album %></h3>
 		<p><%==t('albums.description', artists: top_list(album.artists, limit: 3)) if album.artists.top? %>
 		<% if album.songs.top? %>
-			<p><%=t('songs.label')%><%= top_list(album.songs, limit: 3) %></p>
+			<p><%=t('songs.plural')%>: <%= top_list(album.songs, limit: 3) %></p>
 		<% end %>
 	</div>
 </li>

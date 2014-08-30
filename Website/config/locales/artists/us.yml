@@ -3,7 +3,8 @@ us:
     points: "Fan points"
     unknown: "Unknown artist"
     listens: "Plays"
-    label: "Artists: "
+    plural: "Artists"
+    singular: "Artist"
     
     songs:
       title: "Songs"

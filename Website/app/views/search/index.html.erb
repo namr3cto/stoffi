@@ -1,10 +1,12 @@
 <div class='white full box' id='search-pane'>
+	<%= render 'categories' %>
+	
 	<div class='center'>
 		<%= image_tag 'gfx/logos/blue_on_transparent_128.png', class: 'large-logo' %>
 	</div>
 	<%= hidden_field :search, :id, value: @search.id %>
 	<%= hidden_field :search, :query, value: @search.query %>
-	<%= form_tag search_path, class: 'search-form', id: 'search-form', method: :get do %>
+	<%= form_tag search_path_with_categories, class: 'search-form', id: 'search-form', method: :get do %>
 		<%= image_tag 'gfx/logos/blue_on_transparent_32.png', class: 'small-logo', style: 'display:none;' %>
 		<%= text_field_tag 'q', '', placeholder: t('search.placeholder'), class: 'search', id: 'search',
 		                   value: @search.query %>

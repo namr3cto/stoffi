@@ -1,0 +1,11 @@
+<nav id='categories'>
+	<span data-category='all' <%= "class=selected" if category_selected?('all') %>>
+		<%= link_to t('search.categories.all'), params.merge(categories: nil) %>
+	</span>
+	
+	<% Search.categories.each do |category| %>
+		<span data-category='<%= category %>' <%= "class=selected" if category_selected?(category) %>>
+			<%= link_to t(category+'.plural'), params.merge(categories: category) %>
+		</span>
+	<% end %>
+</nav>

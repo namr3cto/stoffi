@@ -1,3 +1,4 @@
 se:
   genres:
-    label: "Genrer: "
+    plural: "Genrer"
+    singular: "Genre"

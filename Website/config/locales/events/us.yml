@@ -1,5 +1,6 @@
 us:
   events:
-    label: "Events: "
+    label: "Events"
+    singular: "Event"
     description: "An event with %{artists}"
     location: "In %{city} at %{time}"

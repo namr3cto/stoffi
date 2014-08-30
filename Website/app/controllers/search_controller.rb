@@ -86,15 +86,13 @@ class SearchController < ApplicationController
 	end
 	
 	def category_param
-		default = 'artists|songs|genres|events|albums'
-		c = (params[:c] || params[:cat] || params[:categories] || params[:category] || default)
-		c.split(/[\|,]/)
+		x = params[:c] || params[:cat] || params[:categories] || params[:category]
+		x ? x.split(/[\|,]/) : Search.categories
 	end
 	
 	def source_param
-		default = 'soundcloud|youtube|jamendo|lastfm'
-		c = (params[:s] || params[:src] || params[:sources] || params[:source] || default)
-		c.split(/[\|,]/)
+		x = params[:s] || params[:src] || params[:sources] || params[:source]
+		x ? x.split(/[\|,]/) : Search.sources
 	end
 	
 	def limit_param

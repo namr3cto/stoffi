@@ -145,9 +145,9 @@ Stoffi::Application.routes.draw do
 		
 		get "/auth/:provider/callback" => "links#create"
 
-		get "/search",       :to => "search#index",     :as => :search
 		get '/search/suggest'
 		get '/search/fetch'
+		get "/search/(:categories)",      :to => "search#index",     :as => :search
 	end
 	
 	get "(:l)" => "pages#index", :as => :root

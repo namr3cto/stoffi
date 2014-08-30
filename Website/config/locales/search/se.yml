@@ -5,15 +5,6 @@ se:
     error: "Hoppsan! Det blev knas med din sökning."
     categories:
       all: "Allting"
-      artists: "Artister"
-      songs: "Låtar"
-      albums: "Album"
-      playlists: "Spellistor"
-      devices: "Enheter"
-      users: "Personer"
-      files: "Filer"
-      soundcloud: "SoundCloud"
-      youtube: "YouTube"
     stats:
       number:
         one: "Fick en träff"

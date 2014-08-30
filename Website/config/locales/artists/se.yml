@@ -3,7 +3,8 @@ se:
     points: "Fan-poäng"
     unknown: "Okänd artist"
     listens: "Spelningar"
-    label: "Artister: "
+    plural: "Artister"
+    singular: "Artist"
     
     songs:
       title: "Låtar"

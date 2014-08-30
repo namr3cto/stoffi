@@ -1,3 +1,4 @@
 us:
   genres:
-    label: "Genres: "
+    plural: "Genres"
+    singular: "Genre"

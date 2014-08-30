@@ -1,11 +1,18 @@
 class Search < ActiveRecord::Base
 	belongs_to :user
 	
+	def self.categories
+		['artists', 'albums', 'songs', 'playlists', 'genres', 'events']
+	end
+	
+	def self.sources
+		['soundcloud', 'youtube', 'jamendo', 'lastfm']
+	end
+	
 	def self.suggest(query, page, longitude, latitude, locale, user_id = -1, limit = 10)
 		terms = []
 		self.select("*, count(*) as hits").where("lower(query) like ?", [query.downcase+'%']).
 		     group("lower(query)").order("hits desc").find_each do |search|
-			logger.debug search.inspect
 			weight = 1.0
 			debug = {}
 			
@@ -212,6 +219,10 @@ class Search < ActiveRecord::Base
 	
 	def search_in_db(page, limit)
 		objects = categories_array.map { |x| x.classify.constantize }
+		logger.debug '00000000000'
+		logger.debug query.inspect
+		logger.debug objects.inspect
+		logger.debug '00000000000'
 		Sunspot.search(objects) do |q|
 			q.keywords(query, minimum_matches: 1)
 			q.with(:locations, sources_array)

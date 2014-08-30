@@ -1,6 +1,7 @@
 us:
   albums:
-    label: "Albums: "
+    plural: "Albums"
+    singular: "Album"
     description:
       full: "An album by %{artists}"
     description: "By %{artists}"

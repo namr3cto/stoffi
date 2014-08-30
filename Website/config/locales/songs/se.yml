@@ -1,6 +1,7 @@
 se:
   songs:
-    label: "Låtar: "
+    plural: "Låtar"
+    singular: "Låt"
     description: 
       long: "En låt av %{artists}"
       short: "av %{artists}"

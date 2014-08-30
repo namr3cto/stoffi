@@ -1,5 +1,8 @@
 us:
   playlists:
+    
+    plural: 'Playlists'
+    singular: 'Playlist'
   
     title:
       new: "Create playlist"

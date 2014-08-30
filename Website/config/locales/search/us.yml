@@ -5,15 +5,6 @@ us:
     error: "Oops! There was a problem with your search."
     categories:
       all: "Everything"
-      artists: "Artists"
-      songs: "Songs"
-      albums: "Albums"
-      playlists: "Playlists"
-      devices: "Devices"
-      users: "People"
-      files: "Files"
-      soundcloud: "SoundCloud"
-      youtube: "YouTube"
       
     stats:
       number:

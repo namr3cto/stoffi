@@ -1,6 +1,7 @@
 us:
   songs:
-    label: "Songs: "
+    plural: "Songs"
+    singular: "Song"
     description:
       long: "A song by %{artists}"
       short: "by %{artists}"
