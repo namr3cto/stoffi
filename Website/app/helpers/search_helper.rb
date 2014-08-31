@@ -8,4 +8,8 @@ module SearchHelper
 		c = @categories.join('|') unless @categories.include? 'all' or @categories == Search.categories
 		search_path(categories: c)
 	end
+	
+	def no_search_results
+		"<li class='no-results'>#{t('search.empty')}</li>".html_safe
+	end
 end
