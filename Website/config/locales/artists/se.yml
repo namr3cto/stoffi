@@ -1,20 +1,8 @@
 se:
   artists:
-    points: "Fan-poäng"
-    unknown: "Okänd artist"
-    listens: "Spelningar"
-    plural: "Artister"
-    singular: "Artist"
+    plural: "artister"
+    singular: "artist"
     
     songs:
-      title: "Låtar"
       remove: "Ta bort %{artist} som skapare av %{song}"
       empty: "%{artist} har inte gjort några låtar"
-      
-    places:
-      title: "Andra ställen"
-      
-    support:
-      title: "Stöd"
-      charity: "Välgörenhet"
-    

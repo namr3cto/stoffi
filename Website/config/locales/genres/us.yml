@@ -1,4 +1,4 @@
 us:
   genres:
-    plural: "Genres"
-    singular: "Genre"
+    plural: "genres"
+    singular: "genre"

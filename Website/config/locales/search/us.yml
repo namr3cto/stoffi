@@ -8,11 +8,13 @@ us:
       
     stats:
       number:
+        zero: "Didn't find anything"
         one: "Got one hit"
         other: "Got %{count} hits"
       places: 
-        one: " across one place"
-        other: " across %{p} places"
+        one: " in one place"
+        other: " in %{p} places"
       time:
+        zero: " instantly."
         one: " in one second."
         other: " in %{count} seconds."

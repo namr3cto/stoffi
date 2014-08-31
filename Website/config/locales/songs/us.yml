@@ -1,7 +1,7 @@
 us:
   songs:
-    plural: "Songs"
-    singular: "Song"
+    plural: "songs"
+    singular: "song"
     description:
       long: "A song by %{artists}"
       short: "by %{artists}"

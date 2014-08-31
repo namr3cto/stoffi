@@ -1,7 +1,7 @@
 se:
   songs:
-    plural: "Låtar"
-    singular: "Låt"
+    plural: "låtar"
+    singular: "låt"
     description: 
       long: "En låt av %{artists}"
       short: "av %{artists}"

@@ -9,16 +9,16 @@
 		<% limit = 3 %>
 		<% if genre.songs.top? %>
 			<% lines += 1 %>
-			<p><%=t('songs.plural')%>: <%= top_list(genre.songs, limit: limit) %></p>
+			<p><%=t('songs.plural').capitalize %>: <%= top_list(genre.songs, limit: limit) %></p>
 		<% end %>
 		
 		<% if genre.artists.top? %>
 			<% lines += 1 %>
-			<p><%=t('artists.plural')%>: <%= top_list(genre.artists, limit: limit) %></p>
+			<p><%=t('artists.plural').capitalize %>: <%= top_list(genre.artists, limit: limit) %></p>
 		<% end %>
 		
 		<% if genre.albums.top? and lines >= 2 %>
-			<p><%=t('albums.plural')%>: <%= top_list(genre.albums, limit: limit) %></p>
+			<p><%=t('albums.plural').capitalize %>: <%= top_list(genre.albums, limit: limit) %></p>
 		<% end %>
 	</div>
 </li>

@@ -1,5 +1,5 @@
 se:
   albums:
-    plural: "Album"
-    singular: "Album"
+    plural: "album"
+    singular: "album"
     description: "Av %{artists}"

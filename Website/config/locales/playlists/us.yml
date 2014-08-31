@@ -1,8 +1,9 @@
 us:
   playlists:
     
-    plural: 'Playlists'
-    singular: 'Playlist'
+    plural: 'playlists'
+    singular: 'playlist'
+    description: 'By %{owner}'
   
     title:
       new: "Create playlist"

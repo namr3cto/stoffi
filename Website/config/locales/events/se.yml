@@ -1,6 +1,6 @@
 se:
   events:
-    plural: "Evenemang"
-    singular: "Evenemang"
+    plural: "evenemang"
+    singular: "evenemang"
     description: "Ett evenemang med %{artists}"
     location: "I %{city} den %{time}"

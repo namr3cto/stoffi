@@ -1,7 +1,5 @@
 us:
   albums:
-    plural: "Albums"
-    singular: "Album"
-    description:
-      full: "An album by %{artists}"
+    plural: "albums"
+    singular: "album"
     description: "By %{artists}"

@@ -1,8 +1,9 @@
 se:
   playlists:
     
-    plural: 'Spellistor'
-    singular: 'Spellista'
+    plural: 'spellistor'
+    singular: 'spellista'
+    description: 'Av %{owner}'
   
     title:
       new: "Skapa spellista"

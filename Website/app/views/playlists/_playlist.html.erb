@@ -1,0 +1,10 @@
+<li class='clickable playlist' data-type='hit'>
+	<div class='image'>
+		<%= image_tag playlist.image, alt: playlist %>
+	</div>
+	<div class='content'>
+		<h3><%= playlist %></h3>
+		<p><%=t('songs.plural').capitalize %>: <%= top_list(playlist.songs, limit: limit) %></p>
+		<p><%==t 'playlists.description', owner: link_to(playlist.user.name, playlist.user) %></p>
+	</div>
+</li>

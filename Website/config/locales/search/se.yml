@@ -7,11 +7,13 @@ se:
       all: "Allting"
     stats:
       number:
+        zero: "Hittade ingenting"
         one: "Fick en träff"
         other: "Fick %{count} träffar"
       places:
-        one: " från ett ställe"
-        other: " från %{p} ställen"
+        one: " på ett ställe"
+        other: " på %{p} ställen"
       time:
+        zero: " på direkten."
         one: " på en sekund."
         other: " på %{count} sekunder."
