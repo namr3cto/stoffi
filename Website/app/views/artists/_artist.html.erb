@@ -1,9 +1,9 @@
-<li class='clickable artist' data-type='hit'>
+<li class='clickable artist' data-type='hit' data-href='<%= url_for(artist) %>'>
 	<div class='image'>
 		<%= image_tag artist.image, alt: artist %>
 	</div>
 	<div class='content'>
-		<h3><%= artist %></h3>
+		<h3><%= link_to artist.to_s, artist %></h3>
 		
 		<% lines = 0 %>
 		<% if artist.genres.top? %>
