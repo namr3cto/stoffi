@@ -12,6 +12,7 @@ require 'base'
 class Playlist < ActiveRecord::Base
 	include Base
 	include Rankable
+	include Sourceable
 
 	has_and_belongs_to_many :songs, uniq: true do
 		def page(limit=25, offset=0)
@@ -37,6 +38,9 @@ class Playlist < ActiveRecord::Base
 		end
 		text :songs do
 			songs.map(&:title)
+		end
+		string :locations, multiple: true do
+			sources.map(&:name)
 		end
 	end
 	
