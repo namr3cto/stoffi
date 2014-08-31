@@ -230,6 +230,7 @@
 		margin: auto;
 		padding: 0px;
 		overflow: hidden;
+		ins { border: none; }
 
 		&.leader
 		{
@@ -240,7 +241,10 @@
 	}
 }
 
-.ingraved.leader.box.ad { display: inline-block; }
+.ingraved.leader.box.ad
+{
+	display: inline-block;
+}
 .leader { width: 728px; }
 
 .leader.box.ad
