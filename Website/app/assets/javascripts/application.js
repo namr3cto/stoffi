@@ -10,6 +10,7 @@
 //= require jquery.qtip.min
 //= require jquery.color
 
+//= require old_default
 //= require default
 
 //= require slideshow
