@@ -4,6 +4,7 @@
 	    	p: to_words(@results[:total_sources]) %>
 	<%= t 'search.stats.time', count: @results[:benchmark].real.round(2) %>
 </p>
+
 <ul id='result-list'>
 	
 	<% if @results.key? :exact %>
@@ -13,7 +14,7 @@
 	<% end %>
 	
 	<% hits = @results[:hits] %>
-	<%= render(hits) || t('search.empty') %>
+	<%= render(hits) || no_search_results %>
 </ul>
 
 <div id='paginator'>

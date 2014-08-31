@@ -17,5 +17,7 @@
 			data: { loading: true  } %>
 	</div>
 	<%= render 'shared/alert', { title: t('search.error') } %>
+
+	<%= render "ads/#{@query.blank? ? 'banner' : 'skyscraper'}" %>
 	<div id='search-results'></div>
 </div>
