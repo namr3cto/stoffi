@@ -70,6 +70,4 @@
 	<% end %>
 </div>
 
-<div id="sidebar">
-	<%= render :partial => (user_signed_in? ? "sidebars/user" : "sidebars/main") %>
-</div>
+<%= render "sidebars/#{user_signed_in? ? 'user' : 'main'}" %>

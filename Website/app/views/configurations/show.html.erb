@@ -62,14 +62,8 @@
 			<p><%=raw t("remote.text3")%></p>
 		</div>
 	</div>
-
-	<div id="sidebar">
-		<% if user_signed_in? %>
-			<%= render :partial => "sidebars/user" %>
-		<% else %>
-			<%= render :partial => "sidebars/main" %>
-		<% end %>
-	</div>
+	
+	<%= render "sidebars/#{user_signed_in? ? 'user' : 'main'}" %>
 
 <% end %>
 

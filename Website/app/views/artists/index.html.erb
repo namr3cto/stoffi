@@ -1,30 +1,18 @@
-<div class="column throw-right">
-	<%= render :partial => "sidebars/music" %>
+<div id="main">
+	<div class="white box">
+		<h2>Your top artists this week</h2>
+		<p>Lorem ipsum</p>
+		<h2>Your top artists all time</h2>
+		<p>Lorem ipsum</p>
+		<h2>Top artists this week on Stoffi</h2>
+		<p>Lorem ipsum</p>
+		<h2>Top artists all time on Stoffi</h2>
+		<p>Lorem ipsum</p>
+		<h2>Top artists this week on Internet</h2>
+		<p>Lorem ipsum</p>
+		<h2>Top artists all time on Internet</h2>
+		<p>Lorem ipsum</p>
+	</div>
 </div>
 
-<div class="main">
-	<% if user_signed_in? %>
-		<div class="goldenbox">
-			<h1 class="title"><%=t "top.personal"%></h1>
-			<p>&nbsp;</p>
-					
-			<ul class="artists bigitems">
-				<% Artist.top(for: current_user).limit(5).each do |artist| %>
-					<li>
-						<%= artist_item artist %>
-					</li>
-				<% end %>
-			</ul>
-		</div>
-	<% end %>
-	
-	<div class="goldenbox">
-		<h1 class="title"><%=t "top.global"%></h1>
-		<p>&nbsp;</p>
-				
-		<ul class="artists bigitems">
-			<%= render Artist.top.limit(5) %>
-		</ul>
-	</div>
-	
-</div>
+<%= render "sidebars/music" %>
