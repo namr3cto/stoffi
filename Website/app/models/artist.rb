@@ -190,6 +190,10 @@ class Artist < ActiveRecord::Base
 		name.split(/(?:\s+(?:&|feat(?:uring|s)?|ft|vs|and|with)(?:\s+|\.\s*)|\s*[,\+]\s*)/i)
 	end
 	
+	def self.uniq_name(name)
+		split_name(name).map(&:downcase).sort.compact.uniq
+	end
+	
 	private
 	
 	def self.get_by_hash(hash)

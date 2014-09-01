@@ -21,10 +21,16 @@ class Song < ActiveRecord::Base
 	# associations
 	with_options uniq: true do |assoc|
 		assoc.has_and_belongs_to_many :albums
-		assoc.has_and_belongs_to_many :artists
 		assoc.has_and_belongs_to_many :users
 		assoc.has_and_belongs_to_many :playlists
 		assoc.has_and_belongs_to_many :genres
+		
+		assoc.has_and_belongs_to_many :artists do
+			def == (a)
+				a = a.join(',') if a.is_a? Array
+				Artist.uniq_name(self.join(',')) == Artist.uniq_name(a)
+			end
+		end
 	end
 	with_options as: :resource do |assoc|
 		assoc.has_many :sources, as: :resource
@@ -96,9 +102,16 @@ class Song < ActiveRecord::Base
 	# The song will be created if it is not found
 	def self.get(current_user, value, ask_backend = true)
 		v = value
-		unless v.key?(:path) or (v.key?(:source) and v.key?(:id) and v.key?(:type))
-			raise "need either :path or :source, :id, and :type keys in hash"
+		validate_hash(v)
+		
+		v[:title] ||= v[:name]
+		v[:genre] ||= v[:genres]
+		
+		if v[:title].present?
+			song = find_by_hash(v)
+			return song if song.is_a? Song
 		end
+		
 		begin
 			if v[:path]
 				v[:path] = fix_old_path(v[:path])
@@ -133,6 +146,13 @@ class Song < ActiveRecord::Base
 			raise e
 			logger.error "could not get song: #{e.message}"
 		end
+	end
+	
+	def self.find_by_hash(h)
+		artists, title = artists_and_title(h)
+		s = self.where('lower(title) = ?', title.downcase).first
+		return s if s and s.artists == artists
+		return nil
 	end
 	
 	# Finds a song given its path.
@@ -205,23 +225,20 @@ class Song < ActiveRecord::Base
 		s = hash
 		song = nil
 		begin
-			artists = extract_artists(s)
-			artist, title = parse_title(s[:name] || s[:title])
-			artists = [artist] if artists.empty?
+			artists, title = artists_and_title(s)
 		
 			song = Song.new
 			song.title = title
-			song.genre = s[:genre]
-			song.images << Image.create_by_hashes(s[:images])
 			
 			if song.save
-				logger.debug 'song was saved successfully'
+				song.genre = s[:genre]
+				song.images << Image.create_by_hashes(s[:images])
+			
 				if s[:album].present?
 					album = Album.get(s[:album])
 					song.albums << album if album
 				end
 				
-				logger.debug artists.inspect
 				artists.each do |a|
 					_a = Artist.get(a) if a.present?
 					song.artists << _a if _a
@@ -247,6 +264,16 @@ class Song < ActiveRecord::Base
 	
 	private
 	
+	def self.artists_and_title(h)
+		artists = extract_artists(h)
+		title = h[:title] || h[:name]
+		if artists.empty?
+			artist, title = parse_title(title) 
+			artists = [artist]
+		end
+		return artists.compact.sort.uniq, title
+	end
+	
 	def self.extract_artists(song)
 		artists = []
 		if song.has_key? :artists
@@ -259,8 +286,8 @@ class Song < ActiveRecord::Base
 			artist = Artist.get(a)
 			retval << artist if artist
 		end
-		song.delete(:artist)
-		song.delete(:artists)
+		#song.delete(:artist)
+		#song.delete(:artists)
 		return retval
 	end
 	
@@ -322,5 +349,17 @@ class Song < ActiveRecord::Base
 		return m[:artist], m[:title] if m
 		
 		return "", str
+	end
+	
+	def self.validate_hash(h)
+		has_name = (h.key?(:name) or h.key?(:title))
+		has_path = h.key?(:path)
+		has_source = h.key?(:source) and h.key?(:id) and h.key?(:type)
+		unless has_name or has_path or has_source
+			raise "hash needs to contain either\n"+
+				"\t:name or :title\n"+
+				"\t:path\n"+
+				"\t:source, :id, and :type"
+		end
 	end
 end

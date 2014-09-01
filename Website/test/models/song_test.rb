@@ -96,6 +96,14 @@ class SongTest < ActiveSupport::TestCase
 		end
 	end
 	
+	test "should get existing song with same artists and title" do
+		song = songs(:not_afraid)
+		assert_no_difference('Song.count', "Created song") do
+			s = Song.get(nil, {title: song.title.downcase, artist: song.artists.join(', ').upcase})
+			assert_equal song.id, s.id, "Didn't return the existing song"
+		end
+	end
+	
 	test "should get existing youtube song" do
 		song = songs(:one_love)
 		src = song.sources.first
