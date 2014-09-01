@@ -9,7 +9,7 @@
 			<p>&nbsp;</p>
 					
 			<ul class="artists bigitems">
-				<% Artist.top(5, current_user).each do |artist| %>
+				<% Artist.top(for: current_user).limit(5).each do |artist| %>
 					<li>
 						<%= artist_item artist %>
 					</li>
@@ -23,11 +23,7 @@
 		<p>&nbsp;</p>
 				
 		<ul class="artists bigitems">
-			<% Artist.top(5).each do |artist| %>
-				<li>
-					<%= artist_item artist %>
-				</li>
-			<% end %>
+			<%= render Artist.top.limit(5) %>
 		</ul>
 	</div>
 	

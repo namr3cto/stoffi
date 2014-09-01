@@ -9,21 +9,18 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class ArtistsController < ApplicationController
+	before_action :set_artist, only: [:show, :edit, :update, :destroy]
 
 	oauthenticate interactive: true, except: [ :index, :show ]
 	before_filter :ensure_admin, except: [ :index, :show ]
 	respond_to :html, :mobile, :embedded, :xml, :json
 	
-	# GET /artists
 	def index
-		l, o = pagination_params
-		respond_with(@artists = Artist.limit(l).offset(o))
+		@artists = Artist.all
 	end
 
-	# GET /artists/1
 	def show
 		l, o = pagination_params
-		@artist = Artist.find(params[:id])
 		@title = @artist.name
 		@description = t "artist.description", artist: d(@artist.name)
 		@head_prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#"
@@ -47,61 +44,39 @@ class ArtistsController < ApplicationController
 		respond_with(@artist, methods: [ :paginated_songs ])
 	end
 
-	# GET /artists/new
 	def new
-		respond_with(@artist = Artist.new)
+		@artist = Artist.new
 	end
 
-	# GET /artists/1/edit
 	def edit
-		@artist = Artist.find(params[:id])
 	end
 
-	# POST /artists
 	def create
-		if params[:artist] and params[:artist][:name]
-			params[:artist][:name] = h(params[:artist][:name])
-			@artist = Artist.find_by(name: params[:artist][:name])
-		end
-		
-		if @artist
-			@artist.update_attributes(params[:artist])
-		else
-			@artist = Artist.new(params[:artist])
-			@artist.save
-		end
-		
+		@artist = Artist.new(artist_params)
+		@artist.save
 		respond_with(@artist)
 	end
 
-	# PUT /artists/1
 	def update
-		@artist = Artist.find(params[:id])
-		
-		if params[:donation_update]
-			@artist.donations.each do |donation|
-				unless donation.update_attributes(params[:donation])
-					respond_to do |format|
-						format.html { render action: "edit" }
-						format.xml  { render xml: donation.errors, status: :unprocessable_entity }
-						format.json { render json: donation.errors, status: :unprocessable_entity }
-						format.yaml { render text: donation.errors.to_yaml, content_type: 'text/yaml', status: :unprocessable_entity }
-					end and return
-				end
-			end
-			result = true
-		else
-			result = @artist.update_attributes(params[:artist])
-		end
-		
+		@artist.update(artist_params)
 		respond_with(@artist)
 	end
 
-	# DELETE /artists/1
 	def destroy
 		render status: :forbidden and return if ["xml","json"].include?(params[:format])
-		@artist = Artist.find(params[:id])
 		@artist.destroy
 		respond_with(@artist)
+	end
+	
+	private
+
+	# Use callbacks to share common setup or constraints between actions.
+	def set_artist
+		@artist = Artist.find(params[:id])
+	end
+
+	# Never trust parameters from the scary internet, only allow the white list through.
+	def artist_params
+		params.require(:artist).permit(:name)
 	end
 end

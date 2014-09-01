@@ -2,6 +2,7 @@ alice:
   email: alice@example.com
   has_password: 0
   unique_token: DrMfD8UvEqFBcDWbcnW4
+  admin: true
 
 bob:
   email: bob@mail.net

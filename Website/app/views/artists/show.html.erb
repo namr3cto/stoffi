@@ -3,7 +3,7 @@
 		<div class="picture">
 			<%
 			pic = @artist.picture
-			c = pic == Artist.default_pic ? "default" : ""
+			c = pic == Artist.default_image ? "default" : ""
 			%>
 			<%= image_tag pic, :width => 80, :height => 80, :class => c %>
 		</div>
@@ -56,7 +56,7 @@
 		<ul class="horizontal" data-field="songs">
 			<% @artist.songs.order(:title).limit(30).each do |song| %>
 				<%= item song.title, song, "song-#{song.id}-title",
-					:image => song.picture,
+					:image => song.image(:medium),
 					:delete_func => "removeSong(#{@artist.id}, #{song.id}, true, event)",
 					:delete => t("artists.songs.remove", :song => song.title, :artist => @artist.name) %>
 			<% end %>
