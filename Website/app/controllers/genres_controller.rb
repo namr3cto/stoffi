@@ -1,3 +1,12 @@
+# The business logic for genres.
+#
+# This code is part of the Stoffi Music Player Project.
+# Visit our website at: stoffiplayer.com
+#
+# Author::		Christoffer Brodd-Reijer (christoffer@stoffiplayer.com)
+# Copyright::		Copyright (c) 2014 Simplare
+# License::		GNU General Public License (stoffiplayer.com/license)
+
 class GenresController < ApplicationController
   before_action :set_genre, only: [:show, :edit, :update, :destroy]
 
