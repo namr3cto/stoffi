@@ -78,9 +78,7 @@ Stoffi::Application.routes.draw do
 		get "/old",        :to => "pages#old",        :as => :old
 		get "/foo",        :to => "pages#foo",        :as => :foo
 
-		resources :translations, :languages, :votes
-		resources :songs, :artists, :events, :genres
-		resources :links, :devices
+		resources :translations, :languages, :votes, :links, :devices
 		resources :oauth_clients, :path => "apps", :as => :client_application
 		resources :oauth_clients, :path => "apps", :as => :oauth_clients
 		resources :oauth_clients, :path => "apps", :as => :apps do
@@ -89,18 +87,15 @@ Stoffi::Application.routes.draw do
 			end
 		end
 		
-		resources :listens do
-			member do
-				post "end"
-			end
+		resources :artists, :events, :songs, :genres, :albums do
 			collection do
-				get "by/:user_id", :to => "listens#by"
+				get 'weekly'
 			end
 		end
 		
-		resources :albums do
-			collection do
-				get "/by/:artist_id", :to => "albums#by"
+		resources :listens do
+			member do
+				post "end"
 			end
 		end
 		
@@ -109,6 +104,7 @@ Stoffi::Application.routes.draw do
 				put "follow"
 			end
 			collection do
+				get 'weekly'
 				get "/by/:user_id", :to => "playlists#by"
 			end
 		end

@@ -2,3 +2,6 @@ us:
   genres:
     plural: "genres"
     singular: "genre"
+    empty: "No genres found."
+    top:
+      title: "Popular genres"

@@ -17,6 +17,7 @@
 //= require editable
 //= require sha256
 //= require security
+//= require dropdown
 
 //= require translation
 //= require translations

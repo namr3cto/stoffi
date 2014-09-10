@@ -2,6 +2,9 @@ se:
   songs:
     plural: "låtar"
     singular: "låt"
+    empty: "Inga låtar hittades."
+    top:
+      title: "Populära låtar"
     description: 
       long: "En låt av %{artists}"
       short: "av %{artists}"

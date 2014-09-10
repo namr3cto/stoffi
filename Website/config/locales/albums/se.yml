@@ -3,3 +3,6 @@ se:
     plural: "album"
     singular: "album"
     description: "Av %{artists}"
+    empty: "Inga album hittades."
+    top:
+      title: "Populära album"

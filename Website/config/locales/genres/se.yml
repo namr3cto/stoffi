@@ -2,3 +2,6 @@ se:
   genres:
     plural: "genrer"
     singular: "genre"
+    empty: "Inga genrer hittades."
+    top:
+      title: "Populära genrer"

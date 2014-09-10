@@ -78,5 +78,6 @@ $(document).on 'click', '#search-pane [data-category]', (event) ->
 $ ->
 	$("img[data-loading='true']").load () ->
 		id = $('#search_id').val()
-		if id != '' && $('#search_query').val() != ''
+		q = $('#search_query').val()
+		if id and q
 			search(id)

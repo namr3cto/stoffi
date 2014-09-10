@@ -1,0 +1,81 @@
+<%
+services = [
+	{
+		name: 'Twitter',
+		width: 21
+	},
+	{
+		name: 'Facebook',
+		width: 10
+	},
+	{
+		name: 'Google',
+		path: 'google_oauth2',
+		width: 15
+	},
+	{
+		name: 'Vimeo',
+		width: 17
+	},
+	{
+		name: 'LinkedIn',
+		path: 'linked_in',
+		width: 19
+	},
+	{
+		name: 'SoundCloud',
+		width: 26
+	}
+]
+%>
+
+<header>
+	<nav>
+		<%= link_to image_tag("gfx/home.png"), root_path, class: "logo" + (@tab == 'index' ? ' active' : '') %>
+		<% ['news', 'get', 'tour'].each do |link| %>
+			<% opts = { title: t("#{link}.description") } %>
+			<% opts[:class] = 'active' if @tab == link %>
+			<%= link_to t("#{link}.link"), send("#{link}_path"), opts %>
+		<% end %>
+		
+		<% ['about'].each do |link| %>
+			<% opts = { title: t("#{link}.description"), data: { type: 'bonus' } } %>
+			<% opts[:class] = 'active' if @tab == link %>
+			<%= link_to t("#{link}.link"), send("#{link}_path"), opts %>
+		<% end %>
+		
+		<div class="separator">&nbsp;</div>
+		
+		<% if user_signed_in? %>
+			<div class="dropdown">
+				<%= link_to t("dashboard.link")+" ▾", dashboard_path, class: "dropdown-label" %>
+				<ul class="dropdown-menu" style="display:none;">
+					<li>
+						<%= link_to dashboard_path do %>
+							<div class="head">
+								<%= image_tag current_user.picture(:size => :small), size: '32x32' %>
+								<h1><%= current_user.name %></h1>
+								<h2><%=t "dashboard.meta" %></h2>
+							</div>
+						<% end %>
+					</li>
+					<li class="divider"></li>
+					<li><%= link_to t("profile.link"), profile_path %></li>
+					<li><%= link_to t("playlists.link"), playlists_path %></li>
+					<li><%= link_to t("remote.link"), remote_path %></li>
+					<li class="divider"></li>
+					<li><%= link_to t("settings.link"), settings_path %></li>
+					<li><%= link_to t("logout.link"), logout_path %></li>
+				</ul>
+			</div>
+		
+		<% else %>
+			<%= link_to t("login.link"), login_path, title: t("login.description") %>
+			<% services.each do |s| %>
+				<%= link_to image_tag("auth_buttons/#{s[:name].downcase}_16_white.png", width: s[:width], height: 16),
+					s[:path] || s[:name].downcase, class: 'auth', title: t('auth.login', service: s[:name])%>
+			<% end %>
+		<% end %>
+			
+	</nav>
+</header>

@@ -13,10 +13,12 @@ class ArtistsController < ApplicationController
 
 	oauthenticate interactive: true, except: [ :index, :show ]
 	before_filter :ensure_admin, except: [ :index, :show ]
-	respond_to :html, :mobile, :embedded, :xml, :json
+	respond_to :html, :mobile, :embedded, :xml, :json, :js
+	
+	layout 'white_and_sidebar'
 	
 	def index
-		@artists = Artist.all
+		@global_all_time = Artist.top.limit 15
 	end
 
 	def show

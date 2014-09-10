@@ -64,6 +64,14 @@ us:
   
   admin: "Administrate"
   
+  toplists:
+    personal:
+      weekly: "Your weekly top list"
+      total: "Your all time favorites"
+    global:
+      weekly: "Trending right now"
+      total: "Best of all time"
+  
   mail:
     title: "Contact us"
     unlock:

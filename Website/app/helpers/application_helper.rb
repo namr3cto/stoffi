@@ -27,6 +27,10 @@ module ApplicationHelper
 		t
 	end
 	
+	def header(text)
+		"<div class='line-behind-text'><h2>#{h text}</h2></div>".html_safe
+	end
+	
 	def pretty_error(resource)
 		if resource.errors && resource.errors.count > 0
 			return resource.errors.full_messages[0]
@@ -38,93 +42,6 @@ module ApplicationHelper
 	def any_errors?(resource = nil)
 		(flash[:error] && flash[:error] != "") ||
 		(resource && resource.errors && resource.errors.count > 0)
-	end
-	
-	def current_lang
-		lang(I18n.locale.to_s)
-	end
-	
-	def current_locale
-		case I18n.locale.to_s
-		when 'us' then :us
-		when 'uk' then :us
-		else I18n.locale
-		end
-	end
-	
-	def lang(locale)
-		case locale.to_s
-		when 'se' then 'Svenska'
-		when 'us' then 'English (US)'
-		when 'uk' then 'English (UK)'
-		when 'cn' then '简体中文'
-		when 'no' then 'Norsk'
-		when 'fi' then 'Suomi'
-		when 'de' then 'Deutsch'
-		when 'pt' then 'Português'
-		else locale
-		end
-	end
-	
-	def langtag(locale)
-		case locale.to_s
-		when 'se' then 'sv_SE'
-		when 'us' then 'en_US'
-		when 'uk' then 'en_GB'
-		when 'cn' then 'zn_CN'
-		when 'de' then 'de_DE'
-		else locale
-		end
-	end
-	
-	def short_langtag(locale)
-		case locale.to_s
-		when 'se' then 'sv'
-		when 'us' then 'en'
-		when 'uk' then 'en'
-		when 'cn' then 'zn'
-		when 'de' then 'de'
-		else locale
-		end
-	end
-	
-	def full_locale(locale)
-		case locale.to_s
-		when 'se' then 'sv_SE'
-		when 'us' then 'en_US'
-		when 'uk' then 'en_GB'
-		when 'cn' then 'zh_CN'
-		when 'de' then 'de_DE'
-		else locale
-		end
-	end
-	
-	def lang2flag(lang)
-		lang = case lang.to_s
-		when 'uk' then 'gb'
-		else lang
-		end
-		"flags/#{lang}.png"
-	end
-	
-	def link_to_language(display, options)
-		options[:host] = lang2host(options[:l].to_s)
-		case options[:l].to_s
-		when 'cn'
-			options[:l] = nil
-		end
-		return link_to display, options
-	end
-	
-	def lang2host(lang)
-		host = request.host.split('.')
-		unless host[-1] == 'dev'
-			case lang
-			when 'cn' then host[-1] = 'cn'
-			else host[-1] = 'com'
-			end
-		end
-		host.join('.')
 	end
 	
 	def pretty_url(url, remove_www = false)
@@ -358,95 +275,5 @@ module ApplicationHelper
 			:onclick => click)
 		
 		return raw(box + label)
-	end
-	
-	def twitter_widget(username, options = {})
-		options.reverse_merge!(
-		{
-			:version => 2,
-			:type => 'profile',
-			:rpp => 4,
-			:interval => 30000,
-			:width => 'auto',
-			:height => 300,
-			:theme =>
-			{
-				:shell => 
-				{
-					:background => '#0091ff',
-					:color => '#ffffff'
-				},
-				:tweets =>
-				{
-					:background => '#ffffff',
-					:color => '#000000',
-					:links => '#0091ff'
-				}
-			},
-			:features =>
-			{
-				:live => true,
-				:scrollbar => false,
-				:loop => false,
-				:behavior => 'all'
-			}
-		})
-		
-		options[:width] = "'#{options[:width]}'" if options[:width].is_a?(String)
-		
-		raw("<div class='widget'>
-		<script charset='utf-8' src='http://widgets.twimg.com/j/2/widget.js'></script>
-		<script>
-		new TWTR.Widget({
-		  version: #{options[:version]},
-		  type: '#{options[:type]}',
-		  rpp: #{options[:rpp]},
-		  interval: #{options[:interval]},
-		  width: #{options[:width]},
-		  height: #{options[:height]},
-		  lang: '#{langtag(I18n.locale)}',
-		  theme: {
-			shell: {
-			  background: '#{options[:theme][:shell][:background]}',
-			  color: '#{options[:theme][:shell][:color]}'
-			},
-			tweets: {
-			  background: '#{options[:theme][:tweets][:background]}',
-			  color: '#{options[:theme][:tweets][:color]}',
-			  links: '#{options[:theme][:tweets][:links]}'
-			}
-		  },
-		  features: {
-			scrollbar: #{options[:features][:scrollbar]},
-			loop: #{options[:features][:loop]},
-			live: #{options[:features][:live]},
-			behavior: '#{options[:features][:behavior]}'
-		  }
-		}).render().setUser('#{username}').start();
-		</script></div>")
-	end
-	
-	def facebook_widget(username, options = {})
-		options.reverse_merge!(
-		{
-			:width => 210,
-			:show_faces => true,
-			:stream => false,
-			:header => false
-		})
-		
-		raw("<div class='fb-like-box'
-		data-lang='#{langtag(I18n.locale)}'
-		data-href='http://www.facebook.com/#{username}'
-		data-width='#{options[:width]}'
-		data-show-faces='#{options[:show_faces]}'
-		data-stream='#{options[:stream]}'
-		data-header='#{options[:header]}'></div>")
-	end
-	
-	def soundcloud_widget(username, options = {})
-		raw("<div class='center'>
-		<a href='https://soundcloud.com/#{username}' style=\"text-align: left; display: block; margin: 0 auto; width: 160px; height: 92px; font-size: 11px; padding: 68px 0 0 0; background: transparent url(http://a1.sndcdn.com/images/badges/imonsc/square/blue.png?c052af5) top left no-repeat; color: #ffffff; text-decoration: none; font-family: 'Lucida Grande', Helvetica, Arial, sans-serif; line-height: 1.3em; text-align: center; outline: 0;\" class='soundcloud-badge'>http://soundcloud.com/<span style='display: block; width: 137px; height: 20px; margin: 0px 0 0 12px; overflow: hidden; -o-text-overflow: ellipsis; text-overflow: ellipsis'>#{username}</span></a>
-		</div>")
 	end
 end

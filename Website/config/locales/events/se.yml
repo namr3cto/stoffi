@@ -4,3 +4,6 @@ se:
     singular: "evenemang"
     description: "Ett evenemang med %{artists}"
     location: "I %{city} den %{time}"
+    empty: "Inga evenemang hittades."
+    top:
+      title: "Populära evenemang"

@@ -1,0 +1,18 @@
+ul.vertical
+{
+	padding: 0.6em;
+	li
+	{
+		padding: 0.5em;
+		
+		&[data-message="empty"]
+		{
+			display: none;
+		}
+		
+		a
+		{
+			text-decoration: none;
+		}
+	}
+}

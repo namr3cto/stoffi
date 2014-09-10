@@ -10,9 +10,7 @@ us:
     remote: "Remote"
     apps: "Apps"
     
-    follow:
-      title: "Follow Us"
-      link: "%{service}"
+    follow: "Follow Us"
       
     learn:
       title: "Learn More"

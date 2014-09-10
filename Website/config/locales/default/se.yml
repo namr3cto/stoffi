@@ -61,6 +61,14 @@ se:
   
   admin: "Administrera"
   
+  toplists:
+    personal:
+      weekly: "Dina favoriter senaste veckan"
+      total: "Dina favoriter genom alla tider"
+    global:
+      weekly: "Populärt just nu"
+      total: "Bäst genom alla tider"
+  
   mail:
     title: "Kontakta oss"
     unlock:

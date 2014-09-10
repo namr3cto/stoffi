@@ -1,18 +1,19 @@
-<div id="main">
-	<div class="white box">
-		<h2>Your top artists this week</h2>
-		<p>Lorem ipsum</p>
-		<h2>Your top artists all time</h2>
-		<p>Lorem ipsum</p>
-		<h2>Top artists this week on Stoffi</h2>
-		<p>Lorem ipsum</p>
-		<h2>Top artists all time on Stoffi</h2>
-		<p>Lorem ipsum</p>
-		<h2>Top artists this week on Internet</h2>
-		<p>Lorem ipsum</p>
-		<h2>Top artists all time on Internet</h2>
-		<p>Lorem ipsum</p>
-	</div>
-</div>
+<%= header t('toplists.personal.weekly') %>
+<p>Lorem ipsum</p>
+<p></p>
 
-<%= render "sidebars/music" %>
+<%= header t('toplists.personal.total') %>
+<p>Lorem ipsum</p>
+<p></p>
+
+<%= header t('toplists.global.weekly') %>
+<ul class='grid-items' id='global-weekly' data-fill='<%= weekly_artists_path %>'>
+	<li class='loading center'>
+		<%= image_tag 'gfx/ajax_loading_large_white.gif', data: { loading: true } %>
+	</li>
+</ul>
+
+<%= header t('toplists.global.total') %>
+<ul class='grid-items'>
+	<%= render partial: 'grid-item', collection: @global_all_time, as: :artist || no_artists %>
+</ul>

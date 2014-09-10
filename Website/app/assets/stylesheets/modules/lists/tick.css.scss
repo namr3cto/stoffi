@@ -1,0 +1,11 @@
+ul.tick
+{
+	padding: 0.6em;
+	list-style-image: url(/assets/gfx/tick.png);
+	li
+	{
+		margin-left: 15px;
+		padding: 0.2em;
+		font-size: 1em;
+	}
+}

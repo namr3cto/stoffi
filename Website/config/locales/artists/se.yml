@@ -2,6 +2,10 @@ se:
   artists:
     plural: "artister"
     singular: "artist"
+    empty: "Inga artister hittades."
+    
+    top:
+      title: "Hot artists"
     
     songs:
       remove: "Ta bort %{artist} som skapare av %{song}"

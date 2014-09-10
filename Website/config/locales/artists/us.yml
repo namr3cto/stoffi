@@ -2,6 +2,10 @@ us:
   artists:
     plural: "artists"
     singular: "artist"
+    empty: "No artists found."
+    
+    top:
+      title: "Heta artister"
     
     songs:
       remove: "Remove %{artist} as maker of %{song}"

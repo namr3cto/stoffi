@@ -1,0 +1,54 @@
+.dropdown
+{
+	display: inline-block;
+	.dropdown-menu
+	{
+		position: absolute;
+		margin: 0;
+		text-align: left;
+		padding: 0;
+		z-index: 5001;
+		text-transform: lowercase;
+		list-style-type: none;
+		overflow: hidden;
+		display: none;
+		
+		img { margin: 0; }
+		
+		li
+		{
+			font-style: normal;
+			font-size: 0.9em;
+			margin: 0;
+			padding: 0;
+			a
+			{
+				padding: 0.8em 1em;
+				display: block;
+			}
+			
+			
+			div
+			{
+				margin-left: 40px;
+				img
+				{
+					position: absolute;
+					left: 10px;
+					top: 7px;
+				}
+				h1, h2 { margin: 0; }
+				h1 { font-size: 10pt; font-weight: bold; }
+				h2 { font-size: 10pt; font-style: normal; color: rgba(255,255,255,0.8); }
+			}
+		}
+	}
+	
+	&:hover
+	{
+		.dropdown-menu
+		{
+			display: block;
+		}
+	}
+}

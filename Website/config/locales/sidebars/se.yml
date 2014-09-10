@@ -10,9 +10,7 @@ se:
     remote: "Fjärr"
     apps: "Appar"
     
-    follow:
-      title: "Följ oss"
-      link: "%{service}"
+    follow: "Följ oss"
 
     learn:
       title: "Lär Dig Mer"

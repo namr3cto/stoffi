@@ -1,0 +1,139 @@
+@import 'palettes/default';
+
+body
+{
+	background-color: $wallpaper-color;
+	background-image: $wallpaper-image;
+}
+
+a
+{
+	color: $primary;
+}
+
+
+header
+{
+	box-shadow: 0px 3px 5px transparentize($shadow, 0.8);
+	background: $primary;
+	nav
+	{
+		.separator
+		{
+			border-right: 1px solid transparentize($primary_text, 0.5);
+		}
+		
+		.active
+		{
+			background: transparentize($primary_hover, 0.8);
+		}
+		
+		a
+		{
+			color: transparentize($primary_text, 0.2);
+			&:hover
+			{
+				background: transparentize($primary_hover, 0.9);
+				color: transparentize($primary_text, 0.1);
+			}
+		}
+	}
+}
+
+main
+{
+	article
+	{
+		color: $text;
+		background: $background;
+		box-shadow: 0px 0px 10px transparentize($shadow, 0.5);
+	}
+}
+
+aside.sidebar
+{
+	section
+	{
+		box-shadow: inset 0px 0px 50px transparentize($shadow, 0.9);
+		border-left: 1px solid transparentize($shadow, 0.8);
+		border-top: 1px solid transparentize($shadow, 0.8);
+		border-right: 1px solid transparentize(invert($shadow), 0.8);
+		border-bottom: 1px solid transparentize(invert($shadow), 0.8);
+		color: transparentize($shadow, 0.5);
+		h2
+		{
+			color: transparentize($shadow, 0.6);
+			text-shadow: 1px 1px 1px transparentize(invert($shadow) ,0.7);
+		}
+	}
+}
+
+footer
+{
+	border-top: 2px solid transparentize($footer_border, 0.6);
+	box-shadow: inset 0px 5px 10px transparentize($shadow, 0.9);
+	background: transparentize($footer, 0.95);
+	color: transparentize($footer, 0.8);
+	text-shadow: 1px 1px 1px transparentize($footer_shadow,0.7);
+	a
+	{
+		text-decoration: none;
+		color: transparentize($footer, 0.7);
+		&:hover { color: transparentize($footer, 0.5); }
+	}
+	
+	nav a
+	{
+		@media #{$small}
+		{
+			background: transparentize($footer, 0.9);
+		}
+	}
+}
+
+.dropdown
+{
+	.dropdown-menu
+	{
+		background: $primary;
+		box-shadow: 2px 2px 5px transparentize($shadow, 0.5);
+		li
+		{
+			a
+			{
+				color: transparentize($primary_text, 0.1);
+				&:hover { background: none; }
+			}
+			a[href]:hover
+			{
+				background: transparentize($primary_hover, 0.5);
+			}
+		}
+	}
+}
+
+
+ul.buttons a
+{
+	background: linear-gradient(lighten($primary, 10%), darken($primary, 10%));
+	border-left: 1px solid lighten($primary, 20%);
+	border-top: 1px solid lighten($primary, 20%);
+	border-right: 1px solid darken($primary, 20%);
+	border-bottom: 1px solid darken($primary, 20%);
+	
+	color: transparentize($primary_text, 0.1);
+	img
+	{
+		border-right: 1px solid transparentize($shadow, 0.8);
+	}
+}
+
+ul.vertical li a
+{
+	color: transparentize($shadow, 0.5);
+	
+	&:hover
+	{
+		color: $shadow;
+	}
+}

@@ -1,0 +1,43 @@
+<section>
+	<h2><%=t "side.features.title" %></h2>
+	<ul class="tick">
+		<%=t "side.features.list_html" %>
+	</ul>
+</section>
+
+<%= render 'shared/ads/sidebar' %>
+
+<% if user_signed_in? %>>
+	<% [current_user.songs, current_user.artists, current_user.playlists].each do |resource| %>
+		<%= toplist_section resource %>
+	<% end %>
+	
+<% else %>
+	<% [Song, Artist, Album, Genre, Event].each do |resource| %>
+		<%= toplist_section resource %>
+	<% end %>
+<% end %>
+
+<section>
+	<h2><%=t "side.follow" %></h2>
+	<ul class="buttons">
+		<%
+		links =
+		[
+			{:name => "Twitter", :img => "twitter", :url => "https://twitter.com/stoffiplayer"},
+			{:name => "Facebook", :img => "facebook", :url => "https://facebook.com/stoffiplayer"},
+			{:name => "YouTube", :img => "youtube", :url => "https://youtube.com/stoffiplayer"},
+			{:name => "Google+", :img => "googleplus", :url => "https://plus.google.com/b/111751169971055410532"},
+			{:name => "Blogger", :img => "blogger", :url => "http://blog.stoffiplayer.com"}
+		]
+		%>
+		<% links.each do |l| %>
+			<li>
+				<%= link_to l[:url] do %>
+					<%= image_tag('gfx/buttons/'+l[:img]+'.png', alt: l[:name]) %>
+					<span><%= l[:name] %></span>
+				<% end %>
+			</li>
+		<% end %>
+	</ul>
+</section>

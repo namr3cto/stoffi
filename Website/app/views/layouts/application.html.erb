@@ -1,134 +1,61 @@
-<%= render :partial => "layouts/common" %>
-	<link href="https://fonts.googleapis.com/css?family=IM+Fell+French+Canon" rel="stylesheet" type="text/css">
-	<link href='https://fonts.googleapis.com/css?family=Dorsa' rel='stylesheet' type='text/css'>
-	<script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAFQ6PulvKZ8cd4dK4Ex1HLkiVHXzp_izQ&sensor=false"></script>
+<html>
 	
-	<%= stylesheet_link_tag "application" %>
-	<%= stylesheet_link_tag "chrome" if @browser == "chrome" %>
-	<% if @track %>
-		<script type="text/javascript">
-			var _gaq = _gaq || [];
-			_gaq.push(['_setAccount', 'UA-15959893-4']);
-			_gaq.push(['_setDomainName', 'stoffiplayer.com']);
-			_gaq.push(['_setCustomVar', 1, 'UserType', '<%=user_type%>', 2]);
-			_gaq.push(['_trackPageview']);
-			_gaq.push(['_setAllowLinker', true]);
-			_gaq.push(['_trackPageLoadTime']);
-
-			(function() {
-			  var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-			  ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-			  var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-			})();
-		</script>
-	<% end %>
-
-	<!-- Load Twitter JS-API asynchronously -->
-	<script type="text/javascript" charset="utf-8">	
-	window.twttr = (function (d,s,id)
-	{
-		var t, js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
-		js.src="//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
-		return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
-	}(document, "script", "twitter-wjs"));
-
-	// Wait for the asynchronous resources to load
-	twttr.ready(function(twttr)
-	{
-		_ga.trackTwitter(); //Google Analytics tracking
-	});
-	</script>
-</head>
-
-<body>
-	<header id="header">
-		<div class="blue container">
-			<%= render "pages/header" %>
-		</div>
-	</header>
+	<%= render 'shared/headers' %>
 	
-	<div class="clear"></div>
-
-	<div id="root"><div id="wrap">
-		<%= yield %>
-		<div class="clear">&nbsp;</div>
-	</div></div>
-	
-	<footer id="footer">
-		<p class="copyright">
-			© <%= Time.now.year %> <a href="http://www.simplare.com">simplare</a>
-		</p>
-		<p class="links">
-			<%= link_to t("money.link"),   money_path %>
-			<%= link_to t("legal.link"),   legal_path %>
-			<%= link_to t("contact.link"), contact_path %>
-			<%= link_to t("contribute.link"), "http://dev.stoffiplayer.com/wiki/Welcome?tm=6" %>
-			<%= link_to t("blog"),    "https://blog.stoffiplayer.com" %>
-			<%= link_to t("project"), "http://dev.stoffiplayer.com" %>
-			<% if user_signed_in? %>
-				<%= link_to t("apps.link"), apps_path %>
-			<% end %>
-			<%= link_to t("switch.mobile"), { :mobile => 1 } %>
-		</p>
-	</footer>
-	
-	<div id="dimmer" onclick="closeDialog();" style="display: none;"></div>
-
-	<div id="dialog" class="left" style="display: none;">
-	</div>
-
-	<script>
-		// Facebook
-		/*
-		window.fbAsyncInit = function() {
-			// init the FB JS SDK
-			FB.init({
-			appId      : '243125052401100', // App ID from the App Dashboard
-			channelUrl : '//beta.stoffiplayer.com/channel.html', // Channel File for x-domain communication
-			status     : true, // check the login status upon init?
-			cookie     : true, // set sessions cookies to allow your server to access the session?
-			xfbml      : true  // parse XFBML tags on this page?
-			});
-
-			// Additional initialization code such as adding Event Listeners goes here
-			FB.Event.subscribe('edge.create', function(response)
-			{
-				trackSocial('Facebook', 'Like');
-			});
-			
-			FB.Event.subscribe('edge.remove', function(response)
-			{
-				trackSocial('Facebook', 'Unlike');
-			});
-		};
-		(function(d, debug){	
-			var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
-			if (d.getElementById(id)) {return;}
-			js = d.createElement('script'); js.id = id; js.async = true;
-			js.src = "//connect.facebook.net/en_US/all" + (debug ? "/debug" : "") + ".js";
-			ref.parentNode.insertBefore(js, ref);
-		}(document, /*debug*//* false));
-		*/
+	<body>
 		
-		// Google+
-		window.___gcfg = {lang: '<%=I18n.locale%>'};
-		(function()
-		{
-			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
-			po.src = 'https://apis.google.com/js/plusone.js';
-			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
-		})();
+		<%= render 'shared/navigation' %>
 		
-		// Twitter
-		/*
-		window.twttr = (function (d,s,id) {
-			var t, js, fjs = d.getElementsByTagName(s)[0];
-			if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
-			js.src="//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
-			return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
-		}(document, "script", "twitter-wjs"));
-		*/
-	</script>
-</body>
+		<main>
+			<article>
+				
+				<section>
+					<h1>My Fat Title</h1>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					
+					<h2>First subsection</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					
+					<h2>Second subsection</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					
+					<h2>Last subsection</h2>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+				</section>
+				
+				<aside>
+					<section data-type='essential'>
+						<h2>Essential</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</section>
+					
+					<section data-type='bonus'>
+						<h2>Bonus</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</section>
+					
+					<section data-type='bonus'>
+						<h2>Extra bonus</h2>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+						<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+					</section>
+				</aside>
+				
+			</article>
+		</main>
+		
+		<aside class='sidebar'>
+			<%= content_for?(:sidebar) ? yield : render('shared/sidebars/default') %>
+		</aside>
+		
+		<%= render 'shared/footer' %>
+		
+	</body>
 </html>
