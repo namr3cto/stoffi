@@ -7,7 +7,6 @@ body
 
 h1, h2
 {
-	font-weight: bold;
 	margin: 0.8em 0 0.5em 0;
 }
 
@@ -21,16 +20,22 @@ h2
 	font-size: 1.1em;
 	font-weight: normal;
 	font-style: italic;
-	margin-top: 2em;
+	margin-bottom: 1em;
 }
 
 p
 {
-	margin: 1em 0;
+	margin-bottom: 1em;
 }
 
 a
 {
-	transition: color 500ms;
 	text-decoration: none;
+	transition: all 500ms;
+}
+
+img
+{
+	transition: border 1500ms;
+	transition: opacity 500ms;
 }

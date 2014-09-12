@@ -25,9 +25,7 @@ class ApplicationController < ActionController::Base
 	              :restrict_admin,
 	              :set_tab,
 	              :classify_device,
-	              :prepare_for_mobile,
 	              :prepare_for_embedded,
-	              :reload_locales,
 	              :set_locale,
 	              :check_tracking,
 	              :set_config,
@@ -37,11 +35,6 @@ class ApplicationController < ActionController::Base
 	def set_config
 		@site_config = Admin::Config.first
 		
-	end
-	
-	# Reload the cached translations if we are running beta/alpha
-	def reload_locales
-		I18n.reload! if Rails.env.development?
 	end
 	
 	def owns(resource, id)
@@ -512,7 +505,7 @@ class ApplicationController < ActionController::Base
 	
 	def check_old_browsers
 		return if cookies[:skip_old]
-		return if mobile_device? or embedded_device?
+		return if embedded_device?
 		return if ["facebook","google"].include? @browser
 		return if controller_name == "pages" and action_name == "old"
 		return if @ua.include?("capybara-webkit")
@@ -521,7 +514,6 @@ class ApplicationController < ActionController::Base
 		logger.info "browser: #{@browser}"
 		logger.info "os: #{@os}"
 		logger.info "embedded_device? #{embedded_device?}"
-		logger.info "mobile_device? #{mobile_device?}"
 		
 		if params[:dangerous]
 			cookies[:skip_old] = "1"
@@ -576,15 +568,6 @@ class ApplicationController < ActionController::Base
 		end
 	end
 	
-	def mobile_device?
-		if cookies[:mobile_param]
-			cookies[:mobile_param] == "1"
-		else
-			request.user_agent =~ /Mobile|webOS/
-		end
-	end
-	helper_method :mobile_device?
-	
 	def embedded_device?
 		if cookies[:embedded_param]
 			cookies[:embedded_param] == "1"
@@ -593,11 +576,6 @@ class ApplicationController < ActionController::Base
 		end
 	end
 	helper_method :embedded_device?
-	
-	def prepare_for_mobile
-		cookies[:mobile_param] = params[:mobile] if params[:mobile]
-		request.format = :mobile if mobile_device? && adaptable_format?
-	end
 	
 	def prepare_for_embedded
 		cookies[:embedded_param] = params[:embedded] if params[:embedded]

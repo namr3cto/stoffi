@@ -1,11 +1,19 @@
 ul.tick
 {
-	padding: 0.6em;
+	padding: 0 0.5em;
 	list-style-image: url(/assets/gfx/tick.png);
 	li
 	{
-		margin-left: 15px;
-		padding: 0.2em;
+		margin: 0.8em 0 0 15px;
 		font-size: 1em;
+	}
+}
+
+aside.sidebar ul.tick
+{
+	padding: 0.6em;
+	li
+	{
+		padding: 0.2em;
 	}
 }

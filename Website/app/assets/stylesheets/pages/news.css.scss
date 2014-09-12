@@ -1,0 +1,22 @@
+#news
+{
+	section h1
+	{
+		margin-top: 0.2em;
+	}
+	
+	.screenshots
+	{
+		margin: 3em 0 2em;
+		img
+		{
+			margin: 0.2em 0;
+			opacity: 0.8;
+			&:hover { opacity: 1; }
+		}
+	}
+	
+	aside
+	{
+	}
+}

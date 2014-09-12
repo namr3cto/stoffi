@@ -1,5 +1,9 @@
 module I18nHelper
 	
+	def t? key
+		I18n.t key, raise: true rescue false
+	end
+	
 	def current_lang
 		lang(I18n.locale.to_s)
 	end

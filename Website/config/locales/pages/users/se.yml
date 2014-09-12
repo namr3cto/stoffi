@@ -1,0 +1,52 @@
+se:
+  pages:
+    users:
+      
+      sessions:
+  
+        new:
+          link:            'Logga in'
+          title:           'Logga in'
+          description:     "Logga in med ditt konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
+  
+        destroy:
+          link:            'Logga ut'
+          
+      registrations:
+      
+        new:
+          link:            'Gå med'
+          title:           'Gå med'
+          description:     "Skapa ett konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
+  
+        dashboard:
+          link:            'Mitt Stoffi'
+          title:           'Panel'
+          description:     'Få en översikt av ditt konto, spana in dina spelvanor, hantera dina spellistor och enheter, eller fjärrstyr din musik.'
+  
+        edit:
+          link:            'Inställningar'
+          title:           'Inställningar'
+          description:     'Hantera ditt konto, konfigurera din profil, eller koppla ihop ditt konto med andra tjänster.'
+  
+        show:
+          link:            'Profil'
+          description:     'Spana in %{usernames} hetaste låtar och spellistor på Stoffi.'
+
+
+      unlocks:
+        link:            'Lås upp'
+        title:           'Lås upp konto'
+        description:     'Om ditt konto har blivit låst kan du be om ett mail för att låsa upp det.'
+
+      passwords:
+        
+        new:
+          link:            'Glömt'
+          title:           'Glömt lösenord'
+          description:     'Vi glömmer alla ibland. Begär ett mail för att återställa lösenordet.'
+
+        edit:
+          link:            'Återställ'
+          title:           'Återställ lösenord'
+          description:     'Återställ ditt lösenord om du har råkat glömma bort det.'

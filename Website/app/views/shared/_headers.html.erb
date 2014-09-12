@@ -1,5 +1,15 @@
 <head>
-	<title>Stoffi</title>
+	<title>
+		<% if content_for? :title %>
+			<%= yield :title %> - Stoffi
+		<% elsif t? "pages.#{params[:controller]}.#{params[:action]}.title" %>
+			<%= t "pages.#{params[:controller]}.#{params[:action]}.title" %> - Stoffi
+		<% elsif t? "pages.#{params[:controller]}.title" %>
+			<%= t "pages.#{params[:controller]}.title" %> - Stoffi
+		<% else %>
+			Stoffi
+		<% end %>
+	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<%= stylesheet_link_tag "application" %>
 	<%= javascript_include_tag "application" %>

@@ -33,15 +33,15 @@ services = [
 	<nav>
 		<%= link_to image_tag("gfx/home.png"), root_path, class: "logo" + (@tab == 'index' ? ' active' : '') %>
 		<% ['news', 'get', 'tour'].each do |link| %>
-			<% opts = { title: t("#{link}.description") } %>
+			<% opts = { title: t("pages.pages.#{link}.description") } %>
 			<% opts[:class] = 'active' if @tab == link %>
-			<%= link_to t("#{link}.link"), send("#{link}_path"), opts %>
+			<%= link_to t("pages.pages.#{link}.link"), send("#{link}_path"), opts %>
 		<% end %>
 		
 		<% ['about'].each do |link| %>
-			<% opts = { title: t("#{link}.description"), data: { type: 'bonus' } } %>
+			<% opts = { title: t("pages.pages.#{link}.description"), data: { type: 'bonus' } } %>
 			<% opts[:class] = 'active' if @tab == link %>
-			<%= link_to t("#{link}.link"), send("#{link}_path"), opts %>
+			<%= link_to t("pages.pages.#{link}.link"), send("#{link}_path"), opts %>
 		<% end %>
 		
 		<div class="separator">&nbsp;</div>
@@ -60,17 +60,17 @@ services = [
 						<% end %>
 					</li>
 					<li class="divider"></li>
-					<li><%= link_to t("profile.link"), profile_path %></li>
-					<li><%= link_to t("playlists.link"), playlists_path %></li>
-					<li><%= link_to t("remote.link"), remote_path %></li>
+					<li><%= link_to t("pages.profile.link"), profile_path %></li>
+					<li><%= link_to t("pages.playlists.link"), playlists_path %></li>
+					<li><%= link_to t("pages.remote.link"), remote_path %></li>
 					<li class="divider"></li>
-					<li><%= link_to t("settings.link"), settings_path %></li>
-					<li><%= link_to t("logout.link"), logout_path %></li>
+					<li><%= link_to t("pages.settings.link"), settings_path %></li>
+					<li><%= link_to t("pages.logout.link"), logout_path %></li>
 				</ul>
 			</div>
 		
 		<% else %>
-			<%= link_to t("login.link"), login_path, title: t("login.description") %>
+			<%= link_to t("pages.users.sessions.new.link"), login_path, title: t("pages.users.sessions.new.description") %>
 			<% services.each do |s| %>
 				<%= link_to image_tag("auth_buttons/#{s[:name].downcase}_16_white.png", width: s[:width], height: 16),
 					s[:path] || s[:name].downcase, class: 'auth', title: t('auth.login', service: s[:name])%>

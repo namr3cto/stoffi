@@ -1,0 +1,35 @@
+se:
+  pages:
+  
+    apps:
+      index:
+        link:            'Mina Appar'
+        title:           'Appar'
+        description:     'Koppla ihop program och hemsidor med Stoffi och ge dem tillgång till dina spellistor och låtar.' 
+  
+    devices:
+      index:
+        link:            'Enheter'
+        title:           'Enheter'
+        description:     'Visa och hantera de enheter du använder med ditt Stoffikonto.'
+  
+    playlists:
+      index:
+        title:         'Spellistor'
+        link:          'Spellistor'
+        description:   'Hitta de hetaste spellistorna på Stoffi.'
+      by:
+        title:         '%{username} spellistor'
+        link:          '%{username} spellistor'
+        description:   'Spellistor skapade av %{username} på Stoffi.'
+        
+      show:
+        description:     'Spellistan %{name} skapad av %{username} på Stoffi.'
+    
+      artists:
+        show:
+          description: "%{artist} är en artist på Stoffi"
+
+      songs:
+        show:
+          description: "Lyssna på %{song} i Stoffi Musikspelare eller direkt här på hemsidan."

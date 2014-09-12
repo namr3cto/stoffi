@@ -1,6 +1,17 @@
 main
 {
+	font-size: 0.8em;
 	article
 	{
+		section
+		{
+			margin-bottom: 2em;
+			.timestamp
+			{
+				margin-top: 1em;
+				display: block;
+				font-size: 0.8em;
+			}
+		}
 	}
 }

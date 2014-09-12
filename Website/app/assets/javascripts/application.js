@@ -32,3 +32,4 @@
 
 //= require inflection
 //= require ga_social_tracking
+//= require gallery/touch_touch

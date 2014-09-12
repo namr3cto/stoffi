@@ -1,9 +1,13 @@
 @import "compass";
 @import "compass/reset";
+@import 'gallery/touch_touch';
 
 @import 'mixins/*';
-@import 'modules/**/*';
+
 @import 'base/*';
 @import 'base/layout';
+
+@import 'modules/**/*';
+@import 'pages/*';
 
 @import 'themes/default';

@@ -1,0 +1,35 @@
+us:
+  pages:
+  
+    apps:
+      link:            'My Apps'
+      title:           'Apps'
+      description:     'Connect applications and websites to Stoffi and give them access to your playlist and tracks.' 
+  
+    devices:
+      link:            'Devices'
+      title:           'Devices'
+      description:     'See and manage the devices you are using with your Stoffi account.'
+  
+    playlists:
+      
+      index:
+        title:         'Playlists'
+        link:          'Playlists'
+        description:   'Find the hottest music playlists on Stoffi.'
+        
+      by:
+        title:         '%{username} playlists'
+        link:          '%{username} playlists'
+        description:   'Playlists created by %{username} on Stoffi.'
+        
+      show:
+        description:     'The playlist %{name} created by %{username} on Stoffi.'
+    
+    artists:
+      show:
+        description: "%{artist} is an artist on Stoffi"
+    
+    songs:
+      show:
+        description: 'Listen to %{song} in Stoffi Music Player or right here on the website.'

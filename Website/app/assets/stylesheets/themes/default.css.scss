@@ -4,6 +4,7 @@ body
 {
 	background-color: $wallpaper-color;
 	background-image: $wallpaper-image;
+	color: rgba($text, 0.8);
 }
 
 a
@@ -44,9 +45,27 @@ main
 {
 	article
 	{
-		color: $text;
 		background: $background;
 		box-shadow: 0px 0px 10px transparentize($shadow, 0.5);
+		
+		h1, h2
+		{
+			color: rgba($text, 0.6);
+		}
+		
+		.timestamp
+		{
+			color: rgba($text, 0.5);
+		}
+	}
+	
+	aside
+	{
+		h2 { color: rgba($text, 0.6); }
+		li
+		{
+			color: rgba($text, 0.5);
+		}
 	}
 }
 
@@ -121,10 +140,16 @@ ul.buttons a
 	border-right: 1px solid darken($primary, 20%);
 	border-bottom: 1px solid darken($primary, 20%);
 	
-	color: transparentize($primary_text, 0.1);
+	color: transparentize($primary_text, 0.3);
 	img
 	{
 		border-right: 1px solid transparentize($shadow, 0.8);
+	}
+	
+	&:hover
+	{
+		background: linear-gradient($primary, darken($primary, 20%));
+		color: transparentize($primary_text, 0.1);
 	}
 }
 
@@ -136,4 +161,17 @@ ul.vertical li a
 	{
 		color: $shadow;
 	}
+}
+
+#news .screenshots img
+{
+	border: 1px solid rgba($text, 0.5);
+	&:hover {
+		border: 1px solid $text;
+	}
+}
+
+.divider
+{
+	border-bottom: 1px solid rgba($text, 0.2);
 }

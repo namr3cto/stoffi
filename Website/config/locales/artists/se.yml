@@ -5,7 +5,7 @@ se:
     empty: "Inga artister hittades."
     
     top:
-      title: "Hot artists"
+      title: "Heta artister"
     
     songs:
       remove: "Ta bort %{artist} som skapare av %{song}"

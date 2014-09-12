@@ -210,6 +210,9 @@ GEM
       bundler (>= 1.3.0, < 2.0)
       railties (= 4.1.4)
       sprockets-rails (~> 2.0)
+    rails-gallery (0.3.3)
+      hashie (>= 2.0.0)
+      rails (>= 3.1)
     railties (4.1.4)
       actionpack (= 4.1.4)
       activesupport (= 4.1.4)
@@ -337,6 +340,7 @@ DEPENDENCIES
   omniauth-yandex
   omniauth-youtube
   rails (= 4.1.4)
+  rails-gallery
   recaptcha
   ruby-duration
   ruby-prof
