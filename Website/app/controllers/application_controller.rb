@@ -490,8 +490,8 @@ class ApplicationController < ActionController::Base
 			@os = "windows phone"
 		when /windows/i
 			@os = "windows old"
-		when /iphone/i
-			@os = "iphone"
+		when /iphone/i, /ipad/i
+			@os = "ios"
 		when /android/i
 			@os = "android"
 		when /linux/i

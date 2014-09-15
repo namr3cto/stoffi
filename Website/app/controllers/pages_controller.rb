@@ -11,7 +11,6 @@
 class PagesController < ApplicationController
 	oauthenticate only: [ :remote ]
 	
-	before_filter :set_title_and_description
 	respond_to :html, :mobile, :embedded, :json, :xml
 	
 	def foo
@@ -32,37 +31,25 @@ class PagesController < ApplicationController
 	end
 
 	def download
-		params[:channel] = "stable" unless params[:channel]
-		params[:arch] = "32" unless params[:arch]
-		@type = params[:type] || "installer"
+		params[:channel] ||= "stable"
+		params[:arch] ||= "32"
 		
-		unless ["alpha", "beta", "stable"].include? params[:channel]
-			redirect_to "/get" and return
-		end
+		verify_channel
+		verify_arch
 		
-		unless ["32", "64"].include? params[:arch]
-			redirect_to "/get" and return
-		end
+		@fname = download_filename
+		@file = "/downloads/" + params[:channel] + "/" + params[:arch] + "bit/" + @fname + '.exe'
+	end
+	
+	def checksum
+		params[:channel] ||= "stable"
+		params[:arch] ||= "32"
 		
-		unless ["installer", "checksum"].include? @type
-			redirect_to "/get" and return
-		end
+		verify_channel
+		verify_arch
 		
-		filename = "InstallStoffi"
-		filename = "InstallStoffiAlpha" if params[:channel] == "alpha"
-		filename = "InstallStoffiBeta" if params[:channel] == "beta"
-		
-		filename += "AndDotNet" if params[:fat] && params[:fat] == "1"
-		
-		@fname = filename
-		
-		filename += case @type
-			when "checksum" then ".sum"
-			else ".exe"
-		end
-		
-		@file = "/downloads/" + params[:channel] + "/" + params[:arch] + "bit/" + filename
-		@autodownload = @type == "installer"
+		@fname = download_filename
+		@file = "/downloads/" + params[:channel] + "/" + params[:arch] + "bit/" + @fname + '.sum'
 	end
 
 	def tour
@@ -153,11 +140,23 @@ class PagesController < ApplicationController
 		render layout: false
 	end
 	
-	private
-	
-	def set_title_and_description
-		@title = t("#{action_name}.title")
-		@description = t("#{action_name}.description")
+	def download_filename
+		filename = "InstallStoffi"
+		filename = "InstallStoffiAlpha" if params[:channel] == "alpha"
+		filename = "InstallStoffiBeta" if params[:channel] == "beta"
+		filename += "AndDotNet" if params[:fat] && params[:fat] == "1"
+		filename
 	end
 
+	def verify_channel
+		unless ["alpha", "beta", "stable"].include? params[:channel]
+			redirect_to "/get" and return
+		end
+	end
+	
+	def verify_arch
+		unless ["32", "64"].include? params[:arch]
+			redirect_to "/get" and return
+		end
+	end
 end

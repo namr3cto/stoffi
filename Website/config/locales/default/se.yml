@@ -61,6 +61,12 @@ se:
   
   admin: "Administrera"
   
+  download_button:
+    title: "Ladda ner nu"
+    os:
+      windows7: "För Windows 7"
+    size: "Storlek"
+    
   toplists:
     personal:
       weekly: "Dina favoriter senaste veckan"

@@ -83,8 +83,6 @@ articles =
 				</ul>
 			</section>
 		</aside>
-		<% unless article == articles.last %>
-			<div class='clear divider'></div>
-		<% end %>
+		<div class='clear<%=' divider' if article == articles.last %>'></div>
 	<% end %>
 </article>

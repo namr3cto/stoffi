@@ -4,22 +4,6 @@ ul.buttons
 	margin: 1em 0;
 	li a
 	{
-		text-align: left;
-		margin: 0.4em 1em;
-		padding: 0.3em 0.6em 0.5em;
-		display: inline-block;
 		min-width: 50%;
-		border-radius: 3px;
-		
-		img, span
-		{
-			display: inline-block;
-			vertical-align: middle;
-		}
-		img
-		{
-			padding-right: 0.4em;
-			margin-right: 0.3em;
-		}
 	}
 }

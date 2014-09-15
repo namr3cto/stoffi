@@ -47,12 +47,6 @@ se:
         title:      "Bokmärk dina låtar"
         text_html:  "Markera de bra delarna. Med bara ett klick.</p><p>Hoppa till de bästa topparna eller ta bort det dåliga introt på nolltid."
 
-    download_button:
-      title: "Ladda ner nu"
-      os:
-        windows7: "För Windows 7"
-      size: "Storlek"
-      
     latest:
       title: "Senaste nytt"
       text_html: "<p>I den senaste versionen handlar allt om mer musik. Du kan nu strömma musik från SoundCloud och Internetradio.</p><p>Det nya pluginsystemet låter dig bygga ut din musikupplevelse ännu mer. Lägg till vackra visualiserare eller installera filter som kan manipulera ljudet.</p><p>Nu kan man dela spellistor och musik i ett enda klick. Alla länkar spelas automatiskt upp i Stoffi.</p>"

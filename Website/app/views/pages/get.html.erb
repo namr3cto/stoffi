@@ -1,61 +1,183 @@
-<div id="get">
-	<div class="white box">
-		<div class="center">
-
-			<% if @os == "windows 7" %>
-				<% subtitle = "#{t("home.download_button.os.windows7")} &nbsp; &nbsp; #{t("home.download_button.size")}: 5.1 Mb" %>
-				<div class="download-button">
-					<%=custom_button_tag t("home.download_button.title"), download_path, "arrow_down", { :color => :green, :subtitle => subtitle, :id => "download-button" } %>
+<article class='fullwidth'>
+	<section id='download'>
+		
+		<% if @os == "windows 7" %>
+			<%= link_to download_path, class: 'button' do %>
+				<%= image_tag 'gfx/buttons/arrow_down.png' %>
+				<div>
+					<h2><%= t 'download_button.title' %></h2>
+					<p>
+						<span><%= t 'download_button.os.windows7' %></span>
+						<span><%= t 'download_button.size' %>: 5.1 Mb</span>
+					</p>
 				</div>
-			<% else %>
-				<div class="message"><p>
-					<% if  @os == "mac" %>
-						<%=raw t("get.message.osx") %>
-					<% elsif @os == "linux" %>
-						<%=raw t("get.message.linux") %>
-					<% elsif @os == "windows old" %>
-						<%=raw t("get.message.win_old") %>
-					<% elsif @os == "windows 8" %>
-						<%=raw t("get.message.win8") %>
-					<% elsif @os == "google" || @os == "facebook" %>
-						<%=raw t("get.message.bot") %>
-					<% end %>
-				<p></div>
 			<% end %>
+			
+		<% else %>
+			<p class='message'>
+				<% if  @os == "mac" %>
+					<%=raw t("get.message.osx") %>
+				<% elsif @os == "linux" %>
+					<%=raw t("get.message.linux") %>
+				<% elsif @os == "ios" %>
+					<%=raw t("get.message.ios") %>
+				<% elsif @os == "android" %>
+					<%=raw t("get.message.android") %>
+				<% elsif @os == "windows old" %>
+					<%=raw t("get.message.win_old") %>
+				<% elsif @os == "windows 8" %>
+					<%=raw t("get.message.win8") %>
+				<% elsif @os == "google" || @os == "facebook" %>
+					<%=raw t("get.message.bot") %>
+				<% end %>
+			</p>
+		
+		<% end %>  
+		
+		<%= image_tag "#{I18n.locale}/start.png", id: 'screenshot' %>
+	</section>
+</article>
 
-			<%= image_tag "#{I18n.locale}/start.png", :width => "860px", :height => "290px" %>
-		</div>
-	</div>
+<a name="awards"></a>
+<article class='fullwidth' id='awards'>
+		
+	<%= link_to image_tag("http://author.brothersoft.com/softimg/pick_109.gif"),
+		"http://www.brothersoft.com/stoffi-music-player-455731.html" %>
+	
+	<%= link_to image_tag("http://www.softpedia.com/base_img/softpedia_free_award_f.gif"),
+		"http://www.softpedia.com/get/Multimedia/Audio/Audio-Players/Stoffi-Music-Player.shtml" %>
+		
+	<%= link_to image_tag("http://www.findmysoft.com/review2_5_Stoffi%20Music%20Player_award.png"),
+		"http://stoffi-music-player.findmysoft.com/" %>
+		
+	<%= link_to image_tag("http://img.informer.com/awards/si_editor5.gif"),
+		"http://stoffi.software.informer.com/" %>
+		
+	<%= link_to image_tag("http://www.fileguru.com/resources/rate5_b2.gif"),
+		"http://fileguru.com/Stoffi-Music-Player/info " %>
+</article>
+
+<article>
+	<aside>
+		<section>
+			<h2><%=t "get.mirrors" %></h2>
+			<%
+			mirrors =
+			[
+				{
+					:title => "Softpedia",
+					:url => "http://www.softpedia.com/get/Multimedia/Audio/Audio-Players/Stoffi-Music-Player.shtml"
+				},
+				{
+					:title => "CNET",
+					:url => "http://download.cnet.com/Stoffi/3000-2133_4-75610202.html?tag=mncol;1"
+				},
+				{
+					:title => "filecluster",
+					:url => "http://www.filecluster.com/Audio-Video/Media-Players/Download-Stoffi-Music-Player.html"
+				},
+				{
+					:title => "BrotherSoft",
+					:url => "http://www.brothersoft.com/stoffi-music-player-455731.html"
+				},
+				{
+					:title => "Tucows",
+					:url => "http://www.tucows.com/preview/1294571/Stoffi-Music-Player"
+				},
+				{
+					:title => "NoNags",
+					:url => "http://www.nonags.com/freeware-stoffi-music-player_3990.html"
+				},
+				{
+					:title => "software.informer",
+					:url => "http://stoffi.software.informer.com/"
+				}
+			]
+			%>
+			<ul class='vertical'>
+				<% mirrors.each do |m| %>
+					<li>
+						<%=link_to m[:url] do %>
+							<%= image_tag "gfx/buttons/#{m[:title].downcase}.png" %>
+							<%= m[:title] %>
+						<% end %>
+					</li>
+				<% end %>
+			</ul>
+		</section>
+	</aside>
+	<section>
+		<h2><%= t 'get.versions' %></h2>
+		<%= form_tag "download", url: download_path, method: :get, class: 'horizontal' do %>
+			<div class='field'>
+				<%= label_tag "os", t("get.os") %>
+				<%= select_tag "os", options_for_select([["Windows 7", "win7"]]) %>
+			</div>
+			<div class='field'>
+				<%= label_tag "arch", t("get.arch") %>
+				<%= select_tag "arch", options_for_select([[t("get.archs.32bits"), "32"] ]) %>
+			</div>
+			<div class='field'>
+				<%= label_tag "fat", t("get.bundle") %>
+				<%= check_box_tag "fat" %>
+			</div>
+			<div class='field'>
+				<%= label_tag "channel", t("get.channel") %>
+				<%= select_tag "channel", options_for_select([
+					[t("get.channels.stable"), "stable"],
+					[t("get.channels.beta"), "beta"],
+					[t("get.channels.alpha"), "alpha"]
+				]) %>
+			</div>
+			<div class='buttons'>
+				<%= button_tag t('get.download') %>
+			</div>
+		<% end %>
+	</section>
+	<section>
+		<h2><%= t 'get.checksums' %></h2>
+		<%= form_tag "checksum", url: checksum_path, method: :get, class: 'horizontal' do %>
+			<div class='field'>
+				<%= label_tag "os", t("get.os") %>
+				<%= select_tag "os", options_for_select([["Windows 7", "win7"]]) %>
+			</div>
+			<div class='field'>
+				<%= label_tag "arch", t("get.arch") %>
+				<%= select_tag "arch", options_for_select([
+					[t("get.archs.32bits"), "32"]
+				]) %>
+			</div>
+			<div class='field'>
+				<%= label_tag "fat", t("get.bundle") %>
+				<%= check_box_tag "fat" %>
+			</div>
+			<div class='field'>
+				<%= label_tag "channel", t("get.channel") %>
+				<%= select_tag "channel", options_for_select([
+					[t("get.channels.stable"), "stable"],
+					[t("get.channels.beta"), "beta"],
+					[t("get.channels.alpha"), "alpha"]
+				]) %>
+			</div>
+			<div class='buttons'>
+				<%= button_tag t('get.getsum') %>
+			</div>
+		<% end %>
+	</section>
+</article>
+
+<% if false %>
+<div id="get">
 
 	<div class="gold box" id="awards">
-		<a name="awards"></a>
-			
-		<%= link_to image_tag("http://author.brothersoft.com/softimg/pick_109.gif"),
-			"http://www.brothersoft.com/stoffi-music-player-455731.html" %>
-		
-		<%= link_to image_tag("http://www.softpedia.com/base_img/softpedia_free_award_f.gif"),
-			"http://www.softpedia.com/get/Multimedia/Audio/Audio-Players/Stoffi-Music-Player.shtml" %>
-			
-		<%= link_to image_tag("http://www.findmysoft.com/review2_5_Stoffi%20Music%20Player_award.png"),
-			"http://stoffi-music-player.findmysoft.com/" %>
-			
-		<%= link_to image_tag("http://img.informer.com/awards/si_editor5.gif"),
-			"http://stoffi.software.informer.com/" %>
-			
-		<%= link_to image_tag("http://www.fileguru.com/resources/rate5_b2.gif"),
-			"http://fileguru.com/Stoffi-Music-Player/info " %>
 	</div>
 
 	<div class="white box">
 		<div id="versions">	
 			<h2><a name="versions"><%=t "get.versions" %></a></h2>
 			<%= form_tag "download", :url => download_path, :method => :get do %>
-				<%= label_tag "os", t("get.os") %>
-				<%= select_tag "os", options_for_select([["Windows 7", "win7"]]) %>
-				<%= label_tag "arch", t("get.arch") %>
-				<%= select_tag "arch", options_for_select([
-					[t("get.archs.32bits"), "32"]
-				]) %>
+				
+				
 				<%= label_tag "fat", t("get.bundle") %>
 				<%= check_box_tag "fat" %>
 				<%= label_tag "channel", t("get.channel") %>
@@ -139,3 +261,4 @@
 		</div>
 	</div>
 </div>
+<% end %>

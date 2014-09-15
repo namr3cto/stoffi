@@ -48,13 +48,15 @@ us:
     message:
       linux: "We are working hard on a Linux version which will meet the same high standards of quality and integration as our Windows version."
       osx: "We are working hard on an OS X version which will meet the same high standards of quality and integration as our Windows version."
+      android: "An app for iOS and Android is planned right after the OS X version is done."
+      ios: "An app for iOS and Android is planned right after the OS X version is done."
       win_old: "Stoffi cannot run on older versions of Windows since it is extremely integrated with Windows 7 specifically."
       win8: "A Windows 8 version is on the way.</p><p>You can install our Windows 7 version but it will contain some glitches and bugs."
       bot: "Download Stoffi for Windows 7 for free.</p><p>Millions of tracks inside an extremely beautiful music player."
       unknown: "We couldn't detect your operating system.</p><p>Check out \"All versions\" and select a version for your platform."
      
   check:
-    file: "checksum file"
+    file: "click here"
     brief:
       title: "Verify installer integrity"
       text: "To verify that your downloaded installer is free from malware,<br/>backdoors and other nasty stuff follow these simple steps."

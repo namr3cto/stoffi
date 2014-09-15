@@ -1,0 +1,41 @@
+a.button, ul.buttons li a
+{
+	text-align: left;
+	margin: 0.4em 1em;
+	padding: 0.3em 0.6em 0.5em;
+	display: inline-block;
+	border-radius: 3px;
+	
+	img, span, div
+	{
+		display: inline-block;
+		vertical-align: middle;
+	}
+	img
+	{
+		padding-right: 0.4em;
+		margin-right: 0.3em;
+	}
+	
+	h2, p
+	{
+		margin: 0;
+	}
+	
+	h2
+	{
+		font-size: 1.4em;
+		padding: 0 0 0.5em;
+		font-style: normal;
+	}
+	
+	p
+	{
+		font-size: 0.8em;
+		span
+		{
+			padding-left: 1em;
+			&:first-of-type { padding-left: 0; }
+		}
+	}
+}

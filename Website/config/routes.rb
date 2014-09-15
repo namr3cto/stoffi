@@ -64,6 +64,7 @@ Stoffi::Application.routes.draw do
 		get "/tour",       :to => "pages#tour",       :as => :tour
 		get "/get",        :to => "pages#get",        :as => :get
 		get "/download",   :to => "pages#download",   :as => :download
+		get "/checksum",   :to => "pages#checksum",   :as => :checksum
 		get "/contact",    :to => "pages#contact",    :as => :contact
 		get "/about",      :to => "pages#about",      :as => :about
 		get "/legal",      :to => "pages#legal",      :as => :legal

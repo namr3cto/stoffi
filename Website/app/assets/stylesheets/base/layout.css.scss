@@ -35,12 +35,16 @@ header
 main
 {
 	width: 70%;
+	float: left;
 	@media #{$medium} { width: 65%; }
-	@media #{$small} { width: 100%; }
+	@media #{$small}
+	{
+		width: 100%;
+		article { margin: 0; padding: 1em; }
+	}
 	
 	article
 	{
-		float: left;
 		margin: 1em;
 		@media #{$tiny} { margin: 0; }
 	
@@ -60,11 +64,29 @@ main
 			@media #{$medium} { width: 100%; }
 			section { width: 100%; }
 		}
+		
+		&.fullwidth section
+		{
+			float: initial;
+			width: 100%;
+		}
+		
+		&:after
+		{
+			display: block;
+			content: '';
+			clear: both;
+		}
 	}
 }
 
 footer
 {
+	@media #{$small}
+	{
+		border: none;
+		box-shadow: none;
+	}
 	.copyright
 	{
 		@media #{$small}
@@ -112,4 +134,9 @@ aside.sidebar
 section[data-type='bonus']
 {
 	@media #{$medium} { display: none; }
+}
+
+form.horizontal .field
+{
+	@media #{$medium} { display: block; }
 }

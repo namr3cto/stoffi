@@ -63,6 +63,12 @@ us:
   fetched_from: "Fetched from %{from}"
   
   admin: "Administrate"
+
+  download_button:
+    title: "Download now"
+    os:
+      windows7: "For Windows 7"
+    size: "Size"
   
   toplists:
     personal:

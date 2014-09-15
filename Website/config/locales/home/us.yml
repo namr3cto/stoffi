@@ -46,12 +46,6 @@ us:
       bookmarks:
         title:      "Bookmark your songs"
         text_html:  "Mark the good spots. In just one click.</p><p>Jump to the highest peaks and or remove that annoying intro with the click of a button."
-
-    download_button:
-      title: "Download now"
-      os:
-        windows7: "For Windows 7"
-      size: "Size"
       
     latest:
       title: "Latest features"

@@ -54,6 +54,7 @@ se:
       unknown: "Vi kunde inte avgöra ditt operativsystem.</p><p>Spana in \"Alla versioner\" och välj en version för din plattform."
       
   check:
+    file: "klicka här"
     brief:
       title: "Verifiera installationsfilens integritet"
       text: "För att verifiera att installationsfilen du laddat hem inte innehåller skadlig kod, bakdörrar eller andra hemskheter så kan du följa dessa enkla steg."

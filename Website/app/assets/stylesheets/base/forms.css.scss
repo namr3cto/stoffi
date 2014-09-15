@@ -1,0 +1,16 @@
+form.horizontal
+{
+	.field
+	{
+		display: inline-block;
+		padding: 0 1em 1em 0;
+		vertical-align: top;
+		
+		label
+		{
+			display: block;
+			margin-bottom: 0.5em;
+			font-size: 0.8em;
+		}
+	}
+}

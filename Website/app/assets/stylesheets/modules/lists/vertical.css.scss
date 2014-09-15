@@ -1,6 +1,6 @@
 ul.vertical
 {
-	padding: 0.6em;
+	padding: 0.6em 0;
 	li
 	{
 		padding: 0.5em;
@@ -13,6 +13,12 @@ ul.vertical
 		a
 		{
 			text-decoration: none;
+			
+			img
+			{
+				vertical-align: top;
+				margin-top: -0.2em;
+			}
 		}
 	}
 }
