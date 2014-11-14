@@ -7,6 +7,8 @@ Welcome to the world's next music player.
 
 This project should not be taken very seriously. It is mostly a playground for me, allowing me to experiment with different technologies in something that resembles a real world project. However, over the last couple of years Stoffi has grown into something that's no longer very tiny or limited in scope. I've actually managed to create quite a few features.
 
+Go to [stoffiplayer.com](http://stoffiplayer.com) for more information and to download the player.
+
 ## Features
 
 * Streaming from YouTube, SoundCloud, Internet radio
