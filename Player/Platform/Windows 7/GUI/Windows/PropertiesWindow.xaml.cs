@@ -325,6 +325,8 @@ namespace Stoffi
 			foreach (TrackData t in Tracks)
 			{
 				object p = GetTag(t, tag);
+				if (o == null && p == null)
+					continue;
 				if ((o != p && o == null) || (o.ToString() != p.ToString()))
 				{
 					same = false;
