@@ -59,6 +59,7 @@ namespace Stoffi
 		private static string librariesPath = Environment.GetFolderPath(Environment.SpecialFolder.UserProfile) + @"\AppData\Roaming\Microsoft\Windows\Libraries\";
 		private static List<SourceTree> sourceForest = new List<SourceTree>();
 		private static bool haltScanner = false;
+		private static object scanLock = new object();
 
 		#endregion
 
@@ -551,96 +552,101 @@ namespace Stoffi
 
 			ThreadStart ScanThread = delegate()
 			{
-				U.L(LogLevel.Information, "FILESYSTEM", "Starting scan of sources");
-				DispatchProgressChanged(0, "start");
-
-				U.L(LogLevel.Debug, "FILESYSTEM", "Refreshing meta data of existing tracks");
-				foreach (TrackData t in SettingsManager.FileTracks)
+				lock (scanLock)
 				{
-					if (Updated(t))
-						DispatchSourceModified(t, SourceModificationType.Updated);
-				}
+					U.L(LogLevel.Information, "FILESYSTEM", "Starting scan of sources");
+					DispatchProgressChanged(0, "start");
 
-				U.L(LogLevel.Debug, "FILESYSTEM", "Getting forest");
-				List<SourceTree> forest = GetSourceForest();
-
-				List<SourceTree> addedPaths = new List<SourceTree>();
-				List<SourceTree> removedPaths = new List<SourceTree>();
-				U.L(LogLevel.Debug, "FILESYSTEM", "Calculating forest change");
-				GetForestDifference(sourceForest, forest, addedPaths, removedPaths);
-
-				U.L(LogLevel.Debug, "FILESYSTEM", String.Format("Removing {0} paths ", removedPaths.Count));
-				foreach (SourceTree tree in removedPaths)
-				{
-					bool added = PathIsAdded(tree.Data, forest);
-					bool ignored = PathIsIgnored(tree.Data, forest);
-
-					if ((tree.Include && added) || (tree.Ignore && (!added || ignored)))
-						continue;
-
-					// see if there's any other sources on the same drive
-					bool remove = true;
-					foreach (SourceTree t in forest)
+					U.L(LogLevel.Debug, "FILESYSTEM", "Refreshing meta data of existing tracks");
+					for (int i=0; i < SettingsManager.FileTracks.Count; i++)
 					{
-						if (Path.GetPathRoot(t.Data) == Path.GetPathRoot(tree.Data))
+						var t = SettingsManager.FileTracks[i];
+						if (Updated(t))
+							DispatchSourceModified(t, SourceModificationType.Updated);
+					}
+
+					U.L(LogLevel.Debug, "FILESYSTEM", "Getting forest");
+					List<SourceTree> forest = GetSourceForest();
+
+					List<SourceTree> addedPaths = new List<SourceTree>();
+					List<SourceTree> removedPaths = new List<SourceTree>();
+					U.L(LogLevel.Debug, "FILESYSTEM", "Calculating forest change");
+					GetForestDifference(sourceForest, forest, addedPaths, removedPaths);
+
+					U.L(LogLevel.Debug, "FILESYSTEM", String.Format("Removing {0} paths ", removedPaths.Count));
+					foreach (SourceTree tree in removedPaths)
+					{
+						bool added = PathIsAdded(tree.Data, forest);
+						bool ignored = PathIsIgnored(tree.Data, forest);
+
+						if ((tree.Include && added) || (tree.Ignore && (!added || ignored)))
+							continue;
+
+						// see if there's any other sources on the same drive
+						bool remove = true;
+						foreach (SourceTree t in forest)
 						{
-							remove = false;
-							break;
+							if (Path.GetPathRoot(t.Data) == Path.GetPathRoot(tree.Data))
+							{
+								remove = false;
+								break;
+							}
+						}
+						if (remove)
+							RemoveJanitor(Path.GetPathRoot(tree.Data));
+						tree.Ignore = tree.Include;
+						ScanPath(tree.Data, tree, true, callbacks);
+					}
+
+					U.L(LogLevel.Debug, "FILESYSTEM", String.Format("Adding {0} paths", addedPaths.Count));
+					foreach (SourceTree tree in addedPaths)
+					{
+						SetupJanitor(Path.GetPathRoot(tree.Data));
+						ScanPath(tree.Data, tree, true, callbacks);
+					}
+
+					U.L(LogLevel.Debug, "FILESYSTEM", String.Format("Checking existing tracks"));
+					for (int i = 0; i < SettingsManager.FileTracks.Count; i++)
+					{
+						var track = SettingsManager.FileTracks[i];
+						if (PathIsIgnored(track.Path) || !File.Exists(track.Path))
+						{
+							RemoveFile(track.Path, callbacks);
 						}
 					}
-					if (remove)
-						RemoveJanitor(Path.GetPathRoot(tree.Data));
-					tree.Ignore = tree.Include;
-					ScanPath(tree.Data, tree, true, callbacks);
-				}
 
-				U.L(LogLevel.Debug, "FILESYSTEM", String.Format("Adding {0} paths", addedPaths.Count));
-				foreach (SourceTree tree in addedPaths)
-				{
-					SetupJanitor(Path.GetPathRoot(tree.Data));
-					ScanPath(tree.Data, tree, true, callbacks);
-				}
-
-				U.L(LogLevel.Debug, "FILESYSTEM", String.Format("Checking existing tracks"));
-				foreach (TrackData track in SettingsManager.FileTracks)
-				{
-					if (PathIsIgnored(track.Path) || !File.Exists(track.Path))
+					if (addedPaths.Count == 0 && removedPaths.Count == 0)
 					{
-						RemoveFile(track.Path, callbacks);
+						foreach (KeyValuePair<ScannerCallback, object> pair in callbacks)
+						{
+							ScannerCallback callback = pair.Key;
+							object callbackParams = pair.Value;
+							if (callback != null)
+								callback(callbackParams);
+						}
 					}
-				}
 
-				if (addedPaths.Count == 0 && removedPaths.Count == 0)
-				{
-					foreach (KeyValuePair<ScannerCallback,object> pair in callbacks)
+					if (ShouldStopScanner)
+						return;
+
+					sourceForest = forest;
+
+					List<TrackData> tracksToRemove = new List<TrackData>();
+					foreach (TrackData t in SettingsManager.FileTracks)
 					{
-						ScannerCallback callback = pair.Key;
-						object callbackParams = pair.Value;
-						if (callback != null)
-							callback(callbackParams);
+						// remove files that should not be in collection
+						if (!PathIsAdded(t.Path))
+							tracksToRemove.Add(t);
 					}
+
+					if (tracksToRemove.Count > 0)
+						U.L(LogLevel.Debug, "FILESYSTEM", "Dispatching SourceModified for all removals");
+					foreach (TrackData t in tracksToRemove)
+						DispatchSourceModified(t, SourceModificationType.Removed);
+
+					DispatchProgressChanged(100, "done");
+					U.L(LogLevel.Information, "FILESYSTEM", "Finished scan of sources");
 				}
-
-				if (ShouldStopScanner)
-					return;
-
-				sourceForest = forest;
-
-				List<TrackData> tracksToRemove = new List<TrackData>();
-				foreach (TrackData t in SettingsManager.FileTracks)
-				{
-					// remove files that should not be in collection
-					if (!PathIsAdded(t.Path))
-						tracksToRemove.Add(t);
-				}
-
-				if (tracksToRemove.Count > 0)
-					U.L(LogLevel.Debug, "FILESYSTEM", "Dispatching SourceModified for all removals");
-				foreach (TrackData t in tracksToRemove)
-					DispatchSourceModified(t, SourceModificationType.Removed);
-
-				DispatchProgressChanged(100, "done");
-				U.L(LogLevel.Information, "FILESYSTEM", "Finished scan of sources");
 			};
 
 			try
