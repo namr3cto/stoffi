@@ -2137,8 +2137,15 @@ namespace Stoffi
 
 						if (MediaManager.GetType(track) == TrackType.File)
 						{
-							FileInfo fi = new FileInfo(track.Path);
-							size += fi.Length;
+							try
+							{
+								FileInfo fi = new FileInfo(track.Path);
+								size += fi.Length;
+							}
+							catch (Exception e)
+							{
+								U.L(LogLevel.Warning, "main", "Could not read length of file " + track.Path + ": " + e.Message);
+							}
 							allYouTube = false;
 						}
 						else
