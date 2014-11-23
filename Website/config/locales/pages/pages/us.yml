@@ -4,7 +4,6 @@ us:
       
       index:
         link:            'Home'
-        title:           'Stoffi'
         description:     'Stoffi Music Player is a beautiful, integrated, compact &amp; free music player that plays music from YouTube, SoundCloud, radio and your harddrive.'
   
       donations:
@@ -49,6 +48,11 @@ us:
         link:            'Contact'
         title:           'Contact us'
         description:     'You are always free to contact us regarding any issues you may have, any information you want or anything else really.'
+        
+      contribute:
+        link:            'Contribute'
+        title:           'Contribute to the Stoffi project'
+        description:     'asd.'
   
       legal:
         link:            'Legal'

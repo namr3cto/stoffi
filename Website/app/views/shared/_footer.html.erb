@@ -1,15 +1,16 @@
-<footer id="footer">
+<div class='clear'></div>
+<footer>
 	<p class="copyright">
 		© <%= Time.now.year %> <a href="http://www.simplare.com">simplare</a>
 	</p>
 	<nav>
-		<%= link_to t("legal.link"),   legal_path %>
-		<%= link_to t("contact.link"), contact_path %>
-		<%= link_to t("contribute.link"), "http://dev.stoffiplayer.com/wiki/Welcome?tm=6" %>
+		<%= link_to t("pages.pages.legal.link"),   legal_path %>
+		<%= link_to t("pages.pages.contact.link"), contact_path %>
+		<%= link_to t("pages.pages.contribute.link"), "http://dev.stoffiplayer.com/wiki/Welcome?tm=6" %>
 		<%= link_to t("blog"),    "https://blog.stoffiplayer.com" %>
 		<%= link_to t("project"), "http://dev.stoffiplayer.com" %>
 		<% if user_signed_in? %>
-			<%= link_to t("apps.link"), apps_path %>
+			<%= link_to t("pages.models.apps.link"), apps_path %>
 		<% end %>
 	</nav>
 	
@@ -28,3 +29,23 @@
 	</ul>
 	
 </footer>
+
+<script type="text/javascript" charset="utf-8">
+		// Google+
+		window.___gcfg = {lang: '<%=I18n.locale%>'};
+		(function()
+		{
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		})();
+		
+		// Facebook
+		(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=243125052401100&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+</script>

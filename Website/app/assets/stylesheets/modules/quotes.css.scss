@@ -1,0 +1,53 @@
+#quotes
+{
+	width: 60%;
+	margin: auto;
+	
+	@media #{$medium} { width: initial; margin: 1em; }
+	@media #{$small} { font-size: 0.8em; }
+	@media #{$tiny} { margin: 0; }
+	
+	section
+	{
+		float: initial;
+		width: initial;
+	}
+	
+	.quote
+	{
+		padding: 0 2em;
+		margin: 0;
+		
+		.quotemark
+		{
+			font-family: 'IM Fell French Canon', serif;
+			font-size: 3em;
+			margin-top: 0.4em;
+			vertical-align: top;
+			display: inline-block;
+			
+			@media #{$medium} { margin-top: 0.1em; }
+		}
+		
+		.text
+		{
+			display: inline-block;
+			font-style: italic;
+			h2
+			{
+				font-size: 1.6em;
+			}
+			p
+			{
+				letter-spacing: 0.5em;
+				font-size: 1em;
+				padding: 0 5em;
+			}	
+		}
+		
+		&:nth-child(odd)
+		{
+			text-align: right;
+		}
+	}
+}

@@ -8,7 +8,7 @@ articles =
 [
 	{
 		:name => "qin",
-		:stamp => 1356344023,
+		:stamp => 1399309944,
 		:screens =>
 		[
 			{ :width => 514, :height => 318 },
@@ -83,6 +83,6 @@ articles =
 				</ul>
 			</section>
 		</aside>
-		<div class='clear<%=' divider' if article == articles.last %>'></div>
+		<div class='clear<%=' divider' unless article == articles.last %>'></div>
 	<% end %>
 </article>

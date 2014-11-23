@@ -7,29 +7,7 @@
 //= require jquery
 //= require jquery-ui
 //= require jquery_ujs
-//= require jquery.qtip.min
-//= require jquery.color
-
-//= require old_default
-//= require default
-
-//= require slideshow
-//= require editable
-//= require sha256
-//= require security
-//= require dropdown
-
-//= require translation
-//= require translations
-//= require apps
-//= require media
-//= require sync
-//= require tour
-//= require donations
-//= require settings
-//= require playlists
-//= require search
-
-//= require inflection
-//= require ga_social_tracking
-//= require gallery/touch_touch
+//= require_tree ./vendor
+//= require_tree ./base
+//= require_tree ./modules
+//= require_tree ./pages

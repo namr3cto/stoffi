@@ -7,12 +7,29 @@
 		<% elsif t? "pages.#{params[:controller]}.title" %>
 			<%= t "pages.#{params[:controller]}.title" %> - Stoffi
 		<% else %>
-			Stoffi
+			<%= t 'title' %>
 		<% end %>
 	</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<%= stylesheet_link_tag "application" %>
 	<%= javascript_include_tag "application" %>
-	<%= javascript_include_tag "realtime" %>
 	<%= csrf_meta_tags %>
+	<%= javascript_tag "var locale = '#{I18n.locale}';" %>
+	
+	<!-- Load Twitter JS-API asynchronously -->
+	<script type="text/javascript" charset="utf-8">	
+	window.twttr = (function (d,s,id)
+	{
+		var t, js, fjs = d.getElementsByTagName(s)[0];
+		if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
+		js.src="//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
+		return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
+	}(document, "script", "twitter-wjs"));
+	// Wait for the asynchronous resources to load
+	twttr.ready(function(twttr)
+	{
+		_ga.trackTwitter(); //Google Analytics tracking
+	});
+	</script>
+	
 </head>

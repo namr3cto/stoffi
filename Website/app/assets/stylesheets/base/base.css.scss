@@ -1,8 +1,21 @@
+html
+{
+	-webkit-text-size-adjust: 100%;
+}
+
 body
 {
 	margin: 0;
+	position: relative;
 	font-family: verdana, sans-serif;
 	padding-top: 2em;
+	margin-bottom: 12em;
+	@media #{$small} { margin-bottom: 0; }
+	
+	&::after
+	{
+		clear: both;
+	}
 }
 
 h1, h2

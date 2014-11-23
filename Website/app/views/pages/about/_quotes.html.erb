@@ -1,0 +1,19 @@
+<%
+quotes = [
+	['WinAjuda', 'http://winajuda.com/downloads/stoffi-music-player.html'],
+	['Softonic', 'http://stoffi.softonic.it/'],
+	['3D2F', 'http://3d2f.com/smartreviews/1-686-stoffi-music-player-everything-you-have-been-looking-for-in-an-audio-player-read.shtml']
+]
+%>
+
+<article id='quotes' class='ingraved'>
+	<% quotes.each do |quote| %>
+		<section class="quote">
+			<span class="quotemark">"</span>
+			<span class="text">
+				<h2><%= t "home.quotes.#{quote[0].parameterize}" %></h2>
+				<p>- <%= link_to quote[0], quote[1] %></p>
+			</span>
+		</section>
+	<% end %>
+</article>

@@ -1,9 +1,3 @@
-$tiny: "screen and (max-width: 500px)";
-$small: "screen and (max-width: 768px)";
-$medium: "screen and (max-width: 992px)";
-$large: "screen and (max-width: 1200px)";
-$huge: "screen and (max-width: 1600px)";
-
 header
 {
 	nav
@@ -80,40 +74,10 @@ main
 	}
 }
 
-footer
+main.fullwidth
 {
-	@media #{$small}
-	{
-		border: none;
-		box-shadow: none;
-	}
-	.copyright
-	{
-		@media #{$small}
-		{
-			font-size: 0.7em;
-			letter-spacing: 0.8em;
-		}
-	}
-	nav
-	{
-		@media #{$small} { text-transform: uppercase; }
-		
-		a
-		{
-			@media #{$small}
-			{
-				padding: 1em 0;
-				display: block;
-				margin: 2em auto;
-				width: 80%;
-				overflow: hidden;
-				font-size: 0.9em;
-				text-transform: uppercase;
-				letter-spacing: 0.5em;
-			}
-		}
-	}
+	width: 100%;
+	section { float: initial; width: initial; }
 }
 
 aside.sidebar
@@ -139,4 +103,9 @@ section[data-type='bonus']
 form.horizontal .field
 {
 	@media #{$medium} { display: block; }
+}
+
+.banner.ad
+{
+	@media #{$no-banners} { display: none; }
 }

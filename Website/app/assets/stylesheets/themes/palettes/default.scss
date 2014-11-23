@@ -1,18 +1,22 @@
 $primary:           #008bf9;
 $primary_text:	    white;
 $primary_hover:     black;
+$primary_image:     grayscale(100%) contrast(200%) invert(100%);
 
 $secondary:         #fecb00;
 $secondary_text:    black;
 $secondary_hover:   black;
+$secondary_image:   grayscale(100%) contrast(200%);
 
 $tertiary:          #009352;
 $tertiary_text:     white;
 $tertiary_hover:    black;
+$tertiary_image:    grayscale(100%) contrast(200%);
 
 $text:              black;
 $background:        white;
 $shadow:            black;
+$image:             grayscale(100%) contrast(200%);
 
 $wallpaper-color:   rgb(204,204,204);
 $wallpaper-image:   url(/assets/gfx/backgrounds/solid.png);

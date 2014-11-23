@@ -1,5 +1,6 @@
 aside.sidebar
 {
+	font-size: 0.8em;
 	section
 	{
 		border-radius: 3px;
@@ -24,6 +25,11 @@ article aside
 		h2
 		{
 			font-size: 1.1em;
+		}
+		
+		img.featured
+		{
+			width: 100%;
 		}
 	}
 }

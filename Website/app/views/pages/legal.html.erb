@@ -1,6 +1,6 @@
-<div id="main">
-	<div class="white box">
-		<h1><%= t "legal.title" %></h1>
+<article>
+	<section>
+		<h1><%= t "pages.pages.legal.title" %></h1>
 		<p><%=t "legal.intro"%></p>
 		<h2><%=t "legal.privacy.title" %></h2>
 		<p><%=raw t("legal.privacy.text", :opt_out_plugin => link_to(t("legal.privacy.link"), "http://tools.google.com/dlpage/gaoptout")) %><p>
@@ -13,7 +13,10 @@
 				:cc_link => link_to("CC", "http://creativecommons.org/licenses/by-sa/3.0/"))
 			%>
 		<p>
-	</div>
-</div>
-
-<%= render "sidebars/main" %>
+	</section>
+	<aside>
+		<section data-type='bonus'>
+			<%= image_tag 'gfx/legal.png', class: 'featured' %>
+		</section>
+	</aside>
+</article>

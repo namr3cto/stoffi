@@ -17,7 +17,6 @@ loadAjax = ->
 jQuery ->
 	hookHref()
 	$(document).ajaxComplete -> hookHref()
-	$('#thumbs a').touchTouch();
 	
 	
 hookHref = ->

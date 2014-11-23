@@ -21,7 +21,8 @@ class PagesController < ApplicationController
 	end
 	
 	def index
-		redirect_to dashboard_url if params[:format] == :embedded
+		redirect_to dashboard_url and return if params[:format] == :embedded
+		render layout: 'fullwidth'
 	end
 
 	def news

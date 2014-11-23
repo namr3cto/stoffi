@@ -5,7 +5,7 @@ us:
   
     future:
       title: "Future Plans"
-      list_html: "<li>More music sources</li><li>CD device support</li><li>Lyrics</li><li>Guitar tabs</li><li>Album art downloader</li><li>Wikipedia integration</li><li>More synchronization</li><li>Mobile application</li><li>Speed improvements</li><li>Meta data tools</li><li>Linux and Mac support</li><li>Better bookmarks</li>"
+      list: "More music sources|CD device support|Lyrics|Guitar tabs|Album art downloader|Wikipedia integration|More synchronization|Mobile application|Speed improvements|Meta data tools|Linux and Mac support|Better bookmarks"
     
     team:
       title: "With help from"
@@ -14,7 +14,7 @@ us:
       tianwen_zhang: "Chinese translation."
       tom_sokolinski: "German translation."
       fredrik_gadnell: "Created a remote app for iOS."
-      carl_carenvall: "Layed the foundation of the plugin system."
+      carl_carenvall: "Laid the foundation of the plugin system."
       mark_tibblin: "Various development tasks."
       francesco_roberto: "Italian translation."
       ryan_zeigler: "Prevented hibernation and sleep while synchronizing with cloud."
