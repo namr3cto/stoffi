@@ -5,7 +5,7 @@ us:
     empty: "No artists found."
     
     top:
-      title: "Heta artister"
+      title: "Hot artists"
     
     songs:
       remove: "Remove %{artist} as maker of %{song}"
