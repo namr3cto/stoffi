@@ -1,3 +1,28 @@
+// This is the default color theme.
+//
+// This file only defines the base colors used in the theme.
+// The actual theme file defines stuff like opacity, where
+// colors are used, etc.
+//
+// The 'image' variables are code sent to the CSS 'filter'
+// property. They assume that the base color of the image is
+// red. So for example 'hue-rotate(240deg)' would turn the
+// image blue.
+//
+// // // // // // // // //
+// 
+// Copyright 2014 Simplare
+// 
+// This code is part of the Stoffi Music Player Project.
+// Visit our website at: stoffiplayer.com
+//
+// This code is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version
+// 3 of the License, or (at your option) any later version.
+//
+// See stoffiplayer.com/license for more information.
+
 $primary:           #008bf9;
 $primary_text:	    white;
 $primary_hover:     black;
@@ -18,7 +43,7 @@ $background:        white;
 $shadow:            black;
 $image:             grayscale(100%) contrast(200%);
 
-$wallpaper-color:   rgb(204,204,204);
+$wallpaper-color:   #cccccc;
 $wallpaper-image:   url(/assets/gfx/backgrounds/solid.png);
 
 $alert:             #f00;
