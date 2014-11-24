@@ -17,7 +17,7 @@ class PagesController < ApplicationController
 	end
 
 	def old
-		render layout: false
+		render layout: 'empty'
 	end
 	
 	def index

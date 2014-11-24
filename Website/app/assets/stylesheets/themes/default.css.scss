@@ -20,8 +20,6 @@
 //
 // See stoffiplayer.com/license for more information.
 
-@import 'palettes/default';
-
 body
 {
 	background-color: $wallpaper-color;
@@ -38,7 +36,7 @@ a
 
 img.featured
 {
-	@include prefix(filter, $image opacity(60%));
+	@include prefix(filter, $image);
 }
 
 header
@@ -339,4 +337,23 @@ form
 {
 	h1 a { color: rgba($text, 0.6); }
 	ul li p { color: rgba($text, 0.6); }
+}
+
+#old
+{
+	h1 { color: rgba($text, 0.8); }
+	#browsers a:hover .txt { color: $text; }
+	.large.browser .txt
+	{
+		color: rgba($text, 0.8);
+	}
+	.small.browser .txt
+	{
+		color: rgba($text, 0.6);
+	}
+	#skip
+	{
+		color: rgba($text, 0.4);
+		&:hover { color: $text; }
+	}
 }

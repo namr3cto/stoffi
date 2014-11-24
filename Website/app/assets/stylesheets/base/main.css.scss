@@ -15,5 +15,18 @@ main
 		}
 	}
 	
+	&.centered
+	{
+		margin: auto;
+		float: initial;
+		
+		a.right
+		{
+			display: block;
+			text-align: right;
+			padding: 0 1em;
+		}
+	}
+	
 	@media #{$small} { margin-bottom: -1px; }
 }

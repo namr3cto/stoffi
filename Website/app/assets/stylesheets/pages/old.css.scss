@@ -1,0 +1,56 @@
+#old
+{
+	h1
+	{
+		text-align: center;
+		font-size: 2em;
+		padding-bottom: 1em;
+	}
+	#browsers
+	{
+		text-align: center;
+		margin: 2em;
+	}
+	.browser
+	{
+		display: inline-block;
+		vertical-align: bottom;
+	}
+	.large.browser { width: 24%; }
+	.small.browser { width: 18%; }
+	.large.browser .txt
+	{
+		font-size: 1.8em;
+		padding-top: 0.2em;
+	}
+	.small.browser .txt
+	{
+		font-size: 0.7em;
+		padding-top: 0.6em;
+		min-height: 2em;
+	}
+	.txt
+	{
+		display: block;
+	}
+	
+	@media #{$medium}
+	{
+		.large.browser { width: 25%; }
+		.small.browser { width: 17.5%; }
+		.browser img { width: 50%; }
+		.large.browser .txt { font-size: 1.2em; }
+	}
+	@media #{$small}
+	{
+		.large.browser .txt { font-size: 1em; }
+	}
+	@media #{$tiny}
+	{
+		margin-top: -3em;
+		#browsers { margin: 3em 0 0; }
+		.large.browser { width: 25%; }
+		.small.browser { width: 16%; }
+		#skip { padding: 1em; }
+	}
+}
