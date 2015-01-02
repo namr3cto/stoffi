@@ -1,0 +1,20 @@
+<div class='center' id='auth-buttons'>
+	<%
+	[
+		{ :name => "Twitter" },
+		{ :name => "Facebook" },
+		{ :name => "Google", :link_name => "google_oauth2" },
+		{ :name => "Vimeo" },
+		{ :name => "LinkedIn", :link_name => "linked_in" },
+		{ :name => "SoundCloud" }
+	].each do |link|
+		n = link[:name]
+		ln = link[:link_name] || n.downcase
+		path = "/auth/#{ln}"
+		css = "auth"
+		disp = image_tag("auth_buttons/#{n.downcase}_16.png")
+		title = t("auth.login", :service => n)
+		%>
+		<%= link_to disp, path, :class => css, :title => title %>
+	<% end %>
+</div>

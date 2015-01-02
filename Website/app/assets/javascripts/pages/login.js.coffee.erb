@@ -1,0 +1,174 @@
+#
+# Evaluates the current password and displays an indicator of its strength.
+#
+evaluatePassword = ->
+	p = $("#user_plain").val()
+	
+	if p.length == 0 or currentMode() == 'login'
+		$("#crack-time").hide()
+		return
+	
+	# determine keyspace size
+	n = 0
+	if p.match(/[a-z]/)
+		n += 25
+	if p.match(/[A-Z]/)
+		n += 25
+	if p.match(/[0-9]/)
+		n += 10
+	if p.match(/[^a-zA-Z0-9]/)
+		n += 20
+	
+	c = Math.pow(n,p.length) / (cracking_bots * crack_speed)
+	
+	if c < 1
+		$("#crack-time-text").text trans[locale]['notice.password.hint.very_short']
+	else if c <= 60
+		$("#crack-time-text").text hintText(c, 'seconds')
+	else if c <= 60 * 60
+		$("#crack-time-text").text hintText(c/60, 'minutes')
+	else if c <= 60 * 60 * 24
+		$("#crack-time-text").text hintText(c/(60*60), 'hours')
+	else if c <= 60 * 60 * 24 * 7
+		$("#crack-time-text").text hintText(c/(60*60*24), 'days')
+	else if c <= 60 * 60 * 24 * 60
+		$("#crack-time-text").text hintText(c/(60*60*24*7), 'weeks')
+	else if c <= 60 * 60 * 24 * 365
+		$("#crack-time-text").text hintText(c/(60*60*24*30), 'months')
+	else if c <= 60 * 60 * 24 * 365 * 100
+		$("#crack-time-text").text hintText(c/(60*60*24*365), 'years')
+	else if c <= 60 * 60 * 24 * 365 * 100 * 100
+		$("#crack-time-text").text hintText(c/(60*60*24*365*100), 'centuries')
+	else
+		$("#crack-time-text").text trans[locale]['notice.password.hint.very_long']
+		
+	$("#crack-time").show()
+	
+#
+# Returns a localized text given an amount of time and unit.
+#
+hintText = (time, unit) ->
+	time = Math.round time
+	
+	unit = 'x_'+unit
+	if unit == 'x_hours' || unit == 'x_years'
+		unit = 'about_'+unit
+	
+	u = trans[locale]['datetime.distance_in_words.'+unit+'.other']
+	if time == 1
+		u = trans[locale]['datetime.distance_in_words.'+unit+'.one']
+	else
+		u = u.replace "%{count}", time
+	
+	txt = trans[locale]['notice.password.hint.text'];
+	txt.replace "%{time}", u
+
+#
+# Hashes the password in the form.
+# The email is used as a salt.
+#
+# param @header
+#   Whether to hash the header form or a body form
+#
+hashPasswords = ->
+	plain = $('#user_plain')
+	plain_confirm = $('#user_plain_confirmation')
+	plain_current = $('#user_current_plain')
+	hashed = $('#user_password')
+	hashed_confirm = $('#user_password_confirmation')
+	hashed_current = $('#user_current_password')
+	mail = $('#user_email')
+	
+	do_password = plain.length != 0 and plain.val() != null and plain.val().length != 0
+	do_confirm = plain_confirm.length != 0 and plain_confirm.val() != null and plain_confirm.val().length != 0
+	do_current = plain_current.length != 0 and plain_current.val() != null and plain_current.val().length != 0
+	
+	if mail != null and mail.length != 0
+		salt = mail.val()
+		if do_password
+			hashed.val hash(plain.val() + salt, "sha256")
+		if do_confirm
+			hashed_confirm.val hash(plain_confirm.val() + salt, "sha256")
+		if do_current
+			hashed_current.val hash(plain_current.val() + salt, "sha256")
+
+#
+# Clear all plaintext passwords.
+#
+clearPasswords = ->
+	$('#user_plain').val ''
+	$('#user_plain_confirmation').val ''
+	$('#user_current_plain').val ''
+	
+#
+# Get the current mode from the URL.
+# Returns either 'login' or 'join'.
+#
+currentMode = ->
+	mode = window.location.hash.substring 1
+	if mode == ''
+		mode = switch window.location.pathname
+			when '/join', '/user' then 'join'
+			else 'login'
+	mode
+
+#
+# Update the page according to the current mode.
+#
+refreshLoginMode = ->		
+	if currentMode() == 'join'
+		form_url = $('#login #new_user').data 'join-url'
+		$("#login [data-mode='join']").show()
+		$("#login [data-mode='login']").hide()
+	else
+		form_url = $('#login #new_user').data 'login-url'
+		$("#login [data-mode='login']").show()
+		$("#login [data-mode='join']").hide()
+		
+	$('#login #new_user').attr 'action', form_url
+	
+#
+# Switch mode and refresh page.
+#
+toggleLoginMode = ->
+	window.location.hash = `currentMode() == 'join' ? 'login' : 'join'`
+	refreshLoginMode()
+	
+#
+# Submit the login form.
+#
+# First hash the passwords, then clear the plaintext passwords, then submit the form.
+#
+submitLoginForm = ->
+	hashPasswords()
+	clearPasswords()
+	$('#login #new_user').submit()
+	
+#
+# Determine if the user pressed enter, given an event from a key press
+#
+pressedEnter = (event) ->
+	if window.event
+		keycode = window.event.keyCode;
+	else if event
+		keycode = event.which;
+	else
+		return false
+		
+	keycode == 13
+	
+jQuery ->
+	refreshLoginMode()
+	$("#login [data-button='toggle']").on 'click', (event) ->
+		toggleLoginMode()
+	$("#login [data-button='submit']").on 'click', (event) ->
+		submitLoginForm()
+	$("#login #user_plain").on 'keyup', (event) ->
+		evaluatePassword()
+	$("#login #user_plain").on 'keydown', (event) ->
+		if pressedEnter event
+			submitLoginForm()
+	$("#crack-time-img").qtip {
+		content: crack_time_text,
+		style: 'qtip-light qtip-shadow'
+	}

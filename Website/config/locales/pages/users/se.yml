@@ -15,7 +15,7 @@ se:
       registrations:
       
         new:
-          link:            'Gå med'
+          link:            'Jag är ny'
           title:           'Gå med'
           description:     "Skapa ett konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
   

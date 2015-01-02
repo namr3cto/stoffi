@@ -165,6 +165,11 @@ footer
 a.button, ul.buttons li a
 {
 	@include button-colors($primary, $primary_text);
+	
+	&.secondary
+	{
+		@include button-colors($secondary, $secondary_text);
+	}
 }
 
 ul.vertical li a
@@ -208,11 +213,11 @@ form
 
 .notice
 {
-	color: rgba($notice, 0.5);
-	background-image: url(/assets/gfx/error.png);
+	color: darken(rgba($notice, 0.5), 30%);
+	background-image: url(/assets/gfx/notice.png);
 	background-color: lighten(rgba($notice, 0.5), 20%);
-	border: 1px solid rgba($notice, 0.5);
-	h2 { color: rgba($notice, 0.5); }
+	border: 1px solid darken(rgba($notice, 0.5), 30%);
+	h2 { color: darken(rgba($notice, 0.5), 30%); }
 }
 
 .alert
@@ -222,6 +227,14 @@ form
 	background-image: url(/assets/gfx/error.png);
 	border: 1px solid rgba($alert, 0.5);
 	h2 { color: rgba($alert, 0.5); }
+}
+
+h2.line-behind
+{
+	&:before, &:after
+	{
+		border-top: 1px solid rgba($text, 0.2);
+	}
 }
 
 #tour

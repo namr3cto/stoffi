@@ -14,26 +14,40 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	oauthenticate except: [ :new, :create, :show ]
 
 	def new
-		@title = t "join.title"
-		@description = t "join.description"
-		
 		flash[:alert] = nil
 		if request.referer && ![login_url, join_url, unlock_url, forgot_url].index(request.referer)
 			session["user_return_to"] = request.referer
 		end
-		super
+		build_resource {}
+		render '/users/sessions/new', layout: 'fullwidth'
 	end
 	
 	def create
 		if verify_recaptcha
 			flash[:alert] = nil
-			super
+			build_resource(sign_up_params)
+
+			if resource.save
+				yield resource if block_given?
+				if resource.active_for_authentication?
+					set_flash_message :notice, :signed_up if is_flashing_format?
+					sign_up(resource_name, resource)
+					respond_with resource, location: after_sign_up_path_for(resource)
+				else
+					set_flash_message :notice, :"signed_up_but_#{resource.inactive_message}" if is_flashing_format?
+					expire_data_after_sign_in!
+					respond_with resource, location: after_inactive_sign_up_path_for(resource)
+				end
+			else
+				clean_up_passwords resource
+				render '/users/sessions/new', layout: 'fullwidth'
+			end
 		else
 			build_resource
 			clean_up_passwords(resource)
 			flash.now[:alert] = t("activerecord.errors.messages.human")
 			flash.delete :recaptcha_error
-			render :new
+			render '/users/sessions/new', layout: 'fullwidth'
 		end
 	end
 	

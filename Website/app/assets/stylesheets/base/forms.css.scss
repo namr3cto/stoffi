@@ -14,3 +14,50 @@ form.horizontal
 		}
 	}
 }
+
+form
+{
+	div.field
+	{
+		margin-bottom: 1em;
+		
+		span
+		{
+			display: inline-block;
+		}
+		label
+		{
+			display: block;
+			margin-bottom: 0.3em;
+		}
+		
+		&:after
+		{
+			display: block;
+			content: '';
+			clear: both;
+		}
+	}
+}
+
+article.small
+{
+	form
+	{
+		display: inline-block;
+		
+		input[type=email], input[type=password], input[type=text]
+		{
+			border: none;
+			border-bottom: 1px dashed grey;
+			font-size: 1em;
+			font-family: verdana, sans-serif;
+			margin: 1em 0;
+		}
+		
+		a.button
+		{
+			margin: 0.4em 0.1em;
+		}
+	}
+}

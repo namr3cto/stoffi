@@ -1,0 +1,11 @@
+<% if any_errors?(resource) or flash[:alert].present? %>
+	<div class="alert">
+		<%= pretty_error(resource) %>
+		<%= "<br/>" if any_errors?(resource) and flash[:alert].present? %>
+		<%= flash[:alert] %>
+	</div>
+<% end %>
+
+<% if flash[:notice].present? %>
+	<div class="notice"><%=h flash[:notice] %></div>
+<% end %>

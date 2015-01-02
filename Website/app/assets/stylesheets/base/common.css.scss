@@ -19,3 +19,17 @@
 
 .center { text-align: center; }
 .inline { display: inline-block; }
+
+h2.line-behind {
+    display: table;
+    white-space: nowrap;
+    &:before, &:after {
+      content: '';
+      display: table-cell;
+      position: relative;
+      top: 0.5em;
+      width: 45%;
+    }
+    &:before { right: 1.5%; }
+    &:after { left: 1.5%; }
+}

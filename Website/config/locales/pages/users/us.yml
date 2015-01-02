@@ -5,6 +5,7 @@ us:
       registrations:
   
         new:
+          toggle:          "I'm new"
           link:            'Join'
           title:           'Join'
           description:     "Create an account and start to enjoy our great services. If you already have an account at Facebook, Twitter, Google, SoundCloud, Vimeo or LinkedIn you don't even have to register."
@@ -26,6 +27,7 @@ us:
       sessions:
   
         new:
+          toggle:          'Already joined'
           link:            'Login'
           title:           'Login'
           description:     "Login with your account and start to enjoy our great services. If you already have an account at Facebook, Twitter, Google, SoundCloud, Vimeo or LinkedIn you don't even have to register."
@@ -34,14 +36,14 @@ us:
           link:            'Logout'
   
       unlocks:
-        link:            'Unlock'
+        link:            'Unlock account'
         title:           'Unlock account'
         description:     'If you have been locked out you can request an email to unlock your account.'
         
       passwords:
   
         new:
-          link:            'Forgot'
+          link:            'Forgot password'
           title:           'Forgot password'
           description:     'We all forget sometimes. Request an email for a password reset.'
   

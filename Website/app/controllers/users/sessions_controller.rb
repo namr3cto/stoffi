@@ -9,14 +9,13 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class Users::SessionsController < Devise::SessionsController
+	layout 'fullwidth'
+	
 	def new
+		#flash[:alert] = nil
 		if request.referer && ![login_url, join_url, unlock_url, forgot_url].index(request.referer)
 			session["user_return_to"] = request.referer
 		end
-		
-		@title = t "login.title"
-		@description = t "login.description"
-		
 		super
 	end
 end

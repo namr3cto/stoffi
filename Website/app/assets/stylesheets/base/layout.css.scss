@@ -34,7 +34,10 @@ main
 	@media #{$small}
 	{
 		width: 100%;
-		article { margin: 0; padding: 1em; }
+		article
+		{
+			margin: 0; padding: 1em;
+		}
 	}
 	
 	article
@@ -70,6 +73,29 @@ main
 			display: block;
 			content: '';
 			clear: both;
+		}
+		
+		&.small
+		{
+			width: 400px;
+			margin: 2em auto;
+			
+			section:last-child
+			{
+				margin-bottom: 0;
+			}
+			
+			@media #{$tiny}
+			{
+				width: initial;
+				margin: 0;
+			}
+			
+			h1
+			{
+				text-align: center;
+				margin: 0.3em 0 1em;
+			}
 		}
 	}
 }

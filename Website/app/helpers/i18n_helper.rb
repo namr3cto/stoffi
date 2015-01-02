@@ -31,14 +31,7 @@ module I18nHelper
 	end
 	
 	def langtag(locale)
-		case locale.to_s
-		when 'se' then 'sv_SE'
-		when 'us' then 'en_US'
-		when 'uk' then 'en_GB'
-		when 'cn' then 'zn_CN'
-		when 'de' then 'de_DE'
-		else locale
-		end
+		full_locale locale
 	end
 	
 	def short_langtag(locale)
@@ -46,7 +39,7 @@ module I18nHelper
 		when 'se' then 'sv'
 		when 'us' then 'en'
 		when 'uk' then 'en'
-		when 'cn' then 'zn'
+		when 'cn' then 'zh'
 		when 'de' then 'de'
 		else locale
 		end
@@ -59,7 +52,7 @@ module I18nHelper
 		when 'uk' then 'en_GB'
 		when 'cn' then 'zh_CN'
 		when 'de' then 'de_DE'
-		else locale
+		else locale.to_s
 		end
 	end
 	

@@ -1,7 +1,7 @@
 us:
   recaptcha:
-    instructions_visual: "Type the two words:"
-    instructions_audio: "Type what you hear:"
+    instructions_visual: "Type the text"
+    instructions_audio: "Type what you hear"
     play_again: "Play sound again"
     cant_hear_this: "Download sound as mp3"
     visual_challenge: "Get a visual challenge"
