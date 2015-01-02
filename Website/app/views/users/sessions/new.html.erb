@@ -3,11 +3,11 @@
 		<h1 data-mode='login'><%= t "pages.users.sessions.new.title" %></h1>
 		<h1 data-mode='join'><%= t "pages.users.registrations.new.title" %></h1>
 		
-		<h2 class='line-behind'>Use one of these</h2>
+		<h2 class='line-behind'><%= t 'login.services' %></h2>
 		
 		<%= render 'shared/login/services' %>
 		
-		<h2 class='line-behind'>or fill out this form</h2>
+		<h2 class='line-behind'><%= t 'login.form' %></h2>
 		
 		<%= render 'shared/messages' %>
 		
@@ -25,10 +25,11 @@
 				</div>
 				
 				<div class='field'>
-					<%= f.password_field :plain, placeholder: t("dialog.password_placeholder") %>
+					<%= f.password_field :plain, placeholder: t("dialog.password_placeholder"),
+						data: { strength: 'crack-time', submitOnEnter: 'true' } %>
 					<%= f.hidden_field :password %>
 					<div style="display:none;" id="crack-time">
-						<span id="crack-time-text"></span>
+						<span></span>
 						<%= image_tag "gfx/tooltip.png", :id => "crack-time-img" %>
 					</div>
 				</div>
@@ -87,20 +88,3 @@
 		
 	</section>
 </article>
-
-<%= javascript_tag do %>
-	<%
-	bots = 20000
-	speed = 1000000000
-	%>
-	cracking_bots = <%= bots %>;
-	crack_speed = <%= speed %>;
-	
-	<%
-	l = I18n.locale
-	l = :en if l == :us
-	bots = number_with_delimiter(bots, :locale => l)
-	speed = number_to_human(speed, :locale => l).downcase
-	%>
-	crack_time_text = "<%=t "notice.password.explanation", botsize: bots, speed: speed %>";
-<% end %>

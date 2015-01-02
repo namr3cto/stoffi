@@ -1,7 +1,7 @@
 se:
   recaptcha:
-    instructions_visual: "Skriv de två orden:"
-    instructions_audio: "Skriv vad du hör:"
+    instructions_visual: "Skriv texten"
+    instructions_audio: "Skriv vad du hör"
     play_again: "Spela ljudet igen"
     cant_hear_this: "Ladda ner ljud som mp3"
     visual_challenge: "Byt till visuellt test"

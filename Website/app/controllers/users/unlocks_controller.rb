@@ -9,7 +9,5 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class Users::UnlocksController < Devise::UnlocksController
-	def new
-		super
-	end
+	layout 'fullwidth'
 end

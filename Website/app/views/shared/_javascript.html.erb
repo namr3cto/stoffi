@@ -1,0 +1,38 @@
+<script type="text/javascript" charset="utf-8">
+		// Google+
+		window.___gcfg = {lang: '<%=I18n.locale%>'};
+		(function()
+		{
+			var po = document.createElement('script'); po.type = 'text/javascript'; po.async = true;
+			po.src = 'https://apis.google.com/js/plusone.js';
+			var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(po, s);
+		})();
+		
+		// Facebook
+		(function(d, s, id) {
+		  var js, fjs = d.getElementsByTagName(s)[0];
+		  if (d.getElementById(id)) return;
+		  js = d.createElement(s); js.id = id;
+		  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=243125052401100&version=v2.0";
+		  fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+</script>
+
+<%= javascript_tag do %>
+	<%
+	bots = 20000
+	speed = 1000000000
+	%>
+	cracking_bots = <%= bots %>;
+	crack_speed = <%= speed %>;
+	
+	<%
+	l = I18n.locale
+	l = :en if l == :us
+	bots = number_with_delimiter(bots, :locale => l)
+	speed = number_to_human(speed, :locale => l).downcase
+	%>
+	crack_time_text = "<%=t "notice.password.explanation", botsize: bots, speed: speed %>";
+<% end %>
+
+<%= javascript_include_tag 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.js' %>

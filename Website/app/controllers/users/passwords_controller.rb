@@ -9,6 +9,8 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class Users::PasswordsController < Devise::PasswordsController
+	layout 'fullwidth'
+	
 	def edit
 		u = User.find_by(reset_password_token: params[:reset_password_token])
 		@email = u.email if u

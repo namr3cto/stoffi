@@ -1,11 +1,12 @@
 <head>
 	<title>
+		<% c = params[:controller].gsub '/', '.' %>
 		<% if content_for? :title %>
 			<%= yield :title %> - Stoffi
-		<% elsif t? "pages.#{params[:controller]}.#{params[:action]}.title" %>
-			<%= t "pages.#{params[:controller]}.#{params[:action]}.title" %> - Stoffi
-		<% elsif t? "pages.#{params[:controller]}.title" %>
-			<%= t "pages.#{params[:controller]}.title" %> - Stoffi
+		<% elsif t? "pages.#{c}.#{params[:action]}.title" %>
+			<%= t "pages.#{c}.#{params[:action]}.title" %> - Stoffi
+		<% elsif t? "pages.#{c}.title" %>
+			<%= t "pages.#{c}.title" %> - Stoffi
 		<% else %>
 			<%= t 'title' %>
 		<% end %>

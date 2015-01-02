@@ -1,21 +1,12 @@
 se:
   pages:
     users:
-      
-      sessions:
-  
-        new:
-          link:            'Logga in'
-          title:           'Logga in'
-          description:     "Logga in med ditt konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
-  
-        destroy:
-          link:            'Logga ut'
           
       registrations:
       
         new:
-          link:            'Jag är ny'
+          toggle:          "Jag är ny"
+          link:            'Gå med'
           title:           'Gå med'
           description:     "Skapa ett konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
   
@@ -32,17 +23,27 @@ se:
         show:
           link:            'Profil'
           description:     'Spana in %{usernames} hetaste låtar och spellistor på Stoffi.'
-
+      
+      sessions:
+  
+        new:
+          toggle:          'Redan med'
+          link:            'Logga in'
+          title:           'Logga in'
+          description:     "Logga in med ditt konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
+  
+        destroy:
+          link:            'Logga ut'
 
       unlocks:
-        link:            'Lås upp'
+        link:            'Lås upp konto'
         title:           'Lås upp konto'
         description:     'Om ditt konto har blivit låst kan du be om ett mail för att låsa upp det.'
 
       passwords:
         
         new:
-          link:            'Glömt'
+          link:            'Glömt lösenord'
           title:           'Glömt lösenord'
           description:     'Vi glömmer alla ibland. Begär ett mail för att återställa lösenordet.'
 

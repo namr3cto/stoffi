@@ -1,4 +1,8 @@
 se:
+  login:
+    services: 'Använd en av dessa'
+    form: 'eller fyll i det här formuläret'
+  
   dashboard:
     meta: "Visa panel"
     songs:

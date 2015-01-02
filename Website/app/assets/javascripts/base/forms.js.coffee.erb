@@ -1,11 +1,14 @@
 #
 # Evaluates the current password and displays an indicator of its strength.
 #
-evaluatePassword = ->
+evaluatePassword = (element) ->
 	p = $("#user_plain").val()
+	div = element.data 'strength'
+	div_text = $("##{div} span")
+	div = $("##{div}")
 	
 	if p.length == 0 or currentMode() == 'login'
-		$("#crack-time").hide()
+		div.hide()
 		return
 	
 	# determine keyspace size
@@ -22,27 +25,27 @@ evaluatePassword = ->
 	c = Math.pow(n,p.length) / (cracking_bots * crack_speed)
 	
 	if c < 1
-		$("#crack-time-text").text trans[locale]['notice.password.hint.very_short']
+		div_text.text trans[locale]['notice.password.hint.very_short']
 	else if c <= 60
-		$("#crack-time-text").text hintText(c, 'seconds')
+		div_text.text hintText(c, 'seconds')
 	else if c <= 60 * 60
-		$("#crack-time-text").text hintText(c/60, 'minutes')
+		div_text.text hintText(c/60, 'minutes')
 	else if c <= 60 * 60 * 24
-		$("#crack-time-text").text hintText(c/(60*60), 'hours')
+		div_text.text hintText(c/(60*60), 'hours')
 	else if c <= 60 * 60 * 24 * 7
-		$("#crack-time-text").text hintText(c/(60*60*24), 'days')
+		div_text.text hintText(c/(60*60*24), 'days')
 	else if c <= 60 * 60 * 24 * 60
-		$("#crack-time-text").text hintText(c/(60*60*24*7), 'weeks')
+		div_text.text hintText(c/(60*60*24*7), 'weeks')
 	else if c <= 60 * 60 * 24 * 365
-		$("#crack-time-text").text hintText(c/(60*60*24*30), 'months')
+		div_text.text hintText(c/(60*60*24*30), 'months')
 	else if c <= 60 * 60 * 24 * 365 * 100
-		$("#crack-time-text").text hintText(c/(60*60*24*365), 'years')
+		div_text.text hintText(c/(60*60*24*365), 'years')
 	else if c <= 60 * 60 * 24 * 365 * 100 * 100
-		$("#crack-time-text").text hintText(c/(60*60*24*365*100), 'centuries')
+		div_text.text hintText(c/(60*60*24*365*100), 'centuries')
 	else
-		$("#crack-time-text").text trans[locale]['notice.password.hint.very_long']
+		div_text.text trans[locale]['notice.password.hint.very_long']
 		
-	$("#crack-time").show()
+	div.show()
 	
 #
 # Returns a localized text given an amount of time and unit.
@@ -108,8 +111,9 @@ currentMode = ->
 	mode = window.location.hash.substring 1
 	if mode == ''
 		mode = switch window.location.pathname
-			when '/join', '/user' then 'join'
-			else 'login'
+			when '/join', '/user', '/user/sign_up' then 'join'
+			when '/login', '/user/sign_in' then 'login'
+			else 'unknown'
 	mode
 
 #
@@ -139,10 +143,10 @@ toggleLoginMode = ->
 #
 # First hash the passwords, then clear the plaintext passwords, then submit the form.
 #
-submitLoginForm = ->
+submitLoginForm = (element) ->
 	hashPasswords()
 	clearPasswords()
-	$('#login #new_user').submit()
+	element.closest('form').submit()
 	
 #
 # Determine if the user pressed enter, given an event from a key press
@@ -161,13 +165,13 @@ jQuery ->
 	refreshLoginMode()
 	$("#login [data-button='toggle']").on 'click', (event) ->
 		toggleLoginMode()
-	$("#login [data-button='submit']").on 'click', (event) ->
-		submitLoginForm()
-	$("#login #user_plain").on 'keyup', (event) ->
-		evaluatePassword()
-	$("#login #user_plain").on 'keydown', (event) ->
+	$("form [data-button='submit']").on 'click', (event) ->
+		submitLoginForm $(this)
+	$("form [data-strength]").on 'keyup', (event) ->
+		evaluatePassword $(this)
+	$("form [data-submitOnEnter]").on 'keydown', (event) ->
 		if pressedEnter event
-			submitLoginForm()
+			submitLoginForm $(this)
 	$("#crack-time-img").qtip {
 		content: crack_time_text,
 		style: 'qtip-light qtip-shadow'
