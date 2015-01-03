@@ -70,7 +70,7 @@ services = [
 			</div>
 		
 		<% else %>
-			<%= link_to t("pages.users.sessions.new.link"), login_path, title: t("pages.users.sessions.new.description") %>
+			<%= link_to t("pages.users.sessions.new.link"), new_user_session_path, title: t("pages.users.sessions.new.description") %>
 			<% services.each do |s| %>
 				<%= link_to image_tag("auth_buttons/#{s[:name].downcase}_16_white.png", width: s[:width], height: 16),
 					s[:path] || s[:name].downcase, class: 'auth', title: t('auth.login', service: s[:name])%>

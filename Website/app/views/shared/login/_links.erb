@@ -1,14 +1,14 @@
 <div id="login-links">
 
 	<%- if devise_mapping.recoverable? && controller_name != "passwords" %>
-		<%= link_to t("pages.users.passwords.new.link"), forgot_path, :class => "devise-link" %>
+		<%= link_to t("pages.users.passwords.new.link"), new_user_password_path, :class => "devise-link" %>
 	<% end %>
 
 	<%- if devise_mapping.lockable? && resource_class.unlock_strategy_enabled?(:email) && controller_name != "unlocks" %>
-		<%= link_to t("pages.users.unlocks.link"), unlock_path, :class => "devise-link" %>
+		<%= link_to t("pages.users.unlocks.link"), new_user_unlock_path, :class => "devise-link" %>
 	<% end %>
 
 	<%- if controller_name != "registrations" and controller_name != 'sessions' %>
-		<%= link_to t("pages.users.sessions.new.link"), login_path, :class => "devise-link" %>
+		<%= link_to t("pages.users.sessions.new.link"), new_user_session_path, :class => "devise-link" %>
 	<% end %>
 </div>

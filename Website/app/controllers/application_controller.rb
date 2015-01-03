@@ -9,15 +9,14 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class ApplicationController < ActionController::Base
+	
 	# we need number_to_currency for our title formatting
 	include ActionView::Helpers::NumberHelper
-	
-	#require 'juggernaut' # do we need this after rails 3 upgrade?
+
 	require 'geoip'
 	
 	# prevent csrf
-	#TODO: the API stops working with this :(
-	#protect_from_forgery
+	protect_from_forgery
 	
 	before_filter :auth_with_params,
 	              :check_device,
@@ -34,7 +33,6 @@ class ApplicationController < ActionController::Base
 	# sets the configuration for the website
 	def set_config
 		@site_config = Admin::Config.first
-		
 	end
 	
 	def owns(resource, id)
@@ -247,7 +245,7 @@ class ApplicationController < ActionController::Base
 	end
 		
 	def default_url_options(options={})
-		{ l: base_path }
+		{ l: base_path }.merge(options)
 	end
 	
 	def verify_authenticity_token

@@ -15,7 +15,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
 	def new
 		flash[:alert] = nil
-		if request.referer && ![login_url, join_url, unlock_url, forgot_url].index(request.referer)
+		if request.referer && ![user_session_url, user_registration_url, user_unlock_url, user_password_url].index(request.referer)
 			session["user_return_to"] = request.referer
 		end
 		build_resource {}
