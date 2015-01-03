@@ -48,6 +48,11 @@ se:
         link:            'Kontakt'
         title:           'Kontakta oss'
         description:     'Du kan kontakta oss om problem du har, information du saknar eller vad som helst egentligen.'
+        
+      contribute:
+        link:            'Hjälp till'
+        title:           'Hjälp till med Stoffi'
+        description:     'asd.'
   
       legal:
         link:            'Regler'
