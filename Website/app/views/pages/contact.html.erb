@@ -1,3 +1,86 @@
+<article>
+	<section>
+		<% if params[:sent] and params[:sent] == "success" %>
+			<div class="notice"><%=t "contact.email.sent" %></div>
+		<% end %>
+		
+		<h1><%=t "contact.issue.title" %></h1>
+		<p>
+			<%=t "contact.issue.text_html", :link => link_to(t("contact.issue.link"), "http://dev.stoffiplayer.com/issues/new") %>
+		</p>
+		
+		<h1><%=t "contact.email.title" %></h1>
+		<%= form_tag mail_path do %>
+
+			<%= render 'shared/messages' %>
+			<% if flash[:error] %>
+				<div class="error"><%= flash[:error] %></div>
+			<% end %>
+		
+			<div class='field'>
+				<%= text_field_tag :name, params[:name], placeholder: t("contact.email.name") %>
+			</div>
+		
+			<div class='field'>
+				<%= email_field_tag :email, params[:email], placeholder: t("contact.email.email") %>
+			</div>
+		
+			<div class='field'>
+				<%= text_field_tag :subject, params[:subject], placeholder: t("contact.email.subject") %>
+			</div>
+		
+			<div class='field'>
+				<%= text_area_tag :message, params[:message], placeholder: t("contact.email.message") %>
+			</div>
+			
+			<div class='field'>
+				<%= recaptcha_tags ssl: true, display: { theme: "white", lang: full_locale(I18n.locale),
+					custom_translations:
+					{
+						instructions_visual: t("recaptcha.instructions_visual"),
+						instructions_audio:  t("recaptcha.instructions_audio"),
+						play_again:          t("recaptcha.play_again"),
+						cant_hear_this:      t("recaptcha.cant_hear_this"),
+						visual_challenge:    t("recaptcha.visual_challenge"),
+						audio_challenge:     t("recaptcha.audio_challenge"),
+						refresh_btn:         t("recaptcha.refresh_btn"),
+						help_btn:            t("recaptcha.help_btn")
+					} }
+				%>
+			</div>
+			
+			<%= link_to '#', class: 'button', data: { button: :submit } do %>
+				<span><%=t 'contact.email.send' %></span>
+			<% end %>
+		<% end %>
+	</section>
+	
+	<aside>
+		<section data-type='essential'>
+		
+			<h1><%=t "contact.phone.title" %></h1>
+			<p>
+				<%= I18n.locale.to_s == "se" ? "0":"+46 (0) " %>76 1337 235
+			</p>
+			
+			<h1><%=t "contact.visit.title" %></h1>
+			<p>
+				Råbyvägen 32<br/>
+				754 22 Uppsala<br/>
+				<%=t "contact.visit.sweden" %>
+			</p>
+			<%= render partial: 'shared/map', locals: {
+					longitude: 17.6453426, latitude: 59.869088,
+					address: 'Råbyvägen 32, Uppsala, Sweden',
+					marker: t('contact.visit.map.marker'),
+					link_text: t('contact.visit.map.link')
+			} %>
+		</section>
+	</aside>
+</article>
+
+<% if false %>
+
 <div id="main">
 	<div class="white box">
 		<% if params[:sent] && params[:sent] == "success" %>
@@ -98,3 +181,5 @@
 </div>
 
 <%= render "sidebars/main" %>
+
+<% end %>

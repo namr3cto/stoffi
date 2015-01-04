@@ -31,17 +31,20 @@ module ApplicationHelper
 		"<div class='line-behind-text'><h2>#{h text}</h2></div>".html_safe
 	end
 	
-	def pretty_error(resource)
-		if resource.errors && resource.errors.count > 0
-			return resource.errors.full_messages[0]
-		else
-			return ""
+	def pretty_error
+		errors = []
+		if resource and resource.errors and resource.errors.count > 0
+			errors << resource.errors.full_messages[0]
 		end
+		errors << flash[:error] if flash[:error].present?
+		errors << flash[:alert] if flash[:alert].present?
+		errors.join '<br/>'
 	end
 	
 	def any_errors?(resource = nil)
-		(flash[:error] && flash[:error] != "") ||
-		(resource && resource.errors && resource.errors.count > 0)
+		flash[:error].present? or
+		flash[:alert].present? or
+		(resource and resource.errors and resource.errors.count > 0)
 	end
 	
 	def pretty_url(url, remove_www = false)

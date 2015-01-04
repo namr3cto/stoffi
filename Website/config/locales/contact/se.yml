@@ -1,7 +1,7 @@
 se:
   contact:
     issue:
-      title: "Hittat en bugg? Behöver en funktion?"
+      title: "Hittat en bugg? Har du en idé?"
       text_html: "Gå till vårt %{link} och skicka en Issue."
       link: "projekt"
       
@@ -12,8 +12,8 @@ se:
       subject: "Ärende"
       message: "Meddelande"
       captcha: "Är du människa?"
-      send: "skicka"
-      sent: "Meddelande har skickats. Du borde höra från oss inom kort."
+      send: "Skicka"
+      sent: "Ditt meddelande har skickats. Du borde höra från oss inom kort."
     
     phone:
       title: "Ring oss"
@@ -21,7 +21,9 @@ se:
     visit:
       title: "Besök oss"
       sweden: "SVERIGE"
-      map_link: "Visa större karta"
+      map:
+        link: "Visa större karta"
+        marker: 'Det är här vi håller hus'
     
     errors:
       subject: "Ärendet måste vara minst fyra tecken."

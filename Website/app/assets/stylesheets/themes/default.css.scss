@@ -213,20 +213,22 @@ form
 
 .notice
 {
-	color: darken(rgba($notice, 0.5), 30%);
+	$darken: 50%;
+	color: darken(rgba($notice, 0.5), $darken);
 	background-image: url(/assets/gfx/notice.png);
 	background-color: lighten(rgba($notice, 0.5), 20%);
-	border: 1px solid darken(rgba($notice, 0.5), 30%);
-	h2 { color: darken(rgba($notice, 0.5), 30%); }
+	border: 1px solid darken(rgba($notice, 0.5), $darken);
+	h2 { color: darken(rgba($notice, 0.5), $darken); }
 }
 
 .alert
 {
-	color: rgba($alert, 0.5);
+	$darken: 30%;
+	color: darken(rgba($alert, 0.5), $darken);
 	background-color: lighten(rgba($alert, 0.5), 40%);
 	background-image: url(/assets/gfx/error.png);
-	border: 1px solid rgba($alert, 0.5);
-	h2 { color: rgba($alert, 0.5); }
+	border: 1px solid darken(rgba($alert, 0.5), $darken);
+	h2 { color: darken(rgba($alert, 0.5), $darken); }
 }
 
 h2.line-behind

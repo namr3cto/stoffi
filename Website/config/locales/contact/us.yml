@@ -1,7 +1,7 @@
 us:
   contact:
     issue:
-      title: "Found a bug? Need a feature?"
+      title: "Found a bug? Have an idea?"
       text_html: "Go to our %{link} and submit an issue."
       link: "project"
       
@@ -12,8 +12,8 @@ us:
       subject: "Subject"
       message: "Message"
       captcha: "Are you human?"
-      send: "send"
-      sent: "Message has been sent. You should hear from us soon."
+      send: "Send"
+      sent: "Your message has been sent. You should hear from us soon."
     
     phone:
       title: "Call us"
@@ -21,7 +21,9 @@ us:
     visit:
       title: "Visit us"
       sweden: "SWEDEN"
-      map_link: "View larger map"
+      map:
+        link: "View larger map"
+        marker: 'This is where we hang around'
     
     errors:
       subject: "Subject must be at least four characters."

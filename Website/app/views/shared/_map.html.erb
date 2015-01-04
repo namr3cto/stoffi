@@ -1,0 +1,6 @@
+<div id='map-wrapper'>
+	<div id="map" data-map data-longitude='<%=longitude%>' data-latitude='<%=latitude%>' data-marker='<%=marker%>'></div>
+	<% if defined? link_text and defined? address %>
+		<%= link_to link_text,  "http://maps.google.com/maps?q=#{address}", class: 'fullsize' %>
+	<% end %>
+</div>
