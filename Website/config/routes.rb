@@ -167,5 +167,5 @@ Stoffi::Application.routes.draw do
 		get '/search/(:categories)',      to: 'search#index',            as: :search
 	end
 	
-	get '(:locale)', to: 'pages#index', as: :root
+	get '(:l)', to: 'pages#index', as: :root
 end
