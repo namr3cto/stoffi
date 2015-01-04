@@ -10,25 +10,6 @@ Stoffi::Application.routes.draw do
 		end
 		
 		as :user do
-			#get 'login',         to: 'users/sessions#new',            as: :login
-			#get 'logout',        to: 'devise/sessions#destroy',       as: :logout
-			#get 'join',          to: 'users/registrations#new',       as: :join
-			#delete 'leave',      to: 'users/registrations#destroy',   as: :leave
-			#get 'forgot',        to: 'users/passwords#new',           as: :forgot
-			#get 'reset',         to: 'users/passwords#edit',          as: :reset
-			#get 'unlock',        to: 'users/unlocks#new',             as: :unlock
-			#get 'dashboard',     to: 'users/registrations#dashboard', as: :dashboard
-			#put 'settings',      to: 'users/registrations#settings',  as: :settings
-			
-			#get 'profile(/:user_id)/playlists', to: 'playlists#by'
-			#get 'profile(/:id)', to: 'users/registrations#show',      as: :profile
-			
-			#get 'me/playlists', to: 'playlists#by'
-			#get 'me',            to: 'users/registrations#show',      as: :me
-			
-			# handle failed omniauth
-			get    'auth/failure',  to: 'users/sessions#new'
-			
 			get    'login',         to: 'users/sessions#new',            as: :new_user_session
 			post   'login',         to: 'users/sessions#create',         as: :user_session
 			delete 'logout',        to: 'users/sessions#destroy',        as: :destroy_user_session
@@ -53,21 +34,12 @@ Stoffi::Application.routes.draw do
 			get    'profile(/:id)', to: 'users/registrations#show',      as: :user
 			get    'dashboard',     to: 'users/registrations#dashboard', as: :dashboard
 			
-			#post 'login',  to: 'users/sessions#create',      as: :xxnew_user_session
+			get    'me/playlists',  to: 'playlists#by'
+			get    'me',            to: 'users/registrations#show',      as: :me
+			get    'profile(/:user_id)/playlists', to: 'playlists#by'
 			
-			#post 'join',     to: 'users/registrations#create', as: :xxuser_registration
-			#get  'join',     to: 'users/registrations#new',    as: :xxnew_user_registration
-			#get  'settings', to: 'users/registrations#edit',  as: :xxedit_user_registration
-			
-			#post 'forgot', to: 'users/passwords#create',     as: :xxuser_password
-			#get  'forgot', to: 'users/passwords#new',        as: :xxnew_user_password
-			#get  'reset',  to: 'users/passwords#create',     as: :xxedit_user_password
-			#put  'reset',  to: 'users/passwords#update',     as: :xxxedit_user_password
-			
-			#post 'unlock', to: 'devise/unlocks#create',      as: :xxuser_unlock
-			#get  'unlock', to: 'devise/unlocks#new',         as: :xxnew_user_unlock
-			
-			#get 'profile(/:id)', to: 'users/registrations#show',      as: :user
+			# handle failed omniauth
+			get    'auth/failure',  to: 'users/sessions#new'
 		end
 		
 		devise_for :user, skip: :all, controllers:
