@@ -1,5 +1,14 @@
 #credits
 {
+	width: 47.5%;
+	float: left;
+	
+	@media #{$large}
+	{
+		width: initial;
+		float: initial;
+	}
+	
 	h1
 	{
 		text-align: center;

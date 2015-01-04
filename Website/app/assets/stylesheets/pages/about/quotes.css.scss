@@ -1,6 +1,7 @@
 #quotes
 {
 	width: 60%;
+	max-width: 1000px;
 	margin: auto;
 	
 	@media #{$medium} { width: initial; margin: 1em; }

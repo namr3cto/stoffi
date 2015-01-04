@@ -1,5 +1,14 @@
 #future
 {
+	width: 47.5%;
+	float: right;
+	
+	@media #{$large}
+	{
+		width: initial;
+		float: initial;
+	}
+	
 	h1
 	{
 		text-align: center;
@@ -16,7 +25,7 @@
 		
 		p { margin: 0 1em; }
 		
-		@media #{$medium}
+		@media #{$small}
 		{
 			font-size: 1.1em;
 			width: 49%;
