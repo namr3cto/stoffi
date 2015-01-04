@@ -3,7 +3,6 @@ se:
     pages:
       index:
         link:            'Hem'
-        title:           'Stoffi'
         description:     'Stoffi Musikspelare är en vacker, integrerad, kompakt &amp; gratis musikspelare som spelar musik från YouTube, SoundCloud, radio och din hårddisk.'
   
       donations:
