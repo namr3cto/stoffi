@@ -38,12 +38,6 @@ services = [
 			<%= link_to t("pages.pages.#{link}.link"), send("#{link}_path"), opts %>
 		<% end %>
 		
-		<% ['about'].each do |link| %>
-			<% opts = { title: t("pages.pages.#{link}.description"), data: { type: 'bonus' } } %>
-			<% opts[:class] = 'active' if @tab == link %>
-			<%= link_to t("pages.pages.#{link}.link"), send("#{link}_path"), opts %>
-		<% end %>
-		
 		<div class="separator">&nbsp;</div>
 		
 		<% if user_signed_in? %>
