@@ -1,7 +1,7 @@
 # -*- encoding : utf-8 -*-
 Stoffi::Application.routes.draw do
 
-	scope '(:l)', l: /us|uk|se|cn|de|--/ do
+	scope '(:l)', l: /us|uk|se|cn|de/ do
 
 		namespace :admin do
 			resources :translatees
@@ -13,6 +13,7 @@ Stoffi::Application.routes.draw do
 			get    'login',         to: 'users/sessions#new',            as: :new_user_session
 			post   'login',         to: 'users/sessions#create',         as: :user_session
 			delete 'logout',        to: 'users/sessions#destroy',        as: :destroy_user_session
+			get    'logout',        to: 'users/sessions#destroy'
 			
 			post   'forgot',        to: 'users/passwords#create',        as: :user_password
 			get    'forgot',        to: 'users/passwords#new',           as: :new_user_password
@@ -137,7 +138,8 @@ Stoffi::Application.routes.draw do
 		get '/search/suggest'
 		get '/search/fetch'
 		get '/search/(:categories)',      to: 'search#index',            as: :search
-	end
+		
 	
-	get '(:l)', to: 'pages#index', as: :root
+		get '/', to: 'pages#index', as: :root
+	end
 end

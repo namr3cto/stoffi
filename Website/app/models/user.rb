@@ -67,7 +67,7 @@ class User < ActiveRecord::Base
 	# The default picture of a user.
 	def self.default_pic(size = nil)
 		size = "_#{size}" if size.present?
-		"/assets/gfx/user#{size}.png"
+		"gfx/user#{size}.png"
 	end
 	
 	# The default name of a user.

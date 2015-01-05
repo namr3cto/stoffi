@@ -155,8 +155,14 @@ footer
 			}
 			a[href]:hover
 			{
-				background: transparentize($primary_hover, 0.5);
+				background: transparentize($primary_hover, 0.9);
+				color: transparentize($primary_text, 0.1);
 			}
+		}
+		
+		.separator
+		{
+			border-bottom: 1px solid transparentize($primary_text, 0.5);
 		}
 	}
 }

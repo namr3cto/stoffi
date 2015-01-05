@@ -63,3 +63,8 @@ us:
         link:            'Money'
         title:           'Money, money, money'
         description:     'With Stoffi you can send money safely to your favorite artists. We appreaciate that you trust us with your money and want to make sure that you can influence and control how just your money is distributed.'
+  
+      remote:
+        link:            'Remote'
+        title:           'Remote control'
+        description:     'Remotely control your Stoffi player from an easy-to-use web interface.'

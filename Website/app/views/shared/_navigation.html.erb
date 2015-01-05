@@ -42,8 +42,8 @@ services = [
 		
 		<% if user_signed_in? %>
 			<div class="dropdown">
-				<%= link_to t("dashboard.link")+" ▾", dashboard_path, class: "dropdown-label" %>
-				<ul class="dropdown-menu" style="display:none;">
+				<%= link_to t("pages.users.registrations.dashboard.link")+" ▾", dashboard_path, class: "dropdown-label", title: t('pages.users.registrations.dashboard.description') %>
+				<ul class="dropdown-menu">
 					<li>
 						<%= link_to dashboard_path do %>
 							<div class="head">
@@ -53,13 +53,13 @@ services = [
 							</div>
 						<% end %>
 					</li>
-					<li class="divider"></li>
-					<li><%= link_to t("pages.profile.link"), profile_path %></li>
-					<li><%= link_to t("pages.playlists.link"), playlists_path %></li>
-					<li><%= link_to t("pages.remote.link"), remote_path %></li>
-					<li class="divider"></li>
-					<li><%= link_to t("pages.settings.link"), settings_path %></li>
-					<li><%= link_to t("pages.logout.link"), logout_path %></li>
+					<li class="separator"></li>
+					<li><%= link_to t("pages.users.registrations.show.link"), user_path, title: t("pages.users.registrations.new.description") %></li>
+					<li><%= link_to t("pages.playlists.index.link"), playlists_path, title: t("pages.playlists.index.description") %></li>
+					<li><%= link_to t("pages.pages.remote.link"), remote_path, title: t("pages.pages.remote.description") %></li>
+					<li class="separator"></li>
+					<li><%= link_to t("pages.users.registrations.edit.link"), edit_user_registration_path, title: t("pages.users.registrations.edit.description") %></li>
+					<li><%= link_to t("pages.users.sessions.destroy.link"), destroy_user_session_path %></li>
 				</ul>
 			</div>
 		

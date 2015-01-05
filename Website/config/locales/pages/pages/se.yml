@@ -62,4 +62,9 @@ se:
         link:            'Pengar'
         title:           'Pengar, pengar, pengar'
         description:     "Med Stoffi kan du skicka pengar säkert till dina favoritartister. Vi uppskattar att du ger oss förtroende över dina pengar och vill se till att du kan påverka och bestämma hur just dina pengar ska fördelas."
+  
+      remote:
+        link:            'Fjärrkontrol'
+        title:           'Fjärrkontrol'
+        description:     'Styr din Stoffi-spelare genom ett lättanvänt webbgränssnitt.'
         
