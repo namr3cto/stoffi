@@ -408,7 +408,6 @@ class ApplicationController < ActionController::Base
 	
 	# Gets the origin position from an IP
 	def origin_position(ip)
-		ip = '81.233.98.217'
 		db = File.join(Rails.root, "lib", "assets", "GeoLiteCity.dat")
 		if File.exists? db
 			city = GeoIP.new(db).city(ip)
@@ -508,10 +507,10 @@ class ApplicationController < ActionController::Base
 		return if controller_name == "pages" and action_name == "old"
 		return if @ua.include?("capybara-webkit")
 		
-		logger.info "ua: #{@ua}"
-		logger.info "browser: #{@browser}"
-		logger.info "os: #{@os}"
-		logger.info "embedded_device? #{embedded_device?}"
+		logger.debug "ua: #{@ua}"
+		logger.debug "browser: #{@browser}"
+		logger.debug "os: #{@os}"
+		logger.debug "embedded_device?: #{embedded_device?}"
 		
 		if params[:dangerous]
 			cookies[:skip_old] = "1"
