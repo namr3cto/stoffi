@@ -54,7 +54,7 @@ services = [
 						<% end %>
 					</li>
 					<li class="separator"></li>
-					<li><%= link_to t("pages.users.registrations.show.link"), user_path, title: t("pages.users.registrations.new.description") %></li>
+					<li><%= link_to t("pages.users.registrations.show.link"), user_path, title: t("pages.users.registrations.show.description", usernames: t('your')) %></li>
 					<li><%= link_to t("pages.playlists.index.link"), playlists_path, title: t("pages.playlists.index.description") %></li>
 					<li><%= link_to t("pages.pages.remote.link"), remote_path, title: t("pages.pages.remote.description") %></li>
 					<li class="separator"></li>

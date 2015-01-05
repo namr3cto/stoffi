@@ -37,6 +37,7 @@ se:
   back: "Tillbaka"
   
   you: "Du"
+  your: 'dina'
   
   name: "Namn"
   description: "Beskrivning"
