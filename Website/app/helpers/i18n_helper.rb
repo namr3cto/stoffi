@@ -75,7 +75,7 @@ module I18nHelper
 	
 	def lang2host(lang)
 		host = request.host.split('.')
-		unless host[-1] == 'dev'
+		unless host[-1].in? ['dev','io']
 			case lang
 			when 'cn' then host[-1] = 'cn'
 			else host[-1] = 'com'
