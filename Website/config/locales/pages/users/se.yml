@@ -4,11 +4,13 @@ se:
           
       registrations:
       
-        new:
+        new: &join
           toggle:          "Jag är ny"
           link:            'Gå med'
           title:           'Gå med'
           description:     "Skapa ett konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
+          
+        create: *join
   
         dashboard:
           link:            'Mitt Stoffi'
@@ -26,11 +28,13 @@ se:
       
       sessions:
   
-        new:
+        new: &login
           toggle:          'Redan med'
           link:            'Logga in'
           title:           'Logga in'
           description:     "Logga in med ditt konto och ta del av våra coola tjänster. Om du redan har ett konto på Facebook, Twitter, Google, SoundCloud, Vimeo eller LinkedIn så behöver du inte ens registrera dig."
+          
+        create: *login
   
         destroy:
           link:            'Logga ut'
