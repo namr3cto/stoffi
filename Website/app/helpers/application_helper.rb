@@ -31,7 +31,7 @@ module ApplicationHelper
 		"<div class='line-behind-text'><h2>#{h text}</h2></div>".html_safe
 	end
 	
-	def pretty_error
+	def pretty_errors
 		errors = []
 		if resource and resource.errors and resource.errors.count > 0
 			errors << resource.errors.full_messages[0]

@@ -32,6 +32,7 @@ class User < ActiveRecord::Base
 	end
 	has_many :translations
 	has_many :donations
+	has_many :artists, through: :songs
 	has_and_belongs_to_many :songs, uniq: true
 	has_and_belongs_to_many :playlist_subscriptions, class_name: "Playlist", join_table: "playlist_subscribers", uniq: true
 
