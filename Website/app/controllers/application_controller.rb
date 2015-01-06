@@ -195,7 +195,7 @@ class ApplicationController < ActionController::Base
 	
 	def access_denied
 		if user_signed_in?
-			redirect_to dashboard_url
+			redirect_to dashboard_path
 			
 		else
 			if [:json, :xml].include? request.format.to_sym
@@ -207,7 +207,7 @@ class ApplicationController < ActionController::Base
 			
 			else
 				session["user_return_to"] = request.url
-				redirect_to login_url
+				redirect_to new_user_session_path
 			end
 		end
 	end
@@ -261,12 +261,12 @@ class ApplicationController < ActionController::Base
 		set_locale
 		saved = stored_location_for(resource)
 		return saved if saved
-		return dashboard_path(format: params[:format], l: base_path)
+		return dashboard_path
 	end
 	
 	def after_sign_out_path_for(resource_or_scope)
 		set_locale
-		request.referer || login_path(format: params[:format], l: base_path)
+		request.referer || new_user_session_path
 	end
 	
 	def base_path
