@@ -299,12 +299,7 @@ h2.line-behind
 }
 
 #highlights
-{
-	.ad
-	{
-		border-bottom: 1px solid rgba($text, 0.2);
-	}
-	
+{	
 	#donate-button a
 	{
 		@include button-colors($secondary, $secondary_text);
