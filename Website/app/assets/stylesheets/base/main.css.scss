@@ -1,11 +1,26 @@
 main
 {
+	width: 70%;
+	float: left;
 	font-size: 0.8em;
+	
+	@media #{$medium} { width: 100%; }
+	
 	article
 	{
+		margin: 1em;
+		@media #{$small} { padding: 1em; }
+		@media #{$tiny} { margin: 0; }
+		
 		section
 		{
 			margin-bottom: 2em;
+			float: right;
+			box-sizing: border-box;
+			padding: 0.4em 1.2em;
+			width: 70%;
+			@media #{$small} { width: 100%; }
+			
 			.timestamp
 			{
 				margin-top: 1em;
@@ -14,11 +29,47 @@ main
 			}
 		}
 		
+		&.fullwidth section
+		{
+			float: initial;
+			width: 100%;
+		}
+		
 		&:not(.small)
 		{
 			h1:first-child ~ h1
 			{
 				margin-top: 2em;
+			}
+		}
+		
+		&:after
+		{
+			display: block;
+			content: '';
+			clear: both;
+		}
+		
+		&.small
+		{
+			width: 400px;
+			margin: 2em auto;
+			
+			section:last-child
+			{
+				margin-bottom: 0;
+			}
+			
+			@media #{$tiny}
+			{
+				width: initial;
+				margin: 0;
+			}
+			
+			h1
+			{
+				text-align: center;
+				margin: 0.3em 0 1em;
 			}
 		}
 	}
@@ -34,6 +85,12 @@ main
 			text-align: right;
 			padding: 0 1em;
 		}
+	}
+	
+	&.fullwidth
+	{
+		width: 100%;
+		section { float: initial; width: initial; }
 	}
 	
 	@media #{$small} { margin-bottom: -1px; }

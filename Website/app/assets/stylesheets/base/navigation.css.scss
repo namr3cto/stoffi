@@ -19,6 +19,7 @@ header
 			display: inline-block;
 			width: 0px;
 			margin: 0px 0.5em;
+			@media #{$small} { display: none; }
 		}
 		
 		.active { img { opacity: 1; } }
@@ -38,12 +39,19 @@ header
 				text-decoration: none;
 				img { opacity: 1; }
 			}
+			
+			@media #{$medium}
+			{
+				padding: 0.8em 0.5em;
+				font-size: 0.8em;
+			}
 		}
 		
 		.auth
 		{
 			padding: 0.5em 0.2em;
 			min-width: 1em;
+			@media #{$small} { display: none; }
 		}
 		
 		img { margin-bottom: -3px; opacity: 0.8; }
@@ -52,6 +60,11 @@ header
 		{
 			margin-top: -5px;
 			vertical-align: middle;
+		}
+		
+		[data-type='bonus']
+		{
+			@media #{$tiny} { display: none; }
 		}
 	}
 }

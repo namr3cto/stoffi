@@ -1,34 +1,46 @@
-form.horizontal
-{
-	.field
-	{
-		display: inline-block;
-		padding: 0 1em 1em 0;
-		vertical-align: top;
-		
-		label
-		{
-			display: block;
-			margin-bottom: 0.5em;
-			font-size: 0.8em;
-		}
-	}
-}
-
 form
 {
+	display: inline-block;
+	max-width: 100%;
+	
 	div.field
 	{
 		margin-bottom: 1em;
+		
+		input[type=email], input[type=password], input[type=text], textarea
+		{
+			border: none;
+			border-bottom: 1px dashed grey;
+			outline: none;
+			width: 12em;
+			max-width: 100%;
+		}
+		
+		input, textarea, select, 
+		{
+			font-size: 1em;
+			font-family: verdana, sans-serif;
+			margin: 1em 0;
+			margin-right: 1em;
+		}
+	
+		textarea
+		{
+			height: 1.5em;
+			padding: 0;
+			resize: none;
+		}
 		
 		span
 		{
 			display: inline-block;
 		}
-		label
+		label[for]
 		{
 			display: block;
-			margin-bottom: 0.3em;
+			margin: 1em 0.1em 0;
+			
+			&:after { content: ':'; }
 		}
 		
 		&:after
@@ -38,33 +50,29 @@ form
 			clear: both;
 		}
 	}
-}
-
-form
-{
-	display: inline-block;
-	
-	input[type=email], input[type=password], input[type=text], textarea
-	{
-		border: none;
-		border-bottom: 1px dashed grey;
-		font-size: 1em;
-		font-family: verdana, sans-serif;
-		margin: 1em 0;
-		outline: none;
-		width: 12em;
-	}
-	
-	textarea
-	{
-		height: 1.5em;
-		padding: 0;
-		resize: none;
-	}
 	
 	a.button
 	{
-		margin: 0.4em 0.1em;
+		margin: 0.4em 0;
+	}
+	
+	&.horizontal
+	{
+		.field
+		{
+			display: inline-block;
+			padding: 0 1em 1em 0;
+			vertical-align: top;
+		
+			@media #{$medium} { display: block; }
+		
+			label
+			{
+				display: block;
+				margin-bottom: 0.5em;
+				font-size: 0.8em;
+			}
+		}
 	}
 }
 
@@ -73,5 +81,11 @@ article:not(.small) form
 	input[type=email], input[type=password], input[type=text], textarea
 	{
 		width: 29.3em;
+		&.short { width: 14.3em; }
 	}	
+}
+
+.dd-container
+{
+	margin: 1em 0 2em;
 }

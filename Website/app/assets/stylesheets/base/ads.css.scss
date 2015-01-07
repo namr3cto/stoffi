@@ -1,0 +1,4 @@
+.banner.ad
+{
+	@media #{$no-banners} { display: none; }
+}
