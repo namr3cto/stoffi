@@ -1,4 +1,6 @@
 se:
+  usermenu: 'Mitt Stoffi'
+  
   login:
     services: 'Använd en av dessa'
     form: 'eller fyll i det här formuläret'

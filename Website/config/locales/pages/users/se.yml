@@ -13,7 +13,7 @@ se:
         create: *join
   
         dashboard:
-          link:            'Mitt Stoffi'
+          link:            'Panel'
           title:           'Panel'
           description:     'Få en översikt av ditt konto, spana in dina spelvanor, hantera dina spellistor och enheter, eller fjärrstyr din musik.'
   

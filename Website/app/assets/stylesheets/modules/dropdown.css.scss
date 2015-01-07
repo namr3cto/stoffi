@@ -29,9 +29,15 @@
 			}
 			
 			
-			div
+			div.extended
 			{
 				margin-left: 40px;
+				
+				@media #{$small}
+				{
+					display: none;
+				}
+				
 				img
 				{
 					position: absolute;
@@ -41,6 +47,16 @@
 				h1, h2 { margin: 0; }
 				h1 { font-size: 10pt; font-weight: bold; }
 				h2 { font-size: 10pt; font-style: normal; color: rgba(255,255,255,0.8); }
+			}
+			
+			div.minimal
+			{
+				display: none;
+				
+				@media #{$small}
+				{
+					display: block;
+				}
 			}
 		}
 		

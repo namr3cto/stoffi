@@ -1,4 +1,6 @@
 us:
+  usermenu: 'My Stoffi'
+  
   login:
     services: 'Use one of these'
     form: 'or fill out this form'

@@ -14,7 +14,7 @@ us:
           
   
         dashboard:
-          link:            'My Stoffi'
+          link:            'Dashboard'
           title:           'Dashboard'
           description:     'Get an overview of your account, check out your listening habits, manage playlists and devices, or remotely control your music.'
   

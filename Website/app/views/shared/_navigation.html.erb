@@ -42,14 +42,17 @@ services = [
 		
 		<% if user_signed_in? %>
 			<div class="dropdown">
-				<%= link_to t("pages.users.registrations.dashboard.link")+" ▾", dashboard_path, class: "dropdown-label", title: t('pages.users.registrations.dashboard.description') %>
+				<%= link_to t("usermenu")+" ▾", 'javascript:void(0)', class: "dropdown-label" %>
 				<ul class="dropdown-menu">
 					<li>
-						<%= link_to dashboard_path do %>
-							<div class="head">
+						<%= link_to dashboard_path, title: t('pages.users.registrations.dashboard.description') do %>
+							<div class="extended">
 								<%= image_tag current_user.picture(:size => :small), size: '32x32' %>
 								<h1><%= current_user.name %></h1>
 								<h2><%=t "dashboard.meta" %></h2>
+							</div>
+							<div class='minimal'>
+								<%= t 'pages.users.registrations.dashboard.link' %>
 							</div>
 						<% end %>
 					</li>
