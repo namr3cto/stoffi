@@ -544,13 +544,14 @@ class ApplicationController < ActionController::Base
 					v < 10
 					
 				when "safari"
-					m = @ua.match(/ version\/(\d[\d\.]*\d) /)
+					m = @ua.match(/webkit\/(\d[\d\.]*\d)/)
 					if m
 						v = m[1].to_i
 					else
 						v = 0
 					end
-					v < 5
+					
+					v < (@os == 'windows' ? 534 : 537)
 					
 				else
 					false
@@ -558,7 +559,7 @@ class ApplicationController < ActionController::Base
 				
 				if old
 					logger.info "render warning of old browser instead of requested page"
-					render("pages/old", l: I18n.locale, layout: false) and return
+					render("pages/old", l: I18n.locale, layout: 'empty') and return
 				end
 			rescue
 			end
