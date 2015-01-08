@@ -62,7 +62,6 @@ class User < ActiveRecord::Base
 		return custom_name if custom_name.present?
 		return email.split('@')[0].titleize if email.present?
 		User.default_name
-		
 	end
 	
 	# The default picture of a user.
@@ -141,6 +140,11 @@ class User < ActiveRecord::Base
 		when :created
 			return apps
 		end
+	end
+	
+	# Returns all links that the user hasn't yet connected.
+	def unconnected_links
+		Link.available.select { |l| links.find_by(provider: l[:link_name] || l[:name].downcase) == nil }
 	end
 	
 	# Whether or not the user is an administrator.
