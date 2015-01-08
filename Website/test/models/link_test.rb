@@ -209,14 +209,14 @@ class LinkTest < ActiveSupport::TestCase
 		listen = listens(:alice_one_love)
 		link = links(:alice_lastfm)
 		params = {
-			:artist => listen.song.artists.collect { |x| x.name }.to_sentence,
-			:track => listen.song.title,
-			:duration => listen.song.length.to_i,
-			:timestamp => listen.created_at.to_i,
-			:method => "track.updateNowPlaying"
+			artist: listen.song.artists.collect { |x| x.name }.to_sentence,
+			track: listen.song.title,
+			duration: listen.song.length.to_i,
+			timestamp: listen.created_at.to_i,
+			method: "track.updateNowPlaying"
 		}
 		url, params = prepareLastFMRequest(link, :post, params)
-		stub_request(:any, url).with(params).to_return(:body => @empty_lastfm_response)
+		stub_request(:any, url).with(query: params).to_return(body: @empty_lastfm_response)
 		link.start_listen(listen)
 	end
 
@@ -254,14 +254,14 @@ class LinkTest < ActiveSupport::TestCase
 		listen = listens(:alice_one_love)
 		link = links(:alice_lastfm)
 		params = {
-			:artist => listen.song.artists.collect { |x| x.name }.to_sentence,
-			:track => listen.song.title,
-			:duration => listen.song.length.to_i,
-			:timestamp => listen.created_at.to_i,
-			:method => "track.scrobble"
+			artist: listen.song.artists.collect { |x| x.name }.to_sentence,
+			track: listen.song.title,
+			duration: listen.song.length.to_i,
+			timestamp: listen.created_at.to_i,
+			method: "track.scrobble"
 		}
 		url, params = prepareLastFMRequest(link, :post, params)
-		stub_request(:any, url).with(params).to_return(:body => @empty_lastfm_response)
+		stub_request(:any, url).with(query: params).to_return(:body => @empty_lastfm_response)
 		link.end_listen(listen)
 	end
 
