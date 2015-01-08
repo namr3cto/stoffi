@@ -1,0 +1,54 @@
+article.tabbed
+{
+	position: relative;
+	min-height: 20em; // hack, is there a better way?
+		
+	@media #{$small}
+	{
+		padding: 0;
+	}
+	
+	section[data-content]
+	{
+		padding-left: 2em;
+		display: none;
+		
+		&.active
+		{
+			display: block;
+		}
+		
+		@media #{$small}
+		{
+			display: block;
+			width: 100%;
+		}
+	}
+	
+	aside.tabs
+	{
+		height: 100%;
+		position: absolute;
+		overflow: hidden;
+		
+		section
+		{
+			padding: 1em 0 0 1em;
+			
+			div.tab
+			{
+				padding: 1em;
+			
+				&:hover:not(.active)
+				{
+					cursor: pointer;
+				}
+			}
+		}
+		
+		@media #{$small}
+		{
+			display: none;
+		}
+	}
+}
