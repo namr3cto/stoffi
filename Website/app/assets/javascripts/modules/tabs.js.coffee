@@ -11,7 +11,7 @@ currentTab = ->
 	tab = window.location.hash.substring 1
 	
 	# HACK: when returned from omniauth we see this anchor
-	tab = 'accounts' if tab = '_=_'
+	tab = 'accounts' if tab == '_=_'
 	
 	if tab == '' or $("[data-tab='#{tab}']").length == 0
 		tab = $('[data-tab]:first').data('tab')
