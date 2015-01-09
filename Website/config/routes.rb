@@ -72,7 +72,7 @@ Stoffi::Application.routes.draw do
 		get '/old',        to: 'pages#old',        as: :old
 		get '/foo',        to: 'pages#foo',        as: :foo
 
-		resources :translations, :languages, :votes, :links, :devices
+		resources :translations, :languages, :votes, :devices
 		resources :oauth_clients, path: 'apps', as: :client_application
 		resources :oauth_clients, path: 'apps', as: :oauth_clients
 		resources :oauth_clients, path: 'apps', as: :apps do
@@ -80,6 +80,8 @@ Stoffi::Application.routes.draw do
 				delete 'revoke'
 			end
 		end
+		
+		resources :links, only: [:index, :show, :create, :update, :destroy]
 		
 		resources :artists, :events, :songs, :genres, :albums do
 			collection do
