@@ -17,7 +17,7 @@ class ArtistsControllerTest < ActionController::TestCase
 
 	test "should redirect for get new when logged out" do
 		get :new
-		assert_redirected_to login_path
+		assert_redirected_to new_user_session_path
 	end
 
 	test "should redirect for get new when not admin" do
@@ -37,7 +37,7 @@ class ArtistsControllerTest < ActionController::TestCase
 			post :create, artist: { name: 'Foo' }
 		end
 
-		assert_redirected_to login_path
+		assert_redirected_to new_user_session_path
 	end
 
 	test "should redirect create artist when not admin" do
@@ -65,7 +65,7 @@ class ArtistsControllerTest < ActionController::TestCase
 
 	test "should redirect for get edit when logged out" do
 		get :edit, id: @artist
-		assert_redirected_to login_path
+		assert_redirected_to new_user_session_path
 	end
 
 	test "should redirect for get edit when not admin" do
@@ -82,7 +82,7 @@ class ArtistsControllerTest < ActionController::TestCase
 
 	test "should redirect for update artist when logged out" do
 		patch :update, id: @artist, artist: { name: @artist.name }
-		assert_redirected_to login_path
+		assert_redirected_to new_user_session_path
 	end
 
 	test "should redirect for update artist when not admin" do
@@ -102,7 +102,7 @@ class ArtistsControllerTest < ActionController::TestCase
 		  delete :destroy, id: @artist
 		end
 
-		assert_redirected_to login_path
+		assert_redirected_to new_user_session_path
 	end
 
 	test "should redirect for destroy artist when not admin" do
