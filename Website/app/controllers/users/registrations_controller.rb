@@ -67,37 +67,28 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	end
 	
 	def edit
-		if params[:format] == :mobile
-			redirect_to action: :dashboard and return
-		end
-		
 		prepare_settings
 	
 		respond_to do |format|
 			format.html { render action: "edit" }
-			format.mobile { render action: "edit" }
 			format.embedded { render action: "dashboard" }
 		end
 	end
 	
-	def settings
-		if params[:format] == :mobile
-			redirect_to action: :dashboard and return
-		end
-		
+	def update
 		@user = User.find(current_user.id)
 		
 		require_password = params[:edit_password] != nil
-		if not require_password
-			params[:user].delete(:password)
-			params[:user].delete(:password_confirmation)
+		unless require_password
+			params[:user].delete :password
+			params[:user].delete :password_confirmation
 		end
 		
 		success = if require_password
-			@user.update_with_password(params[:user])
+			@user.update_with_password resource_params
 		else
-			params[:user].delete(:current_password)
-			@user.update_without_password(params[:user])
+			params[:user].delete :current_password
+			@user.update_without_password resource_params
 		end
 		
 		if success
@@ -105,13 +96,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
 			redirect_to after_update_path_for(@user)
 		else
 			prepare_settings
-			render "edit"
+			render 'edit'
 		end
-	end
-	
-	def update
-		render text: params[:edit_password] and return
-		super
 	end
 	
 	def show
@@ -181,24 +167,15 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	
 	private
 	
+	def resource_params
+		params.require(:user).permit(:email, :password, :password_confirmation, :current_password, :image, :name_source, :custom_name, :show_ads)
+	end
+	
 	def get_profile_id
 		params[:id] = process_me(params[:id])
 	end
 	
 	def prepare_settings
-		@names = Hash.new
-		@pics = Hash.new
-		current_user.links.each do |l|
-			@names[l.provider] = l.names
-			if l.picture?
-				pic = l.picture
-				@pics[l.provider] = pic if pic
-			end
-		end
-		
-		[:mm, :identicon, :monsterid, :wavatar, :retro].each do |i|
-			@pics[i == :mm ? "Gravatar" : i.to_s] = current_user.gravatar(i)
-		end
 		
 		@new_links = Array.new
 		Link.available.each do |link|
@@ -218,7 +195,5 @@ class Users::RegistrationsController < Devise::RegistrationsController
 			end
 		end
 		
-		@title = t "settings.title"
-		@description = t "settings.description"
 	end
 end

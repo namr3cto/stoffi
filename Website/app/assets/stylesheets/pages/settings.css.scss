@@ -1,0 +1,81 @@
+div.account
+{
+	div.top
+	{
+		h2
+		{
+			display: inline-block;
+			width: 70%;
+		}
+		
+		span.button-container
+		{
+			text-align: right;
+			display: inline-block;
+			width: 28%;
+			
+			a.button
+			{
+				margin-right: 0;
+			}	
+		}
+	}
+	
+	div.settings
+	{
+		div.setting
+		{
+			border-top: 1px solid rgba(black, 0.1);
+			padding: 0.5em;
+			font-size: 0.8em;
+			line-height: 2em;
+		
+			&:first-child { border-top: 1px solid black; }
+			&:last-child { border-bottom: 1px solid black; }
+			&:nth-child(odd) { background: rgba(black, 0.01); }
+		
+			span.title
+			{
+				width: 10em;
+				display: inline-block;
+			}
+		
+			span.description
+			{
+				color: rgba(black, 0.5);
+			
+				@media #{$medium}
+				{
+					display: block;
+				}
+			}
+		
+			span.control
+			{
+				float: right;
+				clear: both;
+			
+				@media #{$medium}
+				{
+					margin-top: 1em;
+				}
+			}
+		}
+	}
+	
+	&:not(:last-child)
+	{
+		margin-bottom: 2em;
+	}
+	
+	&.unlinked
+	{
+		margin-bottom: 0;
+		border-bottom: 1px solid rgba(black, 0.1);
+		
+		&:last-child
+		{
+			border-bottom: 0;
+		}
+	}
+}

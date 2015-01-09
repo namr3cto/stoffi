@@ -33,3 +33,10 @@ us:
     songs:
       show:
         description: 'Listen to %{song} in Stoffi Music Player or right here on the website.'
+        
+    links:
+      new:
+        link: 'Connect'
+      destroy:
+        link: 'Disconnect'
+        confirm: "Do you really want to remove the link to %{provider}?"

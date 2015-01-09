@@ -33,3 +33,9 @@ se:
       songs:
         show:
           description: "Lyssna på %{song} i Stoffi Musikspelare eller direkt här på hemsidan."
+        
+    links:
+      new:
+        link: 'Anslut'
+      destroy:
+        link: 'Koppla ifrån'

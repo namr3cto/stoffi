@@ -21,6 +21,16 @@ se:
           link:            'Inställningar'
           title:           'Inställningar'
           description:     'Hantera ditt konto, konfigurera din profil, eller koppla ihop ditt konto med andra tjänster.'
+          
+          general:
+            link:            'Generellt'
+            title:           'Generella inställningar'
+            description:     'Generella inställningar för ditt konto.'
+          
+          accounts:
+            link:            'Konton'
+            title:           'Kopplade konton'
+            description:     'Hantera kopplingar mot dina konton på andra ställen runtom Internet.'
   
         show:
           link:            'Profil'

@@ -22,6 +22,16 @@ us:
           link:            'Settings'
           title:           'Settings'
           description:     'Manage your account, configure your profile, or connect your account to other services.'
+          
+          general:
+            link:            'General'
+            title:           'General settings'
+            description:     'General settings for your account.'
+          
+          accounts:
+            link:            'Accounts'
+            title:           'Connected accounts'
+            description:     'Manage connections to your accounts at other places around the Internet.'
   
         show:
           link:            'Profile'

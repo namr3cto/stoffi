@@ -52,38 +52,6 @@ se:
       all: "Text och bild"
       text: "Bara text"
       none: "Visa inte reklam"
-    
-    links:
-      title:
-        existing: "Anslutna tjänster"
-        new: "Anslut fler"
-        
-      share:
-        label: "Dela"
-        info: "Publisera saker du delar."
-        
-      listens:
-        label: "Spelningar"
-        info: "Publisera låtar du lyssnar på."
-        
-      playlists:
-        label: "Spellistor"
-        info: "Publisera spellistor du skapar."
-        
-      donations:
-        label: "Donationer"
-        info: "Publisera artister du stödjer."
-        
-      buttons:
-        label: "Sociala knappar"
-        info: "Visa %{button} på din profil och dina spellistor."
-        twitter: "följknapp"
-        google_oauth2: "+knapp"
-        
-      empty: "Du kan koppla ihop Stoffi med andra tjänster."
-      link: "Länka"
-      unlink: "Avlänka"
-      confirm: "Vill du verkligen ta bort länk till %{provider}?"
       
   profile:
     registered: "Registrerade sig för"

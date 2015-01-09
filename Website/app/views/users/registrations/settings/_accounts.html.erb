@@ -1,0 +1,39 @@
+<% current_user.links.each do |link| %>
+	<div class='account'>
+		<div class='top'>
+			<h2><%= link %></h2>
+			<span class='button-container'>
+				<%= link_to link_path(link), class: 'button', method: 'delete', data: { button: :submit } do %>
+					<span><%=t 'pages.links.destroy.link' %></span>
+				<% end %>
+			</span>
+		</div>
+		<div class='settings'>
+			<% ['share', 'listen', 'create_playlist', 'show_button'].each do |setting| %>
+				<% next unless link.respond_to? "can_#{setting}?" %>
+				<div class='setting'>
+					<span class='title'><%= t "links.#{setting}.title" %></span>
+					<span class='control'>
+						<%= check_box_tag "#{setting}-#{link.provider}", '1', link.send("do_#{setting}"),
+							data: { account_provider: link.provider, account_setting: setting, account_id: link.id }  %>
+					</span>
+					<span class='description'><%= t "links.#{setting}.description" %></span>
+				</div>
+			<% end %>
+		</div>
+	</div>
+<% end %>
+
+<% current_user.unconnected_links.each do |link| %>
+	<% link_name = link[:link_name] || link[:name].downcase %>
+	<div class='unlinked account'>
+		<div class='top'>
+			<h2><%= link[:name] %></h2>
+			<span class='button-container'>
+				<%= link_to "/auth/#{link_name}", class: 'button', data: { button: :submit } do %>
+					<span><%=t 'pages.links.new.link' %></span>
+				<% end %>
+			</span>
+		</div>
+	</div>
+<% end %>

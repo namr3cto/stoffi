@@ -57,38 +57,6 @@ us:
       all: "Text and image"
       text: "Text only"
       none: "Don't show ads"
-    
-    links:
-      title:
-        existing: "Connected services"
-        new: "Connect more"
-        
-      share:
-        label: "Share"
-        info: "Publish the stuff you share."
-        
-      listens:
-        label: "Plays"
-        info: "Publish the songs you listen to."
-        
-      playlists:
-        label: "Playlists"
-        info: "Publish the playlists you create."
-        
-      donations:
-        label: "Donations"
-        info: "Publish the artists you support."
-        
-      buttons:
-        label: "Social buttons"
-        info: "Show %{button} on your profile and playlists."
-        twitter: "follow button"
-        google_oauth2: "+ button"
-        
-      empty: "You can connect Stoffi to other services."
-      link: "Link"
-      unlink: "Unlink"
-      confirm: "Do you really want to remove the link to %{provider}?"
       
   profile:
     registered: "Joined Stoffi"

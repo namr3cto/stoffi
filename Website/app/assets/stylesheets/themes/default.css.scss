@@ -158,6 +158,8 @@ footer
 				background: transparentize($primary_hover, 0.9);
 				color: transparentize($primary_text, 0.1);
 			}
+			
+			div.extended h2 { color: rgba($primary_text, 0.8); }
 		}
 		
 		.separator
@@ -204,6 +206,11 @@ ul.vertical li a
 form
 {
 	label { color: rgba($text, 0.5); }
+	
+	div.field input[type=email], input[type=password], input[type=text], textarea
+	{
+		border-bottom: 1px dashed rgba($text,0.5);	
+	}
 }
 
 #awards
@@ -290,6 +297,26 @@ h2.line-behind
 			text-shadow: 1px 1px 1px rgba(invert($secondary_text),0.1);
 			&:hover { color: rgba($secondary_text,0.7); }
 		}	
+	}
+}
+
+article.tabbed aside.tabs
+{
+	background: rgba($shadow,0.1);
+	box-shadow: inset -10px 0px 10px -10px rgba($shadow,0.5);
+	
+	section div.tab
+	{
+		&.active
+		{
+			background: $background;
+			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+		}
+	
+		&:hover:not(.active)
+		{
+			background: rgba($hover,0.1);
+		}
 	}
 }
 

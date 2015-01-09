@@ -177,3 +177,11 @@ jQuery ->
 		style: 'qtip-light qtip-shadow'
 	}
 	$('textarea').autosize()
+	for dd in $('[data-imageselect]')
+		dd = $(dd)
+		h = dd.data 'imageheight'
+		w = dd.data 'imagewidth'
+		options = {}
+		options['imageWidth'] = w if typeof w != 'undefined'
+		options['imageHeight'] = h if typeof h != 'undefined'
+		dd.ddslick options
