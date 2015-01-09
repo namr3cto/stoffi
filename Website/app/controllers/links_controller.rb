@@ -49,20 +49,9 @@ class LinksController < ApplicationController
 		respond_with @link
 	end
 
-	# GET /links/new
-	def new
-		@link = current_user.links.new
-		respond_with @link
-	end
-
-	# GET /links/1/edit
-	def edit
-		@link = current_user.links.find(params[:id])
-	end
-
 	# POST /links
 	def create
-		render status: :forbidden and return if ["xml","json"].include?(params[:format].to_s)
+		head :forbidden and return if ["xml","json"].include?(params[:format].to_s)
 		auth = request.env["omniauth.auth"]
 		
 		if current_user != nil
@@ -93,14 +82,12 @@ class LinksController < ApplicationController
 
 		respond_with(@link) do |format|
 			if @link
-				format.html { redirect_to request.env['omniauth.origin'] || settings_path }
-				format.mobile { redirect_to request.env['omniauth.origin'] || settings_path }
+				format.html { redirect_to request.env['omniauth.origin'] || settings_path + '#accounts' }
 				format.embedded { redirect_to request.env['omniauth.origin'] || dashboard_path }
 				format.xml  { render xml: @link, status: :created, location: @link }
 				format.json { render json: @link, status: :created, location: @link }
 			else
 				format.html { redirect_to request.env['omniauth.origin'] || login_path }
-				format.mobile { redirect_to request.env['omniauth.origin'] || login_path }
 				format.embedded { redirect_to request.env['omniauth.origin'] || login_path }
 				format.xml  { render xml: @link.errors, status: :unprocessable_entity }
 				format.json { render json: @link.errors, status: :unprocessable_entity }
@@ -111,19 +98,17 @@ class LinksController < ApplicationController
 	# PUT /links/1
 	def update
 		@link = current_user.links.find(params[:id])
-		success = @link.update_attributes(params[:link])
+		success = @link.update_attributes(resource_params)
 		SyncController.send('update', @link, request) if success
 
 		respond_with(@link) do |format|
 			if success
-				format.html { redirect_to(settings_path, notice: 'Link was successfully updated.') }
-				format.mobile { redirect_to(settings_path, notice: 'Link was successfully updated.') }
+				format.html { redirect_to(settings_path + '#accounts', notice: 'Link was successfully updated.') }
 				format.embedded { redirect_to(settings_path, notice: 'Link was successfully updated.') }
 				format.xml  { head :ok }
 				format.json { head :ok }
 			else
 				format.html { render action: "edit" }
-				format.mobile { render action: "edit" }
 				format.embedded { render action: "edit" }
 				format.xml  { render xml: @link.errors, status: :unprocessable_entity }
 				format.json { render json: @link.errors, status: :unprocessable_entity }
@@ -141,9 +126,14 @@ class LinksController < ApplicationController
 		@link.destroy
 
 		respond_with(@link) do |format|
-			format.html { redirect_to(settings_path) }
-			format.mobile { redirect_to(settings_path) }
+			format.html { redirect_to(settings_path + '#accounts') }
 			format.embedded { redirect_to(settings_path) }
 		end
+	end
+	
+	private
+	
+	def resource_params
+		params.require(:link).permit(:do_share, :do_listen, :do_create_playlist, :do_show_button, :do_donate)
 	end
 end
