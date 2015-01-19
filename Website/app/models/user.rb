@@ -96,7 +96,7 @@ class User < ActiveRecord::Base
 		end
 		d = donations.where(w).sum(:amount)
 		
-		return l + (d * 1000)
+		return (l + (d * 1000)).to_i
 	end
 	
 	# The picture of the user.
@@ -161,7 +161,7 @@ class User < ActiveRecord::Base
 	def gravatar(type)
 		gravatar_id = Digest::MD5.hexdigest(email.to_s.downcase)
 		force = type == :mm ? "" : "&f=y"
-		"https://gravatar.com/avatar/#{gravatar_id}.png?s=48&d=#{type}#{force}"
+		"https://gravatar.com/avatar/#{gravatar_id}.png?s=128&d=#{type}#{force}"
 	end
 	
 	# Looks for, and creates if necessary, the user based on an authentication with a third party service.
