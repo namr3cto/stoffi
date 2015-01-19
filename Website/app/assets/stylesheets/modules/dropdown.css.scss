@@ -3,7 +3,6 @@
 	display: inline-block;
 	.dropdown-menu
 	{
-		display: hidden;
 		position: absolute;
 		margin: 0;
 		text-align: left;
@@ -27,7 +26,6 @@
 				padding: 0.8em 1em;
 				display: block;
 			}
-			
 			
 			div.extended
 			{
@@ -68,11 +66,15 @@
 		}
 	}
 	
-	&:hover
+	&:hover .dropdown-menu
 	{
-		.dropdown-menu
-		{
-			display: block;
-		}
+		display: block;
+	}
+	
+	&.shadow .dropdown-menu
+	{
+		font-size: 0.7em;
+		padding: 0.2em 0.2em 0.5em;
+		min-width: 13em;
 	}
 }
