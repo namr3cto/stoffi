@@ -167,6 +167,17 @@ footer
 			border-bottom: 1px solid transparentize($primary_text, 0.5);
 		}
 	}
+	
+	&.shadow .dropdown-menu
+	{
+		background: rgba($shadow,0.8);
+		li a { color: $shadow_text; }
+		
+		li:hover
+		{
+			background: rgba($shadow_hover,0.2);
+		}
+	}
 }
 
 
@@ -300,25 +311,118 @@ h2.line-behind
 	}
 }
 
-article.tabbed aside.tabs
+article.tabbed
 {
-	background: rgba($shadow,0.1);
-	box-shadow: inset -10px 0px 10px -10px rgba($shadow,0.5);
-	
-	section div.tab
+	.tabs
 	{
-		&.active
+		background: rgba($shadow,0.1);
+		
+		.tab
 		{
-			background: $background;
-			box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+			&.active
+			{
+				background: $background;
+				box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.5);
+			}
+			
+			&:hover:not(.active)
+			{
+				background: rgba($hover,0.1);
+			}
 		}
+	}
 	
-		&:hover:not(.active)
+	aside.tabs
+	{
+		box-shadow: inset -10px 0px 10px -10px rgba($shadow,0.5);
+	}
+	
+	section.tabs
+	{
+		box-shadow: inset 0 -10px 10px -10px rgba($shadow,0.5);
+	}
+}
+
+section.head
+{
+	background: rgba($shadow, 0.1);
+	@media #{$small} { background: initial; }
+	@media #{$small} { .image-border { border: 1px solid $shadow; } }
+	
+	.image, .line
+	{
+		background: $background;
+		box-shadow: 0px 0px 10px rgba($shadow, 0.5);
+	}
+	
+	.left, .right
+	{
+		span { color: rgba($text, 0.5); }
+	}
+	
+	.left .bottom span
+	{
+		color: rgba($text, 0.3);
+	}
+}
+
+ul.grid
+{
+	li.item
+	{
+		
+		.overlay, .hidden-overlay
 		{
-			background: rgba($hover,0.1);
+			color: $shadow_text;
+			a { color: $shadow_text; }
+		}
+		
+		.overlay
+		{
+			background: linear-gradient(rgba(0,0,0,0), $shadow);
+		}
+		
+		.hidden-overlay
+		{
+			background: linear-gradient($shadow, rgba(0,0,0,0));
 		}
 	}
 }
+
+ul.list
+{
+	li.item
+	{
+		.hidden-overlay
+		{
+			.add, .remove
+			{
+				a
+				{
+					color: $text;
+				}
+				
+				&.shadow.dropdown .dropdown-menu a { color: $shadow_text; }
+			}
+		}
+		
+		img
+		{
+			box-shadow: 0 0 10px rgba($shadow, 0.5);
+		}
+		
+		&:hover { background: rgba($shadow, 0.1); }
+	}
+}
+
+[data-type='artist'] { background: rgba(0,0,255, 0.8); color: white; }
+[data-type='album'] { background: rgba(0,150,0, 0.8); color: white; }
+[data-type='song'] { background: rgba(255,0,0, 0.8); color: white; }
+[data-type='genre'] { background: rgba(100,100,100, 0.8); color: white; }
+[data-type='event'] { background: rgba(255,0,255, 0.8); color: white; }
+[data-type='playlist'] { background: rgba(0,255,255, 0.8); color: black; }
+[data-type='user'] { background: rgba(255,255,0, 0.8); color: black; }
+[data-type='device'] { background: rgba(255,165,0, 0.8); color: black; }
 
 @media #{$tiny}
 {

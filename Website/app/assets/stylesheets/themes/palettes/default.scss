@@ -40,9 +40,12 @@ $tertiary_image:    grayscale(100%) contrast(200%);
 
 $text:              black;
 $background:        white;
-$shadow:            black;
 $image:             hue-rotate(206.5deg) brightness(148.8%);
 $hover:             black;
+
+$shadow:            black;
+$shadow_text:       white;
+$shadow_hover:      white;
 
 $wallpaper-color:   #cccccc;
 $wallpaper-image:   url(/assets/gfx/backgrounds/solid.png);
