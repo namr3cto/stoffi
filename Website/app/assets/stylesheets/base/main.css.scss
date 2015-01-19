@@ -46,8 +46,9 @@ main
 		&:after
 		{
 			display: block;
-			content: '';
+			content: '.';
 			clear: both;
+			font-size: 0;
 		}
 		
 		&.small

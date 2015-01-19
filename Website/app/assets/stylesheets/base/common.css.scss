@@ -33,3 +33,5 @@ h2.line-behind {
     &:before { right: 1.5%; }
     &:after { left: 1.5%; }
 }
+
+[data-href]:hover { cursor: pointer; }
