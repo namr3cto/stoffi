@@ -40,3 +40,9 @@ us:
       destroy:
         link: 'Disconnect'
         confirm: "Do you really want to remove the link to %{provider}?"
+        
+    listens:
+      destroy:
+        link: 'Remove'
+        description: "Remove this from the songs you've played"
+        confirm: "Do you really want to remove %{song} from the songs you've played?"

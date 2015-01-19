@@ -1,0 +1,51 @@
+<dl>
+	<dt><%= t 'profile.joined' %></dt>
+	<dd title='<%= @user.created_at %>'>
+		<%=t 'datetime.ago', ago: time_ago_in_words(@user.created_at).capitalize %>
+	</dd>
+	
+	<dt><%= t 'profile.plays' %></dt>
+	<dd title='<%= number_with_delimiter @user.listens.count, locale: current_locale %>'>
+		<%= number_to_human @user.listens.count %>
+	</dd>
+	
+	<% if @user == current_user or current_user.admin? %>
+	
+		<dt><%= t 'profile.logins' %></dt>
+		<dd title='<%= number_with_delimiter @user.sign_in_count, locale: current_locale %>'>
+			<%= number_to_human @user.sign_in_count %>
+		</dd>
+	
+		<dt><%= t 'profile.last_login.title' %></dt>
+		<dd title='<%= @user.last_sign_in_at %>'>
+			<%=t 'profile.last_login.text', ago: time_ago_in_words(@user.last_sign_in_at).capitalize, ip: @user.current_sign_in_ip %>
+		</dd>
+	
+	<% end %>
+	
+	<% if current_user.admin? %>
+	
+		<dt><%= t 'profile.failed_logins' %></dt>
+		<dd title='<%= number_with_delimiter @user.failed_attempts, locale: current_locale %>'>
+			<%= number_to_human @user.failed_attempts %>
+		</dd>
+	
+		<dt><%= t 'profile.last_edit' %></dt>
+		<dd title='<%= @user.updated_at %>'>
+			<%=t 'datetime.ago', ago: time_ago_in_words(@user.updated_at).capitalize %>
+		</dd>
+	
+		<% unless @user == current_user %>
+			<dt><%= t 'profile.type.admin' %></dt>
+			<dd>
+				<%= check_box_tag 'user[admin]', '1', @user.admin?, data: { ajax_url: update_user_registration_path(@user, format: :json) } %>
+			</dd>
+		<% end %>
+	
+		<dt><%= t 'profile.locked' %></dt>
+		<dd>
+			<%= t(@user.locked_at ? 'yes' : 'no') %>
+		</dd>
+		
+	<% end %>
+</dl>

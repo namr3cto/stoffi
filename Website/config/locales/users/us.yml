@@ -59,29 +59,17 @@ us:
       none: "Don't show ads"
       
   profile:
-    registered: "Joined Stoffi"
-    points: "Fan points"
-    
-    songs:
-      title: "Top songs"
-      empty:
-        you: "You have not listened to any music yet."
-        user: "%{user} has not listened to any music yet."
-    
-    artists:
-      title: "Top artists"
-      empty:
-        you: "You have not listened to any music yet."
-        user: "%{user} has not listened to any music yet."
-    
-    donations:
-      title: "Support"
-      empty:
-        you: "You haven't helped any artists yet."
-        user: "%{user} hasn't helped any artists yet."
-    
-    listens:
-      title: "Recent"
-      empty:
-        you: "You have not listened to any music yet."
-        user: "%{user} has not listened to any music yet."
+    type:
+      user: 'User'
+      admin: 'Admin'
+    points: 'Points'
+    listens: 'Plays'
+    joined: 'Joined Stoffi'
+    plays: 'Songs played'
+    logins: 'Logins'
+    last_login:
+      title: 'Last login'
+      text: '%{ago} ago from %{ip}'
+    failed_logins: 'Failed logins'
+    last_edit: 'Last edit'
+    locked: 'Locked'

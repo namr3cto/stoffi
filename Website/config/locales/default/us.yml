@@ -38,6 +38,8 @@ us:
   create: "Create"
   hide: "Hide"
   back: "Back"
+  yes: 'Yes'
+  no: 'No'
   
   you: "You"
   your: 'your'

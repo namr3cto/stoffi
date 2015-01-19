@@ -1,0 +1,7 @@
+<ul class='grid'>
+	<% if @alltime and @alltime.length > 0 %>
+		<%= render partial: 'songs/song', collection: @alltime %>
+	<% else %>
+		<li data-empty='songs'><%= t 'listens.empty.alltime' %></li>
+	<% end %>
+</ul>

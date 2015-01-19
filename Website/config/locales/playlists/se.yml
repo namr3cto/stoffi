@@ -23,10 +23,8 @@ se:
       remove: "Ta bort %{song} från spellistan."
       
     add:
-      label: "Lägg till låtar från"
-      youtube: "Ha med låtar från YouTube i sökresultaten."
-      soundcloud: "Ha med låtar från SoundCloud i sökresultaten."
-      files: "Ha med lokala filer i sökresultaten."
+      description: 'Lägg till i en av dina spellistor'
+      link: 'Lägg till i spellistan %{playlist}'
       
     empty:
       you: "Du har inga spellistor än."

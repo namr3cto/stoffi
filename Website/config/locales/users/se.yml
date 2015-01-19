@@ -54,29 +54,17 @@ se:
       none: "Visa inte reklam"
       
   profile:
-    registered: "Registrerade sig för"
-    points: "Fan-poäng"
-    
-    songs:
-      title: "Topplåtar"
-      empty:
-        you: "Du har inte lyssnat på någon musik än."
-        user: "%{user} har inte lyssnat på någon musik än."
-    
-    artists:
-      title: "Toppartister"
-      empty:
-        you: "Du har inte lyssnat på någon musik än."
-        user: "%{user} har inte lyssnat på någon musik än."
-    
-    donations:
-      title: "Stöd"
-      empty:
-        you: "Du har inte hjälpt några artister än."
-        user: "%{user} har inte hjälpt några artister än."
-    
-    listens:
-      title: "Senaste"
-      empty:
-        you: "Du har inte lyssnat på någon musik än."
-        user: "%{user} har inte lyssnat på någon musik än."
+    type:
+      user: 'Användare'
+      admin: 'Admin'
+    points: 'Poäng'
+    listens: 'Spelningar'
+    joined: 'Gick med i Stoffi'
+    plays: 'Låtar spelade'
+    logins: 'Inloggningar'
+    last_login:
+      title: 'Senaste inloggning'
+      text: '%{ago} sen från %{ip}'
+    failed_logins: 'Misslyckade inloggningar'
+    last_edit: 'Senaste ändringen'
+    locked: 'Låst'

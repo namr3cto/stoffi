@@ -23,10 +23,8 @@ us:
       remove: "Remove %{song} from playlist."
       
     add:
-      label: "Add songs from"
-      youtube: "Include songs from YouTube in search results."
-      soundcloud: "Include songs from SoundCloud in search results."
-      files: "Include local files in search results."
+      description: 'Add to one of your playlists'
+      link: 'Add to playlist %{playlist}'
       
     empty:
       you: "You have no playlists yet."

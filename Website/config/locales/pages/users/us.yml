@@ -36,6 +36,26 @@ us:
         show:
           link:            'Profile'
           description:     'Check out %{usernames} hottest tracks and playlists on Stoffi.'
+          
+          recent:
+            link:            'Recent'
+            title:           'Recent plays'
+            description:     'See what %{username} has been playing recently.'
+          
+          weekly:
+            link:            'Weekly'
+            title:           'Top this week'
+            description:     'See what %{username} has been playing this week.'
+          
+          all_time:
+            link:            'All time'
+            title:           'Top all time'
+            description:     'See %{usernames} favorite music of all time.'
+          
+          info:
+            link:            'Info'
+            title:           'Information'
+            description:     'See more info about %{username}.'
       
       sessions:
   

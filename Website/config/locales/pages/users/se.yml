@@ -35,6 +35,26 @@ se:
         show:
           link:            'Profil'
           description:     'Spana in %{usernames} hetaste låtar och spellistor på Stoffi.'
+          
+          recent:
+            link:            'Senaste'
+            title:           'Senaste spelningarna'
+            description:     'Se vad %{username} har lyssnat på nyligen.'
+          
+          weekly:
+            link:            'Vecka'
+            title:           'Topp denna vecka'
+            description:     'Se vad %{username} har lyssnat på denna vecka.'
+          
+          all_time:
+            link:            'All tid'
+            title:           'Topp genom tiderna'
+            description:     'Se %{usernames} favoritmusik genom tiderna.'
+          
+          info:
+            link:            'Info'
+            title:           'Information'
+            description:     'Se mer information om %{username}.'
       
       sessions:
   

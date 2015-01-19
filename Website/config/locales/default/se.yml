@@ -35,6 +35,8 @@ se:
   create: "Skapa"
   hide: "Dölj"
   back: "Tillbaka"
+  yes: 'Ja'
+  no: 'Nej'
   
   you: "Du"
   your: 'dina'

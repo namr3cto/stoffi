@@ -1,0 +1,6 @@
+us:
+  listens:
+    empty:
+      recent: 'Nothing has been played recently'
+      weekly: 'Nothing has been played last week'
+      alltime: 'Nothing has been played ever'

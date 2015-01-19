@@ -78,29 +78,78 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	def update
 		@user = User.find(current_user.id)
 		
-		require_password = params[:edit_password] != nil
-		unless require_password
-			params[:user].delete :password
-			params[:user].delete :password_confirmation
+		# admins can edit other users
+		if params[:id] and current_user.admin?
+			@user = User.find params[:id]
 		end
 		
-		success = if require_password
-			@user.update_with_password resource_params
+		# change admin status
+		if params[:user][:admin] and current_user.admin?
+			@user.update_attribute(:admin, params[:user][:admin])
+			params[:user].delete :admin
+		end
+		
+		# only do this if we still have settings to update
+		if params[:user] and params[:user].length > 0
+		
+			# we need to temporarily change this to force unpermitted parameters
+			# to raise an exception so we can return an error status
+			ActionController::Parameters.action_on_unpermitted_parameters = :log
+			previous_aoup = ActionController::Parameters.action_on_unpermitted_parameters
+			ActionController::Parameters.action_on_unpermitted_parameters = :raise
+			
+			begin
+				require_password = params[:edit_password] != nil
+				success = if require_password
+					@user.update_with_password resource_params
+				else
+					params[:user].delete :current_password
+					logger.debug 'test'
+					@user.update_without_password resource_params
+					logger.debug 'test'
+				end
+			
+			rescue UnpermittedParameters
+				success = false
+			end
+		
+			ActionController::Parameters.action_on_unpermitted_parameters = previous_aoup
+			
 		else
-			params[:user].delete :current_password
-			@user.update_without_password resource_params
+			success = true
 		end
 		
 		if success
-			sign_in @user, bypass: true
-			redirect_to after_update_path_for(@user)
+			respond_to do |format|
+				format.html {
+					sign_in @user, bypass: true
+					redirect_to after_update_path_for(@user)
+				}
+				format.embedded { render }
+				format.xml { render xml: @user }
+				format.json { render json: @user }
+			end
 		else
-			prepare_settings
-			render 'edit'
+			respond_to do |format|
+				format.html {
+					prepare_settings
+					render 'edit'
+				}
+				format.embedded { render }
+				format.xml  { render xml: @user.errors, status: :unprocessable_entity }
+				format.json { render json: @user.errors, status: :unprocessable_entity }
+			end
 		end
 	end
 	
 	def show
+		@user = User.find params[:id]
+		@recent = @user.listens.order(created_at: :desc).limit(12)
+		@weekly = @user.songs.top(for: @user, from: 7.days.ago).limit(12)
+		@alltime = @user.songs.top(for: @user).limit(12)
+	end
+	
+	def show2
 		@user = User.find(params[:id])
 		
 		name = d(@user.name)
@@ -162,7 +211,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	protected
 	
 	def after_update_path_for(resource)
-		settings_path
+		edit_registration_path(resource)
 	end
 	
 	private

@@ -39,3 +39,10 @@ se:
         link: 'Anslut'
       destroy:
         link: 'Koppla ifrån'
+        confirm: "Vill du verkligen ta bort kopplingen med %{provider}?"
+        
+    listens:
+      destroy:
+        link: 'Ta bort'
+        description: "Ta bort från listan av låtar du har spelat"
+        confirm: "Vill du verkligen ta bort %{song} från listan av låtar som du spelat?"
