@@ -149,7 +149,7 @@ submitLoginForm = (element) ->
 	element.closest('form').submit()
 	
 #
-# Determine if the user pressed enter, given an event from a key press
+# Determine if the user pressed enter, given an event from a key press.
 #
 pressedEnter = (event) ->
 	if window.event
@@ -160,6 +160,23 @@ pressedEnter = (event) ->
 		return false
 		
 	keycode == 13
+		
+#
+# Send Ajax request when a checkbox is clicked (changed).
+#
+checkboxClicked = (element) ->
+	isChecked = element.is(':checked')
+	data = "#{element.attr('name')}=#{isChecked}"
+	url = element.data('ajax-url')
+	
+	$.ajax {
+		url: url,
+		type: 'PATCH',
+		data: data,
+		error: (jqXHR) ->
+			if jqXHR.status != 200
+				element.prop('checked', !isChecked)
+	}
 	
 jQuery ->
 	refreshLoginMode()
@@ -185,3 +202,6 @@ jQuery ->
 		options['imageWidth'] = w if typeof w != 'undefined'
 		options['imageHeight'] = h if typeof h != 'undefined'
 		dd.ddslick options
+		
+	$('input[type=checkbox][data-ajax-url]').on 'click', (event) ->
+		checkboxClicked $(this)
