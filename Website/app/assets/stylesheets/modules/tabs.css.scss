@@ -25,6 +25,12 @@ article.tabbed
 		}
 	}
 	
+	.tabs
+	{
+		@media #{$small} { display: none; }
+		.tab:hover:not(.active) { cursor: pointer; }
+	}
+	
 	aside.tabs
 	{
 		height: 100%;
@@ -38,17 +44,20 @@ article.tabbed
 			div.tab
 			{
 				padding: 1em;
-			
-				&:hover:not(.active)
-				{
-					cursor: pointer;
-				}
 			}
 		}
+	}
+	
+	section.tabs
+	{
+		margin: 0;
+		padding: 1em 1em 0;
+		overflow: hidden;
 		
-		@media #{$small}
+		span.tab
 		{
-			display: none;
+			padding: 0.8em 1.1em;
+			display: inline-block;
 		}
 	}
 }
