@@ -142,8 +142,8 @@ class Link < ActiveRecord::Base
 		begin
 			case provider
 			when "facebook"
-				response = get("/me?fields=picture")
-				return response['picture']['data']['url']
+				response = get("/me/picture?type=large&redirect=false")
+				return response['data']['url']
 				
 			when "twitter"
 				response = get("/1.1/users/show.json?user_id=#{uid}")
@@ -167,7 +167,6 @@ class Link < ActiveRecord::Base
 				
 			when "vkontakte"
 				response = get("api.php?method=getProfiles?uids=#{uid}&fields=photo_medium")
-				logger.debug response.inspect
 				return response['Response'][0]['Photo']
 				
 			when "lastfm"
@@ -181,7 +180,6 @@ class Link < ActiveRecord::Base
 				
 			when "windowslive"
 				response = get("/v5.0/me/picture?access_token=#{access_token}")
-				logger.debug response.inspect
 				return response['person']['picture_url']
 				
 			end
