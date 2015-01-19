@@ -1,28 +1,73 @@
-<% one_liner = song.images.empty? %>
-
-<li class='clickable song <%=' one-line' if one_liner %>' data-type='hit'>
-	<% unless one_liner %>
-		<div class='image'>
-			<%= image_tag song.image, alt: song.title %>
-		</div>
-	<% end %>
+<li class='item' data-href='<%= url_for song %>'>
 	
-	<div class='content'>
-		<% if one_liner %>
-			<a class='button'>&#9654;</a>
+	<!-- image -->
+	<img src='<%= song.image(:huge) %>'/>
+	
+	<!-- meta data -->
+	<div class='overlay'>
+		<span class='title'><%= song %></span>
+		
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='grid' data-type='song'><%= t 'songs.singular' %></span>
 		<% end %>
 		
-		<h3><%= song.display %></h3>
-		
-	 	<% if song.artists.top? %>
-			<p>
-				<%==t("songs.description.#{one_liner ? 'short' : 'long'}", artists: link_to_association(song.artists))%>
-			</p>
+		<% if song.artists.any? %>
+			<span class='description'>
+				<%= song.artist_names %>
+			</span>
 		<% end %>
 		
-		<% unless one_liner %>
-			<p><a class='button'>&#9654;</a></p>
+	</div>
+	
+	<!-- controls -->
+	<div class='hidden-overlay'>
+		
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='list' data-type='song'><%= t 'songs.singular' %></span>
 		<% end %>
 		
+		<span class='shadow dropdown add'>
+			<%= link_to 'javascript:void(0)', title: t('playlists.add.description') do %>
+				<span data-list-mode='list'><%= t 'playlists.add' %> ▾</span>
+				<span data-list-mode='grid'>+</span>
+			<% end %>
+			<ul class='dropdown-menu'>
+				<li>
+					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
+				</li>
+				<li>
+					<%= link_to 'Something something', 'javascript:void(0)', title: t('playlists.add.link', playlist: 'Something something'),
+					 	data: { add_to_resource: 'playlist', add_to_id: '1', add_id: '9' } %>
+				</li>
+				<li>
+					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
+				</li>
+				<li>
+					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
+				</li>
+				<li>
+					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
+				</li>
+				<li>
+					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
+				</li>
+				<li>
+					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
+				</li>
+				<li>
+					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
+				</li>
+			</ul>	
+		</span>
+		<span class='remove'>
+			<%= link_to 'javascript:void(0)', title: t('pages.listens.destroy.description'),
+			 	data: {
+					confirm: t('pages.listens.destroy.confirm', song: song),
+					remove_resource: 'listen', remove_id: '1'
+				} do %>
+				<span data-list-mode='list'><%= t 'pages.listens.destroy.link' %></span>
+				<span data-list-mode='grid'>x</span>
+			<% end %>
+		</span>
 	</div>
 </li>
