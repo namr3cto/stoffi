@@ -10,7 +10,6 @@ module I18nHelper
 	
 	def current_locale
 		case I18n.locale.to_s
-		when 'us' then :us
 		when 'uk' then :us
 		else I18n.locale
 		end
@@ -73,9 +72,14 @@ module I18nHelper
 		return link_to display, options
 	end
 	
+	# Return a hostname given a language
+	#
+	# For example, given the current host is foo.bar.xx,
+	# then 'en' will return foo.bar.com and 'cn'
+	# will return foo.bar.cn
 	def lang2host(lang)
 		host = request.host.split('.')
-		unless host[-1].in? ['dev','io']
+		unless host[-1].in? ['dev','io'] # don't touch development TLDs
 			case lang
 			when 'cn' then host[-1] = 'cn'
 			else host[-1] = 'com'
