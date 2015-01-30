@@ -25,6 +25,7 @@ us:
     add:
       description: 'Add to one of your playlists'
       link: 'Add to playlist %{playlist}'
+      menu: 'Add to playlist'
       
     empty:
       you: "You have no playlists yet."

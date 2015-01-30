@@ -25,6 +25,7 @@ se:
     add:
       description: 'Lägg till i en av dina spellistor'
       link: 'Lägg till i spellistan %{playlist}'
+      menu: 'Lägg till i spellista'
       
     empty:
       you: "Du har inga spellistor än."
