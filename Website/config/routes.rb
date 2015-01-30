@@ -53,6 +53,12 @@ Stoffi::Application.routes.draw do
 
 		get 'youtube/:action' => 'youtube'
 		
+		# charts
+		namespace :charts do
+			get 'recent_listens_for_user'
+			get 'active_users'
+		end
+		
 		get '/news',       to: 'pages#news',       as: :news
 		get '/tour',       to: 'pages#tour',       as: :tour
 		get '/get',        to: 'pages#get',        as: :get
