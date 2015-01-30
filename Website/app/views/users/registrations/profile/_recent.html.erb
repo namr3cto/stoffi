@@ -1,7 +1,10 @@
-<ul class='grid'>
+<ul class='grid' data-list='listens' data-max-length='<%= @max_items %>'>
 	<% if @recent and @recent.length > 0 %>
 		<%= render partial: 'songs/song', collection: @recent %>
 	<% else %>
 		<li data-empty='listens'><%= t 'listens.empty.recent' %></li>
 	<% end %>
+</ul>
+<ul data-template='song'>
+	<%= render partial: 'songs/song', locals: { song: Song.first } %>
 </ul>

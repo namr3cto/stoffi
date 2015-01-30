@@ -143,10 +143,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	end
 	
 	def show
+		@max_items = 12
 		@user = User.find params[:id]
-		@recent = @user.listens.order(created_at: :desc).limit(12)
-		@weekly = @user.songs.top(for: @user, from: 7.days.ago).limit(12)
-		@alltime = @user.songs.top(for: @user).limit(12)
+		@recent = @user.listens.order(created_at: :desc).limit @max_items
+		@weekly = @user.songs.top(for: @user, from: 7.days.ago).limit @max_items
+		@alltime = @user.songs.top(for: @user).limit @max_items
+		@recent = Song.limit @max_items
 	end
 	
 	def show2

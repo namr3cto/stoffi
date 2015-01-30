@@ -18,9 +18,15 @@
 	<link rel="shortcut icon" href="http://beta.stoffiplayer.com/assets/gfx/logos/blue_on_transparent_16.png"/>
 	<%= stylesheet_link_tag "application" %>
 	<%= stylesheet_link_tag 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.css' %>
-	<%= javascript_include_tag "application" %>
 	<%= csrf_meta_tags %>
-	<%= javascript_tag "var locale = '#{I18n.locale}';" %>
+	
+	<script>
+		var locale = '<%= I18n.locale %>';
+		var Chartkick = {"language": '<%= current_lang %>'};
+	</script>
+	
+	<%= javascript_include_tag "application" %>
+	<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
 	
 	<!-- Load Twitter JS-API asynchronously -->
 	<script type="text/javascript" charset="utf-8">	

@@ -1,18 +1,18 @@
-<li class='item' data-href='<%= url_for song %>'>
+<li class='item' data-href='<%= url_for song %>' data-object='song-<%= song.id %>'>
 	
 	<!-- image -->
-	<img src='<%= song.image(:huge) %>'/>
+	<img data-field='picture' src='<%= song.image(:huge) %>'/>
 	
 	<!-- meta data -->
 	<div class='overlay'>
-		<span class='title'><%= song %></span>
+		<span class='title' data-field='title'><%= song %></span>
 		
 		<% if defined? type and type %>
 			<span class='type' data-list-mode='grid' data-type='song'><%= t 'songs.singular' %></span>
 		<% end %>
 		
 		<% if song.artists.any? %>
-			<span class='description'>
+			<span class='description' data-field='description'>
 				<%= song.artist_names %>
 			</span>
 		<% end %>
@@ -28,7 +28,7 @@
 		
 		<span class='shadow dropdown add'>
 			<%= link_to 'javascript:void(0)', title: t('playlists.add.description') do %>
-				<span data-list-mode='list'><%= t 'playlists.add' %> ▾</span>
+				<span data-list-mode='list'><%= t 'playlists.add.menu' %> ▾</span>
 				<span data-list-mode='grid'>+</span>
 			<% end %>
 			<ul class='dropdown-menu'>
