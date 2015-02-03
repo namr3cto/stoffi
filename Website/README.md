@@ -1,14 +1,14 @@
-= The Stoffi Website
+# The Stoffi Website
 
 As you may know, Stoffi is divided into two parts: the player (hopefully it will soon be 'players') and the website.
 
 The website, also know as the Cloud, is the central point which ties all your devices together and acts as a central repository for all configurations, playlists and statistics. The website is also the communicator between the player and the rest of the Internet such as Facebook and Google.
 
-== Getting started
+## Getting started
 
 If you are reading this you are probably interested in getting the Stoffi website setup on your own development machine. Since the website is rather complex, there are a few steps you need to complete in order to get it up and running.
 
-=== Prerequisites
+### Prerequisites
 
 First I suggest you setup Ruby and Ruby on Rails along with a web server on your machine. I suggest you check out Pow as a local web server. It is fast and easy to deploy. I also suggest you use RVM to manage various ruby versions. The current master branch of Stoffi is developed using Ruby 2.1.
 
@@ -28,7 +28,7 @@ Install juggernaut:
 	
 For some reason I didn't get the latest version of Juggernaut to work. It started to run but never served any requests. I have packaged the folder from the web server which *does* work, and put it into the `vendor` folder. Unpack this into the juggernaut installation folder, which is most likely `/usr/local/lib/node_modules/juggernaut`.
 
-=== Database setup
+### Database setup
 
 Start by creating the database configuration file `config/database.yml`. TODO: add a default configuration file but prevent it from being changed accidentally.
 
@@ -44,7 +44,7 @@ Now initialize the database:
 
 	rake db:seed
 	
-=== Start services
+### Start services
 
 Start redis:
 
@@ -62,21 +62,21 @@ Start the sunspot search engine:
 	
 TDOO: perhaps we could combine all these into a single rake task?
 
-=== Secrets
+### Secrets
 
 You also need to create the file `config/secrets.yml`. TODO: create default sample file with instructions.
 
-== Getting to work
+## Getting to work
 
 When you have everything setup you can start to do some work. Follow the usual workflow when doing work.
 
-=== Tests
+### Tests
 
 Remember to continuously run the automatic tests while working to ensure that you don't break stuff by accident.
 
 	rake test
 	
-=== Documentation
+### Documentation
 
 If you need to build the documentation run the following:
 
