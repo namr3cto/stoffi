@@ -12,7 +12,7 @@ If you are reading this you are probably interested in getting the Stoffi websit
 
 First I suggest you setup Ruby and Ruby on Rails along with a web server on your machine. I suggest you check out Pow as a local web server. It is fast and easy to deploy. I also suggest you use RVM to manage various ruby versions. The current master branch of Stoffi is developed using Ruby 2.1.
 
-You also need to install Juggernaut in order to get server-to-client communication up and running. I will move to WebSockets later when I have managed to switch to a more modern browser for the embedded version inside the player. But for now, we still use Juggernaut. Here's how you install it.
+You also need to install Juggernaut in order to get server-to-client communication up and running. I will move to WebSockets later when I have managed to switch to a more modern browser for the embedded version inside the player. But for now, we still use Juggernaut. Here's how you install it, assuming you use Homebrew as a package manager.
 
 Install Node.js:
 
@@ -60,7 +60,7 @@ Start the sunspot search engine:
 
 	rake solr:sunspot:start
 	
-TDOO: perhaps we could combine all these into a single rake task?
+TODO: perhaps we could combine all these into a single rake task?
 
 ### Secrets
 
