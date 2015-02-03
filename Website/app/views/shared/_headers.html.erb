@@ -1,4 +1,5 @@
 <head>
+	
 	<title>
 		<% c = params[:controller].gsub '/', '.' %>
 		<% if content_for? :title %>
@@ -11,37 +12,19 @@
 			<%= t 'title' %>
 		<% end %>
 	</title>
+	
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-	<meta name="keywords" content="music player, audio player, mp3 player, free music player, free audio player, free mp3 player, stoffiplayer, stoffi" />
+	<meta name="keywords" content="music player, audio player, free music player, free audio player, stoffiplayer, stoffi" />
 	<meta name="copyright" content="Simplare" />
+	
 	<link rel="shortcut icon" href="http://beta.stoffiplayer.com/assets/gfx/logos/blue_on_transparent_16.png"/>
+	
 	<%= stylesheet_link_tag "application" %>
 	<%= stylesheet_link_tag 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.css' %>
+	
 	<%= csrf_meta_tags %>
-	
-	<script>
-		var locale = '<%= I18n.locale %>';
-		var Chartkick = {"language": '<%= current_lang %>'};
-	</script>
-	
-	<%= javascript_include_tag "application" %>
-	<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
-	
-	<!-- Load Twitter JS-API asynchronously -->
-	<script type="text/javascript" charset="utf-8">	
-	window.twttr = (function (d,s,id)
-	{
-		var t, js, fjs = d.getElementsByTagName(s)[0];
-		if (d.getElementById(id)) return; js=d.createElement(s); js.id=id;
-		js.src="//platform.twitter.com/widgets.js"; fjs.parentNode.insertBefore(js, fjs);
-		return window.twttr || (t = { _e: [], ready: function(f){ t._e.push(f) } });
-	}(document, "script", "twitter-wjs"));
-	// Wait for the asynchronous resources to load
-	twttr.ready(function(twttr)
-	{
-		_ga.trackTwitter(); //Google Analytics tracking
-	});
-	</script>
+		
+	<%= render 'shared/javascript' %>
 	
 </head>

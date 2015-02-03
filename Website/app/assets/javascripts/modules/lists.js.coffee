@@ -1,4 +1,4 @@
-#jQuery ->
+jQuery ->
 	
 	# problem:
 	# we have an overlay which is shown on hover, but there is no hover on touch

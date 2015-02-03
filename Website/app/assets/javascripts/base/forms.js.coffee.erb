@@ -1,3 +1,8 @@
+# Password indicator parameters
+cracking_bots = 1 # number of computers doing parallell cracking
+crack_speed = 1 # number of guesses per second
+crack_time_text = 'Someone forgot this text' # tooltip text
+
 #
 # Evaluates the current password and displays an indicator of its strength.
 #
@@ -177,6 +182,14 @@ checkboxClicked = (element) ->
 			if jqXHR.status != 200
 				element.prop('checked', !isChecked)
 	}
+	
+#
+# Initialize the password indicator parameters.
+#
+@initPasswordIndicator = (bots, speed, tooltip_text) ->
+	cracking_bots = bots
+	crack_speed = speed
+	crack_time_text = tooltip_text
 	
 jQuery ->
 	refreshLoginMode()
