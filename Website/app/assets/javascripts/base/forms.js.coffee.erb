@@ -156,7 +156,7 @@ submitLoginForm = (element) ->
 #
 # Determine if the user pressed enter, given an event from a key press.
 #
-pressedEnter = (event) ->
+@pressedEnter = (event) ->
 	if window.event
 		keycode = window.event.keyCode;
 	else if event
@@ -165,6 +165,19 @@ pressedEnter = (event) ->
 		return false
 		
 	keycode == 13
+	
+#
+# Determine if the user pressed enter, given an event from a key press.
+#
+@pressedEscape = (event) ->
+	if window.event
+		keycode = window.event.keyCode;
+	else if event
+		keycode = event.which;
+	else
+		return false
+		
+	keycode == 27
 		
 #
 # Send Ajax request when a checkbox is clicked (changed).
