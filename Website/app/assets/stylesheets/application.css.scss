@@ -6,10 +6,12 @@
 @import 'mixins/*';
 
 @import 'base/*';
-@import 'base/layout';
 
 @import 'modules/**/*';
 @import 'pages/**/*';
 
+// use default color palette
 @import 'themes/palettes/default';
-@import 'themes/default';
+
+// use default theme
+@import 'themes/default/**/*';
