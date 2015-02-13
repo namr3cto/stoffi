@@ -1,0 +1,5 @@
+.edit-icon
+{
+	background: url(gfx/icons/16/map.png) 192 128;
+	@include prefix(filter, $image);
+}
