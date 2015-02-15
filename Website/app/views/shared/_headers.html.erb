@@ -1,7 +1,7 @@
-<head>
+<head prefix='og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#'>
 	
+	<% c = params[:controller].gsub '/', '.' %>
 	<title>
-		<% c = params[:controller].gsub '/', '.' %>
 		<% if content_for? :title %>
 			<%= yield :title %> - Stoffi
 		<% elsif t? "pages.#{c}.#{params[:action]}.title" %>
@@ -13,12 +13,30 @@
 		<% end %>
 	</title>
 	
+	<meta name='description' content='
+	<% if content_for? :description %>
+		<%= yield :description %>
+	<% elsif t? "pages.#{c}.#{params[:action]}.description" %>
+		<%= t "pages.#{c}.#{params[:action]}.description" %>
+	<% elsif t? "pages.#{c}.description" %>
+		<%= t "pages.#{c}.description" %>
+	<% else %>
+		<%= t 'description' %>
+	<% end %>
+	' />
+	
+	<%= yield :header if content_for? :header %>
+	
+	<meta name="content-language" content="<%=langtag(I18n.locale)%>" />
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="keywords" content="music player, audio player, free music player, free audio player, stoffiplayer, stoffi" />
 	<meta name="copyright" content="Simplare" />
 	
-	<link rel="shortcut icon" href="http://beta.stoffiplayer.com/assets/gfx/logos/blue_on_transparent_16.png"/>
+	<meta property="og:site_name" content="Stoffi"/>
+	<meta property="og:app_id" content="243125052401100"/>
+	
+	<link rel="shortcut icon" href="<%= asset_path 'gfx/logos/blue_on_transparent_16.png' %>"/>
 	
 	<%= stylesheet_link_tag "application" %>
 	<%= stylesheet_link_tag 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.css' %>
