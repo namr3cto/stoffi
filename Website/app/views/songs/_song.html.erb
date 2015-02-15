@@ -33,41 +33,23 @@
 			<% end %>
 			<ul class='dropdown-menu'>
 				<li>
-					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
-				</li>
-				<li>
-					<%= link_to 'Something something', 'javascript:void(0)', title: t('playlists.add.link', playlist: 'Something something'),
+					<%= link_to 'Foo', 'javascript:void(0)', title: t('playlists.add.link', playlist: 'Foo'),
 					 	data: { add_to_resource: 'playlist', add_to_id: '1', add_id: '9' } %>
-				</li>
-				<li>
-					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
-				</li>
-				<li>
-					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
-				</li>
-				<li>
-					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
-				</li>
-				<li>
-					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
-				</li>
-				<li>
-					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
-				</li>
-				<li>
-					<%= link_to 'Foobar', '#', title: 'Add to playlist Foobar' %>
 				</li>
 			</ul>	
 		</span>
-		<span class='remove'>
-			<%= link_to 'javascript:void(0)', title: t('pages.listens.destroy.description'),
-			 	data: {
-					confirm: t('pages.listens.destroy.confirm', song: song),
-					remove_resource: 'listen', remove_id: '1'
-				} do %>
-				<span data-list-mode='list'><%= t 'pages.listens.destroy.link' %></span>
-				<span data-list-mode='grid'>x</span>
-			<% end %>
-		</span>
+		
+		<% if defined? deletable %>
+			<span class='remove'>
+				<%= link_to 'javascript:void(0)', title: t('pages.listens.destroy.description'),
+				 	data: {
+						confirm: t('pages.listens.destroy.confirm', song: song),
+						remove_resource: 'listen', remove_id: song.id
+					} do %>
+					<span data-list-mode='list'><%= t 'pages.listens.destroy.link' %></span>
+					<span data-list-mode='grid'>x</span>
+				<% end %>
+			</span>
+		<% end %>
 	</div>
 </li>
