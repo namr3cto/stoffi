@@ -42,7 +42,7 @@ class Album < ActiveRecord::Base
 		end
 	end
 	
-	self.default_image = "/assets/media/disc.png"
+	self.default_image = "/assets/gfx/icons/256/missing.png"
 	
 	# The string to display to users for representing the resource.
 	def display
@@ -53,6 +53,10 @@ class Album < ActiveRecord::Base
 		p = super
 		p += songs.inject(p) { |sum,x| sum + x.popularity } if songs.count > 0 and p == 0
 		p
+	end
+	
+	def artist_names
+		artists.collect { |a| a.name }.to_sentence
 	end
 	
 	def self.find_or_create_by_hash(hash)
