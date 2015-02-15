@@ -68,14 +68,13 @@ class LinkTest < ActiveSupport::TestCase
 	end
 	
 	def prepareLastFMRequest(link, verb, params)
-		link = links(:alice_facebook)
 		params[:api_key] = "foobar"
 		params[:sk] = link.access_token
 		
 		if verb == :get
 			params[:format] = "json"
 		end
-		params[:api_sig] = Digest::MD5.hexdigest(params.stringify_keys.sort.to_s + "somekey")
+		params[:api_sig] = Digest::MD5.hexdigest(params.stringify_keys.sort.flatten.join + "somekey")
 		if verb == :post
 			params[:format] = "json"
 		end
@@ -125,7 +124,7 @@ class LinkTest < ActiveSupport::TestCase
 	test "should get facebook picture" do
 		response = Object.new
 		def response.parsed
-			{ "picture" => { "data" => { "url" => "http://foo.com/pic.jpg" } } }
+			{ "data" => { "url" => "http://foo.com/pic.jpg" } }
 		end
 		OAuth2::AccessToken.any_instance.expects(:get).returns(response)
 		link = links(:alice_facebook)
@@ -211,12 +210,12 @@ class LinkTest < ActiveSupport::TestCase
 		params = {
 			artist: listen.song.artists.collect { |x| x.name }.to_sentence,
 			track: listen.song.title,
-			duration: listen.song.length.to_i,
-			timestamp: listen.created_at.to_i,
+			duration: listen.song.length.to_i.to_s,
+			timestamp: listen.created_at.to_i.to_s,
 			method: "track.updateNowPlaying"
 		}
 		url, params = prepareLastFMRequest(link, :post, params)
-		stub_request(:any, url).with(query: params).to_return(body: @empty_lastfm_response)
+		stub_request(:any, url).with(body: params).to_return(body: @empty_lastfm_response)
 		link.start_listen(listen)
 	end
 
@@ -256,12 +255,12 @@ class LinkTest < ActiveSupport::TestCase
 		params = {
 			artist: listen.song.artists.collect { |x| x.name }.to_sentence,
 			track: listen.song.title,
-			duration: listen.song.length.to_i,
-			timestamp: listen.created_at.to_i,
+			duration: listen.song.length.to_i.to_s,
+			timestamp: listen.created_at.to_i.to_s,
 			method: "track.scrobble"
 		}
 		url, params = prepareLastFMRequest(link, :post, params)
-		stub_request(:any, url).with(query: params).to_return(:body => @empty_lastfm_response)
+		stub_request(:any, url).with(body: params).to_return(:body => @empty_lastfm_response)
 		link.end_listen(listen)
 	end
 
