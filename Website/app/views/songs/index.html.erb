@@ -1,32 +1,63 @@
-<div class="main">
-	<% if user_signed_in? %>
-		<div class="goldenbox">
-			<h1 class="title">Personal top</h1>
-			<p>&nbsp;</p>
-					
-			<ul class="artists bigitems">
-				<% Song.top(5, current_user).each do |song| %>
-					<li>
-						<%= song_item song %>
-					</li>
-				<% end %>
-			</ul>
-		</div>
+<%
+tabs = ['weekly', 'all_time', 'recent']
+categories = [''] # global
+categories << 'user' if user_signed_in?
+%>
+<%  %>
+
+<article class='tabbed'>
+	
+	<% categories.each do |cat| %>
+		<% tabs.each do |tab| %>
+			<% t = cat.present? ? "#{cat}_#{tab}" : tab %>
+			<section data-content='<%= t %>'>
+				<h1><%= t "pages.songs.index.#{t}.title" %></h1>
+				<%= render "songs/tabs/#{t}" %>
+			</section>
+		<% end %>
 	<% end %>
 	
-	<div class="goldenbox">
-		<h1 class="title">Global top</h1>
-		<p>&nbsp;</p>
-				
-		<ul class="artists bigitems">
-			<% Song.top(5).each do |song| %>
-				<li>
-					<%= song_item song %>
-				</li>
+	<aside class='tabs'>
+		<section>
+			<% categories.each do |cat| %>
+				<% if cat.present? %>
+					<h2><%= t 'pages.songs.index.categories.'+cat %></h2>
+				<% end %>
+				<% tabs.each do |tab| %>
+					<% t = cat.present? ? "#{cat}_#{tab}" : tab %>
+					<div class='tab' data-tab='<%= t %>' title='<%=t "pages.songs.index.#{t}.description" %>'>
+						<%=t "pages.songs.index.#{t}.link" %>
+					</div>
+				<% end %>
 			<% end %>
-		</ul>
-	</div>
+		</section>
+	</aside>
 	
-</div>
+</article>
 
-<%= render "sidebars/music" %>
+<% if false %>
+	
+	<% if user_signed_in? %>
+		<section>
+			<h1>Your top this week</h1>
+			<ul class='grid'>
+				<%= render partial: 'songs/song', collection: @user_weekly %>
+			</ul>
+		</section>
+	
+		<section>
+			<h1>Your top all time</h1>
+			<ul class='grid'>
+				<%= render partial: 'songs/song', collection: @user_alltime %>
+			</ul>
+		</section>
+	
+		<section>
+			<h1>Played by you</h1>
+			<ul class='grid'>
+				<%= render partial: 'songs/song', collection: @user_recent %>
+			</ul>
+		</section>
+	<% end %>
+
+<% end %>
