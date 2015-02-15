@@ -4,6 +4,7 @@ section.head
 	padding: 1em 0;
 	position: relative;
 	height: 12em;
+	width: 100%;
 	
 	.left, .image, .right
 	{
@@ -81,6 +82,8 @@ section.head
 				position: absolute;
 				bottom: 0.4em;
 			}
+			
+			.social-buttons { text-align: right; }
 		}
 		
 		.bottom

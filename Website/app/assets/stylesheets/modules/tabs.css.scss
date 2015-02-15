@@ -25,8 +25,9 @@ article.tabbed
 		}
 	}
 	
-	.tabs
+	.tabs:not(aside)
 	{
+		width: 100%;
 		@media #{$small} { display: none; }
 		.tab:hover:not(.active) { cursor: pointer; }
 	}
@@ -41,6 +42,16 @@ article.tabbed
 		{
 			padding: 1em 0 0 1em;
 			
+			h2
+			{
+				text-transform: uppercase;
+				font-size: 0.8em;
+				font-style: normal;
+				font-weight: bold;
+				text-align: center;
+				margin: 3em 0 0.8em;
+			}
+			
 			div.tab
 			{
 				padding: 1em;
@@ -50,7 +61,7 @@ article.tabbed
 	
 	section.tabs
 	{
-		margin: 0;
+		margin: 0 0 1em;
 		padding: 1em 1em 0;
 		overflow: hidden;
 		
@@ -60,4 +71,6 @@ article.tabbed
 			display: inline-block;
 		}
 	}
+	
+	.tab:hover { cursor: pointer; }
 }

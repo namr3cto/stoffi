@@ -52,6 +52,8 @@ ul.grid
 	{
 		display: inline-block;
 		position: relative;
+		margin-right: .5em;
+		margin-bottom: .5em;
 		-webkit-touch-callout: none !important;
 		
 		[data-list-mode='grid'] { display: initial; }
