@@ -93,6 +93,16 @@ class Source < ActiveRecord::Base
 		(popularity || 0).to_f / max
 	end
 	
+	def to_s
+		case name.downcase
+		when 'url' then 'URL'
+		when 'lastfm' then 'Last.fm'
+		when 'soundcloud' then 'SoundCloud'
+		when 'youtube' then 'YouTube'
+		else name.capitalize
+		end
+	end
+	
 	private
 	
 	def self.parse_resource(resource)
