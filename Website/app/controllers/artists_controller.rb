@@ -13,7 +13,7 @@ class ArtistsController < ApplicationController
 
 	oauthenticate interactive: true, except: [ :index, :show ]
 	before_filter :ensure_admin, except: [ :index, :show ]
-	respond_to :html, :mobile, :embedded, :xml, :json, :js
+	respond_to :html, :xml, :json
 	
 	layout 'white_and_sidebar'
 	
