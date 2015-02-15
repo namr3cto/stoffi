@@ -144,4 +144,9 @@ class AlbumTest < ActiveSupport::TestCase
 		end
 		assert_equal p, a.popularity, "Popularity isn't the combined popularity of the sources"
 	end
+	
+	test 'should get artist names' do
+		a = albums(:relapse)
+		assert_equal 'Bob Marley and Eminem', a.artist_names
+	end
 end
