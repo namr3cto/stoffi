@@ -39,7 +39,7 @@ class Song < ActiveRecord::Base
 	has_many :listens
 	has_many :shares, as: :object
 	
-	self.default_image = "/assets/media/disc.png"
+	self.default_image = "/assets/gfx/icons/256/missing.png"
 	
 	searchable do
 		text :title, boost: 5
@@ -58,6 +58,20 @@ class Song < ActiveRecord::Base
 		artists.collect { |a| a.name }.to_sentence
 	end
 	
+	def artists=(names)
+		artists.clear
+		Artist.split_name(names).each do |artist|
+			artists << Artist.find_or_create_by(name: artist)
+		end
+	end
+	
+	def genres=(names)
+		genres.clear
+		names.split(',').each do |genre|
+			genres << Genre.find_or_create_by(name: genre.strip)
+		end
+	end
+	
 	# A long description of the song.
 	def description
 		s = "#{title}, a song "
@@ -69,10 +83,22 @@ class Song < ActiveRecord::Base
 		"#{artist_names} - #{title}"
 	end
 	
-	def xpath
-		return nil if sources.length == 0
-		src = sources.first
-		"stoffi:track:#{src.name}:#{src.foreign_id}"
+	def similar(count = 5)
+		s = []
+		
+		# collect associations
+		genres.each { |x| s << x } if genres.count > 0
+		albums.each { |x| s << x } if albums.count > 0
+		artists.each { |x| s << x } if artists.count > 0
+		
+		# retrieve songs from associations
+		r = []
+		s.each do |x|
+			r.concat x.songs.where.not(id: id).offset(rand(x.songs.count-5)).limit(count).to_a
+		end
+		
+		# shuffle and return
+		r.shuffle[0..count-1]
 	end
 	
 	# The options to use when the song is serialized.
