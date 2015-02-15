@@ -1,12 +1,55 @@
-<li class='clickable album' data-type='hit'>
-	<div class='image'>
-		<%= image_tag album.image, alt: album %>
+<li class='item' data-href='<%= url_for album %>' data-object='album-<%= album.id %>'>
+	
+	<!-- image -->
+	<img data-field='picture' src='<%= album.image(:huge) %>'/>
+	
+	<!-- meta data -->
+	<div class='overlay'>
+		<span class='title' data-field='title'><%= album %></span>
+		
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='grid' data-type='album'><%= t 'albums.singular' %></span>
+		<% end %>
+		
+		<% if album.artists.any? %>
+			<span class='description' data-field='description'>
+				<%= album.artist_names %>
+			</span>
+		<% end %>
+		
 	</div>
-	<div class='content'>
-		<h3><%= album %></h3>
-		<p><%==t 'albums.description', artists: link_to_association(album.artists) %></p>
-		<% if album.songs.top? %>
-			<p><%=t('songs.plural').capitalize %>: <%= top_list(album.songs, limit: 3) %></p>
+	
+	<!-- controls -->
+	<div class='hidden-overlay'>
+		
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='list' data-type='album'><%= t 'albums.singular' %></span>
+		<% end %>
+		
+		<span class='shadow dropdown add'>
+			<%= link_to 'javascript:void(0)', title: t('playlists.add.description') do %>
+				<span data-list-mode='list'><%= t 'playlists.add.menu' %> ▾</span>
+				<span data-list-mode='grid'>+</span>
+			<% end %>
+			<ul class='dropdown-menu'>
+				<li>
+					<%= link_to 'Foo', 'javascript:void(0)', title: t('playlists.add.link', playlist: 'Foo'),
+					 	data: { add_to_resource: 'playlist', add_to_id: '1', add_id: '9' } %>
+				</li>
+			</ul>	
+		</span>
+		
+		<% if defined? deletable %>
+			<span class='remove'>
+				<%= link_to 'javascript:void(0)', title: t('pages.albums.destroy.description'),
+				 	data: {
+						confirm: t('pages.albums.destroy.confirm', album: album),
+						remove_resource: 'album', remove_id: album.id
+					} do %>
+					<span data-list-mode='list'><%= t 'pages.albums.destroy.link' %></span>
+					<span data-list-mode='grid'>x</span>
+				<% end %>
+			</span>
 		<% end %>
 	</div>
 </li>

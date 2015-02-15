@@ -93,3 +93,6 @@ us:
       require_action: "Your password won't change until you click on the link above and create a new one."
 
     ignore: "If you didn't request this, please ignore this email."
+    
+  sources:
+    title: 'Sources'

@@ -1,0 +1,8 @@
+<% if @song.albums.count > 0 %>
+	<section>
+		<h1><%= t 'songs.albums' %></h1>
+		<ul class='grid' data-list='albums'>
+			<%= render partial: 'albums/album', collection: @song.albums %>
+		</ul>
+	</section>
+<% end %>

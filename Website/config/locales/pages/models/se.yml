@@ -30,9 +30,55 @@ se:
         show:
           description: "%{artist} är en artist på Stoffi"
 
-      songs:
-        show:
-          description: "Lyssna på %{song} i Stoffi Musikspelare eller direkt här på hemsidan."
+    songs:
+      show:
+        description: "Lyssna på %{song} i Stoffi Musikspelare eller direkt här på hemsidan."
+      lastfm:
+        title: '%{song} på Last.fm'
+        link: 'Last.fm'
+        description: 'Kolla in %{song} på Last.fm'
+      info:
+        title: 'Mer info'
+        link: 'Info'
+        description: 'Se mer info om %{song}'
+        
+      index:
+        link: 'Låtar'
+        title: 'Populära låtar'
+        description: "Se vad som är hett på Stoffi just nu."
+        
+        recent:
+          link:            'Senaste'
+          title:           'Nyligen spelat'
+          description:     'Se vad som har spelats nyligen.'
+      
+        weekly:
+          link:            'Vecka'
+          title:           'Topp den senaste veckan'
+          description:     'Se populära låtar den senaste veckan.'
+      
+        all_time:
+          link:            'All tid'
+          title:           'Topp genom tiderna'
+          description:     'Se de mest populära låtarna genom tiderna.'
+        
+        user_recent:
+          link:            'Senaste'
+          title:           'Dina senaste spelningar'
+          description:     "Se vad du har spelat nyligen."
+      
+        user_weekly:
+          link:            'Vecka'
+          title:           'Din topp den senaste veckan'
+          description:     "Se dina mest populära låtar den senaste veckan."
+      
+        user_all_time:
+          link:            'All tid'
+          title:           'Din topp genom tiderna'
+          description:     "Se dina mest populära låtar genom tiderna."
+      
+        categories:
+          user: 'Personligt'
         
     links:
       new:
@@ -46,3 +92,9 @@ se:
         link: 'Ta bort'
         description: "Ta bort från listan av låtar du har spelat"
         confirm: "Vill du verkligen ta bort %{song} från listan av låtar som du spelat?"
+        
+    albums:
+      destroy:
+        link: 'Ta bort'
+        description: "Ta bort detta album"
+        confirm: "Vill du verkligen ta bort %{album}?"
