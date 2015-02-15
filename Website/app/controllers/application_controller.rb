@@ -666,3 +666,15 @@ module ActionView
 		end
 	end
 end
+
+module ActiveRecord
+	module Associations
+		class CollectionProxy
+			
+			def to_s
+				self.map(&:to_s).join(', ')
+			end
+			
+		end
+	end
+end
