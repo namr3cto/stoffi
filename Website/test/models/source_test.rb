@@ -48,4 +48,10 @@ class SourceTest < ActiveSupport::TestCase
 		assert s, "Didn't return source"
 		assert_equal s, src, "Didn't return the correct source"
 	end
+	
+	test "should cast to string" do
+		assert_equal 'YouTube', sources(:one_love_youtube).to_s
+		assert_equal 'SoundCloud', sources(:relapse_soundcloud).to_s
+		assert_equal 'Last.fm', sources(:festival_lastfm).to_s
+	end
 end
