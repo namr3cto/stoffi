@@ -246,19 +246,6 @@ class SongTest < ActiveSupport::TestCase
 		assert_includes song.artists, coldplay, "#{coldplay.name} was not in collection"
 	end
 	
-	test "should set genres" do
-		reggae = genres(:reggae)
-		song = songs(:one_love)
-		assert_difference "Genre.count", 1, "Didn't create new genre" do
-			song.genres = "#{reggae}, Roots reggae"
-		end
-		roots_reggae = Genre.find_by(name: 'Roots reggae')
-		assert roots_reggae, "Didn't create proper genre"
-		assert_equal 2, song.genres.count, "Didn't split artists string into two"
-		assert_includes song.genres, reggae, "#{reggae} was not in collection"
-		assert_includes song.genres, roots_reggae, "#{roots_reggae} was not in collection"
-	end
-	
 	test "should get similar, same artist" do
 		song = songs(:no_woman_no_cry)
 		song.genres.clear

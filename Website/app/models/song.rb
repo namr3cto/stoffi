@@ -65,13 +65,6 @@ class Song < ActiveRecord::Base
 		end
 	end
 	
-	def genres=(names)
-		genres.clear
-		names.split(',').each do |genre|
-			genres << Genre.find_or_create_by(name: genre.strip)
-		end
-	end
-	
 	# A long description of the song.
 	def description
 		s = "#{title}, a song "

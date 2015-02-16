@@ -13,7 +13,7 @@
 		<%= editable_field 'dd', @song, 'length', seconds_to_duration(@song.length), disabled: true %>
 	
 		<dt><%= t 'songs.meta.genres' %></dt>
-		<%= editable_field 'dd', @song, 'genres', @song.genres, disabled: admin? do %>
+		<%= editable_field 'dd', @song, 'genre', @song.genres, disabled: admin? do %>
 			<span class='value'><%= link_to_association(@song.genres) || '-' %></span>
 		<% end %>
 		

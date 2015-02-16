@@ -2,9 +2,9 @@ module Genreable
 	extend ActiveSupport::Concern
 	
 	def genre=(text)
+		genres.clear
 		text.to_s.split(',').each do |name|
-			genre = Genre.find_or_create_by(name: name.strip)
-			genres << genre unless genres.include? genre
+			genres << Genre.find_or_create_by(name: name.strip.capitalize)
 		end
 	end
 	
