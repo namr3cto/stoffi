@@ -108,10 +108,16 @@ class User < ActiveRecord::Base
 		size = ""
 		size = options[:size] if options != nil
 		s = image.to_s
-		return User.default_pic(size) if s == ""
+		
+		# no image source
+		return User.default_pic(size) unless s.present?
+		
+		# image source is gravatar
 		if [:gravatar, :identicon, :monsterid, :wavatar, :retro].include? s.to_sym
-			s = s == :gravatar ? :mm : s.to_sym
+			s = s == 'gravatar' ? :mm : s.to_sym
 			return gravatar(s)
+			
+		# image source is something else
 		else
 			l = self.links.find_by(provider: s)
 			return User.default_pic unless l
@@ -119,6 +125,8 @@ class User < ActiveRecord::Base
 			return User.default_pic unless pic
 			return pic
 		end
+		
+		# should we really ever reach this point?
 		return User.default_pic(size)
 	end
 	
