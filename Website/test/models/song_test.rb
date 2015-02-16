@@ -196,7 +196,7 @@ class SongTest < ActiveSupport::TestCase
 	end
 	
 	test "should extract artist from hash" do
-		name = 'Damian Marley'
+		name = 'Stephen Marley'
 		song = { artist: name }
 		assert_difference('Artist.count', 1, "Didn't create artist") do
 			Song.extract_artists(song)
@@ -214,7 +214,7 @@ class SongTest < ActiveSupport::TestCase
 	end
 	
 	test "should extract artists from hash" do
-		song = { artists: ['Eminem', 'Damian Marley', 'Stephen Marley'], artist: 'Foo' }
+		song = { artists: ['Eminem', 'Ziggi Marley', 'Stephen Marley'], artist: 'Foo' }
 		assert_difference('Artist.count', 2, "Didn't create two artists") do
 			Song.extract_artists(song)
 		end
@@ -235,4 +235,52 @@ class SongTest < ActiveSupport::TestCase
 		assert s[0].listens.count >= s[1].listens.count, "Top songs not in order (first and second)"
 		assert s[1].listens.count >= s[2].listens.count, "Top songs not in order (second and third)"
 	end
+	
+	test "should set artists" do
+		eminem = artists(:eminem)
+		coldplay = artists(:coldplay)
+		song = songs(:one_love)
+		song.artists = "#{eminem.name} feat. #{coldplay.name}"
+		assert_equal 2, song.artists.count, "Didn't split artists string into two"
+		assert_includes song.artists, eminem, "#{eminem.name} was not in collection"
+		assert_includes song.artists, coldplay, "#{coldplay.name} was not in collection"
+	end
+	
+	test "should set genres" do
+		reggae = genres(:reggae)
+		song = songs(:one_love)
+		assert_difference "Genre.count", 1, "Didn't create new genre" do
+			song.genres = "#{reggae}, Roots reggae"
+		end
+		roots_reggae = Genre.find_by(name: 'Roots reggae')
+		assert roots_reggae, "Didn't create proper genre"
+		assert_equal 2, song.genres.count, "Didn't split artists string into two"
+		assert_includes song.genres, reggae, "#{reggae} was not in collection"
+		assert_includes song.genres, roots_reggae, "#{roots_reggae} was not in collection"
+	end
+	
+	test "should get similar, same artist" do
+		song = songs(:no_woman_no_cry)
+		song.genres.clear
+		song.similar.each do |s|
+			assert (s.artists & song.artists).length > 0, "#{s} was not made by any of #{song.artists.to_a}"
+		end
+	end
+	
+	test "should get similar, same album" do
+		song = songs(:not_afraid)
+		song.genres.clear
+		song.similar.each do |s|
+			assert (s.albums & song.albums).length > 0, "#{s} was not in any of #{song.albums.to_a}"
+		end
+	end
+	
+	test "should get similar, same genre" do
+		song = songs(:welcome_to_jamrock)
+		song.similar.each do |s|
+			assert (s.genres & song.genres).length > 0
+		end
+	end
+	
+	# similar
 end

@@ -2,7 +2,7 @@ not_afraid:
     title: Not Afraid
     artists: eminem
     length: 123
-    genres: rap
+    genres: rap, hip_hop
 
 one_love:
     title: One Love
@@ -27,3 +27,8 @@ exodus:
 spies:
     title: Spies
     artists: coldplay
+    
+welcome_to_jamrock:
+    title: Welcome to Jamrock
+    artists: damian_marley
+    genres: reggae, hip_hop

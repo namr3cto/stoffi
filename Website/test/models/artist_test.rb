@@ -9,7 +9,7 @@ class SourceTest < ActiveSupport::TestCase
 	
 	test "should get new artist" do
 		a = nil
-		name = 'Damain Marley'
+		name = 'Stephen Marley'
 		assert_difference "Artist.count", 1, "Didn't create new artist" do
 			a = Artist.get(name)
 		end
@@ -28,7 +28,7 @@ class SourceTest < ActiveSupport::TestCase
 	test "should get by hash" do
 		a = nil
 		hash = {
-			name: 'Damian Marley',
+			name: 'Stephen Marley',
 			popularity: 123,
 			images: [
 				{ url: 'http://foo.com/img1.jpg', width: 32, height: 32 },

@@ -32,4 +32,33 @@ class UserTest < ActiveSupport::TestCase
 			end
 		end
 	end
+	
+	test "should fetch gravatar images" do
+		alice = users(:alice)
+		assert alice.gravatar(:mm).starts_with? 'https://gravatar.com/avatar'
+		assert alice.gravatar(:monsterid).starts_with? 'https://gravatar.com/avatar'
+		alice.image = 'gravatar'
+		assert_equal alice.gravatar(:mm), alice.picture
+		alice.image = 'identicon'
+		assert_equal alice.gravatar(:identicon), alice.picture
+	end
+	
+	test "should get unconnected links" do
+		alice = users(:alice)
+		unconnected = alice.unconnected_links
+		available = Link.available # all links
+		
+		# ensure connected links are not included
+		alice.links.each do |link|
+			assert unconnected.select { |l| l[:name] == link.to_s }.length == 0
+			
+			# remove this from all links
+			available.reject! { |l| l[:name] == link.to_s }
+		end
+		
+		# ensure that the left-overs (after removing connected) are all included
+		available.each do |link|
+			assert_includes unconnected, link
+		end
+	end
 end

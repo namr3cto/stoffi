@@ -4,5 +4,8 @@ eminem:
 bob_marley:
     name: Bob Marley
     
+damian_marley:
+    name: Damian Marley
+    
 coldplay:
     name: Coldplay
