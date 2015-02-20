@@ -40,7 +40,8 @@ class Song < ActiveRecord::Base
 	end
 	has_many :listens
 	
-	combine_associations :listens, :shares
+	# include duplicates' association into self's
+	include_associations_of_dups :listens, :shares, :artists
 	
 	self.default_image = "/assets/gfx/icons/256/missing.png"
 	

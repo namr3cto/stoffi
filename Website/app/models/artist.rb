@@ -23,7 +23,7 @@ class Artist < ActiveRecord::Base
 	with_options uniq: true do |assoc|
 		assoc.has_and_belongs_to_many :albums
 		assoc.has_and_belongs_to_many :songs
-		assoc.has_and_belongs_to_many :artists, join_table: :performances
+		assoc.has_and_belongs_to_many :events, join_table: :performances
 		assoc.has_and_belongs_to_many :genres, through: :songs
 	end
 	with_options as: :resource, dependent: :destroy do |assoc|
@@ -37,6 +37,8 @@ class Artist < ActiveRecord::Base
 	# validations
 	validates_uniqueness_of :name
 	validates_presence_of :name
+	
+	include_associations_of_dups :listens
 	
 	searchable do
 		text :name

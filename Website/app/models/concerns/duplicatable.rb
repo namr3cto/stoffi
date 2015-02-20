@@ -38,7 +38,7 @@
 #
 #   class Person
 #     has_many :hobbies
-#     combine_associations :hobbies
+#     include_association_of_dups
 #   end
 #
 # Now `alice.hobbies` will include `bob.hobbies` if you set `bob.duplicate_of alice`.
@@ -64,6 +64,7 @@ module Duplicatable
 			raise TypeError.new("Cannot mark a #{resource.class.name} as duplicate of a #{self.class.name}")
 		end
 		self.archetype = resource
+		save
 	end
 	
 	def duplicate_of?(resource)
@@ -112,40 +113,107 @@ module Duplicatable
 			where(archetype: nil)
 		end
 		
-		# Turn on merging of associations.
+		# Include associations of all duplicates when accessing an association.
 		#
-		# When you access the association on an archetype,
-		# it will include the associations on all its duplicates
-		# as well.
-		def combine_associations(*associations)
-			
-			# ensure that all associations exists
-			associations.each do |association|
-				unless reflections.key? association
-					raise ArgumentError.new("No such association: #{association}")
-				end
+		# When you access the association on an archetype, it will include the
+		# associations on all its duplicates as well.
+		#
+		# Put this into your class after your associations:
+		#   include_association_of_dups
+		#
+		# Turn on for specific assocations:
+		#   include_association_of_dups :comments, :tags
+		# This is the same as:
+		#   include_association_of_dups only: [:comments, :tags]
+		#
+		# You can also use blacklisting:
+		#   include_association_of_dups except: :authors
+		#
+		def include_associations_of_dups(*associations)
+			associations << {except: []} if associations.empty?
+			unless associations[0].is_a? Hash
+				associations = [{only: associations}]
 			end
+			associations = build_associations_from_hash associations[0]
 			
 			# override each association method
-			associations.each do |association|
-				define_method association do |*argumets|
-					reflection = self.class.reflections[association]
+			associations.each do |name|
+				next unless valid_association_for_combining?(name)
+				define_method name do |*arguments|
+					return super(arguments) if duplicates.empty?
+		
 					w = [] # where clause
-					
+					type, key, tbl = self.get_sql_names_for_combining name, self.class.reflections[name]
+			
 					# do we need to specify the resource type? (if polymorphic, for example)
-					w << "#{reflection.type}='#{self.class.name}'" if reflection.type.present?
-					
+					w << "#{tbl}.#{type}='#{self.class.name}'" if type.present?
+
 					# get the IDs of each duplicate, and self
 					ids = [id] + duplicates.map(&:id)
-					ids.map! { |x| "#{reflection.foreign_key}=#{x}" }
+					ids.map! { |i| "#{tbl}.#{key}=#{i}" }
 					w << "(#{ids.join(' or ')})" if ids.size > 0
-					
+
+					wsql = w.join ' and '
+		
 					# construct relation
-					reflection.class_name.constantize.where w.join(' and ')
+					association(name).reader(arguments).unscope(where: key).where(wsql)
 				end
 			end
 		end
 		
+		private
+		
+		# Validate that all associations can be combined
+		def validate_associations_for_combining(associations)
+			associations.each do |name|
+				unless reflections.key? name
+					raise ArgumentError.new("No such association: #{name}")
+				end
+				unless valid_association_for_combining?(name)
+					raise ArgumentError.new("Association type not allowed: #{reflection[name].macro}")
+				end
+			end
+		end
+		
+		# Check if a association can be combined
+		def valid_association_for_combining?(name)
+			reflections[name].macro.in? [:has_and_belongs_to_many, :has_many]
+		end
+		
+		# Build a list of associations from an argument hash
+		def build_associations_from_hash(association_hash)
+			if association_hash.key? :only
+				associations = association_hash[:only]
+				validate_associations_for_combining associations
+			elsif association_hash.key? :except
+				assocations = reflections.keys - association_hash[:except]
+			else
+				raise ArgumentError.new("Argument hash contains neither :only nor :except key")
+			end
+		end
+		
+	end
+	
+	protected
+
+	# Get the table name, foreign key and foreign type used to construct
+	# a where clause when combining associations.
+	def get_sql_names_for_combining(name, reflection)
+		if reflection.macro == :has_many and reflection.options.key? :through
+			r = self.class.reflections[reflection.options[:through]]
+			return get_sql_names_for_combining(name, r)
+			
+		elsif reflection.macro == :has_and_belongs_to_many
+			type = reflection.type
+			key = reflection.foreign_key
+			tbl = reflection.join_table
+			
+		else
+			type = reflection.type
+			key = reflection.foreign_key
+			tbl = reflection.quoted_table_name
+		end
+		return type, key, tbl
 	end
 	
 end

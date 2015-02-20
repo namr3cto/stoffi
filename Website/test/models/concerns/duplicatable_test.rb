@@ -13,12 +13,11 @@ class DuplicatableTest < ActiveSupport::TestCase
 		assert_difference "artist.songs.count", -1 do
 		assert_no_difference "artist.songs.unscoped.count" do
 			dup.duplicate_of master
-			dup.save
 		end
 		end
 	end
 	
-	test "should be recursive" do
+	test "should be transitive" do
 		a = artists(:eminem)
 		b = artists(:bob_marley)
 		c = artists(:damian_marley)
@@ -27,9 +26,6 @@ class DuplicatableTest < ActiveSupport::TestCase
 		a.duplicate_of b
 		b.duplicate_of c
 		c.duplicate_of d
-		a.save
-		b.save
-		c.save
 		
 		assert_equal d, a.archetype
 		assert_equal 3, d.duplicates.count
@@ -55,12 +51,10 @@ class DuplicatableTest < ActiveSupport::TestCase
 		
 		assert_difference "c.duplicates.count", +1 do
 			a.duplicate_of c
-			a.save	
 		end
 		
 		assert_difference "c.duplicates.count", +1 do
 			b.duplicate_of c
-			b.save	
 		end
 	end
 	
@@ -69,7 +63,6 @@ class DuplicatableTest < ActiveSupport::TestCase
 		b = songs(:not_afraid)
 		combined = a.listens.count + b.listens.count
 		a.duplicate_of b
-		a.save
 		
 		assert_equal 1, b.duplicates.length
 		assert_equal combined, b.listens.count
@@ -80,8 +73,27 @@ class DuplicatableTest < ActiveSupport::TestCase
 		b = songs(:not_afraid)
 		combined = a.shares.count + b.shares.count
 		a.duplicate_of b
-		a.save
 		assert_equal combined, b.shares.count
+	end
+	
+	test "should combine has_many :through relation" do
+		a = artists(:bob_marley)
+		b = artists(:eminem)
+		combined = a.listens.count + b.listens.count
+		a.duplicate_of b
+		assert_equal combined, b.listens.count
+	end
+	
+	test "should combine habtm relation" do
+		song_a = songs(:one_love)
+		song_b = songs(:not_afraid)
+		artist = artists(:damian_marley)
+		song_a.artists << artist
+		song_b.artists << artist
+		song_a.duplicate_of song_b
+		(song_a.artists + song_b.artists).each do |a|
+			assert_includes song_b.artists, a, "Artist #{a} not included in song #{song_b}"
+		end
 	end
 	
 	test "should fail to duplicate different models" do
@@ -92,7 +104,7 @@ class DuplicatableTest < ActiveSupport::TestCase
 	
 	test "should fail to combine non-existing association" do
 		assert_raise(ArgumentError) do
-			Song.combine_associations :listens, :this_relation_doesnt_exist, :shares
+			Song.include_associations_of_dups :listens, :this_relation_doesnt_exist, :shares
 		end
 	end
 end
