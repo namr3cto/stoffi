@@ -75,4 +75,15 @@ class DuplicatableTest < ActiveSupport::TestCase
 		assert_equal combined, b.listens.count
 	end
 	
+	test "should fail to duplicate different models" do
+		assert_raise(TypeError) do
+			Song.first.duplicate_of Artist.first
+		end
+	end
+	
+	test "should fail to combine non-existing association" do
+		assert_raise(ArgumentError) do
+			Song.combine_associations :listens, :this_relation_doesnt_exist, :shares
+		end
+	end
 end

@@ -60,6 +60,9 @@ module Duplicatable
 	
 	# Mark as a duplicate of another resource
 	def duplicate_of(resource)
+		if self.class != resource.class
+			raise TypeError.new("Cannot mark a #{resource.class.name} as duplicate of a #{self.class.name}")
+		end
 		self.archetype = resource
 	end
 	
@@ -115,20 +118,30 @@ module Duplicatable
 		# it will include the associations on all its duplicates
 		# as well.
 		def combine_associations(*associations)
+			
+			# ensure that all associations exists
 			associations.each do |association|
-				define_method "#{association}" do |*argumets|
-					unless self.class.reflections.key? association
-						raise "No such association: #{association}"
-					end
+				unless reflections.key? association
+					raise ArgumentError.new("No such association: #{association}")
+				end
+			end
+			
+			# override each association method
+			associations.each do |association|
+				define_method association do |*argumets|
 					reflection = self.class.reflections[association]
-					w = ''
-					w = "#{reflection.type}=#{self.class.name} and " if reflection.type
-					children = ["#{reflection.foreign_key}=#{id}"]
-					for duplicate in duplicates
-						children << "#{reflection.foreign_key}=#{duplicate.id}"
-					end
-					w += "(#{children.join(' or ')})"
-					reflection.class_name.constantize.where(w)
+					w = [] # where clause
+					
+					# do we need to specify the resource type? (if polymorphic, for example)
+					w << "#{reflection.type}=#{self.class.name}" if reflection.type.present?
+					
+					# get the IDs of each duplicate, and self
+					ids = [id] + duplicates.map(&:id)
+					ids.map! { |x| "#{reflection.foreign_key}=#{x}" }
+					w << "(#{ids.join(' or ')})" if ids.size > 0
+					
+					# construct relation
+					reflection.class_name.constantize.where w.join(' and ')
 				end
 			end
 		end
