@@ -9,6 +9,8 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class SongsController < ApplicationController
+	include DuplicatableController
+	
 	before_action :set_song, only: [:show, :edit, :update, :destroy]
 
 	oauthenticate interactive: true, except: [ :index, :show ]
@@ -68,12 +70,6 @@ class SongsController < ApplicationController
 
 	# DELETE /songs/1
 	def destroy
-		current_user.songs.delete(@song)
-		
-		unless @song.users.count > 0 || @song.youtube? || @song.soundcloud?
-			@song.destroy
-		end
-		
 		respond_with(@song)
 	end
 	
