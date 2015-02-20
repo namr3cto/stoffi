@@ -17,6 +17,7 @@ class Song < ActiveRecord::Base
 	include Sourceable
 	include Genreable
 	include Rankable
+	include Duplicatable
 
 	# associations
 	with_options uniq: true do |assoc|
@@ -33,11 +34,13 @@ class Song < ActiveRecord::Base
 		end
 	end
 	with_options as: :resource do |assoc|
-		assoc.has_many :sources, as: :resource
-		assoc.has_many :images, as: :resource
+		assoc.has_many :sources
+		assoc.has_many :images
 	end
 	has_many :listens
 	has_many :shares, as: :object
+	
+	combine_associations :listens
 	
 	self.default_image = "/assets/gfx/icons/256/missing.png"
 	

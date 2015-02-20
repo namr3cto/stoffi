@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140828212043) do
+ActiveRecord::Schema.define(version: 20150217194546) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -47,7 +47,11 @@ ActiveRecord::Schema.define(version: 20140828212043) do
     t.string   "description"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "archetype_id"
+    t.string   "archetype_type"
   end
+
+  add_index "albums", ["archetype_id", "archetype_type"], name: "index_albums_on_archetype_id_and_archetype_type"
 
   create_table "albums_artists", id: false, force: true do |t|
     t.integer "album_id"
@@ -79,8 +83,11 @@ ActiveRecord::Schema.define(version: 20140828212043) do
     t.string   "soundcloud"
     t.string   "website"
     t.string   "lastfm"
+    t.integer  "archetype_id"
+    t.string   "archetype_type"
   end
 
+  add_index "artists", ["archetype_id", "archetype_type"], name: "index_artists_on_archetype_id_and_archetype_type"
   add_index "artists", ["name"], name: "by_name", unique: true
 
   create_table "artists_genres", id: false, force: true do |t|
@@ -225,13 +232,21 @@ ActiveRecord::Schema.define(version: 20140828212043) do
     t.string   "category"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "archetype_id"
+    t.string   "archetype_type"
   end
+
+  add_index "events", ["archetype_id", "archetype_type"], name: "index_events_on_archetype_id_and_archetype_type"
 
   create_table "genres", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
     t.datetime "updated_at"
+    t.integer  "archetype_id"
+    t.string   "archetype_type"
   end
+
+  add_index "genres", ["archetype_id", "archetype_type"], name: "index_genres_on_archetype_id_and_archetype_type"
 
   create_table "genres_songs", id: false, force: true do |t|
     t.integer "song_id",  null: false
@@ -463,7 +478,11 @@ ActiveRecord::Schema.define(version: 20140828212043) do
     t.string   "foreign_url"
     t.string   "art_url"
     t.datetime "analyzed_at"
+    t.integer  "archetype_id"
+    t.string   "archetype_type"
   end
+
+  add_index "songs", ["archetype_id", "archetype_type"], name: "index_songs_on_archetype_id_and_archetype_type"
 
   create_table "songs_artists", id: false, force: true do |t|
     t.integer "song_id"

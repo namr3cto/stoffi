@@ -16,6 +16,7 @@ class Event < ActiveRecord::Base
 	include Imageable
 	include Sourceable
 	include Rankable
+	include Duplicatable
 	
 	has_and_belongs_to_many :artists, join_table: :performances
 	has_many :listens, through: :artists

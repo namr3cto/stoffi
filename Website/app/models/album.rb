@@ -15,6 +15,7 @@ class Album < ActiveRecord::Base
 	include Sourceable
 	include Genreable
 	include Rankable
+	include Duplicatable
 	
 	# associations
 	with_options uniq: true do |assoc|
