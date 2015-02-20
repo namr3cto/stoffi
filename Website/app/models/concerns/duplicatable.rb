@@ -133,7 +133,7 @@ module Duplicatable
 					w = [] # where clause
 					
 					# do we need to specify the resource type? (if polymorphic, for example)
-					w << "#{reflection.type}=#{self.class.name}" if reflection.type.present?
+					w << "#{reflection.type}='#{self.class.name}'" if reflection.type.present?
 					
 					# get the IDs of each duplicate, and self
 					ids = [id] + duplicates.map(&:id)

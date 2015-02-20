@@ -1,6 +1,10 @@
 alice_one_love:
   user: alice
   resource: one_love (Song)
+  
+alice_not_afraid:
+  user: alice
+  resource: not_afraid (Song)
     
 alice_foo:
   user: alice

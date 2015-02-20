@@ -36,11 +36,11 @@ class Song < ActiveRecord::Base
 	with_options as: :resource do |assoc|
 		assoc.has_many :sources
 		assoc.has_many :images
+		assoc.has_many :shares
 	end
 	has_many :listens
-	has_many :shares, as: :object
 	
-	combine_associations :listens
+	combine_associations :listens, :shares
 	
 	self.default_image = "/assets/gfx/icons/256/missing.png"
 	

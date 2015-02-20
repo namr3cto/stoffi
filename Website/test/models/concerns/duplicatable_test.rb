@@ -64,7 +64,7 @@ class DuplicatableTest < ActiveSupport::TestCase
 		end
 	end
 	
-	test "should combine relations" do
+	test "should combine has_many relation" do
 		a = songs(:one_love)
 		b = songs(:not_afraid)
 		combined = a.listens.count + b.listens.count
@@ -73,6 +73,15 @@ class DuplicatableTest < ActiveSupport::TestCase
 		
 		assert_equal 1, b.duplicates.length
 		assert_equal combined, b.listens.count
+	end
+	
+	test "should combine has_many :as relation" do
+		a = songs(:one_love)
+		b = songs(:not_afraid)
+		combined = a.shares.count + b.shares.count
+		a.duplicate_of b
+		a.save
+		assert_equal combined, b.shares.count
 	end
 	
 	test "should fail to duplicate different models" do
