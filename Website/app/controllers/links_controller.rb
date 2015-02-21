@@ -36,7 +36,6 @@ class LinksController < ApplicationController
 		
 		respond_with @links do |format|
 			format.html
-			format.mobile
 			format.embedded
 			format.xml { render xml: @all }
 			format.json { render json: @all }
@@ -82,13 +81,13 @@ class LinksController < ApplicationController
 
 		respond_with(@link) do |format|
 			if @link
-				format.html { redirect_to request.env['omniauth.origin'] || settings_path + '#accounts' }
+				format.html { redirect_to request.env['omniauth.origin'] || edit_user_registration_path + '#accounts' }
 				format.embedded { redirect_to request.env['omniauth.origin'] || dashboard_path }
 				format.xml  { render xml: @link, status: :created, location: @link }
 				format.json { render json: @link, status: :created, location: @link }
 			else
-				format.html { redirect_to request.env['omniauth.origin'] || login_path }
-				format.embedded { redirect_to request.env['omniauth.origin'] || login_path }
+				format.html { redirect_to request.env['omniauth.origin'] || new_user_session_path }
+				format.embedded { redirect_to request.env['omniauth.origin'] || new_user_session_path }
 				format.xml  { render xml: @link.errors, status: :unprocessable_entity }
 				format.json { render json: @link.errors, status: :unprocessable_entity }
 			end
@@ -103,8 +102,8 @@ class LinksController < ApplicationController
 
 		respond_with(@link) do |format|
 			if success
-				format.html { redirect_to(settings_path + '#accounts', notice: 'Link was successfully updated.') }
-				format.embedded { redirect_to(settings_path, notice: 'Link was successfully updated.') }
+				format.html { redirect_to(edit_user_registration_path + '#accounts', notice: 'Link was successfully updated.') }
+				format.embedded { redirect_to(edit_user_registration_path, notice: 'Link was successfully updated.') }
 				format.xml  { head :ok }
 				format.json { head :ok }
 			else
@@ -126,8 +125,8 @@ class LinksController < ApplicationController
 		@link.destroy
 
 		respond_with(@link) do |format|
-			format.html { redirect_to(settings_path + '#accounts') }
-			format.embedded { redirect_to(settings_path) }
+			format.html { redirect_to(edit_user_registration_path + '#accounts') }
+			format.embedded { redirect_to(edit_user_registration_path) }
 		end
 	end
 	

@@ -167,7 +167,7 @@ module Links::Facebook
 				end
 				
 				entries.each do |entry|
-					if entry['application']['id'] == creds[:id] and entry['data']['playlist']['url'].starts_with? url
+					if entry['application']['id'] == creds['id'] and entry['data']['playlist']['url'].starts_with? url
 						id = entry['id']
 						logger.debug "found playlist: #{id}"
 						return id
@@ -204,7 +204,7 @@ module Links::Facebook
 				end
 				
 				entries.each do |entry|
-					if entry['application']['id'] == creds[:id] and (entry['data']['song']['url'].starts_with? url or entry['data']['song']['url'].starts_with? messed_url)
+					if entry['application']['id'] == creds['id'] and (entry['data']['song']['url'].starts_with? url or entry['data']['song']['url'].starts_with? messed_url)
 						id = entry['id']
 						logger.debug "found listen: #{id}"
 						return id

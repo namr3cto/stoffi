@@ -9,7 +9,7 @@
 		<%= number_to_human @user.listens.count %>
 	</dd>
 	
-	<% if @user == current_user or current_user.admin? %>
+	<% if @user == current_user or (user_signed_in? and current_user.admin?) %>
 	
 		<dt><%= t 'profile.logins' %></dt>
 		<dd title='<%= number_with_delimiter @user.sign_in_count, locale: current_locale %>'>
@@ -23,7 +23,7 @@
 	
 	<% end %>
 	
-	<% if current_user.admin? %>
+	<% if user_signed_in? and current_user.admin? %>
 	
 		<dt><%= t 'profile.failed_logins' %></dt>
 		<dd title='<%= number_with_delimiter @user.failed_attempts, locale: current_locale %>'>

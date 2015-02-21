@@ -47,6 +47,7 @@ class SearchControllerTest < ActionController::TestCase
 	end	
 
 	test "should get index" do
+		SearchController.any_instance.expects(:origin_position).returns({ longitude: 123, latitude: 123 })
 		get :index
 		assert_response :success
 	end

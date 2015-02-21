@@ -61,7 +61,7 @@ class ApplicationController < ActionController::Base
 			if token
 				sign_in(token.user)
 			else
-				redirect_to login_path
+				redirect_to new_user_session_path
 			end
 		end
 	end
@@ -236,7 +236,7 @@ class ApplicationController < ActionController::Base
 	
 	def process_me(id)
 		if (!id || id == "me")
-			redirect_to login_path and return unless current_user || current_token
+			redirect_to new_user_session_path and return unless current_user || current_token
 			logger.debug "processing special user 'me'"
 			user = current_user || current_token.user
 			return user.id if user
@@ -469,9 +469,9 @@ class ApplicationController < ActionController::Base
 				@browser = "opera"
 			when /firefox/i
 				@browser = "firefox"
-			when /safari/i
+			when /safari/i, /applewebkit/i
 				@browser = "safari"
-			when /msie/i
+			when /msie/i, /trident/i
 				@browser = "ie"
 			else
 				@browser = "unknown"
@@ -479,10 +479,14 @@ class ApplicationController < ActionController::Base
 		end
 
 		case @ua
+		when /windows nt 6.3/i
+			@os = "windows 8.1"
 		when /windows nt 6.2/i
 			@os = "windows 8"
 		when /windows nt 6.1/i
 			@os = "windows 7"
+		when /windows nt 6./i
+			@os = "windows new"
 		when /windows phone/i
 			@os = "windows phone"
 		when /windows/i

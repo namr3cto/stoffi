@@ -1,13 +1,17 @@
+<% content_for :header do %>
+	<meta http-equiv='refresh' content='1;URL=<%= @url %>'>
+<% end %>
+
 <article class='fullwidth'>
 	<section>
 		<h1><%=t "get.thanks" %></h1>
-		<p><%=t "get.manual_start_html", :click_here => link_to(t("get.click_here"), @file) %></p>
+		<p><%=t "get.manual_start_html", :click_here => link_to(t("get.click_here"), @url) %></p>
 	</section>
 
 
 	<section>
 		<h2>1. <%=t "get.instruction1.title" %></h2>
-		<p><%=t "get.instruction1.text.#{@browser}", :fname => @fname %></p>
+		<p><%=t "get.instruction1.text.#{@browser}", :fname => @filename %></p>
 		<%= image_tag "#{I18n.locale}/installation/#{@browser}.jpg" %>
 	</section>
 	

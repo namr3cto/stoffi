@@ -24,13 +24,13 @@ class LinksControllerTest < ActionController::TestCase
 		assert_redirected_to new_user_session_path
 	end
 	
-	test 'should not find new' do
+	test 'should not get new' do
 		assert_raises ActionController::UrlGenerationError do
 			get :new
 		end
 	end
 	
-	test 'should not find edit' do
+	test 'should not get edit' do
 		assert_raises ActionController::UrlGenerationError do
 			get :edit, id: @link.id
 		end
@@ -53,7 +53,7 @@ class LinksControllerTest < ActionController::TestCase
 	 		post :create
 	 	end
 	 
-	 	assert_redirected_to settings_path+'#accounts'
+	 	assert_redirected_to edit_user_registration_path+'#accounts'
 	end
 	
 	test "should refresh link for signed in user" do
@@ -67,7 +67,31 @@ class LinksControllerTest < ActionController::TestCase
 				'secret' => 'MySecret'
 			}
 		}
+		
+		# refresh link should re-share playlist
+		playlist = @link.backlogs[0].resource.resource
+		facebook_response = Object.new
+		def facebook_response.parsed
+			{ 'status' => 'ok' }
+		end
+		msg = "#{playlist.name} by #{playlist.user.name}"
+		OAuth2::AccessToken.any_instance.expects(:post).with('/me/feed', { params:
+			{
+				caption: 'A playlist on Stoffi',
+				link: playlist.url,
+				message: msg,
+				picture: playlist.image,
+				name: playlist.name
+			}}).returns(facebook_response)
+			
+		# new link to facebook will resend all playlists
+		@user.playlists.each do |pl|
+			OAuth2::AccessToken.any_instance.expects(:post).with('/me/music.playlists', { params:
+				{ playlist: pl.url } }).returns(facebook_response)	
+		end
+		
 		sign_in @user
+		stub_for_settings
 	 	assert_no_difference('Link.count') do
 	 		post :create
 	 	end
@@ -87,6 +111,7 @@ class LinksControllerTest < ActionController::TestCase
 				'secret' => 'MySecret'
 			}
 		}
+		stub_for_settings
 	 	assert_difference('Link.count') do
 	 		post :create
 	 	end
@@ -130,17 +155,27 @@ class LinksControllerTest < ActionController::TestCase
 	test "should update link" do
 		sign_in @user
 	 	do_share = @link.do_share
+		stub_for_settings
 	 	patch :update, id: @link.id, link: { do_share: !do_share }
-	 	assert_redirected_to settings_path + '#accounts'
+	 	assert_redirected_to edit_user_registration_path + '#accounts'
 	 	assert_equal !do_share, Link.find(@link.id).do_share, "Setting wasn't changed"
 	end
 	 
 	test "should destroy link" do
+		stub_for_settings
+		
+		# this will scrape facebook for playlists
+		facebook_response = Object.new
+		def facebook_response.parsed
+			{ 'data' => [] }
+		end
+		OAuth2::AccessToken.any_instance.expects(:get).times(0..99).with("/me/music.playlists?limit=25&offset=0").returns(facebook_response)
+		
 		sign_in @user
 	 	assert_difference('Link.count', -1) do
 	 		delete :destroy, id: @link
 	 	end
 	 
-	 	assert_redirected_to settings_path + '#accounts'
+	 	assert_redirected_to edit_user_registration_path + '#accounts'
 	end
 end

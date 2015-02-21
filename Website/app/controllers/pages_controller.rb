@@ -38,8 +38,9 @@ class PagesController < ApplicationController
 		verify_channel
 		verify_arch
 		
-		@fname = download_filename
-		@file = "/downloads/" + params[:channel] + "/" + params[:arch] + "bit/" + @fname + '.exe'
+		@filename = download_filename
+		@path = "/downloads/" + params[:channel] + "/" + params[:arch] + "bit/" + @filename + '.exe'
+		@url = request.protocol + request.host_with_port + @path
 	end
 	
 	def checksum
@@ -49,12 +50,12 @@ class PagesController < ApplicationController
 		verify_channel
 		verify_arch
 		
-		@fname = download_filename
-		@file = "/downloads/" + params[:channel] + "/" + params[:arch] + "bit/" + @fname + '.sum'
+		@filename = download_filename
+		@path = "/downloads/" + params[:channel] + "/" + params[:arch] + "bit/" + @filename + '.sum'
+		@url = request.protocol + request.host_with_port + @path
 	end
 
 	def tour
-		redirect_to action: :index and return if params[:format] == "mobile"
 	end
 
 	def about

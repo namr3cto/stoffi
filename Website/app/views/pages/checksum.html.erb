@@ -1,3 +1,7 @@
+<% content_for :header do %>
+	<meta http-equiv='refresh' content='1;URL=<%= @url %>'>
+<% end %>
+
 <article class='fullwidth'>
 	<section id="download-start">
 		<h1><%= t "check.brief.title" %></h1>
@@ -11,14 +15,14 @@
 
 	<section>
 		<h2>2. <%= t "check.get.title" %></h2>
-		<p><%= t "check.get.text_html", :click_here => link_to(t("check.file"), @file) %></p>
+		<p><%= t "check.get.text_html", :click_here => link_to(t("check.file"), @url) %></p>
 			<%= image_tag "#{I18n.locale}/installation/files.png" %>
 		<p class="alert"><%= t "check.get.notice_html" %></p>
 	</section>
 
 	<section>
 		<h2>3. <%= t "check.run.title" %></h2>
-		<p><%= t "check.run.text_html", :fname => @fname %></p>
+		<p><%= t "check.run.text_html", :fname => @filename %></p>
 			<%= image_tag "#{I18n.locale}/installation/command.png" %>
 	</section>
 

@@ -33,6 +33,31 @@ class ActionController::TestCase
 		path = File.join(Rails.root, 'test/fixtures/image_32x32.png')
 		stub_request(:get, url).to_return(:body => File.new(path), :status => 200)
 	end
+	
+	def stub_for_settings
+		lastfm_link = links(:alice_lastfm)
+		lastfm_response = Object.new
+		def lastfm_response.parsed
+			{ 'user' => { 'name' => 'lfm_name', 'realname' => 'Lastfm Name' }}
+		end
+		lastfm_url = "/2.0/?method=user.getinfo&format=json&user=#{lastfm_link.uid}&api_key=somerandomid"
+		OAuth2::AccessToken.any_instance.expects(:get).times(0..99).with(lastfm_url).returns(lastfm_response)
+		
+		twitter_link = links(:alice_twitter)
+		twitter_response = Object.new
+		def twitter_response.body
+			{ 'screename' => 'tw_name', 'name' => 'Twitter Name' }.to_json
+		end
+		twitter_url = "https://api.twitter.com/1.1/users/show.json?user_id=#{twitter_link.uid}"
+		OAuth::AccessToken.any_instance.expects(:request).times(0..99).with(:get, twitter_url, nil).returns(twitter_response)
+		
+		facebook_response = Object.new
+		def facebook_response.parsed
+			{ 'username' => 'fb_name', 'name' => 'Facebook Name' }
+		end
+		OAuth2::AccessToken.any_instance.expects(:get).times(0..99).with("/me?fields=name,username").returns(facebook_response)
+		OAuth2::AccessToken.any_instance.expects(:get).times(0..99).with("/me/picture?type=large&redirect=false").returns(facebook_response)
+	end
 end
 
 class ActionDispatch::IntegrationTest

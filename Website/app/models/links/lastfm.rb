@@ -65,7 +65,7 @@ module Links::Lastfm
 	end
 	
 	def req(method, verb, params = {})
-		params[:api_key] = creds[:id]
+		params[:api_key] = creds['id']
 		params[:method] = method
 		params[:sk] = access_token
 		
@@ -73,7 +73,7 @@ module Links::Lastfm
 			params[:format] = "json"
 		end
 		
-		params[:api_sig] = Digest::MD5.hexdigest(params.stringify_keys.sort.flatten.join + creds[:key])
+		params[:api_sig] = Digest::MD5.hexdigest(params.stringify_keys.sort.flatten.join + creds['key'])
 		
 		if verb == :post
 			params[:format] = "json"
@@ -81,11 +81,11 @@ module Links::Lastfm
 		
 		response = case verb
 		when :get
-			uri = URI.parse(creds[:url] + "/2.0/?" + params.to_query)
+			uri = URI.parse(creds['url'] + "/2.0/?" + params.to_query)
 			Net::HTTP.get(uri)
 		
 		when :post
-			uri = URI.parse(creds[:url] + "/2.0/")
+			uri = URI.parse(creds['url'] + "/2.0/")
 			Net::HTTP.post_form(uri, params).body
 		
 		else

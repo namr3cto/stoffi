@@ -513,8 +513,8 @@ class Link < ActiveRecord::Base
 			res, data = http.post("/o/oauth2/token", 
 			{
 				refresh_token: refresh_token,
-				client_id: creds[:id],
-				client_secret: creds[:key],
+				client_id: creds['id'],
+				client_secret: creds['key'],
 				grant_type: 'refresh_token'
 			}.map { |k,v| "#{k}=#{v}" }.join('&'))
 			response = JSON.parse(data)
@@ -523,9 +523,9 @@ class Link < ActiveRecord::Base
 		end
 		
 		if provider == "twitter"
-			client = OAuth::Consumer.new(creds[:id], creds[:key],
+			client = OAuth::Consumer.new(creds['id'], creds['key'],
 				{
-					site: creds[:url],
+					site: creds['url'],
 					ssl: {ca_path: "/etc/ssl/certs"},
 					scheme: :header
 				})
@@ -535,10 +535,10 @@ class Link < ActiveRecord::Base
 			}
 			token = OAuth::AccessToken.from_hash(client, token_hash)
 			logger.debug params.inspect
-			resp = token.request(method, creds[:url] + path, params[:params])
+			resp = token.request(method, creds['url'] + path, params[:params])
 			return JSON.parse(resp.body)
 		else
-			client = OAuth2::Client.new(creds[:id], creds[:key], site: creds[:url], ssl: {ca_path: "/etc/ssl/certs"})
+			client = OAuth2::Client.new(creds['id'], creds['key'], site: creds['url'], ssl: {ca_path: "/etc/ssl/certs"})
 			token = OAuth2::AccessToken.new(client, access_token, header_format: "OAuth %s")
 	
 			case method

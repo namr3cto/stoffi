@@ -21,12 +21,12 @@ class LinkTest < ActiveSupport::TestCase
 			{ "data" => [
 				{
 					"id" => "foo",
-					"application" => { "id" => "foobar" },
+					"application" => { "id" => "somerandomid" },
 					"data" => { "song" =>  { "url" => "something" } }
 				},
 				{
 					"id" => "bar",
-					"application" => { "id" => "foobar" },
+					"application" => { "id" => "somerandomid" },
 					"data" => { "song" =>  { "url" => @listen.song.url } }
 				},
 			] }
@@ -41,12 +41,12 @@ class LinkTest < ActiveSupport::TestCase
 			{ "data" => [
 				{
 					"id" => "foo",
-					"application" => { "id" => "foobar" },
+					"application" => { "id" => "somerandomid" },
 					"data" => { "playlist" =>  { "url" => "something" } }
 				},
 				{
 					"id" => "bar",
-					"application" => { "id" => "foobar" },
+					"application" => { "id" => "somerandomid" },
 					"data" => { "playlist" =>  { "url" => @playlist.url } }
 				},
 			] }
@@ -57,28 +57,23 @@ class LinkTest < ActiveSupport::TestCase
 		def @empty_response.parsed
 			{ "data" => [] }
 		end
-		
-		creds = {
-			:id => "foobar",
-			:key => "somekey",
-			:url => "http://example.com"
-		}
-		Link.any_instance.stubs(:creds).returns(creds)
+
 		super
 	end
 	
 	def prepareLastFMRequest(link, verb, params)
-		params[:api_key] = "foobar"
+		params[:api_key] = Rails.application.secrets.oa_cred['lastfm']['id']
+		secret = Rails.application.secrets.oa_cred['lastfm']['key']
 		params[:sk] = link.access_token
 		
 		if verb == :get
 			params[:format] = "json"
 		end
-		params[:api_sig] = Digest::MD5.hexdigest(params.stringify_keys.sort.flatten.join + "somekey")
+		params[:api_sig] = Digest::MD5.hexdigest(params.stringify_keys.sort.flatten.join + secret)
 		if verb == :post
 			params[:format] = "json"
 		end
-		url = "http://example.com/2.0/"
+		url = "http://ws.audioscrobbler.com/2.0/"
 		return url, params
 	end
 	
@@ -176,7 +171,7 @@ class LinkTest < ActiveSupport::TestCase
 		params = {
 			:status => "#{share.resource.title} by #{a} #{share.resource.url}",
 		}
-		url = "http://example.com/1.1/statuses/update.json"
+		url = "https://api.twitter.com/1.1/statuses/update.json"
 		OAuth::AccessToken.any_instance.expects(:request).with(:post, url, params).returns(@response)
 		links(:alice_twitter).share(share)
 	end
@@ -187,7 +182,7 @@ class LinkTest < ActiveSupport::TestCase
 		params = {
 			:status => "#{share.resource.name} by #{share.user.name} #{share.resource.url}",
 		}
-		url = "http://example.com/1.1/statuses/update.json"
+		url = "https://api.twitter.com/1.1/statuses/update.json"
 		OAuth::AccessToken.any_instance.expects(:request).with(:post, url, params).returns(@response)
 		links(:alice_twitter).share(share)
 	end
