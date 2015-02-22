@@ -4,7 +4,8 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
 	include Devise::TestHelpers
 	
 	setup do
-		@user = users(:alice)
+		@admin = users(:alice)
+		@user = users(:bob)
 		@request.env["devise.mapping"] = Devise.mappings[:user]
 	end
 
@@ -45,6 +46,41 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
 		sign_in @user
 		get :edit
 		assert_response :success
+	end
+	
+	test "should not update when logged out" do
+		post :update, id: @user, user: { email: 'new@mail.com' }
+		assert_not_equal 'new@mail.com', @user.email, "Changed email"
+	end
+	
+	test "should update own account" do
+		sign_in @user
+		post :update, user: { email: 'new@mail.com' }
+		assert_redirected_to edit_user_registration_path
+		assert_equal 'new@mail.com', User.find(@user.id).email, "Didn't change email"
+	end
+	
+	test "should not make self admin" do
+		sign_in @user
+		post :update, user: { admin: true }
+		assert_response :success
+		assert_not User.find(@user.id).admin?, "Made self admin"
+	end
+	
+	# TODO: should display errors
+	
+	test "should not update other account" do
+		sign_in @user
+		post :update, id: users(:charlie), user: { email: 'new@mail.com' }
+		assert_redirected_to edit_user_registration_path
+		assert_not_equal 'new@mail.com', User.find(users(:charlie).id).email, "Changed email"
+	end
+	
+	test "should update other account when admin" do
+		sign_in @admin
+		post :update, id: users(:charlie), user: { email: 'new@mail.com' }
+		assert_redirected_to edit_user_registration_path
+		assert_equal 'new@mail.com', User.find(users(:charlie).id).email, "Didn't change email"
 	end
 	
 	test "should delete profile" do

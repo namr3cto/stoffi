@@ -94,7 +94,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		
 			# we need to temporarily change this to force unpermitted parameters
 			# to raise an exception so we can return an error status
-			ActionController::Parameters.action_on_unpermitted_parameters = :log
 			previous_aoup = ActionController::Parameters.action_on_unpermitted_parameters
 			ActionController::Parameters.action_on_unpermitted_parameters = :raise
 			
@@ -104,12 +103,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 					@user.update_with_password resource_params
 				else
 					params[:user].delete :current_password
-					logger.debug 'test'
 					@user.update_without_password resource_params
-					logger.debug 'test'
 				end
 			
-			rescue UnpermittedParameters
+			rescue ActionController::UnpermittedParameters
 				success = false
 			end
 		
