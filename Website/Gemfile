@@ -62,8 +62,9 @@ group :test do
 	gem 'mocha'
 	gem 'capybara'
 	#gem 'capybara-webkit'
-	gem 'headless'
-	gem 'selenium-webdriver'
+	#gem 'headless'
+	#gem 'selenium-webdriver'
+	gem 'rails-perftest'
 	gem 'ruby-prof'
 end
 

@@ -1,4 +1,3 @@
-# -*- encoding : utf-8 -*-
 require 'test_helper'
 require 'rails/performance_test_help'
 
@@ -8,6 +7,10 @@ class BrowsingTest < ActionDispatch::PerformanceTest
 	#                          :output => 'tmp/performance', :formats => [:flat] }
 
 	def test_homepage
-		get '/'
+		get root_path
+	end
+
+	def test_download
+		get get_path
 	end
 end
