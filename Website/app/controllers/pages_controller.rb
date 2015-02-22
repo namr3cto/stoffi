@@ -125,7 +125,7 @@ class PagesController < ApplicationController
 			render action: 'contact'
 			
 		else
-			Mailer.contact(domain: "beta.stoffiplayer.com",
+			SystemMailer.contact(domain: "beta.stoffiplayer.com",
 			               subject: params[:subject],
 			               from: params[:email],
 			               name: params[:name],

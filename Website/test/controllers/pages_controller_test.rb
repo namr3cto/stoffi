@@ -27,6 +27,15 @@ class PagesControllerTest < ActionController::TestCase
 		assert_response :success
 	end
 	
+	test "should send contact mail" do
+		get :mail, name: 'Alice', email: 'alice@mail.com', subject: 'A Title', message: 'my message is not very short'
+		assert_redirected_to contact_path(sent: :success)
+		email = ActionMailer::Base.deliveries.last
+		assert_equal ['info@stoffiplayer.com'], email.to
+		assert_equal ['alice@mail.com'], email.reply_to
+		assert_match /my message is not very short/, email.body.to_s
+	end
+	
 	test "should get download button" do
 		[
 			'Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)', # windows 7
