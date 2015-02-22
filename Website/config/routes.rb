@@ -25,12 +25,13 @@ Stoffi::Application.routes.draw do
 			post   'join',          to: 'users/registrations#create',    as: :user_registration
 			get    'join',          to: 'users/registrations#new',       as: :new_user_registration
 			get    'settings',      to: 'users/registrations#edit',      as: :edit_user_registration
-			patch  'settings(/:id)', to: 'users/registrations#update',    as: :update_user_registration
+			patch  'settings(/:id)', to: 'users/registrations#update',   as: :update_user_registration
 			put    'settings(/:id)', to: 'users/registrations#update'
 			delete 'leave',         to: 'users/registrations#destroy',   as: :leave
 			
-			post   'unlock',        to: 'users/unlocks#create',          as: :user_unlock
+			post   'unlock',        to: 'users/unlocks#create'
 			get    'unlock',        to: 'users/unlocks#new',             as: :new_user_unlock
+			get    'unlock(/:id)',     to: 'users/unlocks#show',         as: :user_unlock
 			
 			get    'profile(/:id)', to: 'users/registrations#show',      as: :user
 			get    'dashboard',     to: 'users/registrations#dashboard', as: :dashboard
