@@ -13,6 +13,7 @@ class SongsController < ApplicationController
 	
 	before_action :set_song, only: [:show, :edit, :update, :destroy]
 
+	can_duplicate Song
 	oauthenticate interactive: true, except: [ :index, :show ]
 	before_filter :ensure_admin, except: [ :index, :show, :create, :destroy ]
 	respond_to :html, :xml, :json
@@ -77,12 +78,12 @@ class SongsController < ApplicationController
 
 	# Use callbacks to share common setup or constraints between actions.
 	def set_song
-		not_found('song') and return unless Song.exists? params[:id]
-		@song = Song.find(params[:id])
+		not_found('song') and return unless Song.unscoped.exists? params[:id]
+		@song = Song.unscoped.find(params[:id])
 	end
 
 	# Never trust parameters from the scary internet, only allow the white list through.
 	def song_params
-		params.require(:song).permit(:title, :genres, :artists)
+		params.require(:song).permit(:title, :genres, :artists, :archetype_id, :archetype_type)
 	end
 end

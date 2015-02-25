@@ -46,4 +46,21 @@ class SongsControllerTest < ActionController::TestCase
 		assert_redirected_to song_path(assigns(:song))
 		assert_equal 'foo', assigns(:song).title
 	end
+
+	test "should mark as duplicate" do
+		sign_in @admin
+		assert_not @song.duplicate?, "Was marked as duplicate before test"
+		patch :update, id: @song, song: { archetype: songs(:no_woman_no_cry) }
+		assert_redirected_to song_path(@song)
+		assert assigns(:song).duplicate?, "Didn't mark as duplicate"
+	end
+
+	test "should unmark as duplicate" do
+		sign_in @admin
+		@song.duplicate_of songs(:no_woman_no_cry)
+		assert @song.duplicate?, "Wasn't marked as duplicate before test"
+		patch :update, id: @song, song: { archetype: '' }
+		assert_redirected_to song_path(@song)
+		assert_not assigns(:song).duplicate?, "Didn't unmark as duplicate"
+	end
 end
