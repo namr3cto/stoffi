@@ -16,5 +16,6 @@ jQuery ->
 	#		$(@).data 'tapped', true
 		
 		
-	$('.item .hidden-overlay span').on 'mousedown', (event) ->
+	$('.item .action-bar span').on 'mousedown', (event) ->
+		event.stopPropagation()
 		event.preventDefault()
