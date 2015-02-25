@@ -43,7 +43,7 @@ class Song < ActiveRecord::Base
 	# include duplicates' association into self's
 	include_associations_of_dups :listens, :shares, :artists
 	
-	self.default_image = "/assets/gfx/icons/256/missing.png"
+	self.default_image = "gfx/icons/256/missing.png"
 	
 	searchable do
 		text :title, boost: 5

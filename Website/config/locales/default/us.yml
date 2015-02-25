@@ -80,6 +80,15 @@ us:
     global:
       weekly: "Trending right now"
       total: "Best of all time"
+      
+  duplicates:
+    header: 'Duplicates'
+    mark:
+      description: 'Mark this as a duplicate of %{archetype}'
+      link: 'Mark as duplicate'
+    unmark:
+      description: 'Unmark this as a duplicate of %{archetype}'
+      link: 'Remove as duplicate'
   
   mail:
     title: "Contact us"

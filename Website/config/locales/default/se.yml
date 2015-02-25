@@ -77,6 +77,16 @@ se:
     global:
       weekly: "Populärt just nu"
       total: "Bäst genom alla tider"
+      
+  duplicates:
+    header: 'Dubbletter'
+    mark:
+      description: 'Markera som en dubblett av %{archetype}'
+      link: 'Markera som dubblett'
+    unmark:
+      description: 'Avmarkera som en dubblett av %{archetype}'
+      link: 'Ta bort som dubblett'
+      
   
   mail:
     title: "Kontakta oss"

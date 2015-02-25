@@ -24,11 +24,29 @@ initHooks = ->
 		resizeImage $(@), $(@).data('square')
 		
 	# links which should remove a resource via ajax
-	$('[data-remove-resource]').on 'mousedown', (event) ->
+	$("a[data-ajax-call='delete']").on 'click', (event) ->
 		if event.which == 1
 			event.stopPropagation()
-			if $(@).data('confirm') and confirm($(@).data('confirm'))
-				alert 'remove something'
+			if not $(@).data('confirm') or confirm($(@).data('confirm'))
+				resource_url = $(@).closest('[data-resource-url]').data('resource-url')+'.json'
+				url = $(@).data('delete-url') || resource_url
+				method = $(@).data('delete-method') || 'delete'
+				data = $(@).data('delete-data') || ''
+				item = $(@).closest('.item')
+				item.hide 'fade', complete: () ->
+					console.log 'send request'
+					$.ajax {
+						method: method,
+						url: url,
+						data: data,
+						error: (output) ->
+							console.log 'failure'
+							console.log output
+							item.show('fade')
+						success: (output) ->
+							console.log 'success'
+							item.remove()
+					}
 		
 jQuery ->
 	

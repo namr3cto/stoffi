@@ -42,7 +42,7 @@ class SongsController < ApplicationController
 
 	# GET /songs/new
 	def new
-		redirect_to songs_path and return
+		redirect_to songs_path
 	end
 
 	# GET /songs/1/edit
@@ -65,7 +65,7 @@ class SongsController < ApplicationController
 
 	# PUT /songs/1
 	def update
-		@song.update_attributes(song_params)
+		@song.update(song_params)
 		respond_with(@song)
 	end
 

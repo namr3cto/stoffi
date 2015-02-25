@@ -64,5 +64,6 @@
 	
 	<%= render "songs/sections/albums" %>
 	<%= render "songs/sections/similar" %>
+	<%= render "songs/sections/duplicates" if current_user.admin? %>
 	
 </article>

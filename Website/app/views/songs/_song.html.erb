@@ -1,7 +1,8 @@
-<li class='item' data-href='<%= url_for song %>' data-object='song-<%= song.id %>'>
+<li class='item' data-href='<%= url_for song %>' data-resource-type='song' data-resource-id='<%= song.id %>'
+	data-resource-url='<%= url_for(song) %>'>
 	
 	<!-- image -->
-	<img data-field='picture' src='<%= song.image(:huge) %>'/>
+	<%= image_tag song.image(:huge), data: { field: 'picture' } %>
 	
 	<!-- meta data -->
 	<div class='overlay'>
@@ -20,32 +21,56 @@
 	</div>
 	
 	<!-- controls -->
-	<div class='hidden-overlay'>
+	<div class='action-bar'>
 		
 		<% if defined? type and type %>
 			<span class='type' data-list-mode='list' data-type='song'><%= t 'songs.singular' %></span>
 		<% end %>
 		
-		<span class='shadow dropdown add'>
-			<%= link_to 'javascript:void(0)', title: t('playlists.add.description') do %>
+		<span class='shadow dropdown add action'>
+			<%= link_to '', title: t('playlists.add.description') do %>
 				<span data-list-mode='list'><%= t 'playlists.add.menu' %> ▾</span>
 				<span data-list-mode='grid'>+</span>
 			<% end %>
 			<ul class='dropdown-menu'>
 				<li>
-					<%= link_to 'Foo', 'javascript:void(0)', title: t('playlists.add.link', playlist: 'Foo'),
+					<%= link_to 'Foo', '', title: t('playlists.add.link', playlist: 'Foo'),
 					 	data: { add_to_resource: 'playlist', add_to_id: '1', add_id: '9' } %>
 				</li>
 			</ul>	
 		</span>
 		
-		<% if defined? deletable %>
-			<span class='remove'>
-				<%= link_to 'javascript:void(0)', title: t('pages.listens.destroy.description'),
+		<% if current_user.admin? and defined? archetype %>
+			<span class='duplicate action'>
+				<%
+				mark_title = t('duplicates.mark.description', archetype: archetype.title)
+				unmark_title = t('duplicates.unmark.description', archetype: archetype.title)
+				%>
+				<%= link_to '',
 				 	data: {
-						confirm: t('pages.listens.destroy.confirm', song: song),
-						remove_resource: 'listen', remove_id: song.id
+						ajax_call: :duplicate,
+						archetype: archetype.id,
+						duplicate_status: :unmarked
 					} do %>
+					<span data-list-mode='list' data-duplicate-mark title='<%=mark_title%>'>
+						<%= t 'duplicates.mark.link' %>
+					</span>
+					<span data-list-mode='list' data-duplicate-unmark title='<%=unmark_title%>'>
+						<%= t 'duplicates.unmark.link' %>
+					</span>
+				<% end %>
+			</span>
+		<% end %>
+		
+		<% if defined? delete %>
+			<span class='remove action'>
+				<%= link_to '', title: delete[:title] || t('pages.listens.destroy.description'), data: {
+					ajax_call: :delete,
+					delete_url: delete[:url] || url_for(song)+'.json',
+					delete_data: delete[:data],
+					delete_method: delete[:method] || 'delete',
+					confirm: delete[:confirm] || t('pages.listens.destroy.confirm', song: song)
+				} do %>
 					<span data-list-mode='list'><%= t 'pages.listens.destroy.link' %></span>
 					<span data-list-mode='grid'>x</span>
 				<% end %>
