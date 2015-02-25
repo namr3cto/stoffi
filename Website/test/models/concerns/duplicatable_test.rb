@@ -91,9 +91,17 @@ class DuplicatableTest < ActiveSupport::TestCase
 		song_a.artists << artist
 		song_b.artists << artist
 		song_a.duplicate_of song_b
+		
+		checked = []
 		(song_a.artists + song_b.artists).each do |a|
+			next if a.in? checked
 			assert_includes song_b.artists, a, "Artist #{a} not included in song #{song_b}"
+			checked << a
 		end
+		song_b.artists.each do |a|
+			assert_includes checked, a, "Artist #{a} should not be included in song #{song_b}"
+		end
+		assert_equal checked.size, song_b.artists.count, "There are duplicates"
 	end
 	
 	test "should fail to duplicate different models" do

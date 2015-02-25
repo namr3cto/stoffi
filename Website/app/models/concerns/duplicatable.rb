@@ -156,7 +156,8 @@ module Duplicatable
 					wsql = w.join ' and '
 		
 					# construct relation
-					association(name).reader(arguments).unscope(where: key).where(wsql)
+					r = association(name).reader(arguments).unscope(where: key).where(wsql)
+					self.class.reflections[name].options[:uniq] ? r.uniq : r
 				end
 			end
 		end
