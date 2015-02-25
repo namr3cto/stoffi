@@ -20,28 +20,28 @@
 	</div>
 	
 	<!-- controls -->
-	<div class='hidden-overlay'>
+	<div class='action-bar'>
 		
 		<% if defined? type and type %>
 			<span class='type' data-list-mode='list' data-type='album'><%= t 'albums.singular' %></span>
 		<% end %>
 		
-		<span class='shadow dropdown add'>
-			<%= link_to 'javascript:void(0)', title: t('playlists.add.description') do %>
+		<span class='shadow dropdown add action'>
+			<%= link_to '', title: t('playlists.add.description') do %>
 				<span data-list-mode='list'><%= t 'playlists.add.menu' %> ▾</span>
 				<span data-list-mode='grid'>+</span>
 			<% end %>
 			<ul class='dropdown-menu'>
 				<li>
-					<%= link_to 'Foo', 'javascript:void(0)', title: t('playlists.add.link', playlist: 'Foo'),
+					<%= link_to 'Foo', '', title: t('playlists.add.link', playlist: 'Foo'),
 					 	data: { add_to_resource: 'playlist', add_to_id: '1', add_id: '9' } %>
 				</li>
 			</ul>	
 		</span>
 		
 		<% if defined? deletable %>
-			<span class='remove'>
-				<%= link_to 'javascript:void(0)', title: t('pages.albums.destroy.description'),
+			<span class='remove action'>
+				<%= link_to '', title: t('pages.albums.destroy.description'),
 				 	data: {
 						confirm: t('pages.albums.destroy.confirm', album: album),
 						remove_resource: 'album', remove_id: album.id
