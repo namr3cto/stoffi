@@ -15,7 +15,8 @@ initHooks = ->
 	
 	# these elements are like links; click and go somewhere!
 	$('[data-href]').on 'mousedown', (event) ->
-		window.location = $(@).data 'href'
+		if event.which == 1
+			window.location = $(@).data 'href'
 		
 	# these elements are resized so the smallest side is as
 	# long as the value specified
@@ -24,10 +25,17 @@ initHooks = ->
 		
 	# links which should remove a resource via ajax
 	$('[data-remove-resource]').on 'mousedown', (event) ->
-		event.stopPropagation()
-		if $(@).data('confirm') and confirm($(@).data('confirm'))
-			alert 'remove something'
+		if event.which == 1
+			event.stopPropagation()
+			if $(@).data('confirm') and confirm($(@).data('confirm'))
+				alert 'remove something'
 		
 jQuery ->
+	
+	# we want javascript links to not scroll or reload when clicked
+	$("a[href='']").attr 'href', 'javascript:void(0)'
+	$("a[href='#']").attr 'href', 'javascript:void(0)'
+	
+	# setup some hooks
 	initHooks()
 	$(document).ajaxComplete -> initHooks()
