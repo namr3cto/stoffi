@@ -13,6 +13,7 @@ class Playlist < ActiveRecord::Base
 	include Base
 	include Rankable
 	include Sourceable
+	include Followable
 
 	has_and_belongs_to_many :songs, uniq: true do
 		def page(limit=25, offset=0)
@@ -29,7 +30,9 @@ class Playlist < ActiveRecord::Base
 	
 	validates :name, presence: true
 	validates :user, presence: true
-	validates :name, uniqueness: { scope: :user_id, case_sensitive: false } 
+	validates :name, uniqueness: { scope: :user_id, case_sensitive: false }
+	
+	followable_by User
 	
 	searchable do
 		text :name, boost: 5

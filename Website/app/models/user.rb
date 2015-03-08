@@ -13,6 +13,7 @@ require 'base'
 # Describes a user account in the database.
 class User < ActiveRecord::Base
 	include Base
+	include Followingable
 	
 	# Include default devise modules. Others available are:
 	# :token_authenticatable, :encryptable, :confirmable, :omniauthable, :timeoutable and 
@@ -34,7 +35,6 @@ class User < ActiveRecord::Base
 	has_many :donations
 	has_many :artists, through: :songs
 	has_and_belongs_to_many :songs, uniq: true
-	has_and_belongs_to_many :playlist_subscriptions, class_name: "Playlist", join_table: "playlist_subscribers", uniq: true
 
 	# Setup accessible (or protected) attributes for your model
 	#attr_accessible :email, :password, :password_confirmation, :remember_me, :unique_token, :id,
