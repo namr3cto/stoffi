@@ -1,4 +1,4 @@
-# The model of the song resource.
+# The duplicatable concern.
 #
 # This code is part of the Stoffi Music Player Project.
 # Visit our website at: stoffiplayer.com
