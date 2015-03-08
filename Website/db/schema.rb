@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150217194546) do
+ActiveRecord::Schema.define(version: 20150308123700) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -238,6 +238,16 @@ ActiveRecord::Schema.define(version: 20150217194546) do
 
   add_index "events", ["archetype_id", "archetype_type"], name: "index_events_on_archetype_id_and_archetype_type"
 
+  create_table "followings", force: true do |t|
+    t.integer "follower_id"
+    t.string  "follower_type"
+    t.integer "followee_id"
+    t.string  "followee_type"
+  end
+
+  add_index "followings", ["followee_id", "followee_type"], name: "index_followings_on_followee_id_and_followee_type"
+  add_index "followings", ["follower_id", "follower_type"], name: "index_followings_on_follower_id_and_follower_type"
+
   create_table "genres", force: true do |t|
     t.string   "name"
     t.datetime "created_at"
@@ -395,13 +405,6 @@ ActiveRecord::Schema.define(version: 20150217194546) do
 
   add_index "performances", ["artist_id", "event_id"], name: "index_performances_on_artist_id_and_event_id", unique: true
   add_index "performances", ["event_id", "artist_id"], name: "index_performances_on_event_id_and_artist_id", unique: true
-
-  create_table "playlist_subscribers", id: false, force: true do |t|
-    t.integer "playlist_id"
-    t.integer "user_id"
-  end
-
-  add_index "playlist_subscribers", ["user_id", "playlist_id"], name: "by_user_and_playlist", unique: true
 
   create_table "playlists", force: true do |t|
     t.string   "name"

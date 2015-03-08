@@ -8,7 +8,6 @@ alice:
 bob:
   email: bob@mail.net
   has_password: 0
-  playlist_subscriptions: foo
   has_password: false
   last_sign_in_at: <%= 10.minutes.ago %>
   
