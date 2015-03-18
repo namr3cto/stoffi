@@ -30,10 +30,6 @@
 	
 	last = list.find 'li.item:last'
 	
-	console.log "max: #{max}"
-	console.log "items: #{items.length}"
-	console.log "last: #{last}"
-	
 	if max? && items.length > max && last?
 		console.log 'remove last'
 		last.slideUp 400, () ->
