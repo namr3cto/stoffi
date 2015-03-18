@@ -1,0 +1,26 @@
+<%
+type = local_assigns[:type] || 'list'
+
+owner = ''
+if local_assigns.has_key? :owner
+	owner = " data-list-owner=#{local_assigns[:owner]}"
+end
+
+followings = ''
+if local_assigns.has_key? :follower
+	followings = " data-list-followings=#{local_assigns[:follower]}"
+end
+%>
+
+<ul class='<%= type %>' data-list='<%= resource %>'<%= owner %><%= followings %>>
+	<% if collection and collection.length > 0 %>
+		<%= render collection, local_assigns %>
+	<% end %>
+	<li data-list-empty='<%= resource %>'><%= t 'empty' %></li>
+	<% if local_assigns[:show_add_button] %>
+		<%= render partial: 'shared/lists/add', locals: { resource: resource } %>
+	<% end %>
+</ul>
+<ul data-template='<%= resource.singularize %>'>
+	<%= render resource.classify.constantize.first %>
+</ul>
