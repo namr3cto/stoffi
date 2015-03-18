@@ -1,0 +1,57 @@
+#circularG
+{
+	position:relative;
+	width:128px;
+	height:128px
+}
+
+.circularG
+{
+	position:absolute;
+	width:29px;
+	height:29px;
+	@include prefix('border-radius', '19px');
+	@include prefix('animation-name', 'bounce_circularG');
+	@include prefix('animation-duration', '1.2s');
+	@include prefix('animation-iteration-count', 'infinite');
+	@include prefix('animation-direction', 'linear');
+}
+
+$left: 0 14px 50px initial initial initial 50px 14px;
+$top: 50px 14px 0 14px 50px initial initial initial;
+$right: initial initial initial 14px 0 14px 50px initial;
+$bottom: initial initial initial initial initial 14px 0 14px;
+
+@for $i from 1 through 8
+{
+	#circularG_#{$i}
+	{
+		left: nth($left, $i);
+		right: nth($right, $i);
+		top: nth($top, $i);
+		bottom: nth($bottom, $i);
+		@include prefix('animation-delay', "#{0.3 + .15 * $i}s");
+	}
+}
+
+// todo: how do we prettify this?
+@keyframes bounce_circularG
+{
+	0% { transform: scale(1) }
+	100% { transform: scale(.3) }
+}
+@-webkit-keyframes bounce_circularG
+{
+	0% { -webkit-transform: scale(1) }
+	100% { -webkit-transform: scale(.3) }
+}
+@-moz-keyframes bounce_circularG
+{
+	0% { -moz-transform: scale(1) }
+	100% { -moz-transform: scale(.3) }
+}
+@-ms-keyframes bounce_circularG
+{
+	0% { -ms-transform: scale(1) }
+	100% { -ms-transform: scale(.3) }
+}
