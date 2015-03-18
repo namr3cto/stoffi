@@ -66,9 +66,9 @@
 			<span class='remove action'>
 				<%= link_to '', title: delete[:title] || t('pages.listens.destroy.description'), data: {
 					ajax_call: :delete,
-					delete_url: delete[:url] || url_for(song)+'.json',
-					delete_data: delete[:data],
-					delete_method: delete[:method] || 'delete',
+					ajax_url: delete[:url] || url_for(song)+'.json',
+					ajax_data: delete[:data],
+					ajax_method: delete[:method] || 'delete',
 					confirm: delete[:confirm] || t('pages.listens.destroy.confirm', song: song)
 				} do %>
 					<span data-list-mode='list'><%= t 'pages.listens.destroy.link' %></span>
