@@ -29,6 +29,11 @@ module Followingable
 		followings.where(followee_type: class_name).map(&:followee)
 	end
 	
+	# Check if the user follows a given resource
+	def follows?(resource)
+		self.in? resource.followers
+	end
+	
 	# Follow a resource
 	def follow(resource)
 		

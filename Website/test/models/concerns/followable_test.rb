@@ -10,9 +10,11 @@ class FollowableTest < ActiveSupport::TestCase
 	test "should follow" do
 		assert_not_includes @playlist.followers, @user
 		assert_not_includes @user.following(Playlist), @playlist
+		assert_not @user.follows?(@playlist)
 		@user.follow @playlist
 		assert_includes @playlist.followers, @user
 		assert_includes @user.following(Playlist), @playlist
+		assert @user.follows?(@playlist)
 	end
 	
 	test "should unfollow" do
