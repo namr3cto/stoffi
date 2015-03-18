@@ -1,0 +1,11 @@
+// dialog theme style
+
+#dialog-overlay
+{
+	background: rgba($shadow, 0.5);
+	#dialog
+	{
+		background: $background;
+		box-shadow: 0px 0px 10px rgba($shadow, 0.5);
+	}
+}
