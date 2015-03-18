@@ -91,10 +91,16 @@ connect = ->
 	connection = new Juggernaut({
 		secure: window.location.protocol == 'https:', 
 		host: getHostname(), port: getPort()})
+		
+	$.ajaxSetup {
+		beforeSend: (xhr) ->
+			xhr.setRequestHeader 'X-Session-ID', connection.sessionID
+			xhr.setRequestHeader 'X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')
+	}
 	
 	connection.meta = { version: version }
 	connection.meta['user_id'] = userID if userID?	
-	realtimeObject.meta['device_id'] = deviceID if deviceID?
+	connection.meta['device_id'] = deviceID if deviceID?
 		
 	for channel in channels
 		connection.subscribe channel, (data) ->
@@ -135,12 +141,8 @@ connect = ->
 	channels = c
 	version = v
 
-jQuery ->
+$ ->
 	url = "#{window.location.protocol}//#{getHostname()}:#{getPort()}"
 	window.WEB_SOCKET_SWF_LOCATION = "#{url}/socket.io/WebSocketMain.swf"
-	$.ajaxSetup({ beforeSend: (xhr) ->
-		xhr.setRequestHeader('X-Session-ID', sessionID)
-		xhr.setRequestHeader('X-CSRF-Token', $('meta[name="csrf-token"]').attr('content'))
-	})
 	$.getScript "#{url}/application.js", () ->
 		connect()
