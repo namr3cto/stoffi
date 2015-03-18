@@ -16,8 +16,11 @@ currentTab = ->
 	if tab == '' or $("[data-tab='#{tab}']").length == 0
 		tab = $('[data-tab]:first').data('tab')
 	tab
+	
+tabClicked = ->
+	
 
-jQuery ->
-	$('[data-tab]').on 'click', (event) ->
+$(document).on 'contentReady', () ->
+	$('[data-tab]').when 'click.tab', ->
 		switchTab $(this).data('tab')
 	switchTab currentTab()

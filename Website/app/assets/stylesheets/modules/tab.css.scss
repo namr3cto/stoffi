@@ -1,7 +1,7 @@
 article.tabbed
 {
 	position: relative;
-	min-height: 20em; // hack, is there a better way?
+	min-height: 30em; // hack, is there a better way?
 		
 	@media #{$small}
 	{
@@ -25,10 +25,11 @@ article.tabbed
 		}
 	}
 	
+	@media #{$small} { .tabs { display: none; } }
+	
 	.tabs:not(aside)
 	{
 		width: 100%;
-		@media #{$small} { display: none; }
 		.tab:hover:not(.active) { cursor: pointer; }
 	}
 	

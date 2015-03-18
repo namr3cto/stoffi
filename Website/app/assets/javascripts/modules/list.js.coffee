@@ -1,4 +1,4 @@
-jQuery ->
+$(document).on 'contentReady', () ->
 	
 	# problem:
 	# we have an overlay which is shown on hover, but there is no hover on touch
@@ -16,6 +16,15 @@ jQuery ->
 	#		$(@).data 'tapped', true
 		
 		
-	$('.item .action-bar span').on 'mousedown', (event) ->
+	$('.item .action-bar span').when 'mousedown.list.actionbar', (event) ->
 		event.stopPropagation()
 		event.preventDefault()
+		
+	$('[data-list-add]').when 'click.list.add', (event) ->
+		if event.which == 1
+			openDialog $(@).data('list-add')
+	
+	# remove the 'empty' from all lists with items
+	for l in $('[data-list]')
+		if $(l).children('.item:not([data-list-add])').length > 0
+			$(l).children('[data-list-empty]').hide()

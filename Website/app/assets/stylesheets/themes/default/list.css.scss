@@ -1,3 +1,8 @@
+ul.list, ul.grid 
+{
+	[data-list-empty] { color: rgba($text,0.3); }
+}
+
 ul.grid
 {
 	li.item
