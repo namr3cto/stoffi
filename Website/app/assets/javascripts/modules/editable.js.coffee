@@ -54,17 +54,17 @@ submitEditable = (element) ->
 	
 	deactivateEditable element
 
-$ ->
-	$('.editable').on 'click', (event) ->
+$(document).on 'contentReady', () ->
+	$('.editable').when 'click.editable', (event) ->
 		unless $(@).hasClass 'disabled'
 			activateEditable $(@)
 		
-	$(".editable input[type='text']").on 'keyup', (event) ->
+	$(".editable input[type='text']").when 'keyup.editable', (event) ->
 		if pressedEnter event
 			submitEditable $(@).parent('.editable')
 			
 		else if pressedEscape event
 			deactivateEditable $(@).parent('.editable')
 		
-	$(".editable input[type='text']").on 'blur', (event) ->
+	$(".editable input[type='text']").when 'blur.editable', (event) ->
 		deactivateEditable $(@).parent('.editable')

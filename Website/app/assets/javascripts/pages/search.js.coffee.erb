@@ -43,7 +43,7 @@ display_error = (error) ->
 		image.css('clip', "rect(0px,#{r}px,#{size}px,#{l}px)")
 		image.css('margin-left', "-#{l}px")
 		
-jQuery ->
+$(document).on 'contentReady', () ->
 	$('#search').autocomplete({
 		source: "/search/suggest.json",
 		minLength: 2,
@@ -61,20 +61,20 @@ jQuery ->
 	if $('#search_query').val() == ''
 		$('#search').val('')
 	toggleSearchMode()
-
-$(document).on 'click', '#search-pane [data-category]', (event) ->
-	if $('#search_query').val() != ''
-		return
-	event.preventDefault()
-	c = $(@).data('category')
-	l = $(@).children('a').attr('href')
-	$('#search-pane [data-category]').not("[data-category='#{c}']").removeClass('selected')
-	$(@).addClass('selected')
-	$('#search-form').attr('action', l)
-
-$ ->
+	
 	$("img[data-loading='true']").load () ->
 		id = $('#search_id').val()
 		q = $('#search_query').val()
 		if id and q
 			search(id)
+
+$ ->
+	$(document).on 'click', '#search-pane [data-category]', (event) ->
+		if $('#search_query').val() != ''
+			return
+		event.preventDefault()
+		c = $(@).data('category')
+		l = $(@).children('a').attr('href')
+		$('#search-pane [data-category]').not("[data-category='#{c}']").removeClass('selected')
+		$(@).addClass('selected')
+		$('#search-form').attr('action', l)

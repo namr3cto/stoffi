@@ -26,7 +26,7 @@ stopSlideshow = ->
 		currentSlide = number
 		startSlideshow number
 
-jQuery ->
-	$('[data-slide]').click ->
+$ ->
+	$('[data-slide]').when 'click.slide', (event) ->		
 		jumpToSlide $(@).data 'slide'
 	startSlideshow 1

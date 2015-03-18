@@ -27,9 +27,11 @@ toggleDuplicate = (element, event) ->
 			refreshDuplicate element
 	}
 
-$ ->
+$(document).on 'contentReady', () ->
 	for element in $("a[data-ajax-call='duplicate']")
 		refreshDuplicate $(element)
-	$("a[data-ajax-call='duplicate']").on 'click', (event) ->
+	$("a[data-ajax-call='duplicate']").when 'click.duplicate', (event) ->
 		if event.which == 1
+			stopPropagation()
+			preventDefault()
 			toggleDuplicate($(@), event)

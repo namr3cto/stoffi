@@ -204,15 +204,15 @@ checkboxClicked = (element) ->
 	crack_speed = speed
 	crack_time_text = tooltip_text
 	
-jQuery ->
+$(document).on 'contentReady', () ->
 	refreshLoginMode()
-	$("#login [data-button='toggle']").on 'click', (event) ->
+	$("#login [data-button='toggle']").when 'click.form.toggle', (event) ->
 		toggleLoginMode()
-	$("form [data-button='submit']").on 'click', (event) ->
+	$("form [data-button='submit']").when 'click.form.submit', (event) ->
 		submitLoginForm $(this)
-	$("form [data-strength]").on 'keyup', (event) ->
+	$("form [data-strength]").when 'keyup.form.strength', (event) ->
 		evaluatePassword $(this)
-	$("form [data-submitOnEnter]").on 'keydown', (event) ->
+	$("form [data-submitOnEnter]").when 'keydown.form.submit', (event) ->
 		if pressedEnter event
 			submitLoginForm $(this)
 	$("#crack-time-img").qtip {
@@ -229,5 +229,8 @@ jQuery ->
 		options['imageHeight'] = h if typeof h != 'undefined'
 		dd.ddslick options
 		
-	$('input[type=checkbox][data-ajax-url]').on 'click', (event) ->
+	$('input[type=checkbox][data-ajax-url]').when 'click.form.check', (event) ->
 		checkboxClicked $(this)
+		
+$(document).ajaxComplete ->
+	$('input[autofocus]').focus()

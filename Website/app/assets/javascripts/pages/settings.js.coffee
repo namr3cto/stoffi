@@ -26,9 +26,10 @@ linkCheckboxClicked = (element) ->
 				element.prop('checked', !isChecked)
 	}
 
-jQuery ->
+$(document).on 'contentReady', () ->
 	refreshCustomNameVisibility()
-	$('#user_name_source').on 'change', (event) ->
+	$('#user_name_source').when 'change.settings.name', (event) ->
+		stopPropagation()
 		refreshCustomNameVisibility()
 		
 	if $('#user_name_source option').length == 1
@@ -36,9 +37,11 @@ jQuery ->
 		$('#user_custom_name').removeClass 'short'
 		
 	refreshPasswordFieldVisibility()
-	$('#edit_password').on 'click', (event) ->
+	$('#edit_password').when 'click.settings.passwd', (event) ->
+		stopPropagation()
 		refreshPasswordFieldVisibility()
 		
-	$('input[type=checkbox][data-account-setting]').on 'click', (event) ->
+	$('input[type=checkbox][data-account-setting]').when 'click.settings.check', (event) ->
+		stopPropagation()
 		linkCheckboxClicked $(this)
 		
