@@ -215,3 +215,5 @@ pip-log.txt
 .mr.developer.cfg
 Settings Migrator Tester/user.config
 Settings Migrator Tester/user2.config
+
+*.rdb

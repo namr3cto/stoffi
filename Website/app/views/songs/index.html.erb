@@ -3,7 +3,6 @@ tabs = ['weekly', 'all_time', 'recent']
 categories = [''] # global
 categories << 'user' if user_signed_in?
 %>
-<%  %>
 
 <article class='tabbed'>
 	
@@ -34,30 +33,3 @@ categories << 'user' if user_signed_in?
 	</aside>
 	
 </article>
-
-<% if false %>
-	
-	<% if user_signed_in? %>
-		<section>
-			<h1>Your top this week</h1>
-			<ul class='grid'>
-				<%= render partial: 'songs/song', collection: @user_weekly %>
-			</ul>
-		</section>
-	
-		<section>
-			<h1>Your top all time</h1>
-			<ul class='grid'>
-				<%= render partial: 'songs/song', collection: @user_alltime %>
-			</ul>
-		</section>
-	
-		<section>
-			<h1>Played by you</h1>
-			<ul class='grid'>
-				<%= render partial: 'songs/song', collection: @user_recent %>
-			</ul>
-		</section>
-	<% end %>
-
-<% end %>
