@@ -1,11 +1,10 @@
 <!-- language for google+ -->
-<%= javascript_tag "window.___gcfg = {lang: '#{I18n.locale}'};" %>
-
-<!-- language for chartkick -->
-<%= javascript_tag "var Chartkick = {'language': '#{current_lang}'};" %>
-
-<!-- locale, used here and there... -->
-<%= javascript_tag "var locale = '#{I18n.locale}';" %>
+<%= javascript_tag do %>
+	window.___gcfg = {lang: '<%= I18n.locale %>'};
+	var Chartkick = {'language': '<%= current_lang %>'};
+	var locale = '<%= I18n.locale %>';
+	var user_id = <%= user_signed_in? ? current_user.id : -1 %>;
+<% end %>
 
 <!-- include all js files -->
 <%= javascript_include_tag "application" %>
