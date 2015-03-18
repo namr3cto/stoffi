@@ -39,7 +39,7 @@ img.featured
 	@include prefix(filter, $image);
 }
 
-img[src='/assets/gfx/icons/256/missing.png']
+img[src*='/assets/gfx/icons/']
 {
 	@include prefix(filter, $image);
 }
@@ -185,17 +185,6 @@ footer
 	}
 }
 
-
-a.button, ul.buttons li a
-{
-	@include button-colors($primary, $primary_text);
-	
-	&.secondary
-	{
-		@include button-colors($secondary, $secondary_text);
-	}
-}
-
 ul.vertical li a
 {
 	color: transparentize($shadow, 0.5);
@@ -216,7 +205,7 @@ ul.vertical li a
 
 #download .button
 {
-	@include button-colors($tertiary, $tertiary_text);
+	@include button-colors($tertiary, $tertiary_text, $shadow);
 }
 
 form
@@ -353,7 +342,7 @@ section.head
 {	
 	#donate-button a
 	{
-		@include button-colors($secondary, $secondary_text);
+		@include button-colors($secondary, $secondary_text, $shadow);
 	}
 	
 	.large
