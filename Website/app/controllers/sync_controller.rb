@@ -105,8 +105,8 @@ class SyncController < ApplicationController
 		when 'playlist'
 			if resource.is_public
 				chans << "user_#{resource.user.id}"
-				resource.subscribers.each do |subscriber|
-					chans << "hash_#{subscriber.unique_hash}"
+				resource.followers.each do |follower|
+					chans << "hash_#{follower.unique_hash}"
 				end
 			end
 			
@@ -150,12 +150,12 @@ class SyncController < ApplicationController
 		else ""
 		end
 	
-		session_id = request.env['HTTP_X_SESSION_ID']
-		logger.info "publish except #{session_id}"
+		session_id = request.env['HTTP_X_SESSION_ID'] || ''
+		logger.info "publish on #{channels} except #{session_id}"
 		begin
 			Juggernaut.publish(channels, cmd, except: session_id)
-		rescue
-			logger.error "could not publish onto realtime channel"
+		rescue StandardError => e
+			logger.error "could not publish onto realtime channel: #{e.message}"
 		end
 	end
 	

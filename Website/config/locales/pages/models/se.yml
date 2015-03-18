@@ -18,6 +18,35 @@ se:
         title:         'Spellistor'
         link:          'Spellistor'
         description:   'Hitta de hetaste spellistorna på Stoffi.'
+        
+        recent:
+          link:            'Senaste'
+          title:           'Nya spellistor'
+          description:     'Se vad som har skapats nyligen.'
+      
+        weekly:
+          link:            'Vecka'
+          title:           'Veckans topp'
+          description:     'Se populära spellistor den senaste veckan.'
+      
+        all_time:
+          link:            'All tid'
+          title:           'Topp genom tiderna'
+          description:     'Se de mest populära spellistorna genom tiderna.'
+        
+        user_follows:
+          link:            'Följda'
+          title:           'Spellistor du följer'
+          description:     "Se de spellistor som du följer."
+      
+        user_all_time:
+          link:            'Spellistor'
+          title:           'Dina spellistor'
+          description:     "Se dina spellistor."
+        
+        categories:
+          user: 'Personligt'
+          
       by:
         title:         '%{username} spellistor'
         link:          '%{username} spellistor'
@@ -25,6 +54,9 @@ se:
         
       show:
         description:     'Spellistan %{name} skapad av %{username} på Stoffi.'
+        
+      new:
+        link: 'Skapa ny spellista'
     
       artists:
         show:
@@ -54,7 +86,7 @@ se:
       
         weekly:
           link:            'Vecka'
-          title:           'Topp den senaste veckan'
+          title:           'Veckans topp'
           description:     'Se populära låtar den senaste veckan.'
       
         all_time:

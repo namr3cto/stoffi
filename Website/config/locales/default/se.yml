@@ -29,6 +29,7 @@ se:
   confirm: "Är du säker?"
   show_more: "Visa mer"
   delete: "Ta bort %{item}"
+  remove: 'Ta bort'
   
   send: "Skicka"
   save: "Spara"
@@ -57,6 +58,7 @@ se:
     global: "Global topp"
   
   hello: "Hallå, %{name}!"
+  empty: 'Tomt'
   
   location_inside: "%{city} i %{country}"
   

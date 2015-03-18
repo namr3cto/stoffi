@@ -32,6 +32,7 @@ us:
   confirm: "Are you sure?"
   show_more: "Show more"
   delete: "Delete %{item}"
+  remove: 'Delete'
   
   send: "Send"
   save: "Save"
@@ -60,6 +61,7 @@ us:
     global: "Global top"
   
   hello: "Hello, %{name}!"
+  empty: 'Empty'
   
   location_inside: "%{city} in %{country}"
   

@@ -4,35 +4,24 @@ se:
     plural: 'spellistor'
     singular: 'spellista'
     description: 'Av %{owner}'
-  
-    title:
-      new: "Skapa spellista"
-      edit: "Ändra spellista"
-      list: "Spellistor"
-      global: "Bästa spellistorna"
-      you: "Dina spellistor"
-      user: "%{users} spellistor"
-      
-    name: "Namn"
-    is_public: "Publik"
-    filter: "Filter"
     
-    songs:
-      label: "Låtar"
-      empty: "Det finns inga låtar i den här spellistan."
-      remove: "Ta bort %{song} från spellistan."
+    follow:
+      description: 'Följ denna spellista'
+      link: 'Följ'
+    unfollow:
+      description: 'Sluta följa denna spellista'
+      link: 'Sluta följa'
+      confirm: 'Säkert att du vill sluta följa spellistan %{name}?'
+      
+    delete:
+      description: 'Ta bort din spellista %{name}'
+      confirm: 'Säkert att du vill ta bort spellistan %{name}?'
+      
+    new:
+      title: 'Skapa en ny spellista'
+      description: 'Välj namn på din nya spellista'
       
     add:
       description: 'Lägg till i en av dina spellistor'
       link: 'Lägg till i spellistan %{playlist}'
       menu: 'Lägg till i spellista'
-      
-    empty:
-      you: "Du har inga spellistor än."
-      all: "Ingen har några spellistor än."
-      user: "%{user} har inga spellistor än."
-      short: "Inga spellistor än."
-    
-    created: "Skapad av"
-    
-    controls: "Inställningar"

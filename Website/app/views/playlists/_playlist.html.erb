@@ -1,10 +1,73 @@
-<li class='clickable playlist' data-type='hit'>
-	<div class='image'>
-		<%= image_tag playlist.image, alt: playlist %>
+<li class='item' data-href='<%= url_for playlist %>' data-resource-type='playlist' data-resource-id='<%= playlist.id %>'
+	data-resource-url='<%= url_for playlist %>'>
+	
+	<!-- image -->
+	<%= image_tag playlist.image(:huge), data: { field: 'picture' } %>
+	
+	<!-- meta data -->
+	<div class='overlay'>
+		<span class='title' data-field='name'><%= playlist %></span>
+		
+		<% if local_assigns[:type] %>
+			<span class='type' data-list-mode='grid' data-type='playlist'><%= t 'playlists.singular' %></span>
+		<% end %>
+		
+		<span class='description' data-field='description'>
+			By <%= playlist.user %>
+		</span>
+		
 	</div>
-	<div class='content'>
-		<h3><%= playlist %></h3>
-		<p><%=t('songs.plural').capitalize %>: <%= top_list(playlist.songs, limit: limit) %></p>
-		<p><%==t 'playlists.description', owner: link_to(playlist.user.name, playlist.user) %></p>
+	
+	<!-- controls -->
+	<div class='action-bar'>
+		
+		<% if local_assigns[:type] %>
+			<span class='type' data-list-mode='list' data-type='playlist'><%= t 'playlists.singular' %></span>
+		<% end %>
+		
+		<% if user_signed_in? %>
+			<%
+			is_owner = playlist.user == current_user
+			is_following = (not is_owner and current_user.follows?(playlist))
+			
+			del_button_tag = is_owner ? '' : " data-button=unfollow"
+			
+			# hide/show the follow/unfollow buttons depending on is_following
+			add_button_tag = is_following ? ' data-hide' : ''
+			del_button_tag += ' data-hide' unless is_owner or is_following
+			%>
+			
+			<!-- follow button (only for non-owner and shown only for non-followers) -->
+			<% unless is_owner %>
+				<span class='shadow dropdown add action' data-button='follow'<%= add_button_tag %>>
+					<%= link_to '', title: t('playlists.follow.description'), data: {
+						ajax_call: :follow
+					} do %>
+						<span data-list-mode='list'><%= t 'playlists.follow.link' %></span>
+						<span data-list-mode='grid'>+</span>
+					<% end %>
+				</span>
+			<% end %>
+			
+			<!-- remove (for owners) or unfollow (for rest, but shown only to followers) -->
+			<span class='remove action'<%= del_button_tag %>>
+				<%
+				# decide text: remove for owner, unfollow for rest
+				link = is_owner ? t('remove') : t('playlists.unfollow.link')
+				title = is_owner ? 'playlists.delete.description' : 'playlists.unfollow.description'
+				confirm = is_owner ? 'playlists.delete.confirm' : 'playlists.unfollow.confirm'
+				call = is_owner ? :delete : :unfollow
+				%>
+				<%= link_to '', title: t(title, name: playlist.name), data: {
+					ajax_call: call,
+					ajax_delete_url: url_for(playlist)+'.json',
+					ajax_delete_method: 'delete',
+					confirm: t(confirm, name: playlist.name)
+				} do %>
+					<span data-list-mode='list'><%= link %></span>
+					<span data-list-mode='grid'>x</span>
+				<% end %>
+			</span>
+		<% end %>
 	</div>
 </li>

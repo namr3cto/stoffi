@@ -11,7 +11,7 @@
 # @param object_params
 #   The parameters of the object, encoded in JSON.
 #
-createObject = (object_type, object_params) ->
+@createObject = (object_type, object_params) ->
 	if embedded?
 		try
 			window.external.CreateObject object_type, object_params
@@ -37,7 +37,7 @@ createObject = (object_type, object_params) ->
 # @param updated_params
 #   The parameters that were changed, encoded in JSON.
 #
-updateObject = (object_type, object_id, updated_params) ->
+@updateObject = (object_type, object_id, updated_params) ->
 	if embedded?
 		try
 			window.external.UpdateObject object_type, object_id, update_params
@@ -61,7 +61,7 @@ updateObject = (object_type, object_id, updated_params) ->
 # @param object_id
 #   The ID of the object.#
 #
-deleteObject = (object_type, object_id) ->
+@deleteObject = (object_type, object_id) ->
 	if embedded?
 		try
 			window.external.DeleteObject object_type, object_id
@@ -71,3 +71,26 @@ deleteObject = (object_type, object_id) ->
 			when 'device'        then deleteDevice   object_id
 			when 'playlist'      then deletePlaylist object_id
 			when 'link'          then deleteLink     object_id
+
+# Executes a command.
+# 
+# Sends the execution of a command.
+#
+# @param command
+#   The command name.
+#
+# @param object_type
+#   The type of the object.
+#
+# @param params
+#   (Optional) Additional parameters of the command.
+#
+@execute = (command, object_type, params) ->
+	if embedded?
+		try
+			window.external.Execute command, object_type, params
+		catch err
+	else
+		switch object_type
+			when 'device'        then executeDevice   command, params
+			when 'playlist'      then executePlaylist command, params

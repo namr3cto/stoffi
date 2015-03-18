@@ -4,35 +4,24 @@ us:
     plural: 'playlists'
     singular: 'playlist'
     description: 'By %{owner}'
-  
-    title:
-      new: "Create playlist"
-      edit: "Edit playlist"
-      list: "Playlists"
-      global: "Best playlists"
-      you: "Your playlists"
-      user: "%{users} playlists"
-      
-    name: "Name"
-    is_public: "Public"
-    filter: "Filter"
     
-    songs: 
-      label: "Songs"
-      empty: "There are no songs in this playlist."
-      remove: "Remove %{song} from playlist."
+    follow:
+      description: 'Follow this playlist'
+      link: 'Follow'
+    unfollow:
+      description: 'Stop following this playlist'
+      link: 'Unfollow'
+      confirm: 'Are you sure you want to unfollow the playlist %{name}?'
+      
+    delete:
+      description: 'Delete your playlist %{name}'
+      confirm: 'Are you sure you want to delete the playlist %{name}?'
+      
+    new:
+      title: 'Create a new playlist'
+      description: 'Choose the name of your new playlist'
       
     add:
       description: 'Add to one of your playlists'
       link: 'Add to playlist %{playlist}'
       menu: 'Add to playlist'
-      
-    empty:
-      you: "You have no playlists yet."
-      all: "No one has any playlists yet."
-      user: "%{user} has no plyalists yet."
-      short: "No playlists yet."
-    
-    created: "Created by"
-    
-    controls: "Controls"

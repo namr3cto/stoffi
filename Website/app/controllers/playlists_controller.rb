@@ -1,82 +1,61 @@
-# -*- encoding : utf-8 -*-
 # The business logic for playlists.
 #
 # This code is part of the Stoffi Music Player Project.
 # Visit our website at: stoffiplayer.com
 #
 # Author::		Christoffer Brodd-Reijer (christoffer@stoffiplayer.com)
-# Copyright::	Copyright (c) 2013 Simplare
+# Copyright::	Copyright (c) 2015 Simplare
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class PlaylistsController < ApplicationController
+	
+	before_action :set_playlist, only: [:show, :edit, :update, :destroy, :follow]
 	oauthenticate except: [ :index, :show ]
 	
-	respond_to :html, :mobile, :embedded, :json, :xml
+	respond_to :html, :embedded, :json, :xml
 	
 	# GET /playlists
 	def index
 		l, o = pagination_params
-		id = logged_in? ? current_user.id : -1
 		
-		if id > 0
-			@follows = current_user.playlist_subscriptions.limit(l).offset(o)
-			@personal = current_user.playlists.limit(l).offset(o)
+		@recent = Playlist.is_public.order(created_at: :desc).limit(l).offset(o)
+		@weekly = Playlist.is_public.top(from: 7.days.ago).limit(l).offset(o)
+		@all_time = Playlist.is_public.top.limit(l).offset(o)
+		
+		if user_signed_in?
+			@user_follows = current_user.following(Playlist)
+			@user_all_time = current_user.playlists.limit(l).offset(o)
 		end
-		@global = Playlist.top(l, o)
 		
-		@channels = Array.new
-		@global.each { |p| @channels << "user_#{p.user_id}" }
-		
-		@title = t "playlists.all.title"
-		@description = t "playlists.all.description"
-		
-		respond_with(@global)
+		respond_with(@all_time)
 	end
 	
 	# GET /playlists/by/1
 	def by
 		l, o = pagination_params
 		params[:user_id] = process_me(params[:user_id])
-		follows = params[:follows] != nil && params[:follows] == "1"
-		id = logged_in? ? current_user.id : -1
+		follows = params[:follows].present?
 		
 		@user = User.find(params[:user_id])
 		
-		if current_user != nil and params[:user_id] == current_user.id
-			if follows
-				@playlists = current_user.playlist_subscriptions.limit(l).offset(o)
-			else
-				@playlists = current_user.playlists.limit(l).offset(o)
-			end
+		if follows
+			@playlists = @user.following(Playlist)
 		else
-			if follows
-				@playlists = @user.playlist_subscriptions.limit(l).offset(o)
-			else
-				@playlists = @user.playlists.where(is_public: 1).limit(l).offset(o)
-			end
+			@playlists = @user.playlists.where(is_public: 1).limit(l).offset(o)
 		end
-		
-		@channels = ["user_#{id}"]
-		
-		@title = t "playlists.by.title", username: @user.name.possessive
-		@description = t "playlists.by.description", username: @user.name
 		
 		respond_with(@playlists, include: [ :songs ])
 	end
 
 	# GET /playlists/1
 	def show
-		not_found('playlist') and return unless Playlist.exists? params[:id]
 		l, o = pagination_params
-		@playlist = Playlist.find(params[:id])
 		
 		unless user_signed_in? && @playlist.user == current_user || @playlist.is_public
 			access_denied and return
 		end
 		
 		@channels = ["user_#{@playlist.user.id}"]
-		@title = @playlist.name
-		@description = t "playlist.description", name: d(@playlist.name), username: d(@playlist.user.name)
 		
 		t=0
 		@head_prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#"
@@ -91,7 +70,7 @@ class PlaylistsController < ApplicationController
 			{ property: "og:audio:type", content: "audio/vnd.facebook.bridge" },
 			{ property: "og:site_name", content: "Stoffi" },
 			{ property: "fb:app_id", content: "243125052401100" },
-			{ property: "music:creator", content: profile_url(@playlist.user) },
+			{ property: "music:creator", content: user_registration_path(@playlist.user) },
 		] |
 			@playlist.songs.map { |song| { property: "music:song", content: song_url(song) } }
 			
@@ -101,16 +80,13 @@ class PlaylistsController < ApplicationController
 
 	# GET /playlists/new
 	def new
-		redirect_to action: :index and return if params[:format] == "mobile"
-		respond_with(@playlist = current_user.playlists.new)
+		@playlist = current_user.playlists.new
+		render layout: false
 	end
 
 	# GET /playlists/1/edit
 	def edit
-		redirect_to action: :show, id: params[:id] and return if params[:format] == "mobile"
 		not_found('playlist') and return unless owns(Playlist, params[:id])
-		@playlist = current_user.playlists.find(params[:id])
-		@title = "Edit #{@playlist.name}"
 	end
 
 	# POST /playlists
@@ -169,14 +145,23 @@ class PlaylistsController < ApplicationController
 				}
 			end
 		end
-
-		respond_with(@playlist)
+		
+		respond_to do |format|
+			if success
+				format.html { redirect_to @playlist }
+				format.js { }
+				format.json { render json: @playlist, status: :created, location: @playlist }
+			else
+				format.html { render action: 'new' }
+				format.js { render partial: 'shared/dialog/errors', locals: { resource: @playlist, action: :create } }
+				format.json { render json: @playlist.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	# PUT /playlists/1
 	def update
 		not_found('playlist') and return unless owns(Playlist, params[:id])
-		@playlist = current_user.playlists.find(params[:id])
 		
 		newProps = Hash.new
 		newProps['songs'] = { 'added' => [], 'removed' => [] }
@@ -253,8 +238,6 @@ class PlaylistsController < ApplicationController
 
 	# DELETE /playlists/1
 	def destroy
-		not_found('playlist') and return unless Playlist.exists? params[:id]
-		@playlist = Playlist.find(params[:id])
 		
 		# destroy playlist
 		if @playlist.user == current_user
@@ -264,21 +247,18 @@ class PlaylistsController < ApplicationController
 			
 		# unfollow playlist
 		else
-			SyncController.send_privately('delete', @playlist, request, current_user)
-			@playlist.subscribers.delete current_user
+			SyncController.send('execute', @playlist, request, 'unfollow')
+			current_user.unfollow @playlist
 		end
 		respond_with(@playlist)
 	end
 	
 	# PUT /playlists/1/follow
 	def follow
-		not_found('playlist') and return unless Playlist.exists? params[:id]
-		@playlist = Playlist.find(params[:id])
-		
 		not_found('playlist') and return unless @playlist.is_public
 		
-		unless @playlist.subscribers.exists?(current_user.id)
-			@playlist.subscribers << current_user
+		unless current_user.follows? @playlist
+			current_user.follow @playlist
 			SyncController.send('execute', @playlist, request, 'follow')
 		end
 		
@@ -286,7 +266,14 @@ class PlaylistsController < ApplicationController
 	end
 	
 	private
-	
+
+	# Use callbacks to share common setup or constraints between actions.
+	def set_playlist
+		not_found('playlist') and return unless Playlist.exists? params[:id]
+		@playlist = Playlist.find(params[:id])
+	end
+
+	# Never trust parameters from the scary internet, only allow the white list through.
 	def playlist_params
 		params.require(:playlist).permit(:name, :user, :is_public)
 	end

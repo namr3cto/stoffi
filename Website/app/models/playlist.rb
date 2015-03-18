@@ -24,7 +24,6 @@ class Playlist < ActiveRecord::Base
 	has_many :listens, through: :songs
 	has_many :artists, through: :songs
 	has_many :shares, as: :object
-	has_and_belongs_to_many :subscribers, class_name: "User", join_table: "playlist_subscribers", uniq: true
 	belongs_to :user
 	has_many :link_backlogs, as: :resource, dependent: :destroy
 	
@@ -51,8 +50,8 @@ class Playlist < ActiveRecord::Base
 		name
 	end
 	
-	def image
-		"/assets/media/disc.png"
+	def image(size = :huge)
+		"gfx/icons/256/playlist.png"
 		#songs.count == 0 ? "/assets/media/disc.png" : songs.first.picture
 	end
 	
@@ -91,6 +90,10 @@ class Playlist < ActiveRecord::Base
 		order("listens_count DESC, playlists.updated_at DESC").
 		limit(limit).
 		offset(offset)
+	end
+	
+	def self.is_public
+		where(is_public: 1)
 	end
 	
 	def self.search(user, search, limit = 5, offset = 0)

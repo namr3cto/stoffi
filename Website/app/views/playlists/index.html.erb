@@ -1,29 +1,13 @@
-<div id="main">
-	<div class="white box">
-		<% if user_signed_in? %>
-			<h1><%=t "playlists.title.you" %></h1>
-			<ul class="horizontal" data-list="playlists">
-				<% @personal.each do |playlist| %>
-					<%= item playlist.name, playlist, "playlist-#{playlist.id}-name",
-							:image => playlist.image %>
-				<% end %>
-			</ul>
-			<p class="message" data-field="no-playlists"<%= "style='display:none;'".html_safe if @personal.length > 0 %>>
-				<%=t "playlists.empty.you" %>
-			</p>
-		<% end %>
-		
-		<h1><%=t "playlists.title.global" %></h1>
-		<ul class="horizontal" data-list="global-playlists">
-			<% @global.each do |playlist| %>
-				<%= item playlist.name, playlist, "playlist-#{playlist.id}-name",
-						:image => playlist.image %>
-			<% end %>
-		</ul>
-		<p class="message" data-field="no-global-playlists"<%= "style='display:none;'".html_safe if @global.length > 0 %>>
-			<%=t "playlists.empty.all" %>
-		</p>
-	</div>
-</div>
-
-<%= render "sidebars/music" %>
+<%= render partial: 'shared/lists/top', locals:{
+	resource: 'playlists',
+	tabs: ['weekly', 'all_time', 'recent', 'follows'],
+	locals:
+	{
+		user_follows: { follower: current_user.id },
+		user_all_time:
+		{
+			show_add_button: true,
+			owner: current_user.id
+		}
+	}
+} %>
