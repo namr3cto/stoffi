@@ -701,9 +701,9 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy "$(ProjectDir)\External\bass.dll" "$(TargetDir)"
-copy "$(ProjectDir)\External\bass_fx.dll" "$(TargetDir)"
-copy "$(ProjectDir)\External\OptimFrog.dll" "$(TargetDir)"</PostBuildEvent>
+    <PostBuildEvent>copy "$(ProjectDir)\Libraries\bass.dll" "$(TargetDir)"
+copy "$(ProjectDir)\Libraries\bass_fx.dll" "$(TargetDir)"
+copy "$(ProjectDir)\Libraries\OptimFrog.dll" "$(TargetDir)"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <PreBuildEvent>
