@@ -1003,32 +1003,24 @@ namespace Stoffi.Core.Media
 				Source = "Radio",
 			};
 			track.Path = URL;
+			track.URL = track.Path;
 
-			int stream = Un4seen.Bass.Bass.BASS_StreamCreateURL(URL, 0, Un4seen.Bass.BASSFlag.BASS_SAMPLE_FLOAT, null, IntPtr.Zero);
+			int stream = Bass.BASS_StreamCreateURL(URL, 0, BASSFlag.BASS_SAMPLE_FLOAT, null, IntPtr.Zero);
 			if (stream != 0)
 			{
-				//Un4seen.Bass.Bass.BASS_ChannelPlay(stream, true);
-				string[] tags = Bass.BASS_ChannelGetTagsICY(stream);
-				SortedList<string, string> meta = new SortedList<string, string>();
-				if (tags != null && tags.Length > 0)
-				{
-					foreach (string tag in tags)
-					{
-						string[] s = tag.Split(new char[] { ':' }, 2);
-						if (s.Length == 2)
-							meta.Add(s[0], s[1]);
-					}
+				var meta = GetMeta(stream);
 
-					if (meta.Keys.Contains("icy-name"))
-						track.Title = meta["icy-name"];
+				// TODO: add support for more fields (protocols)
+				if (meta.Keys.Contains("icy-name"))
+					track.Title = meta["icy-name"];
 
-					if (meta.Keys.Contains("icy-genre"))
-						track.Genre = meta["icy-genre"];
+				if (meta.Keys.Contains("icy-genre"))
+					track.Genre = meta["icy-genre"];
 
-					if (meta.Keys.Contains("icy-url"))
-						track.URL = meta["icy-url"];
-				}
+				if (meta.Keys.Contains("icy-url"))
+					track.URL = meta["icy-url"];
 			}
+
 			return track;
 		}
 
@@ -1162,6 +1154,38 @@ namespace Stoffi.Core.Media
 				//comp.fRatio = ratio;
 				Bass.BASS_FXSetParameters(fxCompHandle, comp);
 			}
+		}
+
+		/// <summary>
+		/// Get the meta data for a given stream.
+		/// </summary>
+		/// <param name="stream">The audio stream</param>
+		/// <returns>A sorted list with meta data</returns>
+		public static SortedList<string,string> GetMeta(int stream)
+		{
+			// collect some tags
+			var tags = new List<string[]>();
+			tags.Add(Bass.BASS_ChannelGetTagsICY(stream));
+			tags.Add(Bass.BASS_ChannelGetTagsHTTP(stream));
+			tags.Add(Bass.BASS_ChannelGetTagsMETA(stream));
+			tags.Add(Bass.BASS_ChannelGetTagsID3V1(stream));
+			tags.Add(Bass.BASS_ChannelGetTagsID3V2(stream));
+
+			// split tags by : and put into sorted list
+			var meta = new SortedList<string, string>();
+			foreach (var tag in tags)
+			{
+				if (tag == null || tag.Length == 0)
+					continue;
+				foreach (var t in tag)
+				{
+					string[] s = t.Split(new char[] { ':' }, 2);
+					if (s.Length == 2 && !meta.ContainsKey(s[0]))
+						meta.Add(s[0], s[1]);
+				}
+			}
+
+			return meta;
 		}
 
 		#endregion
