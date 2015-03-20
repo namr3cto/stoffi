@@ -33,8 +33,8 @@ using System.IO;
 using System.Linq;
 using System.Threading;
 
-//using System.Data.SQLite;
-using Mono.Data.Sqlite;
+using System.Data.SQLite;
+//using Mono.Data.SQLite;
 
 using Stoffi.Core.Media;
 using Stoffi.Core.Playlists;
@@ -52,16 +52,16 @@ namespace Stoffi.Core.Settings
 	{
 		#region Members
 		private string dbConnection;
-		private SqliteConnection cnn;
+		private SQLiteConnection cnn;
 		#endregion
 
 		#region Constructor
 		public Database(string filename)
 		{
 			if (!File.Exists(filename))
-				SqliteConnection.CreateFile(filename);
+				SQLiteConnection.CreateFile(filename);
 			dbConnection = "uri=file:settings.s3db";
-			cnn = new SqliteConnection (dbConnection);
+			cnn = new SQLiteConnection (dbConnection);
 			cnn.Open ();
 		}
 		public static string[] Split(string source, char separator)
@@ -128,7 +128,7 @@ namespace Stoffi.Core.Settings
 		{
 			DataTable dt = new DataTable();
 			try{
-				var cmd = new SqliteCommand(cnn);
+				var cmd = new SQLiteCommand(cnn);
 				cmd.CommandText = sql;
 				var reader = cmd.ExecuteReader();
 				dt.Load(reader);
@@ -148,7 +148,7 @@ namespace Stoffi.Core.Settings
 			while (fails < maxAttempts) {
 				try
 				{
-					var cmd = new SqliteCommand (cnn);
+					var cmd = new SQLiteCommand (cnn);
 					cmd.CommandText = sql;
 					var rowsUpdated = cmd.ExecuteNonQuery ();
 					return rowsUpdated;
@@ -165,7 +165,7 @@ namespace Stoffi.Core.Settings
 		{
 			try
 			{
-				var cmd = new SqliteCommand (cnn);
+				var cmd = new SQLiteCommand (cnn);
 				cmd.CommandText = sql;
 				var value = cmd.ExecuteScalar();
 				if (value != null)
@@ -277,7 +277,7 @@ namespace Stoffi.Core.Settings
 		/// </summary>
 		static Manager()
 		{
-            InitializeDatabase();
+			InitializeDatabase();
 		}
 
 		#endregion
