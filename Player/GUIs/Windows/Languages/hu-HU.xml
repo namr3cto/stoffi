@@ -444,6 +444,7 @@ Ez magában foglalja a navigációs panelt (Zenei gyűjtemény, Várakozási sor
 	<Value Id="AddURLTitle"                      Title="Rádióállomás hozzáadása"/>
 	<Value Id="AddURLLabel"                       Text="URL:"/>
 	<Value Id="AddURLWait"                        Text="Kérlek, várj..."/>
+	<Value Id="AddURLGroupName"                   Text="My Stations"/>
 
 	<Value Id="GeneratePlaylistTitle"            Title="Lejátszási lista generálása"/>
 	<Value Id="FromList"                          Text="Létező listából"/>

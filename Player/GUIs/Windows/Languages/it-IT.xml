@@ -477,6 +477,7 @@ Questo include il riquadro di navigazione (Libreria, Coda, Playlist ed altro), l
 	<Value Id="AddYouTubePlaylistTitle"          Title="Add YouTube Playlist"/>
 	<Value Id="AddURLLabel"                       Text="URL:"/>
 	<Value Id="AddURLWait"                        Text="Per favore attendere..."/>
+	<Value Id="AddURLGroupName"                   Text="My Stations"/>
 
 	<Value Id="GeneratePlaylistTitle"            Title="Genera playlist"/>
 	<Value Id="FromList"                          Text="Da lista"/>

@@ -477,6 +477,7 @@
 	<Value Id="AddYouTubePlaylistTitle"          Title="添加YouTube播放列表"/>
 	<Value Id="AddURLLabel"                       Text="URL:"/>
 	<Value Id="AddURLWait"                        Text="请等待..."/>
+	<Value Id="AddURLGroupName"                   Text="My Stations"/>
 
 	<Value Id="GeneratePlaylistTitle"            Title="生成播放列表"/>
 	<Value Id="FromList"                          Text="表单列表"/>
