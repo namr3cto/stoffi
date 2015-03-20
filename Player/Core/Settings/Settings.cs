@@ -1643,8 +1643,6 @@ namespace Stoffi.Core.Settings
 
 				SaveListConfiguration(JamendoListConfig, "listConfigurations");
 				SaveConfig("config", "jamendoListConfig", DBEncode(db.LastID("listConfigurations")));
-
-				Sources.Radio.Manager.PopulateDefaults();
 			}
 			YouTubeListConfig.PropertyChanged += Object_PropertyChanged;
 			SoundCloudListConfig.PropertyChanged += Object_PropertyChanged;
@@ -1668,7 +1666,7 @@ namespace Stoffi.Core.Settings
 			if (radioListConfig == null)
 			{
 				radioListConfig = ListConfig.Create();
-				radioListConfig.Columns.Add(ListColumn.Create("Album", U.T("ColumnGroup"), 150));
+				radioListConfig.Columns.Add(ListColumn.Create("Group", U.T("ColumnGroup"), 150));
 				radioListConfig.Columns.Add(ListColumn.Create("Title", U.T("ColumnTitle"), 200));
 				radioListConfig.Columns.Add(ListColumn.Create("Genre", U.T("ColumnGenre"), 100));
 				radioListConfig.Columns.Add(ListColumn.Create("Artist", U.T("ColumnDJ"), 150));
@@ -1857,6 +1855,13 @@ namespace Stoffi.Core.Settings
 			#endregion
 
 			#region Event handlers
+			radio.CollectionChanged -= ObservableCollection_CollectionChanged;
+			radio.CollectionChanged += ObservableCollection_CollectionChanged;
+			files.CollectionChanged -= ObservableCollection_CollectionChanged;
+			files.CollectionChanged += ObservableCollection_CollectionChanged;
+			playlists.CollectionChanged -= ObservableCollection_CollectionChanged;
+			playlists.CollectionChanged += ObservableCollection_CollectionChanged;
+
 			foreach (var x in radio)
 			{
 				x.PropertyChanged -= Object_PropertyChanged;
@@ -1881,6 +1886,8 @@ namespace Stoffi.Core.Settings
 			{
 				x.PropertyChanged -= Object_PropertyChanged;
 				x.PropertyChanged += Object_PropertyChanged;
+				x.Tracks.CollectionChanged -= ObservableCollection_CollectionChanged;
+				x.Tracks.CollectionChanged += ObservableCollection_CollectionChanged;
 			}
 			foreach (var x in pluginSettings)
 			{
@@ -1889,8 +1896,6 @@ namespace Stoffi.Core.Settings
 			}
 			#endregion
 
-			if (firstRun)
-				Sources.Radio.Manager.PopulateDefaults ();
 			DispatchInitialized();
 		}
 
@@ -2347,7 +2352,6 @@ namespace Stoffi.Core.Settings
 		{
 			U.L(LogLevel.Debug, "SETTINGS", "Dispatching initialized");
 			IsInitialized = true;
-			firstRun = true;
 			if (Initialized != null)
 				Initialized(null, new EventArgs());
 		}

@@ -117,8 +117,12 @@ namespace Stoffi.Core.Settings
 		#region Destructor
 		~Database()
 		{
-			if (cnn != null)
-				cnn.Close();
+			try
+			{
+				if (cnn != null)
+					cnn.Close();
+			}
+			catch { }
 		}
 		#endregion
 
@@ -718,12 +722,12 @@ namespace Stoffi.Core.Settings
 			db.CreateTable ("equalizerProfiles", new string[] { "name", "bands" }, new string[] { "protected", "echo" });
 
 			db.CreateTable ("files",
-				new string[] { "path", "title", "album", "artist", "genre", "url", "artUrl", "originalArtUrl", "source", "codecs" },
+				new string[] { "path", "title", "album", "artist", "genre", "url", "artUrl", "originalArtUrl", "source", "codecs", "grp" },
 				new string[] { "year", "bitrate", "track", "channels", "number", "lastWrite", "lastPlayed", "userPlayCount", "globalPlayCount", "sampleRate", "processed" },
 				new string[] { "length" }
 			);
 			db.CreateTable ("radio",
-				new string[] { "path", "title", "album", "artist", "genre", "url", "artUrl", "originalArtUrl", "source", "codecs" },
+				new string[] { "path", "title", "album", "artist", "genre", "url", "artUrl", "originalArtUrl", "source", "codecs", "grp" },
 				new string[] { "year", "bitrate", "track", "channels", "number", "lastWrite", "lastPlayed", "userPlayCount", "globalPlayCount", "sampleRate", "processed" },
 				new string[] { "length" }
 			);
@@ -761,7 +765,8 @@ namespace Stoffi.Core.Settings
 		/// </summary>
 		private static void LoadDatabase()
 		{
-			LoadTracks(files, db.Select ("select * from files;"));
+			LoadTracks(files, db.Select("select * from files;"));
+			LoadTracks(radio, db.Select("select * from radio;"));
 			LoadTrackReferences (queue, db.Select ("select * from queue order by number;"));
 			LoadTrackReferences (history, db.Select ("select * from history;"));
 			LoadShortcutProfiles (shortcutProfiles, db.Select ("select rowid,* from shortcutProfiles"));
@@ -865,7 +870,7 @@ namespace Stoffi.Core.Settings
 						break;
 						#endregion
 
-						#region List configurations
+					#region List configurations
 					case "sourceListConfig":
 						if (listConfigs.ContainsKey(Convert.ToInt32 (v)))
 							sourceListConfig = listConfigs[Convert.ToInt32 (v)];
@@ -915,15 +920,15 @@ namespace Stoffi.Core.Settings
 						if (listConfigs.ContainsKey(Convert.ToInt32 (v)))
 							discListConfig = listConfigs[Convert.ToInt32 (v)];
 						break;
-						#endregion
+					#endregion
 
-						#region Application params
+					#region Application params
 					case "id":
 						id = Convert.ToInt32(v);
 						break;
-						#endregion
+					#endregion
 
-						#region Settings
+					#region Settings
 					case "upgradePolicy":
 						upgradePolicy = StringToUpgrade (v);
 						break;
@@ -967,9 +972,9 @@ namespace Stoffi.Core.Settings
 					case "youTubeQuality":
 						youTubeQuality = v;
 						break;
-						#endregion
+					#endregion
 
-						#region Playback
+					#region Playback
 					case "currentActiveNavigation":
 						currentActiveNavigation = v;
 						break;
@@ -1006,16 +1011,16 @@ namespace Stoffi.Core.Settings
 					case "mediaState":
 						mediaState = StringToMediaState (v);
 						break;
-						#endregion
+					#endregion
 
-						#region Cloud
-						#endregion
+					#region Cloud
+					#endregion
 
-						#region Misc
+					#region Misc
 					case "firstRun":
 						firstRun = v == "1";
 						break;
-						#endregion
+					#endregion
 
 					}
 				}
@@ -1118,6 +1123,7 @@ namespace Stoffi.Core.Settings
 				track.Codecs = row["codecs"].ToString();
 				track.Genre = row["genre"].ToString();
 				track.Image = row["artUrl"].ToString();
+				track.Group = row["grp"].ToString();
 				var lastPlayed = Convert.ToInt64(row["lastPlayed"]);
 				if (lastPlayed > 0)
 					track.LastPlayed = DateTime.FromFileTimeUtc(lastPlayed);
@@ -2740,6 +2746,7 @@ namespace Stoffi.Core.Settings
 				data ["channels"] = DBEncode(track.Channels);
 				data ["codecs"] = DBEncode (track.Codecs);
 				data ["genre"] = DBEncode (track.Genre);
+				data ["grp"] = DBEncode (track.Group);
 				data ["lastPlayed"] = DBEncode(track.LastPlayed);
 				data ["lastWrite"] = DBEncode(track.LastWrite);
 				data ["length"] = DBEncode(track.Length);
