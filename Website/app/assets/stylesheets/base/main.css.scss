@@ -73,6 +73,15 @@ main
 				margin: 0.3em 0 1em;
 			}
 		}
+		
+		&.error
+		{
+			section
+			{
+				font-size: 1.3em;
+				h1 { font-size: 2.5em; }
+			}
+		}
 	}
 	
 	&.centered

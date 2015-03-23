@@ -2,6 +2,14 @@ us:
   pages:
     pages:
       
+      not_found:
+        header:          'No such %{resource} exists'
+        text:            "The %{resource} that this adress points to doesn't seem to exist."
+      
+      internal_error:
+        header:          'A server error occured'
+        text:            "Something weird happened. But don't worry, it's our fault and not yours. Try again later and hopefully it's been fixed."
+      
       index:
         link:            'Home'
         description:     'Stoffi Music Player is a beautiful, integrated, compact &amp; free music player that plays music from YouTube, SoundCloud, radio and your harddrive.'

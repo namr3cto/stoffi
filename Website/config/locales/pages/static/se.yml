@@ -1,6 +1,14 @@
 se:
   pages:
     pages:
+      not_found:
+        header:          'Ingen sån %{resource} finns'
+        text:            'Den %{resource} som den här addressen pekar på verkar inte finnas.'
+      
+      internal_error:
+        header:          'Ett serverfel uppstod'
+        text:            'Något knas uppstod. Men ta det lugnt, det var vårt fel och inte ditt. Försök igen om en stund så har vi förhoppningsvis fixat det.'
+      
       index:
         link:            'Hem'
         description:     'Stoffi Musikspelare är en vacker, integrerad, kompakt &amp; gratis musikspelare som spelar musik från YouTube, SoundCloud, radio och din hårddisk.'

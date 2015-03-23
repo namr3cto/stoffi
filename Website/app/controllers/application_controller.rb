@@ -44,7 +44,7 @@ class ApplicationController < ActionController::Base
 	
 	def not_found(resource)
 		@resource = resource
-		render file: "#{Rails.root}/public/404", status: :not_found, formats: [:html, :mobile]
+		render file: "#{Rails.root}/public/404", status: :not_found, formats: [:html]
 	end
 	
 	# authenticate a user if the correct parameters are given
