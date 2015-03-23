@@ -160,6 +160,15 @@ class User < ActiveRecord::Base
 		self.admin
 	end
 	
+	# Check if the user owns a given resource/
+	def owns?(resource)
+		[:owner, :user].each do |m|
+			if resource.respond_to? m
+				return resource.send(m) == self
+			end
+		end
+	end
+	
 	# The URL to the user's profile.
 	def url
 		"http://beta.stoffiplayer.com/profile/#{id}"
