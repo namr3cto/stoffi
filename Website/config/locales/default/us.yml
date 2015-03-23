@@ -61,7 +61,7 @@ us:
     global: "Global top"
   
   hello: "Hello, %{name}!"
-  empty: 'Empty'
+  empty: 'Nothing to see here'
   
   location_inside: "%{city} in %{country}"
   

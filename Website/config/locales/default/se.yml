@@ -58,7 +58,7 @@ se:
     global: "Global topp"
   
   hello: "Hallå, %{name}!"
-  empty: 'Tomt'
+  empty: 'Här var det tomt'
   
   location_inside: "%{city} i %{country}"
   
