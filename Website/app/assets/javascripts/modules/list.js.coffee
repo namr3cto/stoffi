@@ -22,7 +22,12 @@ $(document).on 'contentReady', () ->
 		
 	$('[data-list-add]').when 'click.list.add', (event) ->
 		if event.which == 1
-			openDialog $(@).data('list-add')
+			url = $(@).data('list-add')
+			mode = $(@).data('list-add-mode') || 'float'
+			openDialog url, {
+				mode: mode,
+				parent: $(@).closest('[data-list]')
+			}
 	
 	# remove the 'empty' from all lists with items
 	for l in $('[data-list]')

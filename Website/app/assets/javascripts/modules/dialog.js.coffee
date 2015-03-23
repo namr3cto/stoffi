@@ -3,8 +3,23 @@ isOpening = false
 @closeDialog = () ->
 	$('#dialog-overlay').fadeOut()
 
-@openDialog = (url, callback) ->
+@openDialog = (url, options) ->
+	$.extend true, { mode: 'float' }, options
+	if options['mode'] == 'inline' and not 'parent' in options
+		$.error 'You must specify parent if you use inline dialog mode.'
+		return
 	isOpening = true
+	$('#dialog-overlay').attr('data-dialog-mode', options['mode'])
+	
+	if options['mode'] == 'inline'
+		p = $(options['parent'])
+		$('#dialog-overlay').css 'width', p.width()
+		$('#dialog-overlay').css 'height', p.height()
+		$('#dialog-overlay').css 'top', p.offset().top
+		$('#dialog-overlay').css 'left', p.offset().left
+	else
+		$('#dialog-overlay').removeAttr 'style'
+	
 	$('#dialog #content').hide()
 	$('#dialog .alert').hide()
 	$('#dialog .loading').show()

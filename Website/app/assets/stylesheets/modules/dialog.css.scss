@@ -28,4 +28,14 @@
 			margin-bottom: 2em;
 		}
 	}
+	
+	&[data-dialog-mode='inline']
+	{
+		position: absolute;
+		
+		#dialog
+		{
+			margin: 0;
+		}
+	}
 }
