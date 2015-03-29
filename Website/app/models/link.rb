@@ -93,7 +93,7 @@ class Link < ActiveRecord::Base
 
 	# Whether or not to share stuff with the third party account.
 	def share?
-		Rails.env.production? and do_share && can_share?
+		!Rails.env.development? and do_share && can_share?
 	end
 	
 	# Whether or not listens can be shared with the third party account.
@@ -103,7 +103,7 @@ class Link < ActiveRecord::Base
 	
 	# Whether or not to share listens with the third party account.
 	def listen?
-		Rails.env.production? and do_listen && can_listen?
+		!Rails.env.development? and do_listen && can_listen?
 	end
 	
 	# Whether or not donations can be shared with the third party account.
@@ -113,7 +113,7 @@ class Link < ActiveRecord::Base
 	
 	# Whether or not to share donations with the third party account.
 	def donate?
-		Rails.env.production? and do_donate && can_donate?
+		!Rails.env.development? and do_donate && can_donate?
 	end
 	
 	# Whether or not playlists can be kept and synchronized with the third party account.
@@ -123,7 +123,7 @@ class Link < ActiveRecord::Base
 	
 	# Whether or not to keep and synchronize playlists with the third party account.
 	def create_playlist?
-		Rails.env.production? and do_create_playlist && can_create_playlist?
+		!Rails.env.development? and do_create_playlist && can_create_playlist?
 	end
 	
 	def error
