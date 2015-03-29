@@ -408,13 +408,14 @@ class ApplicationController < ActionController::Base
 	
 	# Gets the origin position from an IP
 	def origin_position(ip)
+		default = {longitude: -1, latitude: -1}
 		db = File.join(Rails.root, "lib", "assets", "GeoLiteCity.dat")
 		if File.exists? db
 			city = GeoIP.new(db).city(ip)
-			return nil unless city
+			return default unless city
 			return {longitude: city[:longitude], latitude: city[:latitude]}
 		else
-			nil
+			default
 		end
 	end
 	helper_method :origin_network
