@@ -164,10 +164,13 @@ namespace Stoffi.Player.GUI.Windows
 		/// <param name="track">The track representing the audio at the URL</param>
 		private void URL_Parsed(Track track)
 		{
+			if (String.IsNullOrWhiteSpace(track.Group))
+				track.Group = U.T("AddURLGroupName");
 			Tracks.Clear();
 			Tracks.Add(track);
 			Dispatcher.Invoke(DispatcherPriority.Background, new Action(delegate()
 			{
+				MetaTitle.Text = Tracks[0].Title;
 				ToggleProgressbar(false);
 			}));
 			if (callCallback && callback != null)

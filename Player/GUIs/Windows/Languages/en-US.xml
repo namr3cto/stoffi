@@ -480,6 +480,7 @@ This includes the navigation pane (Library, Queue, Playlists and so on), the tra
 	<Value Id="AddYouTubePlaylistTitle"          Title="Add YouTube Playlist"/>
 	<Value Id="AddURLLabel"                       Text="URL:"/>
 	<Value Id="AddURLWait"                        Text="Please wait..."/>
+	<Value Id="AddURLGroupName"                   Text="My Stations"/>
 
 	<Value Id="GeneratePlaylistTitle"            Title="Generate playlist"/>
 	<Value Id="FromList"                          Text="From list"/>

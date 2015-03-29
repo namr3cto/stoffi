@@ -477,6 +477,7 @@ Dette inkluderer navigationsruter (Musikk, Spillekø, Spillelister osv), låtlis
 	<Value Id="AddYouTubePlaylistTitle"          Title="Legg Til Spillelista Fra YouTube"/>
 	<Value Id="AddURLLabel"                       Text="URL:"/>
 	<Value Id="AddURLWait"                        Text="Vent litt..."/>
+	<Value Id="AddURLGroupName"                   Text="My Stations"/>
 
 	<Value Id="GeneratePlaylistTitle"            Title="Lag spilleliste"/>
 	<Value Id="FromList"                          Text="Fra liste"/>

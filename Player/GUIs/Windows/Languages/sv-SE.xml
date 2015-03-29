@@ -476,7 +476,8 @@ Detta inkluderar navigationsvyn (Musik, Spelkö, Spellistor, osv), låtlistan oc
 	<Value Id="AddURLTitle"                      Title="Lägg Till Radiostation"/>
 	<Value Id="AddYouTubePlaylistTitle"          Title="Lägg Till Spellista Från YouTube"/>
 	<Value Id="AddURLLabel"                       Text="URL:"/>
-	<Value Id="AddURLWait"                        Text="Please wait..."/>
+	<Value Id="AddURLWait"                        Text="Vänta lite..."/>
+	<Value Id="AddURLGroupName"                   Text="Mina stationer"/>
 	
 	<Value Id="GeneratePlaylistTitle"            Title="Generera spellista"/>
 	<Value Id="FromList"                          Text="Från lista"/>

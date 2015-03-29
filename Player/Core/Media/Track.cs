@@ -355,8 +355,9 @@ namespace Stoffi.Core.Media
 
 			else if (Regex.IsMatch (path, @"^https?://", RegexOptions.IgnoreCase))
 			{
-				if (Regex.IsMatch (path, @"https?://[^\?]+/[^\?]+\.\w{1,5}(\?.*)?$", RegexOptions.IgnoreCase))
-					return TrackType.File;
+				// TODO: what is this pattern? when is a URL a file?
+				//if (Regex.IsMatch (path, @"https?://[^\?]+/[^\?]+\.\w{1,5}(\?.*)?$", RegexOptions.IgnoreCase))
+				//    return TrackType.File;
 				return TrackType.WebRadio;
 			}
 

@@ -477,6 +477,7 @@ Dies umfasst den Navigationsbereich (Bibliothek, Warteschlangen Wiedergabelisten
 	<Value Id="AddYouTubePlaylistTitle"          Title="Add YouTube Playlist"/>
 	<Value Id="AddURLLabel"                       Text="URL:"/>
 	<Value Id="AddURLWait"                        Text="Bitte warten..."/>
+	<Value Id="AddURLGroupName"                   Text="My Stations"/>
 
 	<Value Id="GeneratePlaylistTitle"            Title="Wiedergabeliste erzeugen"/>
 	<Value Id="FromList"                          Text="Aus Liste"/>

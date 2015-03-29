@@ -211,9 +211,11 @@ pip-log.txt
 #Translations
 *.mo
 
-#Mr Developer
+# Mr Developer
 .mr.developer.cfg
+
+# Custom
 Settings Migrator Tester/user.config
 Settings Migrator Tester/user2.config
-
 *.rdb
+Player/Core/Services/Keys.cs
