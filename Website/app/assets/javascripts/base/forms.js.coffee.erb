@@ -219,6 +219,8 @@ $(document).on 'contentReady', () ->
 		content: crack_time_text,
 		style: 'qtip-light qtip-shadow'
 	}
+	$('form[data-loading]').when 'submit.form', ->
+		$('#'+ $(@).data('loading') + ' .loading').show()
 	$('textarea').autosize()
 	for dd in $('[data-imageselect]')
 		dd = $(dd)

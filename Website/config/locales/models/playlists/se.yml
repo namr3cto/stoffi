@@ -13,6 +13,15 @@ se:
       link: 'Sluta följa'
       confirm: 'Säkert att du vill sluta följa spellistan %{name}?'
       
+    meta:
+      header: 'Information'
+      title: 'Titel'
+      public: 'Offentlig'
+      stats: 'Statistik'
+      songs: 'Låtar'
+      listens: 'Spelningar'
+      followers: 'Följare'
+      
     delete:
       description: 'Ta bort din spellista %{name}'
       confirm: 'Säkert att du vill ta bort spellistan %{name}?'

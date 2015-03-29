@@ -13,6 +13,15 @@ us:
       link: 'Unfollow'
       confirm: 'Are you sure you want to unfollow the playlist %{name}?'
       
+    meta:
+      header: 'Information'
+      title: 'Title'
+      public: 'Public'
+      stats: 'Statistics'
+      songs: 'Songs'
+      listens: 'Plays'
+      followers: 'Followers'
+      
     delete:
       description: 'Delete your playlist %{name}'
       confirm: 'Are you sure you want to delete the playlist %{name}?'

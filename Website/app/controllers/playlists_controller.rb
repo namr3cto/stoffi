@@ -24,7 +24,7 @@ class PlaylistsController < ApplicationController
 		
 		if user_signed_in?
 			@user_follows = current_user.following(Playlist)
-			@user_all_time = current_user.playlists.limit(l).offset(o)
+			@user_owns = current_user.playlists.limit(l).offset(o)
 		end
 		
 		respond_with(@all_time)
@@ -51,30 +51,11 @@ class PlaylistsController < ApplicationController
 	def show
 		l, o = pagination_params
 		
-		unless user_signed_in? && @playlist.user == current_user || @playlist.is_public
+		unless (user_signed_in? and current_user.owns?(@playlist.user)) or @playlist.is_public
 			access_denied and return
 		end
 		
 		@channels = ["user_#{@playlist.user.id}"]
-		
-		t=0
-		@head_prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#"
-		@meta_tags =
-		[
-			{ property: "og:title", content: d(@playlist.name) },
-			{ property: "og:type", content: "music.playlist" },
-			{ property: "og:image", content: @playlist.image },
-			{ property: "og:url", content: playlist_url(@playlist) },
-			{ property: "og:description", content: @description },
-			{ property: "og:audio", content: playlist_url(@playlist, protocol: "playlist") },
-			{ property: "og:audio:type", content: "audio/vnd.facebook.bridge" },
-			{ property: "og:site_name", content: "Stoffi" },
-			{ property: "fb:app_id", content: "243125052401100" },
-			{ property: "music:creator", content: user_registration_path(@playlist.user) },
-		] |
-			@playlist.songs.map { |song| { property: "music:song", content: song_url(song) } }
-			
-		@playlist.paginate_songs(l, o)
 		respond_with(@playlist, methods: [ :paginated_songs ])
 	end
 
@@ -86,7 +67,8 @@ class PlaylistsController < ApplicationController
 
 	# GET /playlists/1/edit
 	def edit
-		not_found('playlist') and return unless owns(Playlist, params[:id])
+		not_found('playlist') and return unless user_signed_in? and current_user.owns?(@playlist)
+		render layout: false
 	end
 
 	# POST /playlists
@@ -179,31 +161,17 @@ class PlaylistsController < ApplicationController
 		end
 		
 		if songs
-			logger.debug songs.to_yaml
-			
-			# make sure that params['playlist'] exists
-			# so create_properties will run diff check
-			params['playlist'] = Hash.new unless params['playlist']
+			params[:playlist] ||= {}
 			props = SyncController.create_properties(@playlist, params)
 			
 			# add songs
 			if songs['added']
 				songs['added'].each do |track|
-					song = Song.get(current_user,
-					{
-						title: track['title'],
-						path: track['path'],
-						length: track['length'],
-						foreign_url: track['foreign_url'],
-						art_url: track['art_url'],
-						genre: track['genre'],
-						artist: track['artist'],
-						album: track['album']
-					})
+					song = Song.get(current_user, track)
 					
-					if song and not @playlist.songs.exists?(song.id)
-						@playlist.songs << song
+					if song and not @playlist.songs.include?(song)
 						props['songs']['added'] << song
+						@playlist.songs << song
 					end
 				end
 			end
@@ -211,18 +179,34 @@ class PlaylistsController < ApplicationController
 			# remove songs
 			if songs['removed']
 				songs['removed'].each do |track|
-					song = Song.find(track['id']) if (track['id'] and not track['id'].starts_with?("tmp_"))
-					song = Song.find_by(path: track['path']) if track['path'] and not song
 					
-					@playlist.songs.delete(song) if song
+					# track can be:
+					#  * Integer (ID)
+					#  * String (ID or path)
+					#  * Hash with keys 'id' or 'path'
 					
-					props['songs']['removed'] << song if song
+					if track.is_a?(String)
+						t = track.to_i
+						track = t if t > 0
+					end
+					
+					track = {'id' => track.to_s} if track.is_a?(Integer)
+					track = {'path' => track} if track.is_a?(String)
+					
+					song = Song.find(track['id'].to_i) if track['id'].present? and not track['id'].starts_with?('tmp_')
+					song = Song.find_by(path: track['path']) if track['path'].present? and not song
+					
+					if song
+						props['songs']['removed'] << song
+						@playlist.songs.delete(song)
+					end
 				end
 			end
 			
 		end
 		
-		success = @playlist.update_attributes(playlist_params)
+		success = true
+		success = @playlist.update_attributes(playlist_params) if params[:playlist].present?
 		
 		if success
 			if not @playlist.is_public or @playlist.songs.count == 0
@@ -230,10 +214,22 @@ class PlaylistsController < ApplicationController
 			elsif @playlist.songs.count > 0
 				current_user.links.each { |link| link.update_playlist(@playlist) }
 			end
+			logger.debug '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
+			logger.debug props.inspect
 			SyncController.send('update', @playlist, request, props)
 		end
-
-		respond_with(@playlist)
+		
+		respond_to do |format|
+			if success
+				format.html { redirect_to @playlist }
+				format.js { }
+				format.json { render json: @playlist, location: @playlist }
+			else
+				format.html { render action: 'edit' }
+				format.js { render partial: 'shared/dialog/errors', locals: { resource: @playlist, action: :update } }
+				format.json { render json: @playlist.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	# DELETE /playlists/1

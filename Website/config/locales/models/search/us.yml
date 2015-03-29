@@ -1,6 +1,8 @@
 us:
   search:
-    placeholder: "Search for artists, albums, songs or genres"
+    placeholder: 
+      all: "Search for artists, albums, songs or genres"
+      songs: 'Search for songs'
     empty: "Miss! Try searching for something else."
     error: "Oops! There was a problem with your search."
     categories:

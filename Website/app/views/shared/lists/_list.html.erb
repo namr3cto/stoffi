@@ -1,26 +1,34 @@
 <%
 type = local_assigns[:type] || 'list'
 
-owner = ''
-if local_assigns.has_key? :owner
-	owner = " data-list-owner=#{local_assigns[:owner]}"
+data = { list: resource }
+
+if local_assigns.has_key?(:data) and local_assigns[:data].is_a?(Hash)
+	for k,v in local_assigns[:data]
+		data["list_#{k}".to_sym] = v
+	end
 end
 
-followings = ''
-if local_assigns.has_key? :follower
-	followings = " data-list-followings=#{local_assigns[:follower]}"
-end
+# TODO: move to :data instead
+data[:list_owner] = local_assigns[:owner] if local_assigns.has_key? :owner
+data[:list_followings] = local_assigns[:follower] if local_assigns.has_key? :follower
 %>
 
-<ul class='<%= type %>' data-list='<%= resource %>'<%= owner %><%= followings %>>
+<%= content_tag :ul, data: data, class: type do %>
+
 	<% if collection and collection.length > 0 %>
-		<%= render collection, local_assigns %>
+		<%= render partial: "#{resource}/#{resource.singularize}", collection: collection, locals: local_assigns %>
 	<% end %>
 	<li data-list-empty='<%= resource %>'><%= t 'empty' %></li>
 	<% if local_assigns[:show_add_button] %>
-		<%= render partial: 'shared/lists/add', locals: { resource: resource } %>
+		<%= render partial: 'shared/lists/add', locals: {
+			resource: resource,
+			options: local_assigns[:show_add_button]
+		} %>
 	<% end %>
-</ul>
+<% end %>
+
 <ul data-template='<%= resource.singularize %>'>
-	<%= render resource.classify.constantize.first %>
+	<%= render partial: "#{resource.pluralize}/#{resource.singularize}",
+		object: resource.classify.constantize.first %>
 </ul>

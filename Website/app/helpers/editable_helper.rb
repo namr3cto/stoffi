@@ -14,11 +14,11 @@ module EditableHelper
 			
 		if block_given?
 			text = content_tag 'div', capture(&block)+icon, class: :text
-			input = text_field_tag f, value, class: :input, data: { autosize_input: '{ "space": 0 }' }
+			input = text_field_tag f, value, class: :input, data: { autosize_input: '{ "space": 0 }', field: field }
 			
 			content = text+input
 		else
-			content = text_field_tag f, value, disabled: true, data: { autosize_input: '{ "space": 0 }' }
+			content = text_field_tag f, value, disabled: true, data: { autosize_input: '{ "space": 0 }', field: field }
 			content = content+icon 
 		end
 		
@@ -30,7 +30,7 @@ module EditableHelper
 		# prepare data attribute
 		data = {
 			editable_url: url_for(resource),
-			editable_method: :patch,
+			editable_method: :patch
 		}
 		data.merge(options[:data]) if options[:data]
 		

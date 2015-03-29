@@ -1,3 +1,67 @@
+<% content_for :title do %>
+	<%= @playlist.name %>
+<% end %>
+
+<% content_for :description do %>
+	<%=t 'pages.playlists.show.description', name: @playlist, username: @playlist.user %>
+<% end %>
+
+<% content_for :header do %>
+	<meta property="og:title" content="<%=h @playlist.name %>"/>
+	<meta property="og:type" content="music.playlist"/>
+	<meta property="og:image" content="<%= @playlist.image %>"/>
+	<meta property="og:url" content="<%= playlist_url(@playlist) %>"/>
+	<meta property="og:description" content="<%=t 'playlists.description', owner: @playlist.user %>"/>
+	<meta property="music:creator" content="<%= user_registration_path(@playlist.user) %>"/>
+	<% @playlist.songs.each do |s| %>
+		<meta property="music:song" content="<%= song_url(s) %>"/>
+	<% end %>
+<% end %>
+
+<article class='tabbed' data-resource-type='playlist' data-resource-id='<%= @playlist.id %>'>
+	<section class='head'>
+		<div class='left'>
+			<div class='top'></div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span><%=t 'playlists.singular' %></span>
+			</div>
+		</div>
+		<div class='right'>
+			<div class='top'>
+				<h1 data-field='display'><%=d @playlist.name %></h1>
+				<%= render partial: 'shared/social' %>
+			</div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span>
+					<%= link_to t('playlists.description', owner: @playlist.user), @playlist.user %>
+				</span>
+			</div>
+		</div>
+		<div class='image'>
+			<div class='image-border'>
+				<%= image_tag @playlist.image(:huge), data: { field: :picture } %>
+			</div>
+		</div>
+	</section>
+	
+	<!-- we don't have any tabs, but need this to create the shadow effect -->
+	<section class='tabs'></section>
+	
+	<aside>
+		<%= render 'playlists/sections/stats' %>
+		<%= render 'playlists/sections/info' %>
+	</aside>
+	
+	<%= render 'playlists/sections/songs' %>
+	
+</article>
+
+
+
+<% if false %>
+
 <div class="white box" id="playlist-<%=@playlist.id%>">
 
 	<div class="top">
@@ -85,3 +149,5 @@
 	
 	<div class="clear"></div>
 </div>
+
+<% end %>

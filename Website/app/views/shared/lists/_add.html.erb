@@ -1,6 +1,17 @@
-<li class='item' data-list-add='<%= send "new_#{resource.singularize}_path" %>'>
+<%
+options = {
+	mode: :float,
+	url: send("new_#{resource.singularize}_path")
+}
+if local_assigns[:options] and local_assigns[:options].is_a? Hash
+	options.merge! local_assigns[:options]
+end
+mode = 
+%>
+<li class='item' data-list-add='<%= options[:url] %>'
+	data-list-add-mode='<%= options[:mode] %>'>
 	<%= image_tag 'gfx/icons/256/add.png' %>
 	<div class='overlay'>
-		<span class='title' data-field='name'><%=t "pages.#{resource}.new.link" %></span>
+		<span class='title'><%=t "pages.#{resource}.new.link" %></span>
 	</div>
 </li>

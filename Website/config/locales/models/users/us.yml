@@ -70,6 +70,7 @@ us:
     last_login:
       title: 'Last login'
       text: '%{ago} ago from %{ip}'
+      nil: 'Never logged in'
     failed_logins: 'Failed logins'
     last_edit: 'Last edit'
     locked: 'Locked'

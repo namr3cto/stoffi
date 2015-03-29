@@ -70,11 +70,14 @@ class Song < ActiveRecord::Base
 	end
 	
 	# A long description of the song.
+	# TODO: belongs in view!
 	def description
 		s = "#{title}, a song "
 		s+= "by #{artist_names} " if artists.length > 0
 		s+= "on Stoffi"
 	end
+	
+	alias_method :subtitle, :artist_names
 	
 	def fullname
 		"#{artist_names} - #{title}"
@@ -101,13 +104,13 @@ class Song < ActiveRecord::Base
 	# The options to use when the song is serialized.
 	def serialize_options
 		{
-			methods: [ :kind, :display, :url, :picture ]
+			methods: [ :kind, :display, :url, :image, :artist_names, :subtitle ]
 		}
 	end
 	
 	# Returns a song matching a hash of values, describing the song.
 	#
-	# The value should be a hash with the following structure:
+	# The value should be an ID or a hash with the following structure:
 	#  title: the name of the song
 	#  path: the path of the song (required)
 	#  length: the length of the song, in seconds
@@ -117,13 +120,21 @@ class Song < ActiveRecord::Base
 	#  album: the name of the album to which the song belongs
 	#  art_url: a url to an image for the song
 	#
-	# If ask_backend is true and the path points to an external
-	# service such as YouTube or SoundCloud, then that service
-	# will be queried for info instead of using what is provided
+	# If value is a hash and ask_backend is true, and the path points
+	# to an external service such as YouTube or SoundCloud, then that
+	# service will be queried for info instead of using what is provided
 	# in the hash value.
 	#
-	# The song will be created if it is not found
+	# If value is a hash, the song will be created if it is not found.
 	def self.get(current_user, value, ask_backend = true)
+		
+		# value is an ID (as integer or string)
+		value = value.to_i if value.is_a?(String)
+		if value.is_a? Integer
+			return Song.find(value)
+		end
+		
+		# value is a hash
 		v = value
 		validate_hash(v)
 		

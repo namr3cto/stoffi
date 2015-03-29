@@ -12,14 +12,14 @@
 			<span class='type' data-list-mode='grid' data-type='playlist'><%= t 'playlists.singular' %></span>
 		<% end %>
 		
-		<span class='description' data-field='description'>
-			By <%= playlist.user %>
+		<span class='description' data-field='subtitle'>
+			<%= t 'playlists.description', owner: playlist.user %>
 		</span>
 		
 	</div>
 	
 	<!-- controls -->
-	<div class='action-bar'>
+	<div class='action-bar' data-href-stop>
 		
 		<% if local_assigns[:type] %>
 			<span class='type' data-list-mode='list' data-type='playlist'><%= t 'playlists.singular' %></span>

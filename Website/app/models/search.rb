@@ -47,7 +47,8 @@ class Search < ActiveRecord::Base
 		results = {}
 		time = Benchmark.measure do
 			hits = []
-			if previous_at < CACHE_EXPIRATION.ago
+			# TODO: move this to a crawler
+			if false and previous_at < CACHE_EXPIRATION.ago
 				logger.info "fill db from backends"
 				hits += Backend::Lastfm.search(query, categories) if sources.include? 'lastfm'
 				hits += Backend::Youtube.search(query, categories) if sources.include? 'youtube'
@@ -219,10 +220,6 @@ class Search < ActiveRecord::Base
 	
 	def search_in_db(page, limit)
 		objects = categories_array.map { |x| x.classify.constantize }
-		logger.debug '00000000000'
-		logger.debug query.inspect
-		logger.debug objects.inspect
-		logger.debug '00000000000'
 		Sunspot.search(objects) do |q|
 			q.keywords(query, minimum_matches: 1)
 			q.with(:locations, sources_array)

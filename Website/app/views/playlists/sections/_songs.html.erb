@@ -1,0 +1,24 @@
+<section>
+	<%
+	add_button_options = false
+	if user_signed_in? and current_user.owns? @playlist
+		add_button_options = {
+			mode: :inline,
+			url: edit_playlist_url(@playlist)
+		}
+	end
+	%>
+	<%= render partial: 'shared/lists/list', locals:
+	{
+		collection: @playlist.songs,
+		resource: 'songs',
+		show_add_button: add_button_options,
+		data: { playlist: @playlist.id },
+		delete:
+		{
+			url: playlist_path(@playlist, format: :json),
+			method: :put,
+			data: "{ songs: { removed: [song.id] } }"
+		}
+	} %>
+</section>

@@ -52,6 +52,11 @@ us:
             title:           'Top all time'
             description:     'See %{usernames} favorite music of all time.'
           
+          playlists:
+            link:            'Playlists'
+            title:           'Playlists'
+            description:     'See the playlists that %{username} have created.'
+          
           info:
             link:            'Info'
             title:           'Information'

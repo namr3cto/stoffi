@@ -1,10 +1,14 @@
-<div id="main">
-	<div class="white box">
-		<h1 data-field="playlist-<%=@playlist.id%>-name"><%=h @playlist.name %></h1>
-
-		<%= render "form" %>
+<section id='edit-playlist' data-playlist-id='<%= @playlist.id %>'>
+	<%= form_tag search_url(categories: :songs, limit: 5), method: :get, remote: true, data: {
+		loading: 'search-loading'
+	} do %>
+		<div class='field'>
+			<%= text_field_tag :query, nil, autofocus: true, placeholder: t('search.placeholder.songs') %>
+		</div>
+	<% end %>
+	
+	<div id='search-loading'>
+		<%= render 'shared/widgets/loading' %>
 	</div>
-</div>
-
-
-<%= render "sidebars/music" %>
+	<ul id='search-results' class='mini list' data-href-stop></ul>
+</section>

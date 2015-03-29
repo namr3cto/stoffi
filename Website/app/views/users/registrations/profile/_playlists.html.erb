@@ -1,0 +1,9 @@
+<section>
+	<%= render partial: 'shared/lists/list', locals:
+	{
+		collection: @user.playlists,
+		resource: 'playlists',
+		show_add_button: (user_signed_in? and @user == current_user),
+		owner: @user.id
+	} %>
+</section>

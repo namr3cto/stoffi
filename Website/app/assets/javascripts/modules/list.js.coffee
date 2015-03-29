@@ -15,11 +15,6 @@ $(document).on 'contentReady', () ->
 	#		event.preventDefault()
 	#		$(@).data 'tapped', true
 		
-		
-	$('.item .action-bar span').when 'mousedown.list.actionbar', (event) ->
-		event.stopPropagation()
-		event.preventDefault()
-		
 	$('[data-list-add]').when 'click.list.add', (event) ->
 		if event.which == 1
 			url = $(@).data('list-add')

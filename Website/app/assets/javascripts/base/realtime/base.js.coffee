@@ -43,6 +43,10 @@
 			window.external.UpdateObject object_type, object_id, update_params
 		catch err
 	else
+		# general updates
+		update object_type, object_id, JSON.parse(updated_params)
+		
+		# type-specific updates
 		switch object_type
 			when 'device'        then updateDevice   object_id, updated_params
 			when 'configuration' then updateConfig   object_id, updated_params
@@ -94,3 +98,36 @@
 		switch object_type
 			when 'device'        then executeDevice   command, params
 			when 'playlist'      then executePlaylist command, params
+			
+
+#
+# Update all fields of a resource.
+#
+# @param type
+#   The type of the resource.
+#
+# @param id
+#   The id of the resource.
+#
+# @param params
+#   The parameters to update.
+#
+update = (type, id, params) ->
+	items = $(getResource(type,id))
+	
+	# create a list of fields
+	fields = []
+	for field in items.find('[data-field]')
+		resource = $(field).closest('[data-resource-id][data-resource-type]')
+		if resource.data('resource-id') == id and resource.data('resource-type') == type
+			fields.push field
+	
+	# update all fields
+	for k,v of params
+		for field in $(fields).filter("[data-field='#{k}']")
+			
+			# different actions depending on tag type
+			switch ($(field).prop('tagName'))
+				when 'INPUT' then $(field).val(v)
+				when 'IMG' then $(field).attr('src', v)
+				else $(field).html(v)

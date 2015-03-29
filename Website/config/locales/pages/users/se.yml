@@ -51,6 +51,11 @@ se:
             title:           'Topp genom tiderna'
             description:     'Se %{usernames} favoritmusik genom tiderna.'
           
+          playlists:
+            link:            'Spellistor'
+            title:           'Spellistor'
+            description:     'Se vilka spellistor som %{username} har skapat.'
+          
           info:
             link:            'Info'
             title:           'Information'

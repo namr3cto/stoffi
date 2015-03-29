@@ -65,6 +65,7 @@ se:
     last_login:
       title: 'Senaste inloggning'
       text: '%{ago} sen från %{ip}'
+      nil: 'Aldrig loggat in'
     failed_logins: 'Misslyckade inloggningar'
     last_edit: 'Senaste ändringen'
     locked: 'Låst'

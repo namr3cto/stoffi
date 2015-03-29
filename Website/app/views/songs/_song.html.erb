@@ -6,14 +6,14 @@
 	
 	<!-- meta data -->
 	<div class='overlay'>
-		<span class='title' data-field='title'><%= song %></span>
+		<span class='title' data-field='display'><%= song %></span>
 		
 		<% if defined? type and type %>
 			<span class='type' data-list-mode='grid' data-type='song'><%= t 'songs.singular' %></span>
 		<% end %>
 		
 		<% if song.artists.any? %>
-			<span class='description' data-field='description'>
+			<span class='description' data-field='subtitle'>
 				<%= song.artist_names %>
 			</span>
 		<% end %>
@@ -21,24 +21,13 @@
 	</div>
 	
 	<!-- controls -->
-	<div class='action-bar'>
+	<div class='action-bar' data-href-stop>
 		
 		<% if defined? type and type %>
 			<span class='type' data-list-mode='list' data-type='song'><%= t 'songs.singular' %></span>
 		<% end %>
 		
-		<span class='shadow dropdown add action'>
-			<%= link_to '', title: t('playlists.add.description') do %>
-				<span data-list-mode='list'><%= t 'playlists.add.menu' %> ▾</span>
-				<span data-list-mode='grid'>+</span>
-			<% end %>
-			<ul class='dropdown-menu'>
-				<li>
-					<%= link_to 'Foo', '', title: t('playlists.add.link', playlist: 'Foo'),
-					 	data: { add_to_resource: 'playlist', add_to_id: '1', add_id: '9' } %>
-				</li>
-			</ul>	
-		</span>
+		<%= render partial: 'playlists/menu', locals: { song: song } %>
 		
 		<% if current_user.admin? and defined? archetype %>
 			<span class='duplicate action'>
@@ -67,7 +56,7 @@
 				<%= link_to '', title: delete[:title] || t('pages.listens.destroy.description'), data: {
 					ajax_call: :delete,
 					ajax_url: delete[:url] || url_for(song)+'.json',
-					ajax_data: delete[:data],
+					ajax_data: (delete[:data].is_a?(String) ? eval(delete[:data]) : delete[:data]).to_json,
 					ajax_method: delete[:method] || 'delete',
 					confirm: delete[:confirm] || t('pages.listens.destroy.confirm', song: song)
 				} do %>

@@ -1,6 +1,8 @@
 se:
   search:
-    placeholder: "Sök efter artister, album, låtar och genrer"
+    placeholder: 
+      all: "Sök efter artister, album, låtar och genrer"
+      songs: 'Sök efter låtar'
     empty: "Miss! Prova att söka på något annat."
     error: "Hoppsan! Det blev knas med din sökning."
     categories:

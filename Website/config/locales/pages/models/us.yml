@@ -32,24 +32,19 @@ us:
           link:            'All time'
           title:           'Top all time'
           description:     'See the most popular playlists of all time.'
-          
-        user_recent:
-          link:            'Recent'
-          title:           'Your recent playlists'
-          description:     "See what you've been creating recently."
         
-        user_weekly:
-          link:            'Weekly'
-          title:           'Your most played playlists this week'
-          description:     "See what you've played this week."
-        
-        user_all_time:
-          link:            'All time'
-          title:           'Your most played playlists of all time'
-          description:     "See what playlists you've played the most."
+        user_follows:
+          link:            'Follows'
+          title:           'Playlists you follow'
+          description:     "See the playlists you're following."
+      
+        user_owns:
+          link:            'Created'
+          title:           'Your playlists'
+          description:     "See the playlists you've created."
         
         categories:
-          user: 'Personal'
+          user: 'Your playlists'
         
       by:
         title:         '%{username} playlists'

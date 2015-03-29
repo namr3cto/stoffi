@@ -35,17 +35,17 @@ se:
           description:     'Se de mest populära spellistorna genom tiderna.'
         
         user_follows:
-          link:            'Följda'
+          link:            'Följer'
           title:           'Spellistor du följer'
           description:     "Se de spellistor som du följer."
       
-        user_all_time:
-          link:            'Spellistor'
+        user_owns:
+          link:            'Skapat'
           title:           'Dina spellistor'
           description:     "Se dina spellistor."
         
         categories:
-          user: 'Personligt'
+          user: 'Dina spellistor'
           
       by:
         title:         '%{username} spellistor'
@@ -73,6 +73,9 @@ se:
         title: 'Mer info'
         link: 'Info'
         description: 'Se mer info om %{song}'
+        
+      new:
+        link: 'Lägg till låt'
         
       index:
         link: 'Låtar'

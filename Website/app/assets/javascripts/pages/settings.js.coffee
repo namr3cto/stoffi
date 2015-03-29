@@ -29,7 +29,7 @@ linkCheckboxClicked = (element) ->
 $(document).on 'contentReady', () ->
 	refreshCustomNameVisibility()
 	$('#user_name_source').when 'change.settings.name', (event) ->
-		stopPropagation()
+		event.stopPropagation()
 		refreshCustomNameVisibility()
 		
 	if $('#user_name_source option').length == 1
@@ -38,10 +38,10 @@ $(document).on 'contentReady', () ->
 		
 	refreshPasswordFieldVisibility()
 	$('#edit_password').when 'click.settings.passwd', (event) ->
-		stopPropagation()
+		event.stopPropagation()
 		refreshPasswordFieldVisibility()
 		
 	$('input[type=checkbox][data-account-setting]').when 'click.settings.check', (event) ->
-		stopPropagation()
+		event.stopPropagation()
 		linkCheckboxClicked $(this)
 		
