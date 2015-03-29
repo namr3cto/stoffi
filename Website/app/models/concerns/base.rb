@@ -37,13 +37,16 @@ module Base
 	end
 	
 	# The path to use when creating links using <tt>url_for</tt> to the resource.
-	# TODO: pretty-ids?
 	def to_param
 		if display.blank?
 			id.to_s
 		else
 			"#{id}-#{display.parameterize}"
 		end
+	end
+	
+	def subtitle
+		respond_to?('description') ? description : display
 	end
 
 	# The options to use when serializing the resource.
