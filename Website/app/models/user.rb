@@ -160,7 +160,7 @@ class User < ActiveRecord::Base
 		self.admin
 	end
 	
-	# Check if the user owns a given resource/
+	# Check if the user owns a given resource.
 	def owns?(resource)
 		[:owner, :user].each do |m|
 			if resource.respond_to? m
@@ -339,4 +339,9 @@ class User < ActiveRecord::Base
 			methods: [ :kind, :display, :url ]
 		}
 	end
+end
+
+# Allow us to call current_user#owns? when user not signed in.
+class NilClass
+	def owns?(resource) false end
 end
