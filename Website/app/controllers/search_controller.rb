@@ -25,17 +25,6 @@
 #require 'backend/soundcloud'
 
 class SearchController < ApplicationController
-	respond_to :html, :mobile, :embedded, :json, :xml
-	
-	def flush	
-		Artist.delete_all
-		Album.delete_all
-		Song.delete_all
-		Event.delete_all
-		Search.delete_all
-		Image.delete_all
-		Source.delete_all
-	end
 
 	def suggest
 		@query = query_param
@@ -49,13 +38,10 @@ class SearchController < ApplicationController
 			user = user_signed_in? ? current_user.id : -1
 			@suggestions = Search.suggest(@query, page, long, lat, loc, user)
 		end
-		respond_with(@suggestions)
+		render @suggestions
 	end
 	
 	def index
-		#flush
-		
-		redirect_to action: :index and return if params[:format] == "mobile"
 		@search = save_search
 		@query = query_param
 		@categories = category_param
@@ -63,10 +49,11 @@ class SearchController < ApplicationController
 		@title = e(@query)
 		@description = t("index.description")
 		
-		respond_with(@search) and return if request.format == :html
-			
-		# request is API call, so we call fetch and return the results
-		respond_with(@search.do(page_param, limit_param))
+		respond_to do |format|
+			format.html { render @search }
+			format.js { @results = @search.do(page_param, limit_param) }
+			format.json { render json: @search.do(page_param, limit_param) }
+		end
 	end
 	
 	def fetch
@@ -75,7 +62,7 @@ class SearchController < ApplicationController
 		@results = @search.do(page_param, limit_param)
 		@paginatable_array = Kaminari.paginate_array(@results[:hits], total_count: @results[:total_hits])
 			.page(page_param).per(limit_param)
-		respond_with(@results, layout: false)
+		render @results, layout: false
 	end
 	
 	private
