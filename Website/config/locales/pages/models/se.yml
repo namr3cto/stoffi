@@ -129,6 +129,45 @@ se:
         confirm: "Vill du verkligen ta bort %{song} från listan av låtar som du spelat?"
         
     albums:
+      
+      index:
+        title:         'Album'
+        link:          'Album'
+        description:   'Hitta de hetaste albumen på Stoffi.'
+        
+        recent:
+          link:            'Senaste'
+          title:           'Nyligen spelade album'
+          description:     'Se vilka album som lyssnas på just nu.'
+      
+        weekly:
+          link:            'Vecka'
+          title:           'Veckans topp'
+          description:     'Se populära album den senaste veckan.'
+      
+        all_time:
+          link:            'All tid'
+          title:           'Topp genom tiderna'
+          description:     'Se de mest populära albumena genom tiderna.'
+        
+        user_recent:
+          link:            'Senaste'
+          title:           'Dina senaste spelningar'
+          description:     "Se vad du har spelat nyligen."
+      
+        user_weekly:
+          link:            'Vecka'
+          title:           'Din topp den senaste veckan'
+          description:     "Se dina mest populära album den senaste veckan."
+      
+        user_all_time:
+          link:            'All tid'
+          title:           'Din topp genom tiderna'
+          description:     "Se dina mest populära album genom tiderna."
+      
+        categories:
+          user: 'Personligt'
+          
       destroy:
         link: 'Ta bort'
         description: "Ta bort detta album"

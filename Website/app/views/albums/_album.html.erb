@@ -5,14 +5,14 @@
 	
 	<!-- meta data -->
 	<div class='overlay'>
-		<span class='title' data-field='title'><%= album %></span>
+		<span class='title' data-field='display'><%= album %></span>
 		
 		<% if defined? type and type %>
 			<span class='type' data-list-mode='grid' data-type='album'><%= t 'albums.singular' %></span>
 		<% end %>
 		
 		<% if album.artists.any? %>
-			<span class='description' data-field='description'>
+			<span class='description' data-field='subtitle'>
 				<%= album.artist_names %>
 			</span>
 		<% end %>
@@ -25,19 +25,6 @@
 		<% if defined? type and type %>
 			<span class='type' data-list-mode='list' data-type='album'><%= t 'albums.singular' %></span>
 		<% end %>
-		
-		<span class='shadow dropdown add action'>
-			<%= link_to '', title: t('playlists.add.description') do %>
-				<span data-list-mode='list'><%= t 'playlists.add.menu' %> ▾</span>
-				<span data-list-mode='grid'>+</span>
-			<% end %>
-			<ul class='dropdown-menu'>
-				<li>
-					<%= link_to 'Foo', '', title: t('playlists.add.link', playlist: 'Foo'),
-					 	data: { add_to_resource: 'playlist', add_to_id: '1', add_id: '9' } %>
-				</li>
-			</ul>	
-		</span>
 		
 		<% if defined? deletable %>
 			<span class='remove action'>

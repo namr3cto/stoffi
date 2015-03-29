@@ -16,7 +16,17 @@ class AlbumsController < ApplicationController
 	# GET /albums
 	def index
 		l, o = pagination_params
-		respond_with(@albums = Album.limit(l).offset(o))
+		@recent = Listen.order(created_at: :desc).where(:album).limit(l).offset(o).map(&:album)
+		@weekly = Album.top(from: 7.days.ago).limit(l).offset(o)
+		@all_time = Album.top.limit(l).offset(o)
+		
+		if user_signed_in?
+			@user_recent = current_user.listens.order(created_at: :desc).where(:album).limit(l).offset(o).map(&:album)
+			@user_weekly = Album.top(for: current_user, from: 7.days.ago).limit(l).offset(o)
+			@user_all_time = Album.top(for: current_user).limit(l).offset(o)
+		end
+		
+		respond_with(@all_time)
 	end
 	
 	# GET /albums/by/1
