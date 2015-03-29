@@ -18,7 +18,11 @@
 	
 		<dt><%= t 'profile.last_login.title' %></dt>
 		<dd title='<%= @user.last_sign_in_at %>'>
-			<%=t 'profile.last_login.text', ago: time_ago_in_words(@user.last_sign_in_at).capitalize, ip: @user.current_sign_in_ip %>
+			<% if @user.last_sign_in_at %>
+				<%=t 'profile.last_login.text', ago: time_ago_in_words(@user.last_sign_in_at).capitalize, ip: @user.current_sign_in_ip %>
+			<% else %>
+				<%= t 'profile.last_login.nil' %>
+			<% end %>
 		</dd>
 	
 	<% end %>
