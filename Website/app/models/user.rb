@@ -341,7 +341,13 @@ class User < ActiveRecord::Base
 	end
 end
 
-# Allow us to call current_user#owns? when user not signed in.
+# Allow us to do some checks without having to check
+# that current_user != nil.
 class NilClass
+	
+	# Anonymous users doesn't own anything.
 	def owns?(resource) false end
+		
+	# Anonymous users are never admins.
+	def admin?() false end
 end

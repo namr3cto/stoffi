@@ -24,6 +24,7 @@ class UserTest < ActiveSupport::TestCase
 	test "should destroy user" do
 		alice = users(:alice)
 		bob = users(:bob)
+		bob.follow alice.playlists.first
 		assert_difference('User.count', -1, "Didn't remove user") do
 			assert_difference('bob.followings.count', -1, "Didn't remove following") do
 				assert_difference('Playlist.count', -1*alice.playlists.count, "Didn't remove playlists") do
