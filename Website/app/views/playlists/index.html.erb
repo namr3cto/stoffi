@@ -1,13 +1,16 @@
+<%
+locals = user_signed_in? ? {
+	user_follows: { follower: current_user.id },
+	user_owns:
+	{
+		show_add_button: true,
+		owner: current_user.id
+	}
+} : {}
+%>
+
 <%= render partial: 'shared/lists/top', locals:{
 	resource: 'playlists',
 	tabs: ['weekly', 'all_time', 'recent', 'owns', 'follows'],
-	locals:
-	{
-		user_follows: { follower: current_user.id },
-		user_owns:
-		{
-			show_add_button: true,
-			owner: current_user.id
-		}
-	}
+	locals: locals
 } %>
