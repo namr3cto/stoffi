@@ -129,14 +129,16 @@ class SyncController < ApplicationController
 		id = resource.id
 		properties = arg if verb == 'update' and arg
 		properties = create_properties(resource) unless properties or verb == 'execute'
-		properties = [] unless properties
+		properties = {} unless properties
 		
 		# sanitize
 		properties.each do |k,v|
 			properties[k] = e(properties[k])
 		end
 		
-		properties['display'] = resource.display
+		if verb == 'update'
+			properties['display'] = resource.display
+		end
 		
 		properties = properties.to_json
 	
