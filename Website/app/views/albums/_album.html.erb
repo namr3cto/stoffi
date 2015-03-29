@@ -1,7 +1,10 @@
 <li class='item' data-href='<%= url_for album %>' data-object='album-<%= album.id %>'>
 	
 	<!-- image -->
-	<img data-field='picture' src='<%= album.image(:huge) %>'/>
+	<div class='album-back'>
+		<%= image_tag album.image(:huge), data: { field: :picture } %>
+		<div class='album-front'></div>
+	</div>
 	
 	<!-- meta data -->
 	<div class='overlay'>

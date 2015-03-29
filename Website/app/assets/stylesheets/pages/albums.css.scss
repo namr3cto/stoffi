@@ -1,0 +1,27 @@
+ul.list .item .album-back
+{
+	background: url(/assets/gfx/icons/256/album_background.png);
+	width: 64px;
+	height: 56px;
+	background-size: cover;
+	box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+	
+	img
+	{
+		box-shadow: none;
+		width: 55px;
+		height: 54px;
+		left: 7px;
+		top: 1px;
+		position: absolute;
+	}
+	
+	.album-front
+	{
+		width: 64px;
+		height: 56px;
+		position: absolute;
+		background: url(/assets/gfx/icons/256/album_foreground.png);
+		background-size: cover;
+	}
+}

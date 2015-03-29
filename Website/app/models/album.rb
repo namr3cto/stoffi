@@ -43,7 +43,7 @@ class Album < ActiveRecord::Base
 		end
 	end
 	
-	self.default_image = "/assets/gfx/icons/256/missing.png"
+	self.default_image = "gfx/icons/256/missing.png"
 	
 	# The string to display to users for representing the resource.
 	def display
