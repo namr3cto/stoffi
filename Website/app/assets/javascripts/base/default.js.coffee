@@ -15,6 +15,9 @@
 			list.find('[data-list-empty]').slideDown()
 	)
 	
+@getResource = (type, id) ->
+	"[data-resource-type='#{type}'][data-resource-id='#{id}']"
+	
 $.fn.when = (types, selector, data, fn) ->
 	this.off(types).on(types, selector, data, fn)
 
@@ -31,6 +34,7 @@ resizeImage = (image, size) ->
 		image.css 'margin-left', "-#{l}px"
 		
 deleteClicked = (element, event) ->
+	# TODO: move to list?
 	resource_url = element.closest('[data-resource-url]').data('resource-url')+'.json'
 	url = element.data('ajax-url') || resource_url
 	method = element.data('ajax-method') || 'delete'
@@ -64,6 +68,8 @@ $(document).on 'contentReady', () ->
 	
 	# these elements are like links; click and go somewhere!
 	$('[data-href]').when 'click.href', (event) ->
+		if $(@).closest('[data-href-stop]').length > 0
+			return
 		if event.which == 1
 			window.location = $(@).data 'href'
 		
