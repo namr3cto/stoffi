@@ -131,14 +131,12 @@ class SyncController < ApplicationController
 		properties = create_properties(resource) unless properties or verb == 'execute'
 		properties = [] unless properties
 		
-		if type == 'playlist'
-			properties.delete('songs')
-		end
-		
 		# sanitize
 		properties.each do |k,v|
 			properties[k] = e(properties[k])
 		end
+		
+		properties['display'] = resource.display
 		
 		properties = properties.to_json
 	
@@ -151,7 +149,6 @@ class SyncController < ApplicationController
 		end
 	
 		session_id = request.env['HTTP_X_SESSION_ID'] || ''
-		logger.info "publish on #{channels} except #{session_id}"
 		begin
 			Juggernaut.publish(channels, cmd, except: session_id)
 		rescue StandardError => e
