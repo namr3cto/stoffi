@@ -9,53 +9,33 @@ class ArtistsControllerTest < ActionController::TestCase
 		@user = users(:bob)
 	end
 
-	test "should get index" do
+	test "should get index when logged out" do
 		get :index
 		assert_response :success
-		assert_not_nil assigns(:artists)
+		assert_not_nil assigns(:all_time)
+		assert_nil assigns(:user_all_time)
 	end
 
-	test "should redirect for get new when logged out" do
-		get :new
-		assert_redirected_to new_user_session_path
-	end
-
-	test "should redirect for get new when not admin" do
+	test "should get index when logged in" do
 		sign_in @user
-		get :new
-		assert_redirected_to dashboard_path
-	end
-	
-	test "should get new" do
-		sign_in @admin
-		get :new
+		get :index
 		assert_response :success
+		assert_not_nil assigns(:all_time)
+		assert_not_nil assigns(:user_all_time)
 	end
 
-	test "should redirect create artist when logged out" do
-		assert_no_difference('Artist.count') do
-			post :create, artist: { name: 'Foo' }
+	test "should not get new" do
+		assert_raises AbstractController::ActionNotFound do
+			get :new
 		end
-
-		assert_redirected_to new_user_session_path
 	end
 
-	test "should redirect create artist when not admin" do
-		sign_in @user
-		assert_no_difference('Artist.count') do
-			post :create, artist: { name: 'Foo' }
+	test "should not create" do
+		assert_raises AbstractController::ActionNotFound do
+			assert_no_difference('Artist.count') do
+				post :create, artist: { name: 'Foo' }
+			end
 		end
-
-		assert_redirected_to dashboard_path
-	end
-
-	test "should create artist" do
-		sign_in @admin
-		assert_difference('Artist.count') do
-			post :create, artist: { name: 'Foo' }
-		end
-
-		assert_redirected_to artist_path(assigns(:artist))
 	end
 
 	test "should show artist" do
@@ -63,21 +43,10 @@ class ArtistsControllerTest < ActionController::TestCase
 		assert_response :success
 	end
 
-	test "should redirect for get edit when logged out" do
-		get :edit, id: @artist
-		assert_redirected_to new_user_session_path
-	end
-
-	test "should redirect for get edit when not admin" do
-		sign_in @user
-		get :edit, id: @artist
-		assert_redirected_to dashboard_path
-	end
-
-	test "should get edit" do
-		sign_in @admin
-		get :edit, id: @artist
-		assert_response :success
+	test "should not get edit" do
+		assert_raises AbstractController::ActionNotFound do
+			get :edit, id: @artist.to_param
+		end
 	end
 
 	test "should redirect for update artist when logged out" do
@@ -93,8 +62,9 @@ class ArtistsControllerTest < ActionController::TestCase
 
 	test "should update artist" do
 		sign_in @admin
-		patch :update, id: @artist, artist: { name: @artist.name }
+		patch :update, id: @artist, artist: { name: 'New name' }
 		assert_redirected_to artist_path(assigns(:artist))
+		assert_equal 'New name', Artist.find(@artist.id).name, "Didn't change name"
 	end
 
 	test "should redirect for destroy artist when logged out" do
@@ -117,7 +87,7 @@ class ArtistsControllerTest < ActionController::TestCase
 	test "should destroy artist" do
 		sign_in @admin
 		assert_difference('Artist.count', -1) do
-		  delete :destroy, id: @artist
+			delete :destroy, id: @artist
 		end
 
 		assert_redirected_to artists_path
