@@ -10,8 +10,9 @@
  
 class AlbumsController < ApplicationController
 
+	before_action :set_album, only: [:show, :edit, :update, :destroy, :follow]
 	oauthenticate interactive: true, except: [ :index, :show ]
-	respond_to :html, :mobile, :embedded, :xml, :json
+	respond_to :html, :embedded, :xml, :json
 	
 	# GET /albums
 	def index
@@ -40,7 +41,6 @@ class AlbumsController < ApplicationController
 	# GET /albums/1
 	def show
 		l, o = pagination_params
-		@album = Album.find(params[:id])
 		@album.paginate_songs(l, o)
 		respond_with(@album, methods: [ :paginated_songs ])
 	end
@@ -75,5 +75,18 @@ class AlbumsController < ApplicationController
 		@album = Album.find(params[:id])
 		@album.destroy
 		respond_with @album
+	end
+	
+	private
+
+	# Use callbacks to share common setup or constraints between actions.
+	def set_album
+		not_found('album') and return unless Album.exists? params[:id]
+		@album = Album.find(params[:id])
+	end
+
+	# Never trust parameters from the scary internet, only allow the white list through.
+	def album_params
+		params.require(:album).permit(:name)
 	end
 end

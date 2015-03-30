@@ -1,0 +1,7 @@
+<section>
+	<h1><%= t 'albums.meta.header' %></h1>
+	<dl>
+		<dt><%= t 'albums.meta.title' %></dt>
+		<%= editable_field 'dd', @album, 'title', @album.title, disabled: !current_user.admin? %>
+	</dl>
+</section>

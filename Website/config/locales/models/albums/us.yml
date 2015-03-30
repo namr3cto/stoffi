@@ -3,6 +3,10 @@ us:
     plural: "albums"
     singular: "album"
     description: "By %{artists}"
-    empty: "No albums found."
-    top:
-      title: "Popular albums"
+      
+    meta:
+      header: 'Information'
+      title: 'Title'
+      stats: 'Statistics'
+      songs: 'Songs'
+      listens: 'Plays'

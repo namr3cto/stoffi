@@ -1,0 +1,152 @@
+<% content_for :title do %>
+	<%= @album.title %>
+<% end %>
+
+<% content_for :description do %>
+	<%=t 'pages.albums.show.description', name: @album %>
+<% end %>
+
+<% content_for :header do %>
+	<meta property="og:title" content="<%=h @album.title %>"/>
+	<meta property="og:type" content="music.album"/>
+	<meta property="og:image" content="<%= @album.image %>"/>
+	<meta property="og:url" content="<%= album_url(@album) %>"/>
+	<meta property="og:description" content="<%=t 'albums.description' %>"/>
+	<% @album.songs.each do |s| %>
+		<meta property="music:song" content="<%= song_url(s) %>"/>
+	<% end %>
+<% end %>
+
+<article class='tabbed' data-resource-type='album' data-resource-id='<%= @album.id %>'>
+	<section class='head'>
+		<div class='left'>
+			<div class='top'></div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span><%=t 'albums.singular' %></span>
+			</div>
+		</div>
+		<div class='right'>
+			<div class='top'>
+				<h1 data-field='display'><%=d @album.title %></h1>
+				<%= render partial: 'shared/social' %>
+			</div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span>
+					<%= link_to_association @album.artists %>
+				</span>
+			</div>
+		</div>
+		<div class='image'>
+			<div class='image-border'>
+				<%= image_tag @album.image(:huge), data: { field: :picture } %>
+			</div>
+		</div>
+	</section>
+	
+	<!-- we don't have any tabs, but need this to create the shadow effect -->
+	<section class='tabs'></section>
+	
+	<aside>
+		<%= render 'albums/sections/stats' %>
+		<%= render 'albums/sections/info' %>
+	</aside>
+	
+	<%= render 'albums/sections/songs' %>
+	
+</article>
+
+
+
+<% if false %>
+
+<div class="white box" id="playlist-<%=@playlist.id%>">
+
+	<div class="top">
+		<div class="picture">
+			<% pic = @playlist.user.picture %>
+			<img src="<%=pic%>" width="80" height="80"<%=" class='default'" if pic == User.default_pic %>/>
+		</div>
+		<div class="info">
+			<h3><%=t "playlists.created" %></h3>
+			<h2><%=link_to @playlist.user.name, @playlist.user %></h2>
+		</div>
+		
+		<h1 data-field="playlist-<%=@playlist.id%>-name"><%=h @playlist.name %></h1>
+		<div class="actions">
+			<%= custom_button_tag t("links.play"), @playlist.play, "play_white", { :color => :blue, :class => :small } %>
+			<% if signed_in? and @playlist.user == current_user %>
+				<%= custom_button_tag t("links.edit"), edit_playlist_path(@playlist), "edit_white", { :color => :blue, :class => :small } %>
+				<%= custom_button_tag t("links.delete"), playlist_path(@playlist), "delete", { :method => :delete, :confirm => t("confirm"), :class => :small } %>
+			<% end %>
+			
+			<div class="social-buttons">
+				<div id="fb-root"></div>
+				
+				<!-- +1 button -->
+				<span class="plus-button">
+					<div class="g-plusone" data-size="medium" data-lang="<%langtag(I18n.locale)%>"
+						data-width="50">
+					</div>
+				</span>
+				
+				<!-- like button -->
+				<span class="like-button">
+					<div class="fb-like"
+						data-send="false" data-layout="button_count" data-width="50"
+						data-show-faces="false" data-font="segoe ui">
+					</div>
+				</span>
+				
+				<!-- tweet button -->
+				<span class="tweet-button">
+					<% if true %>
+						<a href="https://twitter.com/ephracis" class="twitter-follow-button"
+							data-show-count="false" data-lang="<%=langtag(I18n.locale)%>">Follow @ephracis</a>
+					<% else %>
+						<a href="https://twitter.com/share" class="twitter-share-button"
+							data-via="StoffiPlayer" data-lang="<%=langtag(I18n.locale)%>">Tweet</a>
+					<% end %>
+				</span>
+			</div>
+		</div>
+	</div>
+	
+	<% if text_ads? %>
+		<div class="skyscraper ad">
+			<script type="text/javascript"><!--
+			google_ad_client = "ca-pub-5639501338860736";
+			/* Skyscraper */
+			google_ad_slot = "3985447558";
+			google_ad_width = 160;
+			google_ad_height = 600;
+			//-->
+			</script>
+			<script type="text/javascript"
+			src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+			</script>
+		</div>
+	<% end %>
+	
+	<% if @playlist.dynamic? %>
+		<p>TODO: dynamic playlist</p>
+	
+	<% else %>
+		<ul class="horizontal" data-list="songs">
+			<% @playlist.songs.order(:title).each do |song| %>
+				<%= item song.title, song, "song_#{song.id}",
+					:image => song.image,
+					:delete_func => "removeSong(#{@playlist.id}, #{song.id}, true, event)",
+					:delete => t("playlists.songs.remove", :song => song.title) %>
+			<% end %>
+		</ul>
+		<p class="message" data-field="no-songs"<%= "style='display:none;'".html_safe if @playlist.songs.length > 0 %>>
+			<%=t "playlists.songs.empty" %>
+		</p>
+	<% end %>
+	
+	<div class="clear"></div>
+</div>
+
+<% end %>
