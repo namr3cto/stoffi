@@ -10,7 +10,8 @@
  
 class AlbumsController < ApplicationController
 
-	before_action :set_album, only: [:show, :edit, :update, :destroy, :follow]
+	before_action :set_album, only: [ :show, :edit, :update, :destroy ]
+	before_action :ensure_admin, only: [ :edit, :update, :destroy ]
 	oauthenticate interactive: true, except: [ :index, :show ]
 	respond_to :html, :embedded, :xml, :json
 	
@@ -47,14 +48,11 @@ class AlbumsController < ApplicationController
 
 	# GET /albums/1/edit
 	def edit
-		render status: :forbidden and return unless current_user.admin?
 		render layout: false
 	end
 
-	# PUT /albums/1
+	# PATCH /albums/1
 	def update
-		render status: :forbidden and return unless current_user.admin?
-		
 		if params[:songs].present?
 			
 			# add songs
@@ -93,7 +91,6 @@ class AlbumsController < ApplicationController
 
 	# DELETE /albums/1
 	def destroy
-		render status: :forbidden and return unless current_user.admin?
 		@album.destroy
 		respond_with @album
 	end
