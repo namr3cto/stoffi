@@ -51,7 +51,7 @@
 			</span>
 		<% end %>
 		
-		<% if defined? delete %>
+		<% if defined? delete and delete.present? %>
 			<span class='remove action'>
 				<%= link_to '', title: delete[:title] || t('pages.listens.destroy.description'), data: {
 					ajax_call: :delete,
