@@ -45,34 +45,55 @@ class AlbumsController < ApplicationController
 		respond_with(@album, methods: [ :paginated_songs ])
 	end
 
-	# GET /albums/new
-	def new
-		respond_with(@album = Album.new)
-	end
-
 	# GET /albums/1/edit
 	def edit
-		@album = Album.find(params[:id])
-	end
-
-	# POST /albums
-	def create
-		@album = Album.new(params[:album])
-		respond_with @album
+		render status: :forbidden and return unless current_user.admin?
+		render layout: false
 	end
 
 	# PUT /albums/1
 	def update
-		render status: :forbidden and return if ["xml","json"].include?(params[:format])
-		@album = Album.find(params[:id])
-		@album.update_attributes(params[:album])
-		respond_with @album
+		render status: :forbidden and return unless current_user.admin?
+		
+		if params[:songs].present?
+			
+			# add songs
+			if params[:songs][:added].present?
+				params[:songs][:added].each do |s|
+					song = Song.get(current_user, s)
+					@album.songs << song if song and not @album.songs.include?(song)
+				end
+			end
+			
+			# remove songs
+			if params[:songs][:removed].present?
+				params[:songs][:removed].each do |s|
+					song = Song.find(s.to_i) if s.to_i > 0
+					@album.songs.delete(song) if song
+				end
+			end
+			
+			params.delete(:songs)
+		end
+		
+		success = params[:album].present? ? @album.update_attributes(album_params) : true
+		
+		respond_to do |format|
+			if success
+				format.html { redirect_to @album }
+				format.js { }
+				format.json { render json: @album, location: @album }
+			else
+				format.html { render action: 'edit' }
+				format.js { render partial: 'shared/dialog/errors', locals: { resource: @album, action: :update } }
+				format.json { render json: @album.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	# DELETE /albums/1
 	def destroy
-		render status: :forbidden and return if ["xml","json"].include?(params[:format])
-		@album = Album.find(params[:id])
+		render status: :forbidden and return unless current_user.admin?
 		@album.destroy
 		respond_with @album
 	end
@@ -87,6 +108,6 @@ class AlbumsController < ApplicationController
 
 	# Never trust parameters from the scary internet, only allow the white list through.
 	def album_params
-		params.require(:album).permit(:name)
+		params.require(:album).permit(:title)
 	end
 end

@@ -25,3 +25,10 @@ ul.list .item .album-back
 		background-size: cover;
 	}
 }
+
+#edit-album
+{
+	min-width: 25em;
+	
+	#search-results { text-align: left; }
+}
