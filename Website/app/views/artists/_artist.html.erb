@@ -1,23 +1,31 @@
-<li class='clickable artist' data-type='hit' data-href='<%= url_for(artist) %>'>
-	<div class='image'>
-		<%= image_tag artist.image, alt: artist %>
+<li class='item' data-href='<%= url_for artist %>' data-resource-type='artist' data-resource-id='<%= artist.id %>'
+	data-resource-url='<%= url_for artist %>'>
+	
+	<!-- image -->
+	<%= image_tag artist.image(:huge), data: { field: :picture } %>
+	
+	<!-- meta data -->
+	<div class='overlay'>
+		<span class='title' data-field='display'><%= artist %></span>
+		
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='grid' data-type='artist'><%= t 'artists.singular' %></span>
+		<% end %>
+		
+		<% if artist.songs.any? %>
+			<span class='description'>
+				<%=t('songs.plural').capitalize %>: <%= top_list(artist.songs, limit: 3) %>
+			</span>
+		<% end %>
+		
 	</div>
-	<div class='content'>
-		<h3><%= link_to artist.to_s, artist %></h3>
+	
+	<!-- controls -->
+	<div class='action-bar'>
 		
-		<% lines = 0 %>
-		<% if artist.genres.top? %>
-			<% lines += 1 %>
-			<p><%=t('genres.plural').capitalize %>: <%= top_list(artist.genres, limit: 3) %></p>
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='list' data-type='artist'><%= t 'artists.singular' %></span>
 		<% end %>
 		
-		<% if artist.songs.top? %>
-			<% lines += 1 %>
-			<p><%=t('songs.plural').capitalize %>: <%= top_list(artist.songs, limit: 3) %></p>
-		<% end %>
-		
-		<% if artist.albums.top? and lines >= 2 %>
-			<p><%=t('albums.plural').capitalize %>: <%= top_list(artist.albums, limit: 3) %></p>
-		<% end %>
 	</div>
 </li>

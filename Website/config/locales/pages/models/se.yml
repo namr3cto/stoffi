@@ -58,9 +58,48 @@ se:
       new:
         link: 'Skapa ny spellista'
     
-      artists:
-        show:
-          description: "%{artist} är en artist på Stoffi"
+    artists:
+      
+      index:
+        title:         'Artister'
+        link:          'Artister'
+        description:   'Hitta de hetaste artisterna på Stoffi.'
+        
+        recent:
+          link:            'Senaste'
+          title:           'Nyligen spelade artister'
+          description:     'Se vilka artister som lyssnas på just nu.'
+      
+        weekly:
+          link:            'Vecka'
+          title:           'Veckans topp'
+          description:     'Se populära artister den senaste veckan.'
+      
+        all_time:
+          link:            'All tid'
+          title:           'Topp genom tiderna'
+          description:     'Se de mest populära artisterna genom tiderna.'
+        
+        user_recent:
+          link:            'Senaste'
+          title:           'Dina senaste spelningar'
+          description:     "Se vad du har spelat nyligen."
+      
+        user_weekly:
+          link:            'Vecka'
+          title:           'Din topp den senaste veckan'
+          description:     "Se dina mest populära artister den senaste veckan."
+      
+        user_all_time:
+          link:            'All tid'
+          title:           'Din topp genom tiderna'
+          description:     "Se dina mest populära artister genom tiderna."
+      
+        categories:
+          user: 'Personligt'
+          
+      show:
+        description: "%{artist} är en artist på Stoffi"
 
     songs:
       show:

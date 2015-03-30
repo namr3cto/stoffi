@@ -15,7 +15,6 @@ class Artist < ActiveRecord::Base
 	include Base
 	include Imageable
 	include Sourceable
-	include Genreable
 	include Rankable
 	include Duplicatable
 	
@@ -24,13 +23,8 @@ class Artist < ActiveRecord::Base
 		assoc.has_and_belongs_to_many :albums
 		assoc.has_and_belongs_to_many :songs
 		assoc.has_and_belongs_to_many :events, join_table: :performances
-		assoc.has_and_belongs_to_many :genres, through: :songs
 	end
-	with_options as: :resource, dependent: :destroy do |assoc|
-		assoc.has_many :wikipedia_links
-		assoc.has_many :sources
-		assoc.has_many :images
-	end
+	has_many :genres, through: :songs
 	has_many :listens, through: :songs
 	has_many :donations
 	
@@ -47,7 +41,7 @@ class Artist < ActiveRecord::Base
 		end
 	end
 	
-	self.default_image = "/assets/media/artist.png"
+	self.default_image = "gfx/icons/256/artist.png"
 	
 	# Whether or not the artist has a Twitter account.
 	def twitter?; twitter.present? end
