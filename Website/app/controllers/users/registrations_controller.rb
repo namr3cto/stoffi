@@ -51,9 +51,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
 	end
 	
 	def dashboard
-		@title = t "dashboard.title"
-		@description = t "dashboard.description"
-		
 		@donations = current_user.donations.order('created_at DESC').limit(5)
 		@artists = Artist.top(for: current_user).limit 10
 		@songs = Song.top(for: current_user).limit 10
