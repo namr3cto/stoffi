@@ -1,0 +1,10 @@
+ul.list .item .album-back
+{
+	background: url(/assets/gfx/icons/256/album_background.png);
+	box-shadow: 0 0 10px rgba($shadow, 0.5);
+	
+	.album-front
+	{
+		background: url(/assets/gfx/icons/256/album_foreground.png);
+	}
+}
