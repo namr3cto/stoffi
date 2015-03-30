@@ -12,7 +12,7 @@
 			<span class='type' data-list-mode='grid' data-type='event'><%= t 'events.singular' %></span>
 		<% end %>
 		
-		<% if event.artist.any? %>
+		<% if event.artists.any? %>
 			<span class='description'>
 				<%=t('artists.plural').capitalize %>: <%= top_list(event.artists, limit: 3) %>
 			</span>
