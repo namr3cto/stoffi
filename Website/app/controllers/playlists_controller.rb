@@ -214,8 +214,6 @@ class PlaylistsController < ApplicationController
 			elsif @playlist.songs.count > 0
 				current_user.links.each { |link| link.update_playlist(@playlist) }
 			end
-			logger.debug '@@@@@@@@@@@@@@@@@@@@@@@@@@@@@'
-			logger.debug props.inspect
 			SyncController.send('update', @playlist, request, props)
 		end
 		
