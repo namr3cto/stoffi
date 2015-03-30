@@ -3,7 +3,7 @@
 		<h1><%= t 'duplicates.header' %></h1>
 		<ul class='list' data-list='songs'>
 			<%= render partial: 'songs/song', collection: @song.duplicates, locals: {
-				delete: { method: :patch, data: 'song[archetype]=', 
+				delete: { method: :patch, data: { song: { archetype: nil }}, 
 					title: t('duplicates.unmark.description', archetype: @song),
 					confirm: '' }
 			} %>
