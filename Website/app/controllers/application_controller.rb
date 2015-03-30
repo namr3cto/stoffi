@@ -190,7 +190,7 @@ class ApplicationController < ActionController::Base
 	end
 	
 	def ensure_admin
-		access_denied unless current_user && current_user.is_admin?
+		access_denied unless current_user.admin?
 	end
 	
 	def access_denied
