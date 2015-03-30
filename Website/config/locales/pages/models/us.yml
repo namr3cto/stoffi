@@ -203,6 +203,9 @@ us:
         categories:
           user: 'Personal'
           
+      show:
+        description: "%{album} is an album by %{artists} on Stoffi"
+          
       destroy:
         link: 'Delete'
         description: "Delete this album"

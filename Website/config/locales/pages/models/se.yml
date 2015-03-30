@@ -207,6 +207,9 @@ se:
         categories:
           user: 'Personligt'
           
+      show:
+        description: "%{album} är ett album av %{artists} på Stoffi"
+          
       destroy:
         link: 'Ta bort'
         description: "Ta bort detta album"

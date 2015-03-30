@@ -3,7 +3,7 @@
 <% end %>
 
 <% content_for :description do %>
-	<%=t 'pages.albums.show.description', name: @album %>
+	<%=t 'pages.albums.show.description', album: @album, artists: @album.artists.to_sentence %>
 <% end %>
 
 <% content_for :header do %>
@@ -11,13 +11,13 @@
 	<meta property="og:type" content="music.album"/>
 	<meta property="og:image" content="<%= @album.image %>"/>
 	<meta property="og:url" content="<%= album_url(@album) %>"/>
-	<meta property="og:description" content="<%=t 'albums.description' %>"/>
+	<meta property="og:description" content="<%=t 'albums.description', artists: @album.artists.to_sentence %>"/>
 	<% @album.songs.each do |s| %>
 		<meta property="music:song" content="<%= song_url(s) %>"/>
 	<% end %>
 <% end %>
 
-<article class='tabbed' data-resource-type='album' data-resource-id='<%= @album.id %>'>
+<article class='tabbed' data-resource-type='album' data-resource-id='<%= @album.id %>' data-resource-url='<%= url_for @album %>'>
 	<section class='head'>
 		<div class='left'>
 			<div class='top'></div>
