@@ -85,6 +85,7 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
 	
 	test "should delete profile" do
 		sign_in @user
+		@user.follow users(:alice).playlists.first
 		
 		assert_difference('User.count', -1) do
 		assert_difference('Playlist.count', @user.playlists.count * -1) do
@@ -93,7 +94,7 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
 		assert_difference('Link.count', @user.links.count * -1) do
 		assert_difference('Device.count', @user.devices.count * -1) do
 		assert_difference('ClientApplication.count', @user.apps.count * -1) do
-		assert_difference('users(:bob).playlist_subscriptions.count', -1) do
+		assert_difference('users(:bob).followings.count', -1) do
 			delete :destroy
 			assert_redirected_to new_user_session_path, "Not redirected to login page"
 		end end end end end end end end
@@ -104,7 +105,7 @@ class Users::RegistrationsControllerTest < ActionController::TestCase
 		
 		# TODO: possible to make this prettier?
 		Playlist.all.each do |playlist|
-			assert playlist.subscribers.where(id: @user.id).empty?
+			assert playlist.followers.where(id: @user.id).empty?
 		end
 	end
 end
