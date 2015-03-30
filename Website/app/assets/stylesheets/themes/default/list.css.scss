@@ -31,10 +31,10 @@ ul.list
 {
 	li.item
 	{
-		.action-bar .action
+		.overlay, .action-bar
 		{
 			a { color: $text; }
-			&.shadow.dropdown .dropdown-menu a { color: $shadow_text; }
+			.action.shadow.dropdown .dropdown-menu a { color: $shadow_text; }
 		}
 		
 		img
