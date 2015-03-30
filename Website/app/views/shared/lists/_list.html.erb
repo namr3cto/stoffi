@@ -28,7 +28,9 @@ data[:list_followings] = local_assigns[:follower] if local_assigns.has_key? :fol
 	<% end %>
 <% end %>
 
-<ul data-template='<%= resource.singularize %>'>
-	<%= render partial: "#{resource.pluralize}/#{resource.singularize}",
-		object: resource.classify.constantize.first %>
-</ul>
+<% if resource.classify.constantize.any? %>
+	<ul data-template='<%= resource.singularize %>'>
+		<%= render partial: "#{resource.pluralize}/#{resource.singularize}",
+			object: resource.classify.constantize.first %>
+	</ul>
+<% end %>
