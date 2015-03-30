@@ -1,3 +1,17 @@
+<section class='tabs'>
+	
+	<span class='tab' data-tab='all'>
+		<%= t 'search.categories.all' %>
+	</span>
+	
+	<% Search.categories.each do |category| %>
+		<span class='tab' data-tab='<%= category %>'>
+			<%=t("#{category}.plural").capitalize %>
+		</span>
+	<% end %>
+</section>
+
+<% if false %>
 <nav id='categories'>
 	<span data-category='all' <%= "class=selected" if category_selected?('all') %>>
 		<%= link_to t('search.categories.all'), params.merge(categories: nil) %>
@@ -9,3 +23,4 @@
 		</span>
 	<% end %>
 </nav>
+<% end %>

@@ -46,11 +46,9 @@ class SearchController < ApplicationController
 		@query = query_param
 		@categories = category_param
 		@sources = source_param
-		@title = e(@query)
-		@description = t("index.description")
 		
 		respond_to do |format|
-			format.html { render @search }
+			format.html { render }
 			format.js { @results = @search.do(page_param, limit_param) }
 			format.json { render json: @search.do(page_param, limit_param) }
 		end

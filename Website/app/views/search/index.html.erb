@@ -1,3 +1,16 @@
+<% content_for :title do %>
+	<%= @query %>
+<% end %>
+
+<article class='tabbed fullwidth'>
+	<%= render 'categories' %>
+	
+	<section>
+		<p>TODO</p>
+	</section>
+</article>
+
+<% if false %>
 <div class='white full box' id='search-pane'>
 	<%= render 'categories' %>
 	
@@ -21,3 +34,4 @@
 	<%= render "shared/ads/#{@query.blank? ? 'banner' : 'skyscraper'}" %>
 	<div id='search-results'></div>
 </div>
+<% end %>
