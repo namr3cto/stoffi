@@ -25,11 +25,11 @@ class OauthServerFlowTest < ActionDispatch::IntegrationTest
 		# login
 		url = "/oauth/authorize?oauth_token=#{r['oauth_token']}"
 		get_via_redirect url, {}, {'HTTP_REFERER' => url }
-		post_via_redirect login_path, user: { email: user.email, password: passwd }
+		post_via_redirect new_user_session_path, user: { email: user.email, password: passwd }
 		
 		# authorize
-		assert_select 'h1', "Allow", "No allow button"
-		assert_select 'h1', "Deny", "No deny button"
+		assert_select 'a span', "Allow", "No allow button"
+		assert_select 'a span', "Deny", "No deny button"
 		assert assigns(:token), "No token assigned"
 		token = OauthToken.find_by_token(assigns(:token).token)
 		assert token, "No token exists"
@@ -84,7 +84,7 @@ class OauthServerFlowTest < ActionDispatch::IntegrationTest
 		# login
 		url = "/oauth/authorize?oauth_token=#{r['oauth_token']}"
 		get_via_redirect url, {}, {'HTTP_REFERER' => url }
-		post_via_redirect login_path, user: { email: user.email, password: passwd }
+		post_via_redirect new_user_session_path, user: { email: user.email, password: passwd }
 		
 		# extract token verifier
 		assert_equal dashboard_path, path, "Didn't get redirected to dashboard"

@@ -5,10 +5,7 @@ class GenericBrowsingTest < ActionDispatch::IntegrationTest
 		visit '/'
 		assert page.has_link?("News"), "Missing news link"
 		assert page.has_link?("Download"), "Missing download link"
-		assert page.has_link?("Donate"), "Missing donate link"
-		assert page.has_link?("About"), "Missing about link"
 		assert page.has_link?("Login"), "Missing login link"
-		#assert page.has_link?("download-button"), "Missing download button"
 	end
 	
 	test 'go to downloads' do
@@ -51,8 +48,8 @@ class GenericBrowsingTest < ActionDispatch::IntegrationTest
 	
 	test 'download beta' do
 		visit '/get'
-		within 'div#versions' do
-			select('Beta', :from => 'Channel')
+		within "form[url='/download']" do
+			select('Beta', from: 'Channel')
 			click_on 'Download'
 		end
 	end
@@ -60,10 +57,5 @@ class GenericBrowsingTest < ActionDispatch::IntegrationTest
 	test 'go to news' do
 		visit '/'
 		click_on 'News'
-	end
-	
-	test 'go to donations' do
-		visit '/'
-		click_on 'Donate'
 	end
 end
