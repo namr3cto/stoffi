@@ -31,25 +31,6 @@ class ArtistsController < ApplicationController
 
 	def show
 		l, o = pagination_params
-		@title = @artist.name
-		@description = t "artist.description", artist: d(@artist.name)
-		@head_prefix = "og: http://ogp.me/ns# fb: http://ogp.me/ns/fb# stoffiplayer: http://ogp.me/ns/fb/stoffiplayer#"
-		@meta_tags =
-		[
-			{ property: "og:title", content: d(@artist.name) },
-			{ property: "og:type", content: "stoffiplayer:artist" },
-			{ property: "og:image", content: @artist.picture },
-			{ property: "og:url", content: @artist.url },
-			{ property: "og:site_name", content: "Stoffi" },
-			{ property: "fb:app_id", content: "243125052401100" },
-			{ property: "og:description", content: t("artist.short_description", artist: d(@artist.name)) },
-			{ property: "stoffiplayer:donations", content: @artist.donations.count },
-			{ property: "stoffiplayer:support_generated", content: "$#{@artist.donated_sum}" },
-			{ property: "stoffiplayer:charity_generated", content: "$#{@artist.charity_sum}" }
-		]
-		
-		@donations = @artist.donations
-
 		@artist.paginate_songs(l, o)
 		respond_with(@artist, methods: [ :paginated_songs ])
 	end

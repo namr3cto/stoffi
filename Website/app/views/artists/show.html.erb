@@ -1,3 +1,62 @@
+<% content_for :title do %>
+	<%= @artist.name %>
+<% end %>
+
+<% content_for :description do %>
+	<%=t 'pages.artists.show.description', artist: @artist %>
+<% end %>
+
+<% content_for :header do %>
+	<meta property="og:title" content="<%=h @artist.name %>"/>
+	<meta property="og:type" content="music.artist"/>
+	<meta property="og:image" content="<%= @artist.image %>"/>
+	<meta property="og:url" content="<%= artist_url(@artist) %>"/>
+	<meta property="og:description" content="<%=t 'pages.artists.show.description', artist: @artist %>"/>
+	<% @artist.songs.each do |s| %>
+		<meta property="music:song" content="<%= song_url(s) %>"/>
+	<% end %>
+<% end %>
+
+<article class='tabbed' data-resource-type='artist' data-resource-id='<%= @artist.id %>' data-resource-url='<%= url_for @artist %>'>
+	<section class='head'>
+		<div class='left'>
+			<div class='top'></div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span><%=t 'artists.singular' %></span>
+			</div>
+		</div>
+		<div class='right'>
+			<div class='top'>
+				<h1 data-field='display'><%=d @artist.name %></h1>
+				<%= render partial: 'shared/social' %>
+			</div>
+			<div class='line'></div>
+			<div class='bottom'>
+			</div>
+		</div>
+		<div class='image'>
+			<div class='image-border'>
+				<%= image_tag @artist.image(:huge), data: { field: :picture } %>
+			</div>
+		</div>
+	</section>
+	
+	<!-- we don't have any tabs, but need this to create the shadow effect -->
+	<section class='tabs'></section>
+	
+	<aside>
+		<%= render 'artists/sections/stats' %>
+		<%= render 'artists/sections/info' %>
+	</aside>
+	
+	<%= render 'artists/sections/songs' %>
+	<%= render 'artists/sections/albums' %>
+	<%= render 'artists/sections/events' %>
+	
+</article>
+
+<% if false %>
 <div class="white box">
 	<div class="top">
 		<div class="picture">
@@ -179,3 +238,4 @@
 	// tweet button
 	!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 </script>
+<% end %>

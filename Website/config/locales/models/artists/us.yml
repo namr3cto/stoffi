@@ -2,12 +2,15 @@ us:
   artists:
     plural: "artists"
     singular: "artist"
-    empty: "No artists found."
     
-    top:
-      title: "Hot artists"
+    songs: 'Popular songs'
+    albums: 'Albums'
+    albums: 'Upcoming events'
     
-    songs:
-      remove: "Remove %{artist} as maker of %{song}"
-      empty: "No songs have been made by %{artist}"
+    meta:
+      info: 'Information'
+      name: 'Name'
+      stats: 'Statistics'
+      listens: 'Plays'
+      songs: 'Songs'
     

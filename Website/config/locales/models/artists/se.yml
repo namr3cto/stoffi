@@ -2,11 +2,14 @@ se:
   artists:
     plural: "artister"
     singular: "artist"
-    empty: "Inga artister hittades."
     
-    top:
-      title: "Heta artister"
+    songs: 'Populära låtar'
+    albums: 'Album'
+    events: 'Kommande evenemang'
     
-    songs:
-      remove: "Ta bort %{artist} som skapare av %{song}"
-      empty: "%{artist} har inte gjort några låtar"
+    meta:
+      info: 'Information'
+      name: 'Namn'
+      stats: 'Statistik'
+      listens: 'Spelningar'
+      songs: 'Låtar'
