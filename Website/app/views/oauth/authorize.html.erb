@@ -28,7 +28,9 @@ c = @token.client_application
 					<%- if params[:oauth_callback] -%>
 					  <%= hidden_field_tag "oauth_callback", params[:oauth_callback] %>
 					<%- end -%>
-					<%=custom_button_tag "Deny", nil, "", { :type => :form, :color => :gray } %>
+					<%= link_to '#', class: 'button secondary', data: { button: :submit } do %>
+						<span>Deny</span>
+					<% end %>
 				<%- end -%>
 			</td>
 			<td>
@@ -38,7 +40,9 @@ c = @token.client_application
 					<%- if params[:oauth_callback] -%>
 					  <%= hidden_field_tag "oauth_callback", params[:oauth_callback] %>
 					<%- end -%>
-					<%=custom_button_tag "Allow", nil, "", { :type => :form, :color => :blue } %>
+					<%= link_to '#', class: 'button primary', data: { button: :submit } do %>
+						<span>Allow</span>
+					<% end %>
 				<%- end -%>
 			</td>
 		</tr>
