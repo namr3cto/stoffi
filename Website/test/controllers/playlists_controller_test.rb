@@ -57,11 +57,11 @@ class PlaylistsControllerTest < ActionController::TestCase
 		Link.any_instance.stubs(:create_playlist).returns(nil)
 		sign_in @user
 		songs = [
-			{:path => "foo.mp3"},
-			{:path => "bar.wav"},
+			{ path: "foo.mp3" },
+			{ path: "bar.wav" },
 		]
 		assert_difference('Playlist.count') do
-			post :create, { :playlist => { :name => "Something" }, :songs => songs }
+			post :create, { playlist: { name: "Something" }, songs: songs }
 		end
 		
 		assert_not_nil assigns(:playlist)
@@ -70,7 +70,7 @@ class PlaylistsControllerTest < ActionController::TestCase
 	end
 
 	test "should not create playlist logged out" do
-		post :create, :playlist => @playlist.attributes
+		post :create, playlist: @playlist.attributes
 		assert_redirected_to new_user_session_path, "Not redirected to login page"
 	end
 
@@ -78,11 +78,11 @@ class PlaylistsControllerTest < ActionController::TestCase
 		Link.any_instance.stubs(:update_playlist).returns(nil)
 		sign_in @user
 		songs = [
-			{:path => "stoffi:track:youtube:abc"},
-			{:path => "foo.mp3"},
+			{ path: "stoffi:track:youtube:abc" },
+			{ path: "foo.mp3" },
 		]
 		assert_no_difference('Playlist.count') do
-			post :create, {:playlist => @playlist.attributes, :songs => songs}
+			post :create, { playlist: @playlist.attributes, songs: songs }
 		end
 		
 		assert_not_nil assigns(:playlist), 'Did not assign @playlist'
@@ -110,19 +110,19 @@ class PlaylistsControllerTest < ActionController::TestCase
 	test "should update playlist" do
 		Link.any_instance.stubs(:update_playlist).returns(nil)
 		sign_in @user
-		put :update, id: @playlist.to_param, :playlist => @playlist.attributes
+		put :update, id: @playlist.to_param, playlist: @playlist.attributes
 		assert_response :found
 		assert_redirected_to playlist_path(assigns(:playlist))
 	end
 
 	test "should not update playlist logged out" do
-		put :update, id: @playlist.to_param, :playlist => @playlist.attributes
+		put :update, id: @playlist.to_param, playlist: @playlist.attributes
 		assert_redirected_to new_user_session_path, "Not redirected to login page"
 	end
 
 	test "should not update someone else's playlist" do
 		sign_in @user
-		put :update, id: @playlist2.to_param, :playlist => @playlist2.attributes
+		put :update, id: @playlist2.to_param, playlist: @playlist2.attributes
 		assert_response :not_found
 	end
 
