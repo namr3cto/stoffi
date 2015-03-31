@@ -2,6 +2,13 @@ us:
   genres:
     plural: "genres"
     singular: "genre"
-    empty: "No genres found."
-    top:
-      title: "Popular genres"
+    songs: 'Popular songs'
+    artists: 'Popular artists'
+    
+    meta:
+      info: 'Information'
+      name: 'Name'
+      stats: 'Statistics'
+      listens: 'Plays'
+      songs: 'Songs'
+      artists: 'Artists'

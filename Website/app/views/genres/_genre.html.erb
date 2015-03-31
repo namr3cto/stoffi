@@ -1,24 +1,30 @@
-<li class='clickable genre' data-type='hit'>
-	<div class='image'>
-		<%= image_tag genre.image, alt: genre %>
+<li class='item' data-href='<%= url_for genre %>' data-resource-id='<%= genre.id %>' data-resource-type='genre'
+	data-resource-url='<%= url_for genre %>'>
+	
+	<!-- image -->
+	<%= image_tag genre.image(:huge), data: { field: :picture } %>
+	
+	<!-- meta data -->
+	<div class='overlay'>
+		<span class='title' data-field='display'><%= genre %></span>
+		
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='grid' data-type='genre'><%= t 'genres.singular' %></span>
+		<% end %>
+		
+		<% if genre.songs.any? %>
+			<span class='description'>
+				<%= t('songs.plural').capitalize %>: <%= link_to_association genre.songs.top.limit(3) %>
+			</span>
+		<% end %>
+		
 	</div>
-	<div class='content'>
-		<h3><%= genre %></h3>
+	
+	<!-- controls -->
+	<div class='action-bar'>
 		
-		<% lines = 0 %>
-		<% limit = 3 %>
-		<% if genre.songs.top? %>
-			<% lines += 1 %>
-			<p><%=t('songs.plural').capitalize %>: <%= top_list(genre.songs, limit: limit) %></p>
-		<% end %>
-		
-		<% if genre.artists.top? %>
-			<% lines += 1 %>
-			<p><%=t('artists.plural').capitalize %>: <%= top_list(genre.artists, limit: limit) %></p>
-		<% end %>
-		
-		<% if genre.albums.top? and lines >= 2 %>
-			<p><%=t('albums.plural').capitalize %>: <%= top_list(genre.albums, limit: limit) %></p>
+		<% if defined? type and type %>
+			<span class='type' data-list-mode='list' data-type='genre'><%= t 'genres.singular' %></span>
 		<% end %>
 	</div>
 </li>

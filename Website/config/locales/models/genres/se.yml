@@ -2,6 +2,13 @@ se:
   genres:
     plural: "genrer"
     singular: "genre"
-    empty: "Inga genrer hittades."
-    top:
-      title: "Populära genrer"
+    songs: 'Populära låtar'
+    artists: 'Populära artister'
+    
+    meta:
+      info: 'Information'
+      name: 'Namn'
+      stats: 'Statistik'
+      listens: 'Spelningar'
+      songs: 'Låtar'
+      artists: 'Artister'

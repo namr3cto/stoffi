@@ -214,3 +214,46 @@ se:
         link: 'Ta bort'
         description: "Ta bort detta album"
         confirm: "Vill du verkligen ta bort %{album}?"
+        
+    genres:
+      
+      index:
+        title:         'Genrer'
+        link:          'Genrer'
+        description:   'Hitta de hetaste genrerna på Stoffi.'
+        
+        recent:
+          link:            'Senaste'
+          title:           'Nyligen spelade genrer'
+          description:     'Se vilka genrer som lyssnas på just nu.'
+      
+        weekly:
+          link:            'Vecka'
+          title:           'Veckans topp'
+          description:     'Se populära genrer den senaste veckan.'
+      
+        all_time:
+          link:            'All tid'
+          title:           'Topp genom tiderna'
+          description:     'Se de mest populära genrerna genom tiderna.'
+        
+        user_recent:
+          link:            'Senaste'
+          title:           'Dina senaste spelningar'
+          description:     "Se vad du har spelat nyligen."
+      
+        user_weekly:
+          link:            'Vecka'
+          title:           'Din topp den senaste veckan'
+          description:     "Se dina mest populära genrer den senaste veckan."
+      
+        user_all_time:
+          link:            'All tid'
+          title:           'Din topp genom tiderna'
+          description:     "Se dina mest populära genrer genom tiderna."
+      
+        categories:
+          user: 'Personligt'
+          
+      show:
+        description: "%{genre} är en genre på Stoffi"
