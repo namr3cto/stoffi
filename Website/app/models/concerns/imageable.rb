@@ -4,7 +4,7 @@ module Imageable
 	included do
 		has_many :images, as: :resource, dependent: :destroy
 		class_attribute :default_image
-		self.default_image = "/assets/media/artist.png"
+		self.default_image = "gfx/icons/256/missing.png"
 	end
 	
 	def image(size = :medium)
