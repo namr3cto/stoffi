@@ -2,10 +2,10 @@
 	<h1><%= t 'songs.meta.header' %></h1>
 	<dl>
 		<dt><%= t 'songs.meta.title' %></dt>
-		<%= editable_field 'dd', @song, 'title', @song.title, disabled: admin? %>
+		<%= editable_field 'dd', @song, 'title', @song.title, disabled: !current_user.admin? %>
 	
 		<dt><%= t 'songs.meta.artists' %></dt>
-		<%= editable_field 'dd', @song, 'artists', @song.artists, disabled: admin? do %>
+		<%= editable_field 'dd', @song, 'artists', @song.artists, disabled: !current_user.admin? do %>
 			<span class='value'><%= link_to_association(@song.artists) || '-' %></span>
 		<% end %>
 	
@@ -13,7 +13,7 @@
 		<%= editable_field 'dd', @song, 'length', seconds_to_duration(@song.length), disabled: true %>
 	
 		<dt><%= t 'songs.meta.genres' %></dt>
-		<%= editable_field 'dd', @song, 'genre', @song.genres, disabled: admin? do %>
+		<%= editable_field 'dd', @song, 'genre', @song.genres, disabled: !current_user.admin? do %>
 			<span class='value'><%= link_to_association(@song.genres) || '-' %></span>
 		<% end %>
 		
