@@ -77,6 +77,7 @@ Stoffi::Application.routes.draw do
 		get '/facebook',   to: 'pages#facebook',   as: :facebook
 		get '/channel',    to: 'pages#channel',    as: :facebook_channel
 		get '/old',        to: 'pages#old',        as: :old
+		get '/donate',     to: 'pages#donate',     as: :donations
 		get '/foo',        to: 'pages#foo',        as: :foo
 
 		resources :translations, :languages, :votes, :devices
@@ -90,11 +91,7 @@ Stoffi::Application.routes.draw do
 		
 		resources :links, only: [:index, :show, :create, :update, :destroy]
 		
-		resources :artists, :events, :songs, :genres, :albums do
-			collection do
-				get 'weekly'
-			end
-		end
+		resources :artists, :events, :songs, :genres, :albums
 		
 		resources :listens do
 			member do
@@ -107,7 +104,6 @@ Stoffi::Application.routes.draw do
 				put 'follow'
 			end
 			collection do
-				get 'weekly'
 				get '/by/:user_id', to: 'playlists#by'
 			end
 		end
@@ -115,12 +111,6 @@ Stoffi::Application.routes.draw do
 		resources :shares do
 			collection do
 				get '/by/:user_id', to: 'shares#by'
-			end
-		end
-		
-		resources :donations do
-			collection do
-				get '/by/:user_id', to: 'donations#by'
 			end
 		end
 		
