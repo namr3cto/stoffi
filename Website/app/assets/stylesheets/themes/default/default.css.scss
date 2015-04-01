@@ -208,16 +208,6 @@ ul.vertical li a
 	@include button-colors($tertiary, $tertiary_text, $shadow);
 }
 
-form
-{
-	label { color: rgba($text, 0.5); }
-	
-	div.field input[type=email], input[type=password], input[type=text], textarea
-	{
-		border-bottom: 1px dashed rgba($text,0.5);	
-	}
-}
-
 #awards
 {
 	background: $secondary;
