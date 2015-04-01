@@ -257,3 +257,31 @@ se:
           
       show:
         description: "%{genre} är en genre på Stoffi"
+        
+    events:
+      
+      index:
+        title:         'Evenemang'
+        link:          'Evenemang'
+        description:   'Hitta de hetaste evenemangen på Stoffi.'
+        
+        popular:
+          link:            'Populära'
+          title:           'Populära evenemang'
+          description:     'Se vilka populära evenemang som är på gång.'
+      
+        close:
+          link:            'Nära dig'
+          title:           'Nära dig'
+          description:     'Se evenemang på gång i din närhet.'
+        
+        user_popular:
+          link:            'Populära'
+          title:           'Populära för dig'
+          description:     "Se kommande evenemang som du kan tänkas gilla."
+      
+        categories:
+          user: 'Personligt'
+          
+      show:
+        description: "%{event} är ett evenemang på Stoffi"
