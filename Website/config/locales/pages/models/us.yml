@@ -2,9 +2,20 @@ us:
   pages:
   
     apps:
-      link:            'My Apps'
-      title:           'Apps'
-      description:     'Connect applications and websites to Stoffi and give them access to your playlist and tracks.' 
+      index:
+        link:            'Apps'
+        title:           'Apps'
+        description:     'Connect applications and websites to Stoffi and give them access to your playlist and tracks.' 
+          
+        popular:
+          link:            'Popular'
+          title:           'Popular apps'
+          description:     'See the most popular apps on Stoffi.'
+        
+        installed:
+          link:            'Installed'
+          title:           'Installed apps'
+          description:     'See the apps you have installed.'
   
     devices:
       link:            'Devices'

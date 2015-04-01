@@ -10,7 +10,7 @@ module SidebarHelper
 		top = resource.top.limit limit
 		return unless top and top.length > 0
 		r = resource.to_s.tableize
-		section_block t("#{r}.top.title") do
+		section_block t("side.#{r}") do
 			content_tag('ul', class: 'vertical', data: { field: r }) do
 				top.each do |x|
 					concat content_tag('li', link_to(x.to_s, x), data: { resource: "#{r}_#{x.id}" })

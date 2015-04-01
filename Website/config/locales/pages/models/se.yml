@@ -3,9 +3,19 @@ se:
   
     apps:
       index:
-        link:            'Mina Appar'
+        link:            'Appar'
         title:           'Appar'
         description:     'Koppla ihop program och hemsidor med Stoffi och ge dem tillgång till dina spellistor och låtar.' 
+          
+        popular:
+          link:            'Populära'
+          title:           'Populära appar'
+          description:     'Se de mest populära apparna på Stoffi.'
+        
+        installed:
+          link:            'Installerat'
+          title:           'Installerade appar'
+          description:     'Se vilka appar som du har installerat.'
   
     devices:
       index:
