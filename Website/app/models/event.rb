@@ -25,6 +25,8 @@ class Event < ActiveRecord::Base
 	validates :longitude, :latitude, numericality: true
 	validates :name, uniqueness: { scope: [ :start, :venue ] }
 	
+	acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
+	
 	self.default_image = "/assets/media/artist.png"
 	
 	searchable do
@@ -95,6 +97,10 @@ class Event < ActiveRecord::Base
 			return event
 		rescue StandardError => e
 		end
+	end
+	
+	def self.upcoming
+		where(['start > ?', Time.now])
 	end
 	
 	def display

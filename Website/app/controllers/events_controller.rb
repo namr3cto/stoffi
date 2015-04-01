@@ -16,14 +16,17 @@ class EventsController < ApplicationController
 	# GET /events
 	def index
 		l, o = pagination_params
-		@events = Event.order(created_at: :desc).limit(l).offset(o)
+		pos = origin_position(request.remote_ip)
+		pos = [pos[:longitude], pos[:latitude]]
+		@popular = Event.upcoming.order(:start).limit(l).offset(o)
+		@close = Event.upcoming.by_distance(origin: pos).limit(l).offset(o).order(:start)
 		
 		if user_signed_in?
 			artist_ids = []
 			artists = Artist.top(for: current_user, from: 7.days.ago).limit(l)
 			artists.each { |a| artist_ids << a.id }
-			where_clause = artist_ids.map { |id| "artists_genres.artist_id = #{id}" }.join(' OR ')
-			@user_events = Event.joins(:artists).where(where_clause).uniq.limit(l).offset(o)
+			where_clause = artist_ids.map { |id| "performances.artist_id = #{id}" }.join(' OR ')
+			@user_popular = Event.upcoming.joins(:artists).where(where_clause).uniq.limit(l).offset(o)
 		end
 	end
 

@@ -23,15 +23,15 @@ class EventsControllerTest < ActionController::TestCase
 		sign_in @user
 		get :index
 		assert_response :success
-		assert_not_nil assigns(:events)
-		assert_not_nil assigns(:user_events)
+		assert_not_nil assigns(:popular)
+		assert_not_nil assigns(:user_popular)
 	end
 
 	test "should get index logged out" do
 		get :index
 		assert_response :success
-		assert_nil assigns(:user_events)
-		assert_not_nil assigns(:events)
+		assert_nil assigns(:user_popular)
+		assert_not_nil assigns(:popular)
 	end
 	
 	test "should get show logged in" do
