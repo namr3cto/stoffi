@@ -100,7 +100,12 @@
 		#result-list
 		{
 			margin-right: 220px;
-			@media #{$no-banners} { margin-right: 0; }
+			min-height: 600px;
+			@media #{$no-banners}
+			{
+				margin-right: 0;
+				min-height: auto;
+			}
 		}
 	}
 }
