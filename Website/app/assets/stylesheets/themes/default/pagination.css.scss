@@ -1,0 +1,16 @@
+#paginator
+{
+	color: rgba($primary, 0.3);
+	.pagination
+	{
+		border: 1px solid $primary;
+		span
+		{
+			border-left: 1px solid $primary;
+			a
+			{
+				color: $primary;
+			}
+		}
+	}	
+}

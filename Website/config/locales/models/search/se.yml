@@ -1,8 +1,13 @@
 se:
   search:
     placeholder: 
-      all: "Sök efter artister, album, låtar och genrer"
+      all: "Sök efter musik"
+      artists: 'Sök efter artister'
+      albums: 'Sök efter album'
       songs: 'Sök efter låtar'
+      playlists: 'Sök efter spellistor'
+      genres: 'Sök efter genrer'
+      events: 'Sök efter evenemang'
     empty: "Miss! Prova att söka på något annat."
     error: "Hoppsan! Det blev knas med din sökning."
     categories:
@@ -13,6 +18,7 @@ se:
         one: "Fick en träff"
         other: "Fick %{count} träffar"
       places:
+        zero: ''
         one: " på ett ställe"
         other: " på %{p} ställen"
       time:

@@ -1,25 +1,32 @@
-ul.list .item .album-back
+ul.list .item
 {
-	width: 64px;
-	height: 56px;
-	background-size: cover;
-	
-	img
+	&[data-resource-type='album']
 	{
-		box-shadow: none;
-		width: 55px;
-		height: 54px;
-		left: 7px;
-		top: 1px;
-		position: absolute;
+		.action-bar { bottom: 0; }
 	}
-	
-	.album-front
+	.album-back
 	{
 		width: 64px;
 		height: 56px;
-		position: absolute;
 		background-size: cover;
+	
+		img
+		{
+			box-shadow: none;
+			width: 55px;
+			height: 54px;
+			left: 7px;
+			top: 1px;
+			position: absolute;
+		}
+	
+		.album-front
+		{
+			width: 64px;
+			height: 56px;
+			position: absolute;
+			background-size: cover;
+		}	
 	}
 }
 

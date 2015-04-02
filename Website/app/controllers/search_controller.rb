@@ -38,14 +38,14 @@ class SearchController < ApplicationController
 			user = user_signed_in? ? current_user.id : -1
 			@suggestions = Search.suggest(@query, page, long, lat, loc, user)
 		end
-		render @suggestions
+		render json: @suggestions
 	end
 	
 	def index
-		@search = save_search
-		@query = query_param
-		@categories = category_param
-		@sources = source_param
+		@search = new_search
+		
+		@paginatable_array = Kaminari.paginate_array(Song.all, total_count: Song.count)
+			.page(page_param).per(limit_param)
 		
 		respond_to do |format|
 			format.html { render }
@@ -60,7 +60,7 @@ class SearchController < ApplicationController
 		@results = @search.do(page_param, limit_param)
 		@paginatable_array = Kaminari.paginate_array(@results[:hits], total_count: @results[:total_hits])
 			.page(page_param).per(limit_param)
-		render @results, layout: false
+		render layout: false
 	end
 	
 	private
@@ -88,11 +88,8 @@ class SearchController < ApplicationController
 		(params[:p] || params[:page] || "1").to_i
 	end
 	
-	# Save a search
-	#
-	# This is later used for auto-complete suggestions, and
-	# for knowing when a cache is dirty
-	def save_search
+	# create a search object
+	def new_search
 		pos = origin_position(request.remote_ip)
 		s = Search.new
 		s.query = query_param
@@ -103,7 +100,7 @@ class SearchController < ApplicationController
 		s.sources = source_param.sort.join('|')
 		s.page = request.referer || ""
 		s.user = current_user if user_signed_in?
-		s.save
+		s.save if s.query.present?
 		s
 	end
 end

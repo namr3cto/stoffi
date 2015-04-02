@@ -1,37 +1,30 @@
 <% content_for :title do %>
-	<%= @query %>
+	<%= @search.query %>
 <% end %>
 
-<article class='tabbed fullwidth'>
+<article class='tabbed fullwidth' id='search'>
 	<%= render 'categories' %>
 	
-	<section>
-		<p>TODO</p>
-	</section>
-</article>
-
-<% if false %>
-<div class='white full box' id='search-pane'>
-	<%= render 'categories' %>
-	
-	<div class='center'>
+	<section id='form'>
 		<%= image_tag 'gfx/logos/blue_on_transparent_128.png', class: 'large-logo' %>
-	</div>
-	<%= hidden_field :search, :id, value: @search.id %>
-	<%= hidden_field :search, :query, value: @search.query %>
-	<%= form_tag search_path_with_categories, class: 'search-form', id: 'search-form', method: :get do %>
-		<%= image_tag 'gfx/logos/blue_on_transparent_32.png', class: 'small-logo', style: 'display:none;' %>
-		<%= text_field_tag 'q', '', placeholder: t('search.placeholder'), class: 'search', id: 'search',
-		                   value: @search.query %>
-	<% end %>
+		
+		<%= form_for search_path, method: :get do %>
+			<%= hidden_field :search, :id, value: @search.id %>
+			<%= hidden_field :search, :query, value: @search.query %>
+			<%= hidden_field :search, :categories, value: @search.categories %>
+			<%= image_tag 'gfx/logos/blue_on_transparent_32.png', class: 'small-logo' %>
+			<%= text_field_tag 'q', '', id: 'query', value: @search.query %>
+		<% end %>
+	</section>
 	
-	<div class='center' id='loading-search' style='display:none;'>
-		<%= image_tag 'gfx/ajax_loading_large_white.gif', class: 'loading',
-			data: { loading: true } %>
-	</div>
+	<section id='loading-results'>
+		<%= render 'shared/widgets/loading' %>
+	</section>
+	
 	<%= render 'shared/alert', { title: t('search.error') } %>
-
-	<%= render "shared/ads/#{@query.blank? ? 'banner' : 'skyscraper'}" %>
-	<div id='search-results'></div>
-</div>
-<% end %>
+	
+	<div id='results'></div>
+	
+	<%= render "shared/ads/#{@search.query.blank? ? 'banner' : 'skyscraper'}" %>
+	
+</article>

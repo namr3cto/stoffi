@@ -1,26 +1,15 @@
 <section class='tabs'>
 	
-	<span class='tab' data-tab='all'>
+	<span class='tab' data-tab='all' data-categories='<%= Search.categories.join('|') %>'>
 		<%= t 'search.categories.all' %>
+		<%= hidden_field :placeholder, :all, value: t("search.placeholder.all") %>
 	</span>
 	
 	<% Search.categories.each do |category| %>
-		<span class='tab' data-tab='<%= category %>'>
+		<span class='tab' data-tab='<%= category %>' data-categories='<%= category %>'>
 			<%=t("#{category}.plural").capitalize %>
+			<%= hidden_field :placeholder, category, value: t("search.placeholder.#{category}") %>
 		</span>
 	<% end %>
-</section>
-
-<% if false %>
-<nav id='categories'>
-	<span data-category='all' <%= "class=selected" if category_selected?('all') %>>
-		<%= link_to t('search.categories.all'), params.merge(categories: nil) %>
-	</span>
 	
-	<% Search.categories.each do |category| %>
-		<span data-category='<%= category %>' <%= "class=selected" if category_selected?(category) %>>
-			<%= link_to t(category+'.plural'), params.merge(categories: category) %>
-		</span>
-	<% end %>
-</nav>
-<% end %>
+</section>

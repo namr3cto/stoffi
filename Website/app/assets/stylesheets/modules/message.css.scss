@@ -10,4 +10,11 @@
 		font-style: normal;
 		font-weight: bold;
 	}
+	
+	&.large
+	{
+		background-position: 8px 5px;
+		padding: 7px 38px;
+		p { margin: .5em 0; }
+	}
 }

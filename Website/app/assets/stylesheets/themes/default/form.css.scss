@@ -9,3 +9,19 @@ form
 		border-bottom: 1px dashed rgba($text,0.5);	
 	}
 }
+
+.ui-autocomplete
+{
+	box-shadow: 0 2px 4px rgba($shadow,0.2);
+	background: $background;
+
+	.ui-menu-item
+	{
+		color: $text;
+
+		&.ui-state-focus
+		{
+			background: rgba($shadow, 0.1);
+		}
+	}
+}

@@ -1,49 +1,17 @@
-<p class='stats'>
+<div class='stats'>
 	<%= t 'search.stats.number', count: @results[:total_hits] %>
-	<%= t 'search.stats.places', count: @results[:total_sources], 
-	    	p: to_words(@results[:total_sources]) %>
+	<%= t 'search.stats.places', count: 0, p: to_words(@results[:total_sources]) %>
 	<%= t 'search.stats.time', count: @results[:benchmark].real.round(2) %>
-</p>
-
-<ul id='result-list'>
-	
-	<% if @results.key? :exact %>
-		<% o = @results[:exact] %>
-		<% c = o.class.to_s.tableize %>
-		<%= render(partial: "#{c}/large", object: o, as: c.singularize.to_sym) %>
-	<% end %>
-	
-	<% hits = @results[:hits] %>
-	<%= render(hits) || no_search_results %>
-</ul>
-
-<div id='paginator'>
-	<%= paginate @paginatable_array, param_name: :p, remote: true %>
 </div>
 
-<script>
-// TODO: can someone please help me move this into search.js.coffee?
-$("[data-type='hit'] img").load(function() { resizeImage($(this), 64); });
-$(".exact img").load(function() { resizeImage($(this), 120); });
-
-$('#paginator a').on('click', function(e)
-{
-	$('#loading-search').show();
-	$('#search-results').hide();
-});
-
-$('#paginator a').on('ajax:success', function(e, data, status, xhr)
-{
-	$('#loading-search').hide();
-	$('#alert').hide()
-	$('#search-results').html(data)
-	$('#search-results').show();
+<% if @results[:hits].empty? %>
+	<%= no_search_results %>
 	
-}).on('ajax:error', function(e, xhr, status, error)
-{
-	$('#loading-search').hide()
-	$('#search-results').hide()
-	$('#alert_message').html(error)
-	$('#alert').show()
-})	
-</script>
+<% else %>
+	<ul class='list' id='result-list'>
+		<%= render partial: @results[:hits], locals: { type: @search.categories_array.length > 1 } %>
+	</ul>
+	<div id='paginator'>
+		<%= paginate @paginatable_array, param_name: :p, remote: true %>
+	</div>
+<% end %>

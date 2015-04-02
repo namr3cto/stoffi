@@ -47,6 +47,15 @@ a
 	transition: all 500ms;
 }
 
+b { font-weight: bold; }
+
+span
+{
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
 img
 {
 	transition: border 1500ms;

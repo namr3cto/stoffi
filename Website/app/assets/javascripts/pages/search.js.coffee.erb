@@ -1,80 +1,111 @@
-# Place all the behaviors and hooks related to the matching controller here.
-# All this logic will automatically be available in application.js.
-# You can use CoffeeScript in this file: http://coffeescript.org/
-
+#
+# Switches between the front search and result mode.
+#
+# Front search is the view that the user sees when no query has
+# been submitted, the result mode is shown when there is a query
+# and search results to show.
+# 
 toggleSearchMode = () ->
-	v = $('#search').val()
-	
-	if $('#search').val() == ''
+	if $('#query').val() == ''
 		$('.large-logo').show()
 		$('.small-logo').hide()
-		$('#loading-search').hide()
+		$('#loading-results').hide()
+		$('#query').removeClass 'small'
 	else
 		$('.large-logo').hide()
 		$('.small-logo').show()
-		$('#loading-search').show()
+		$('#loading-results').show()
+		$('#query').addClass 'small'
 		
+#
+# Perform a search and fetch results.
+#
 search = (id) ->
-	url = "/search/fetch?id=#{id}"
-	req = $.get url
-	req.success (html) ->
-		display_results(html)
-	req.error (jqXHR, status, error) ->
-		display_error(error)
+	$.ajax {
+		url: "/search/fetch?id=#{id}",
+		method: 'get',
+		success: (html, status, jqXHR) ->
+			showResults html
+		error: (jqXHR, status, error) ->
+			showError error
+	}
 		
-display_results = (html) ->
-	$('#loading-search').hide()
+showResults = (html) ->
+	$('#loading-results').hide()
 	$('#alert').hide()
-	$('#search-results').html(html)
+	$('#results').html(html)
 		
-display_error = (error) ->
-	$('#loading-search').hide()
-	$('#search-results').hide()
+showError = (error) ->
+	$('#loading-results').hide()
+	$('#results').hide()
 	$('#alert_message').html(error)
 	$('#alert').show()
 	
-@resizeImage = (image, size) ->
-	if image.height() > image.width()
-		image.width(size)
-	else
-		image.height(size)
-		l = (image.width() - size) / 2
-		r = size + l
-		image.css('clip', "rect(0px,#{r}px,#{size}px,#{l}px)")
-		image.css('margin-left', "-#{l}px")
+refreshPlaceholder = ->
+	activeTab = $('.tab.active').data('tab')
+	placeholder = $("#placeholder_#{activeTab}").val()
+	$('#query').attr 'placeholder', placeholder
+	
+refreshCategories = ->
+	categories = $('.tab.active').data('categories')
+	$('#search_categories').val categories
+	
+changeCategory = ->
+	categories = $('.tab.active').data('categories')
+	tab = $('.tab.active').data('tab')
+	query = $('#query').val()
+	newUrl = "/search?q=#{query}&c=#{categories}##{tab}"
+	window.location.href = newUrl
+	
+$(document).on 'contentReady', ->
+	
+	$('#paginator a').when 'click.search', ->
+		$('#loading-results').show()
+		$('#results').hide()
+		$(window).scrollTop($('#query').offset().top-40)
+
+	$('#paginator a').when('ajax:success', (e, data, status, xhr) ->
+		$('#loading-results').hide()
+		$('#alert').hide()
+		$('#results').html(data)
+		$('#results').show()
 		
-$(document).on 'contentReady', () ->
-	$('#search').autocomplete({
+	).when('ajax:error.search', (e, xhr, status, error) ->
+		$('#loading-results').hide()
+		$('#results').hide()
+		$('#alert_message').html(error)
+		$('#alert').show()
+	)
+
+$ ->
+	$('#query').autocomplete({
 		source: "/search/suggest.json",
 		minLength: 2,
+		appendTo: '#form form'
 		focus: (event,ui) ->
-			$('#search').val(ui.item.query)
+			$('#query').val(ui.item.query)
 			false
 		select: (event,ui) ->
-			$('#search-form').submit()
+			$('#search form').submit()
 			false
 	})
 	.autocomplete('instance')._renderItem = (ul, item) ->
-		l = $('#search').val().length
+		l = $('#query').val().length
 		str = item.query[0..l-1] + '<b>' + item.query[l..]
 		$('<li>'+str+'</b></li>').appendTo(ul)
-	if $('#search_query').val() == ''
-		$('#search').val('')
+		
+	search_id = $('#search_id').val()
+	if search_id
+		search search_id
+		
 	toggleSearchMode()
+	refreshPlaceholder()
+	refreshCategories()
 	
-	$("img[data-loading='true']").load () ->
-		id = $('#search_id').val()
-		q = $('#search_query').val()
-		if id and q
-			search(id)
-
-$ ->
-	$(document).on 'click', '#search-pane [data-category]', (event) ->
-		if $('#search_query').val() != ''
-			return
-		event.preventDefault()
-		c = $(@).data('category')
-		l = $(@).children('a').attr('href')
-		$('#search-pane [data-category]').not("[data-category='#{c}']").removeClass('selected')
-		$(@).addClass('selected')
-		$('#search-form').attr('action', l)
+	$(document).on 'click', '#search .tab', (event) ->
+		if $('#search_query').val()
+			changeCategory()
+		else
+			refreshPlaceholder()
+			refreshCategories()
+		

@@ -1,8 +1,13 @@
 us:
   search:
     placeholder: 
-      all: "Search for artists, albums, songs or genres"
+      all: "Search for music"
+      artists: 'Search for artists'
+      albums: 'Search for albums'
       songs: 'Search for songs'
+      playlists: 'Search for playlists'
+      genres: 'Search for genres'
+      events: 'Search for events'
     empty: "Miss! Try searching for something else."
     error: "Oops! There was a problem with your search."
     categories:
@@ -14,6 +19,7 @@ us:
         one: "Got one hit"
         other: "Got %{count} hits"
       places: 
+        zero: ''
         one: " in one place"
         other: " in %{p} places"
       time:
