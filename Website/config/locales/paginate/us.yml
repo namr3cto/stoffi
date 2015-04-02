@@ -18,8 +18,8 @@ us:
     
   views:
     pagination:
-      first: "&laquo; First"
-      last: "Last &raquo;"
-      previous: "&#8592; Previous"
-      next: "Next &#8594;"
+      first: "&laquo; <span data-bonus>First</span>"
+      last: "<span data-bonus>Last</span> &raquo;"
+      previous: "&#8592; <span data-bonus>Previous</span>"
+      next: "<span data-bonus>Next</span> &#8594;"
       truncate: "&hellip;"

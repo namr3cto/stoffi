@@ -4,9 +4,13 @@
 	.pagination
 	{
 		border: 1px solid $primary;
-		span
+		span.page, span.prev, span.first, span.next, span.last
 		{
 			border-left: 1px solid $primary;
+		}
+		span.prev { border-left: none; }
+		span
+		{
 			a
 			{
 				color: $primary;

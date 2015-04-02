@@ -17,8 +17,8 @@ se:
     
   views:
     pagination:
-      first: "&laquo; Första"
-      last: "Sista &raquo;"
-      previous: "&#8592; Föregående"
-      next: "Nästa &#8594;"
+      first: "&laquo; <span data-bonus>Första</span>"
+      last: "<span data-bonus>Sista &raquo;</span>"
+      previous: "&#8592; <span data-bonus>Föregående</span>"
+      next: "<span data-bonus>Nästa</span> &#8594;"
       truncate: "&hellip;"
