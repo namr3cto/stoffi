@@ -59,6 +59,7 @@ class Event < ActiveRecord::Base
 		# look for same name, same city and same start date (within an hour)
 		date = hash[:start_date]
 		date = Date.parse(date) if date.is_a? String
+		date = Time.now unless date
 		d_upper = date + 1.hour
 		d_lower = date - 1.hour
 		event = where("lower(name) = ? and lower(venue) = ? and start between ? and ?",
