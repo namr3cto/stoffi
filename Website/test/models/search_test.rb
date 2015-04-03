@@ -1,6 +1,10 @@
 require 'test_helper'
+require 'test_helpers/lastfm_helper'
 
 class SearchTest < ActiveSupport::TestCase
+	
+	include Backend::Lastfm::TestHelpers
+	
 	test "should get suggestions" do
 		s = Search.suggest('bob', '/home', 50, 50, 'us')
 		assert_equal 5, s.length, "wrong number of suggestions returned"
@@ -43,13 +47,17 @@ class SearchTest < ActiveSupport::TestCase
 		s1.query = s0.query
 		s0.save!
 		s1.save!
-		Rails.logger.debug s0.inspect
-		Rails.logger.debug s1.inspect
 		assert_equal s1.updated_at, s0.previous_at, "Didn't get the correct date"
 	end
 	
 	test "should get previous search from first search" do
 		searches = Search.order(:updated_at)
 		assert searches.first.previous_at < searches.first.updated_at, "Didn't get the correct date"
+	end
+	
+	test "should search backends" do
+		stub_lastfm
+		hits = Search.search_backends('test', 'events', 'lastfm')
+		assert_equal lastfm_events.length, hits.length
 	end
 end

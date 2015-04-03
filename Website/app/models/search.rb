@@ -47,14 +47,6 @@ class Search < ActiveRecord::Base
 		results = {}
 		time = Benchmark.measure do
 			hits = []
-			# TODO: move this to a crawler
-			if false and previous_at < CACHE_EXPIRATION.ago
-				logger.info "fill db from backends"
-				hits += Backend::Lastfm.search(query, categories) if sources.include? 'lastfm'
-				hits += Backend::Youtube.search(query, categories) if sources.include? 'youtube'
-				hits = parse(hits)
-				hits = save_hits(hits)
-			end
 			search = search_in_db(page, limit)
 			results[:total_sources] = sources_array.length
 			results[:total_hits] = search.total
@@ -67,6 +59,7 @@ class Search < ActiveRecord::Base
 			results[:offset] = search.results.offset
 			hits = rank(search.results.uniq)
 			
+			# TODO: show exact match
 			#exact = find_exact(hits) if page == 1
 			#if exact
 			#	results[:exact] = exact
@@ -98,7 +91,15 @@ class Search < ActiveRecord::Base
 		sources.to_s.split('|').sort
 	end
 	
-	#private
+	def self.search_backends(query, categories, sources)
+		hits = []
+		hits += Backend::Lastfm.search(query, categories) if sources.include? 'lastfm'
+		hits += Backend::Youtube.search(query, categories) if sources.include? 'youtube'
+		hits = Search.parse(hits)
+		return hits
+	end
+	
+	private
 	
 	# The time a search is cached to ease pressure on backends
 	CACHE_EXPIRATION = 1.week
@@ -128,7 +129,7 @@ class Search < ActiveRecord::Base
 	# Rank an array of hits according to a query, putting the most
 	# relevant hit at the start of the array
 	def rank(hits)
-		hits = fill_meta(hits)
+		hits = Search.fill_meta(hits)
 		
 		hits.each do |h|
 			h[:distance] = distance(query, h[:object].display)
@@ -143,7 +144,7 @@ class Search < ActiveRecord::Base
 	# where artists has been parsed and split if needed, song titles
 	# have been parsed and split into song title and artist name, and
 	# popularity has been normalized.
-	def parse(hits)
+	def self.parse(hits)
 		# parse hits (extract artists and song titles, for example) and
 		# put into a structure, separated by type
 		parsed_hits = parse_hits(hits)
@@ -157,7 +158,7 @@ class Search < ActiveRecord::Base
 	# Parse an array of hits, as reported by backends, into a hash
 	# of results where hits separated by type and some values are
 	# parsed (such as song titles and artist names)
-	def parse_hits(hits)
+	def self.parse_hits(hits)
 		parsed_hits = { artist: {}, song: {}, album: {}, event: {}, genre: {}}
 		hits.each do |hit|
 			begin
@@ -190,8 +191,13 @@ class Search < ActiveRecord::Base
 				when :album
 					hit[:artists] = Artist.split_name(hit[:artist]) if hit[:artist]
 					add_parsed_hit(:album, parsed_hits, hit, true)
+					
+				when :event
+					hit[:artists] = Artist.split_name(hit[:artists]) if hit[:artists]
+					add_parsed_hit(:event, parsed_hits, hit, true)
 				
 				else
+					add_parsed_hit(hit[:type], parsed_hits, hit, true)
 				end
 			rescue
 			end
@@ -232,7 +238,7 @@ class Search < ActiveRecord::Base
 	# The saved objects should function as full replacements of the
 	# actual hits, which allows us to use the database as a cache,
 	# minimizing the need to send queries to the backends.
-	def save_hits(hits)
+	def self.save_hits(hits)
 		retval = []
 		hits.each do |hit|
 			begin
@@ -249,13 +255,12 @@ class Search < ActiveRecord::Base
 				when :genre
 					x = Genre.find_or_create_by_hash(hit)
 				else
-					raise "Unknown hit type: #{hit[:type]}"
+					raise "Unknown hit type: #{hit[:type]}: #{hit.inspect}"
 				end
 				
 				retval << x if x
 				
 			rescue StandardError => e
-				raise e
 			end
 		end
 		
@@ -263,7 +268,7 @@ class Search < ActiveRecord::Base
 	end
 	
 	# Fill in meta data for objects such as popularity
-	def fill_meta(hits)
+	def self.fill_meta(hits)
 		sources = hits.collect { |h| h.sources.to_a }.flatten
 		popularity = {}
 		sources.each do |s|
@@ -295,7 +300,7 @@ class Search < ActiveRecord::Base
 	# Add a hit, as reported from a backend, into a hash of hits
 	# where the key is either the name (allow_dups = false) or a
 	# random string
-	def add_parsed_hit(type, collection, hit, allow_dups = false)
+	def self.add_parsed_hit(type, collection, hit, allow_dups = false)
 		# duplicates: random key, otherwise use name
 		key = allow_dups ? (0...16).map {(65+rand(26)).chr}.join : hit[:name].parameterize('_')
 		
