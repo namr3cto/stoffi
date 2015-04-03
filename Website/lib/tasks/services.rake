@@ -6,11 +6,11 @@ namespace :services do
 		Rake::Task['sunspot:solr:start'].execute rescue nil
 		
 		puts 'starting redis'
-		system('redis-server &')
+		system('redis-server /usr/local/etc/redis.conf')
 		
 		port = Rails.env == :production ? 8443 : 8080
 		puts "starting juggernaut on port #{port}"
-		system("juggernaut --port #{port} &")
+		system("juggernaut --port #{port} 2>&1 > /var/log/juggernaut.log &")
 	end
 
 	desc "Stop all services"
