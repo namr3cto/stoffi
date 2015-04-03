@@ -125,8 +125,8 @@ class Backend::Lastfm
 			retval[:location] = { longitude: long, latitude: lat }
 			retval[:city] = hit['venue']['location']['city']
 			retval[:id] = hit['id']
-			retval[:start_date] = hit['start_date']
-			retval[:end_date] = hit['end_date']
+			retval[:start_date] = hit['startDate']
+			retval[:end_date] = hit['endDate']
 			
 		else
 			return nil
