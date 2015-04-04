@@ -25,7 +25,7 @@ namespace :crawler do
 			puts "  queries processed: #{status[:processed]}"
 			puts "     total run time: #{status[:runtime]}"
 			puts "   queries in queue: #{status[:queue]}"
-			puts "      current query: #{status[:current_query]}"
+			puts "         last query: #{status[:current_query]}"
 		else
 			puts 'no crawler is running'
 		end
