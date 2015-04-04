@@ -100,7 +100,7 @@ module Backend::Lastfm::TestHelpers
 				'title' => 'The Monster Tour',
 				'artists' =>
 				{
-					'artist' => ['Eminem', 'Rihanna' ],
+					'artist' => ['Eminem', 'Rihanna'],
 					'headliner' => 'Eminem'
 				},
 				'venue' =>
@@ -141,7 +141,7 @@ module Backend::Lastfm::TestHelpers
 				'title' => 'Music Midtown',
 				'artists' =>
 				{
-					'artist' => ['Eminem', 'John Mayer', 'B.o.B', 'Lorde' ],
+					'artist' => ['Eminem', 'John Mayer', 'B.o.B', 'Lorde'],
 					'headliner' => 'Eminem'
 				},
 				'venue' =>
