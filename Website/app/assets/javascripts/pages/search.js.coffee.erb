@@ -48,7 +48,7 @@ refreshPlaceholder = ->
 	
 refreshCategories = ->
 	categories = $('.tab.active').data('categories')
-	$('#search_categories').val categories
+	$('#categories').val categories
 	
 changeCategory = ->
 	categories = $('.tab.active').data('categories')
@@ -103,7 +103,7 @@ $ ->
 	refreshCategories()
 	
 	$(document).on 'click', '#search .tab', (event) ->
-		if $('#search_query').val()
+		if $('#query').val()
 			changeCategory()
 		else
 			refreshPlaceholder()
