@@ -193,7 +193,6 @@ class Search < ActiveRecord::Base
 					add_parsed_hit(:album, parsed_hits, hit, true)
 					
 				when :event
-					hit[:artists] = Artist.split_name(hit[:artists]) if hit[:artists]
 					add_parsed_hit(:event, parsed_hits, hit, true)
 				
 				else
