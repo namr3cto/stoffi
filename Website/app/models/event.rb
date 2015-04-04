@@ -85,7 +85,7 @@ class Event < ActiveRecord::Base
 			
 			if hash.key? :location
 				event.longitude = hash[:location][:longitude]
-				event.latitude = hash[:location][:longitude]
+				event.latitude = hash[:location][:latitude]
 				event.save
 			end
 			
