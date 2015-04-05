@@ -2,8 +2,12 @@ se:
   events:
     plural: "evenemang"
     singular: "evenemang"
-    description: "Ett evenemang med %{artists}"
-    location: "I %{city} den %{time}"
-    empty: "Inga evenemang hittades."
-    top:
-      title: "Populära evenemang"
+    artists: 'Artister'
+    
+    meta:
+      info: 'Information'
+      name: 'Namn'
+      venue: 'Plats'
+      date: 'Datum'
+      attending: 'Anmälda'
+      

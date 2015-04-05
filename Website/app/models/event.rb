@@ -27,7 +27,7 @@ class Event < ActiveRecord::Base
 	
 	acts_as_mappable lat_column_name: :latitude, lng_column_name: :longitude
 	
-	self.default_image = "/assets/media/artist.png"
+	self.default_image = "gfx/icons/256/event.png"
 	
 	searchable do
 		text :name, boost: 5

@@ -2,8 +2,11 @@ us:
   events:
     plural: "events"
     singular: "event"
-    empty: "No events found."
-    description: "An event with %{artists}"
-    location: "In %{city} at %{time}"
-    top:
-      title: "Popular events"
+    artists: 'Artists'
+    
+    meta:
+      info: 'Information'
+      name: 'Name'
+      venue: 'Venue'
+      date: 'Date'
+      attending: 'Attending'

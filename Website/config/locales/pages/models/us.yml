@@ -18,12 +18,12 @@ us:
           description:     'See the apps you have installed.'
   
     devices:
-      link:            'Devices'
-      title:           'Devices'
-      description:     'See and manage the devices you are using with your Stoffi account.'
+      index:
+        link:            'Devices'
+        title:           'Devices'
+        description:     'See and manage the devices you are using with your Stoffi account.'
   
     playlists:
-      
       index:
         title:         'Playlists'
         link:          'Playlists'

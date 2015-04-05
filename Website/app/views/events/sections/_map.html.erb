@@ -1,0 +1,11 @@
+<% if @event.longitude != 0 and @event.latitude != 0 or @event.venue.present? %>
+	<section class='event-map'>
+		<%= render partial: 'shared/map', locals: {
+			longitude: @event.longitude,
+			latitude: @event.latitude,
+			zoom: 5,
+			tilt: true,
+			marker: @event.name,
+		} %>
+	</section>
+<% end %>

@@ -1,44 +1,55 @@
-<p id="notice"><%= notice %></p>
+<% content_for :title do %>
+	<%= @event.name %>
+<% end %>
 
-<p>
-  <strong>Name:</strong>
-  <%= @event.name %>
-</p>
+<% content_for :description do %>
+	<%=t 'pages.events.show.description', event: @event %>
+<% end %>
 
-<p>
-  <strong>Venue:</strong>
-  <%= @event.venue %>
-</p>
+<% content_for :header do %>
+	<meta property="og:title" content="<%=h @event.name %>"/>
+	<meta property="og:type" content="music.album"/>
+	<meta property="og:image" content="<%= @event.image %>"/>
+	<meta property="og:url" content="<%= event_url(@event) %>"/>
+	<meta property="og:description" content="<%=t 'pages.events.show.description', event: @event %>"/>
+<% end %>
 
-<p>
-  <strong>Latitude:</strong>
-  <%= @event.latitude %>
-</p>
-
-<p>
-  <strong>Longitude:</strong>
-  <%= @event.longitude %>
-</p>
-
-<p>
-  <strong>From:</strong>
-  <%= @event.start %>
-</p>
-
-<p>
-  <strong>Until:</strong>
-  <%= @event.stop %>
-</p>
-
-<p>
-  <strong>Content:</strong>
-  <%= @event.content %>
-</p>
-
-<p>
-  <strong>Category:</strong>
-  <%= @event.category %>
-</p>
-
-<%= link_to 'Edit', edit_event_path(@event) %> |
-<%= link_to 'Back', events_path %>
+<article class='tabbed' data-resource-type='event' data-resource-id='<%= @event.id %>' data-resource-url='<%= url_for @event %>'>
+	<section class='head'>
+		<div class='left'>
+			<div class='top'></div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span><%=t 'events.singular' %></span>
+			</div>
+		</div>
+		<div class='right'>
+			<div class='top'>
+				<h1 data-field='display'><%=d @event.name %></h1>
+				<%= render partial: 'shared/social' %>
+			</div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span>
+					<%= t('artists.plural').capitalize %>: <%= link_to_association @event.artists.top.limit(3) %>
+				</span>
+			</div>
+		</div>
+		<div class='image'>
+			<div class='image-border'>
+				<%= image_tag @event.image(:huge), data: { field: :picture } %>
+			</div>
+		</div>
+	</section>
+	
+	<!-- we don't have any tabs, but need this to create the shadow effect -->
+	<section class='tabs'></section>
+	
+	<aside>
+		<%= render 'events/sections/info' %>
+	</aside>
+	
+	<%= render 'events/sections/map' %>
+	<%= render 'events/sections/artists' %>
+	
+</article>
