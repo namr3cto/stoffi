@@ -1,16 +1,20 @@
 
 initMap = (div) ->
-	lng = div.data('longitude')
-	lat = div.data('latitude')
-	mrk = div.data 'marker'
+	lng = div.data('map-longitude')
+	lat = div.data('map-latitude')
+	zoom = div.data('map-zoom') || 3
+	type = div.data('map-type') || 'terrain'
+	mark = div.data('map-marker')
 	pos = new google.maps.LatLng(lat, lng)
 	i = null
 	
 	map = new google.maps.Map div[0], {
-		zoom: 3,
+		zoom: zoom,
 		center: pos,
-		mapTypeId: google.maps.MapTypeId.TERRAIN
+		mapTypeId: type
 	}
+	
+	map.setTilt(45)# if div.data('tilt')
 	
 	infowindow = new google.maps.InfoWindow()
 	
@@ -21,7 +25,7 @@ initMap = (div) ->
 	
 	google.maps.event.addListener marker, 'click', ((marker, i) ->
 		() ->
-			infowindow.setContent mrk
+			infowindow.setContent mark
 			infowindow.open map, marker
 	)(marker, i)
 
