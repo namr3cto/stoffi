@@ -56,6 +56,12 @@ span
 	text-overflow: ellipsis;
 }
 
+code
+{
+	font-family: monospace;
+	font-size: 1.3em;
+}
+
 img
 {
 	transition: border 1500ms;
@@ -71,11 +77,12 @@ dl
 		font-weight: bold;
 		margin-top: 1.5em;
 		margin-bottom: 0.2em;
+		&:not(:first-child) { margin-top: 2em; }
 	}
 	
-	dd:not(:last-child)
+	dd
 	{
-		margin-bottom: 1em;
+		margin: 1em 0;
 	}
 }
 

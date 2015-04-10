@@ -1,6 +1,8 @@
-<% if any_errors? %>
+<% resource = nil unless defined? resource %>
+
+<% if any_errors? resource %>
 	<div class="alert">
-		<%= pretty_errors %>
+		<%= pretty_errors resource %>
 	</div>
 <% end %>
 

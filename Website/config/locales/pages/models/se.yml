@@ -1,7 +1,7 @@
 se:
   pages:
   
-    apps:
+    oauth_clients:
       index:
         link:            'Appar'
         title:           'Appar'
@@ -12,10 +12,37 @@ se:
           title:           'Populära appar'
           description:     'Se de mest populära apparna på Stoffi.'
         
-        installed:
+        added:
           link:            'Installerat'
           title:           'Installerade appar'
           description:     'Se vilka appar som du har installerat.'
+        
+        created:
+          link:            'Skapat'
+          title:           'Skapade appar'
+          description:     'Se vilka appar som du har skapat.'
+          
+      edit:
+        link:            'Ändra'
+        title:           'Ändra %{app}'
+        description:     'Gör förändringar på appen %{app}.'
+          
+      new:
+        link:            'Ny app'
+        title:           'Ny app'
+        description:     'Skapa en ny app för att koppla ihop ditt program eller din hemsida med Stoffi.' 
+          
+      show:
+        description:     '%{app} ör en app av %{author} på Stoffi.'
+          
+      destroy:
+        link:            'Ta bort'
+        description:     'Ta bort appen %{app}'
+        confirm:         'Är du säker på att du vill ta bort %{app}?'
+        
+      authorize:
+        link:            'Installera'
+        description:     'Installera appen %{app}'
   
     devices:
       index:

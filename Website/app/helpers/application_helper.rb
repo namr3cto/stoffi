@@ -26,7 +26,7 @@ module ApplicationHelper
 		"<div class='line-behind-text'><h2>#{h text}</h2></div>".html_safe
 	end
 	
-	def pretty_errors
+	def pretty_errors(resource = nil)
 		errors = []
 		if resource and resource.errors and resource.errors.count > 0
 			errors << resource.errors.full_messages[0]
@@ -49,7 +49,7 @@ module ApplicationHelper
 			url = url[8..-1]
 		end
 		
-		if url.starts_with? 'www.' && remove_www
+		if url.starts_with?('www.') and remove_www
 			url = url[4..-1]
 		end
 		

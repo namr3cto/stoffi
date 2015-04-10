@@ -1,53 +1,49 @@
 us:
   apps:
-    personal: "My apps"
-    created: "Apps I have created"
-    more: "More apps"
-    all: "Apps on Stoffi"
-    create: "Create app"
+    singular: 'app'
+    plural: 'apps'
+    description_html: 'By %{author}'
     
-    revoke: "Remove"
-    
-    add:
-      button: "Add"
-      hint: "Give %{app} access to my account."
+    meta:
+      info: 'Information'
+      name: "Name"
+      description: "Description"
+      website: "Website"
+      added: "Was added %{time} ago"
+      created_at: "Was created %{time} ago"
+      icon_64: "URL for large icon (512x512)"
+      icon_64: "URL for medium icon (64x64)"
+      icon_16: "URL for small icon (16x16)"
+      support: "Support"
+      support_url: "Support URL"
+      author: "Author"
+      author_url: "Author URL"
+      key: "Key"
+      secret: "Secret"
+      callback: "Callback URL"
+      request: "Request Token URL"
+      access: "Access Token URL"
+      authorize: "Authorize Token URL"
       
     permissions:
-      title: "Permissions"
+      header: "Permissions"
       picture:
         label: "Picture"
-        tooltip: "Your profile picture."
+        description: "Your profile picture."
       name:
         label: "Name"
-        tooltip: "Your full name."
+        description: "Your full name."
       playlists:
         label: "Playlists"
-        tooltip: "Create, edit and remove playlists."
+        description: "Create, edit and remove playlists."
       listens:
         label: "Listens"
-        tooltip: "Read and add songs you listen to."
+        description: "Read and add songs you listen to."
       shares:
         label: "Shares"
-        tooltip: "See previously shared songs and playlists, and share new ones."
-    
-    name: "Name"
-    descr: "Description"
-    url: "Website"
-    added: "Was added %{time} ago"
-    created_at: "Was created %{time} ago"
-    settings: "Settings"
-    large_icon: "Large Icon URL (64x64)"
-    small_icon: "Small Icon URL (16x16)"
-    support: "Support"
-    support_url: "Support URL"
-    author: "Author"
-    author_url: "Author URL"
-    key: "Key"
-    secret: "Secret"
-    callback: "Callback URL"
-    request: "Request Token URL"
-    access: "Access Token URL"
-    authorize: "Authorize Token URL"
-    mode_notice: "We support HMAC-SHA1 (recommended) as well as plain text in SSL mode."
-    
-    edit: "Edit"
+        description: "See previously shared songs and playlists, and share new ones."
+        
+    modes:
+      notice: "We support HMAC-SHA1 (recommended) and plain text in SSL mode."
+      
+    similar: 'Similar apps'

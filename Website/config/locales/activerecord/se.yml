@@ -68,6 +68,10 @@ se:
       artist:
         picture: "Bild"
         website: "Hemsida"
+        
+      client_application:
+        website: 'Hemsida'
+        name: 'Namn'
 
   date:
     formats:

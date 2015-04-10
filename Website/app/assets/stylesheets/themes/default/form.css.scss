@@ -2,7 +2,7 @@ form
 {
 	label { color: rgba($text, 0.5); }
 	
-	div.field input[type=email], input[type=password], input[type=text], textarea
+	div.field input[type=email], input[type=password], input[type=url], input[type=text], textarea
 	{
 		border: none;
 		outline: none;

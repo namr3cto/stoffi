@@ -1,7 +1,7 @@
 us:
   pages:
   
-    apps:
+    oauth_clients:
       index:
         link:            'Apps'
         title:           'Apps'
@@ -12,10 +12,37 @@ us:
           title:           'Popular apps'
           description:     'See the most popular apps on Stoffi.'
         
-        installed:
+        added:
           link:            'Installed'
           title:           'Installed apps'
           description:     'See the apps you have installed.'
+        
+        created:
+          link:            'Created'
+          title:           'Created apps'
+          description:     'See the apps you have created.'
+          
+      edit:
+        link:            'Edit'
+        title:           'Edit %{app}'
+        description:     'Make changes to the app %{app}.'
+          
+      new:
+        link:            'New app'
+        title:           'New app'
+        description:     'Create a new app and connect your application or website to Stoffi.'
+          
+      show:
+        description:     '%{app} is an app by %{author} on Stoffi.'
+          
+      destroy:
+        link:            'Delete'
+        description:     'Delete the app %{app}'
+        confirm:         'Are you sure you want to delete %{app}?'
+        
+      authorize:
+        link:            'Install'
+        description:     'Install the app %{app}'
   
     devices:
       index:

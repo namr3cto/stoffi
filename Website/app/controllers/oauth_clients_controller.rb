@@ -9,99 +9,109 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class OauthClientsController < ApplicationController
-	oauthenticate only: [:index, :show]
-	oauthenticate interactive: true
-	before_filter :get_app, only: [:edit, :update, :destroy]
-	before_filter :no_mobile
-	respond_to :html, :mobile, :xml, :json
+	oauthenticate except: [:index, :show]
+	oauthenticate interactive: true, only: [:update, :create, :destroy]
+	before_action :set_app, only: [:show, :edit, :update, :destroy, :revoke]
+	before_action :ensure_owner_or_admin, only: [:edit, :update, :destroy]
 	
 	# GET /apps
 	def index
-		@created = current_user.get_apps(:created)
-		@added = current_user.get_apps(:added)
-		@rest = ClientApplication.not_added_by(current_user)
+		l, o = pagination_params
+		@popular = ClientApplication.rank.limit(l).offset(o)
 		
-		@tokens = {}
-		@added.each do |app|
-			token = current_user.tokens.
-				where("client_application_id = ? and "+
-					"invalidated_at is null and "+
-					"authorized_at is not null and "+
-					"type = 'AccessToken'", app.id).first
+		if user_signed_in?
+			@created = current_user.get_apps(:created)
+			@added = current_user.get_apps(:added)
+			@tokens = {}
+			@added.each do |app|
+				token = current_user.tokens.
+					where("client_application_id = ? and "+
+						"invalidated_at is null and "+
+						"authorized_at is not null and "+
+						"type = 'AccessToken'", app.id).first
 			
-			@tokens[app.id] = token
+				@tokens[app.id] = token
+			end
 		end
-		
-		@title = t "apps.title"
-		@description = t "apps.description"
-		respond_with ClientApplication.all
 	end
 
 	# GET /apps/new
 	def new
 		@app = ClientApplication.new
-		@title = t "apps.title"
-		@description = t "apps.description"
 	end
 
 	# POST /apps
 	def create
-		@app = current_user.apps.build(params[:app])
-		respond_with(@app)
+		@app = current_user.apps.new(app_params)
+
+		respond_to do |format|
+			if @app.save
+				format.html { redirect_to @app }
+				format.json { render :show, status: :created, location: @app }
+			else
+				format.html { render :new }
+				format.json { render json: @app.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	# GET /apps/1
 	def show
-		@app = ClientApplication.find(params[:id])
-		@channels = @app.user == nil ? [] : ["user_"+@app.user.id]
-		@title = @app.name
-		@description = t "apps.description"
-		respond_with @app
+		@channels = @app.user.blank? ? [] : ["user_#{@app.user.id}"]
+		@app.similar
 	end
 
 	# GET /apps/1/edit
 	def edit
-		@title = @app.name
-		@description = t "apps.description"
 	end
 
 	# PUT /apps/1
 	def update
-		@app.update_attributes(params[:app])
-		respond_with(@app)
+		respond_to do |format|
+			if @app.update_attributes(app_params)
+				format.html { redirect_to @app }
+				format.js { }
+				format.json { render json: @album, location: @album }
+			else
+				format.html { render action: 'edit' }
+				format.js { render partial: 'shared/dialog/errors', locals: { resource: @app, action: :update } }
+				format.json { render json: @app.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	# DELETE /apps/1
 	def destroy
 		@app.destroy
-		respond_with(@app)
+		redirect_to :index
 	end
 
 	# GET /apps/1/revoke
 	def revoke
-		@app = ClientApplication.find(params[:id])
 		tokens = current_user.tokens.find_by(client_application_id: @app.id)
-		
-		tokens.each do |t|
-			t.delete
-		end
-		
-		respond_with(@app) do |format|
-			format.html { redirect_to(apps_url) }
+		tokens.each { |t| t.delete }
+		respond_to do |format|
+			format.html { redirect_to :index }
 			format.xml  { head :ok }
 			format.json { head :ok }
 		end
 	end
 
 	private
-	def get_app
-		unless @app = current_user.apps.find(params[:id])
-			flash.now[:error] = "Wrong application id"
-			raise ActiveRecord::RecordNotFound
-		end
+	
+	# Use callbacks to share common setup or constraints between actions.
+	def set_app
+		not_found('app') and return unless ClientApplication.exists? params[:id]
+		@app = ClientApplication.find(params[:id])
+	end
+
+	# Never trust parameters from the scary internet, only allow the white list through.
+	def app_params
+		params.require(:client_application).permit(:name, :website, :support_url, :callback_url, :icon_16, :icon_64, 
+			:description, :author, :author_url)
 	end
 	
-	def no_mobile
-		redirect_to root_url and return if params[:format] == "mobile"
+	def ensure_owner_or_admin
+		access_denied unless current_user.owns?(@app) or current_user.admin?
 	end
 end

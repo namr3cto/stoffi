@@ -10,7 +10,7 @@ module EditableHelper
 		
 		# prepare markup content
 		icon = content_tag 'span', '', class: 'icon edit-icon'
-		f = "#{resource.class.name.downcase}[#{field}]"
+		f = "#{resource.class.name.tableize.singularize}[#{field}]"
 			
 		if block_given?
 			text = content_tag 'div', capture(&block)+icon, class: :text

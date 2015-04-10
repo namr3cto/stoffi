@@ -19,10 +19,13 @@ $(document).on 'contentReady', () ->
 		if event.which == 1
 			url = $(@).data('list-add')
 			mode = $(@).data('list-add-mode') || 'float'
-			openDialog url, {
-				mode: mode,
-				parent: $(@).closest('[data-list]')
-			}
+			if mode == 'page'
+				window.location = url
+			else
+				openDialog url, {
+					mode: mode,
+					parent: $(@).closest('[data-list]')
+				}
 	
 	# remove the 'empty' from all lists with items
 	for l in $('[data-list]')

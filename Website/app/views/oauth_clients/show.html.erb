@@ -1,3 +1,73 @@
+<% content_for :title do %>
+	<%= @app.name %>
+<% end %>
+
+<% content_for :description do %>
+	<%=t 'pages.apps.show.description', app: @app %>
+<% end %>
+
+<article class='tabbed' data-resource-type='app' data-resource-id='<%= @app.id %>' data-resource-url='<%= url_for @app %>'>
+	<section class='head'>
+		<div class='left'>
+			<div class='top'></div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span><%=t 'apps.singular' %></span>
+			</div>
+		</div>
+		<div class='right'>
+			<div class='top'>
+				<h1 data-field='display'><%=d @app.name %></h1>
+				<%= render partial: 'shared/social' %>
+			</div>
+			<div class='line'></div>
+			<div class='bottom'>
+				<span>
+					<%= t 'apps.description_html', author: link_to(@app.user) %>
+				</span>
+			</div>
+		</div>
+		<div class='image'>
+			<div class='image-border'>
+				<%= image_tag @app.image(:huge), data: { field: :picture } %>
+			</div>
+		</div>
+	</section>
+	
+	<!-- we don't have any tabs, but need this to create the shadow effect -->
+	<section class='tabs'></section>
+	
+	<aside>
+		<section data-bonus>
+			<%= render 'shared/ads/skyscraper' %>
+		</section>
+	</aside>
+	
+	<%= link_to t('pages.oauth_clients.authorize.link'), authorize_path(client_id: @app.key),
+		class: 'button', id: 'install_button' %>
+	
+	<%= render 'oauth_clients/sections/info' %>
+	<!-- TODO: fix the sunspot search so we get results here -->
+	<%= render 'oauth_clients/sections/similar' if false %>
+	
+	<% if current_user.owns?(@app) or current_user.admin? %>
+		<section>
+			<%= link_to edit_app_path(@app), class: 'button primary' do %>
+				<span><%= t 'pages.oauth_clients.edit.link' %></span>
+			<% end %>
+			<%= link_to t('pages.oauth_clients.destroy.link'), app_path(@app), method: :delete, data: {
+				confirm: t('pages.oauth_clients.destroy.confirm')
+			} %>
+		</section>
+	<% end %>
+	
+</article>
+
+
+<% if false %>
+
+		@channels = @app.user == nil ? [] : ["user_"+@app.user.id]
+
 <div id="main" class="app">
 	<div class="white box">
 		<div class="head">
@@ -69,3 +139,4 @@
 </div>
 
 <%= render "sidebars/#{user_signed_in? ? 'user' : 'main'}" %>
+<% end %>

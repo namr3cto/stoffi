@@ -1,8 +1,8 @@
 a.button, ul.buttons li a
 {
 	text-align: left;
-	margin: 0.4em 1em;
-	padding: 0.3em 1em 0.5em;
+	margin: 0.4em 0;
+	padding: 0.3em 1em;
 	display: inline-block;
 	//border-radius: 3px;
 	
@@ -38,4 +38,10 @@ a.button, ul.buttons li a
 			&:first-of-type { padding-left: 0; }
 		}
 	}
+}
+
+a.button
+{
+	padding: 0.5em 1em;
+	margin-right: 2em;
 }

@@ -7,7 +7,7 @@ form
 	{
 		margin-bottom: 1em;
 		
-		input[type=email], input[type=password], input[type=text], textarea
+		input[type=email], input[type=password], input[type=text], input[type=url], textarea
 		{
 			width: 12em;
 			max-width: 100%;
@@ -75,7 +75,7 @@ form
 
 article:not(.small) form
 {
-	input[type=email], input[type=password], input[type=text], textarea
+	input[type=email], input[type=password], input[type=text], input[type=url], textarea
 	{
 		width: 29.3em;
 		&.short { width: 14.3em; }

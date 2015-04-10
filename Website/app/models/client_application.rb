@@ -24,6 +24,8 @@ class ClientApplication < ActiveRecord::Base
 		assoc.has_many :oauth_tokens
 	end
 	
+	has_many :users, through: :access_tokens
+	
 	# validations
 	validates_presence_of :name, :website, :key, :secret
 	validates_uniqueness_of :key
@@ -34,6 +36,10 @@ class ClientApplication < ActiveRecord::Base
 	validates_format_of :callback_url, with: /\Ahttp(s?):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/i, :allow_blank=>true
 
 	attr_accessor :token_callback_url
+	
+	searchable do
+		text :name, :author, :description
+	end
 	
 	# Gets a list of all apps not added by a given user
 	def self.not_added_by(user)
@@ -70,6 +76,13 @@ class ClientApplication < ActiveRecord::Base
 			false
 		end
 	end
+	
+	def self.rank
+		self.select("client_applications.*,COUNT(DISTINCT(users.id)) AS user_count").
+			joins("LEFT JOIN oauth_tokens ON oauth_tokens.client_application_id = client_applications.id").
+			joins("LEFT JOIN users ON oauth_tokens.user_id = users.id").
+			group("client_applications.id").order("user_count DESC")
+	end
 
 	# The URL to the OAuth server.
 	def oauth_server
@@ -88,16 +101,28 @@ class ClientApplication < ActiveRecord::Base
 		RequestToken.create client_application: self, callback_url: self.token_callback_url
 	end
 	
-	# The large icon of the app (64x64).
-	def large_icon
-		return icon_64 if icon_64.present?
-		"/assets/gfx/app_default_icon_64.png"
+	def image(size = :huge)
+		sizes = {
+			tiny: 16,
+			small: 32,
+			medium: 64,
+			large: 128,
+			huge: 256
+		}
+		raise "Invalid icon size: #{size}" unless size.in? sizes
+		m = "icon_#{sizes[size]}"
+		return send(m) if respond_to?(m) and send(m).present?
+		"gfx/icons/#{sizes[size]}/app.png"
 	end
 	
-	# The small icon of the app (16x16).
-	def small_icon
-		return icon_16 if icon_16.present?
-		"/assets/gfx/app_default_icon_16.png"
+	def similar
+		search = ClientApplication.search do
+			fulltext name.split.join(' or ') do
+				phrase_fields name: 5.0
+				phrase_slop 2
+			end
+		end
+		search.results
 	end
 	
 	# The type of the resource.
@@ -116,6 +141,10 @@ class ClientApplication < ActiveRecord::Base
 			except: :secret,
 			methods: [ :kind, :display, :url ]
 		}
+	end
+	
+	def added_by?(user)
+		access_tokens.where("user_id = #{user.id} AND authorized_at IS NOT NULL AND invalidated_at IS NULL").any?
 	end
 
 	protected

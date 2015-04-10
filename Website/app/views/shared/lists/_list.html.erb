@@ -28,9 +28,11 @@ data[:list_followings] = local_assigns[:follower] if local_assigns.has_key? :fol
 	<% end %>
 <% end %>
 
-<% if resource.classify.constantize.any? %>
+<% r = resource == 'oauth_clients' ? 'client_application' : resource %>
+
+<% if r.classify.constantize.any? %>
 	<ul data-template='<%= resource.singularize %>'>
 		<%= render partial: "#{resource.pluralize}/#{resource.singularize}",
-			object: resource.classify.constantize.first %>
+			object: r.classify.constantize.first %>
 	</ul>
 <% end %>

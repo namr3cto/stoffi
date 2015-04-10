@@ -1,10 +1,22 @@
-<div id="main">
-	<div class="white box">
-		<h1><%=t "app.create" %></h1>
-		<%= form_for :app, :url => { :action => :create } do |f| %>
-			<%= render :partial => "form", :locals => { :f => f } %>
-		<% end %>
-	</div>
-</div>
+<% content_for :title do %>
+	<%=t 'pages.oauth_clients.new.title' %>
+<% end %>
 
-<%= render "sidebars/user" %>
+<% content_for :description do %>
+	<%=t 'pages.oauth_clients.new.description' %>
+<% end %>
+
+<article>
+	
+	<aside>
+		<section data-bonus>
+			<%= render 'shared/ads/skyscraper' %>
+		</section>
+	</aside>
+	
+	<section>
+		<h1><%=t 'pages.oauth_clients.new.title' %></h1>
+		<%= render 'form' %>
+	</section>
+	
+</article>

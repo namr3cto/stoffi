@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20150308123700) do
+ActiveRecord::Schema.define(version: 20150410165947) do
 
   create_table "admin_configs", force: true do |t|
     t.string   "name"
@@ -119,6 +119,7 @@ ActiveRecord::Schema.define(version: 20150308123700) do
     t.string   "description"
     t.string   "author"
     t.string   "author_url"
+    t.string   "icon_512"
   end
 
   add_index "client_applications", ["key"], name: "index_client_applications_on_key", unique: true
