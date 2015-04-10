@@ -9,7 +9,7 @@ locals = user_signed_in? ? {
 } : {}
 %>
 
-<%= render partial: 'shared/lists/top', locals:{
+<%= render partial: 'shared/lists/top', locals: {
 	resource: 'playlists',
 	tabs: ['weekly', 'all_time', 'recent', 'owns', 'follows'],
 	locals: locals
