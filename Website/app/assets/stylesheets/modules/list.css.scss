@@ -157,9 +157,14 @@ ul.list
 			top: 0;
 			padding: 0;
 			
-			span.title { font-size: 1.1em; }
+			span.title
+			{
+				padding-bottom: 0;
+				font-size: 1.1em;
+			}
 			span.description
 			{
+				padding-top: 0;
 				font-size: 1em;
 				a:hover { text-decoration: underline; }
 			}
@@ -168,7 +173,7 @@ ul.list
 		.action-bar
 		{
 			display: block;
-			bottom: 0.3em;
+			bottom: 0;
 			padding: 0;
 			
 			.action
