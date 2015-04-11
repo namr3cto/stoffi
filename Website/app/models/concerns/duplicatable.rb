@@ -110,7 +110,7 @@ module Duplicatable
 		
 		# Filter out duplicates by default
 		def default_scope
-			where(archetype: nil)
+			where(archetype_id: nil)
 		end
 		
 		# Include associations of all duplicates when accessing an association.
