@@ -14,7 +14,7 @@ class OauthController < ApplicationController
 			
 				# find access token for the app
 				token = current_user.tokens.where(
-					"client_application_id = ? AND type = 'AccessToken' AND invalidated_at IS NULL AND authorized_at IS NOT NULL",
+					"client_application_id = ? AND type IS 'AccessToken' AND invalidated_at IS NULL AND authorized_at IS NOT NULL",
 					@token.client_application.id).first
 					
 				# check the access token

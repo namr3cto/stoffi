@@ -32,7 +32,7 @@
 		<% end %>
 		
 		<% if user_signed_in? %>
-			<% if oauth_client.added_by? current_user %>
+			<% if current_user.owns?(oauth_client) or current_user.admin? %>
 				<span class='remove action'>
 					<%= link_to '', title: t('pages.oauth_clients.destroy.description'), data: {
 						ajax_call: :delete,
@@ -44,14 +44,22 @@
 						<span data-list-mode='grid'>x</span>
 					<% end %>
 				</span>
-			<% else %>
-				<span class='add action'>
-					<%= link_to '', title: t('pages.oauth_clients.authorize.description', app: oauth_client) do %>
+			<% end %>
+			
+			<span class='action'>
+				<% if oauth_client.installed_by? current_user %>
+					<%= link_to revoke_app_path(oauth_client, return_uri: request.url), method: :delete do %>
+						<span data-list-mode='list'><%= t 'pages.oauth_clients.revoke.link' %></span>
+						<span data-list-mode='grid'>-</span>
+					<% end %>
+				<% else %>
+					<%= link_to authorize_path(client_id: oauth_client.key, redirect_uri: request.url, response_type: :token) do %>
 						<span data-list-mode='list'><%= t 'pages.oauth_clients.authorize.link' %></span>
 						<span data-list-mode='grid'>+</span>
 					<% end %>
-				</span>
-			<% end %>
+				<% end %>
+			</span>
+				
 		<% end %>
 		
 	</div>

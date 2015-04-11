@@ -47,3 +47,8 @@ us:
       notice: "We support HMAC-SHA1 (recommended) and plain text in SSL mode."
       
     similar: 'Similar apps'
+    
+    authorize:
+      header: '%{app} wants access to the following'
+      allow: 'Allow'
+      deny: 'Cancel'

@@ -38,13 +38,17 @@
 	<section class='tabs'></section>
 	
 	<aside>
-		<section data-bonus>
+		<section data-type='bonus'>
 			<%= render 'shared/ads/skyscraper' %>
 		</section>
 	</aside>
 	
-	<%= link_to t('pages.oauth_clients.authorize.link'), authorize_path(client_id: @app.key),
-		class: 'button', id: 'install_button' %>
+	<% if @app.installed_by? current_user %>
+		<%= link_to t('pages.oauth_clients.revoke.link'), revoke_app_path(@app, return_uri: request.url), method: :delete, class: 'button', id: 'uninstall_button' %>
+	<% elsif user_signed_in? %>
+		<%= link_to t('pages.oauth_clients.authorize.link'), authorize_path(client_id: @app.key, redirect_uri: request.url, response_type: :token),
+			class: 'button', id: 'install_button' %>
+	<% end %>
 	
 	<%= render 'oauth_clients/sections/info' %>
 	<!-- TODO: fix the sunspot search so we get results here -->
@@ -62,81 +66,3 @@
 	<% end %>
 	
 </article>
-
-
-<% if false %>
-
-		@channels = @app.user == nil ? [] : ["user_"+@app.user.id]
-
-<div id="main" class="app">
-	<div class="white box">
-		<div class="head">
-			<%= image_tag @app.large_icon, :width => 64, :height => 64 %>
-			<div class="text">
-				<h1><%=h @app.name %></h1>
-				<h2><%=h @app.description %></h2>
-			</div>
-		</div>
-		
-		<div class="narrow">
-			<dl>
-				<dt><%=t "apps.permissions.title" %></dt>
-				
-				<% ["name", "picture", "playlists", "listens", "shares"].each do |p| %>
-					<dd title="<%=t "apps.permissions.#{p}.tooltip" %>">
-						<%=t "apps.permissions.#{p}.label" %>
-					</dd>
-				<% end %>
-				
-				<dt><%=t "apps.url" %></dt>
-				<dd><%= link_to pretty_url(@app.website), @app.website %></dd>
-				
-				<dt><%=t "apps.support" %></dt>
-				<dd><%= link_to pretty_url(@app.support_url), @app.support_url %></dd>
-				
-				<dt><%=t "apps.author" %></dt>
-				<dd><%= link_to @app.author, @app.author_url %></dd>
-				
-				<% if user_signed_in? && @app.user == current_user %>
-					<dt><%=t "apps.key" %></dt>
-					<dd><%= @app.key %></dd>
-					<dt><%=t "apps.secret" %></dt>
-					<dd><%= @app.secret %></dd>
-					<dt><%=t "apps.request" %></dt>
-					<dd><code>
-						http<%="s" if request.ssl? %>://<%= request.host_with_port %><%=@app.oauth_server.request_token_path %>
-					</code></dd>
-					<dt><%=t "apps.access" %></dt>
-					<dd><code>
-						http<%="s" if request.ssl? %>://<%= request.host_with_port %><%=@app.oauth_server.access_token_path %>
-					</code></dd>
-					<dt><%=t "apps.authorize" %></dt>
-					<dd><code>
-						http<%="s" if request.ssl? %>://<%= request.host_with_port %><%=@app.oauth_server.authorize_path %>
-					</code></dd>
-				<% end %>
-			</dl>
-		</div>
-		
-		<% if false %>
-		<div class="wide center">
-			<%= custom_button_tag t("apps.add.button"), "", "", { :color => :blue, :class => "huge add" } %>
-			<p><%=t "apps.add.hint", :app => h(@app.name) %></p>
-		</div>
-		<% end %>
-		
-	</div>
-	
-	<% if user_signed_in? && @app.user == current_user %>
-		<div class="blue box">
-			<h1><%=t "apps.settings" %></h1>
-			<%= form_for :app, :url => app_path(@app), :html => {:method => :put}  do |f| %>
-				<% @no_back = true %>
-				<%= render :partial => "form", :locals => { :f => f } %>
-			<% end %>
-		</div>
-	<% end %>
-</div>
-
-<%= render "sidebars/#{user_signed_in? ? 'user' : 'main'}" %>
-<% end %>

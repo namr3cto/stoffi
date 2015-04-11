@@ -1,0 +1,6 @@
+<% [:client_id, :response_type, :redirect_uri, :state, :scope, :oauth_callback].each do |f| %>
+	<%= hidden_field_tag f, (local_assigns[f] || params[f]) %>
+<% end %>
+<% if local_assigns[:token].present? %>
+	<%= hidden_field_tag "oauth_token", local_assigns[:token].token %>
+<% end %>

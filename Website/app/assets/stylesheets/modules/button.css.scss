@@ -46,6 +46,15 @@ a.button
 	margin-right: 2em;
 }
 
+form
+{
+	a.button
+	{
+		img { margin-left: -1em; }
+		margin: .4em 1em .4em 0;
+	}
+}
+
 ul.buttons li a
 {
 	img { padding-right: 1em; margin-right: .5em; }

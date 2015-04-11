@@ -48,3 +48,8 @@ se:
       notice: "Vi stödjer HMAC-SHA1 (rekommenderas) och klartext i SSL läge."
       
     similar: 'Liknande appar'
+    
+    authorize:
+      header: '%{app} vill ha tillgång till följande'
+      allow: 'Tillåt'
+      deny: 'Avbryt'

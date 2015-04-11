@@ -1,0 +1,47 @@
+<% content_for :title do %>
+	<%= t 'pages.oauth_clients.authorize.title', app: app %>
+<% end %>
+
+<% content_for :description do -%>
+	<%= t 'pages.oauth_clients.authorize.description', app: app %>
+<% end -%>
+
+<article class='fullwidth' id='authorize'>
+	<section id='info'>
+		<%= image_tag app.image(:medium) %>
+		<span class='heading'>
+			<h1><%= app.name %></h1>
+			<span><%= link_to app.author, app.author_url, target: '_blank' %></span>
+		</span>
+	</section>
+	
+	<section id='permissions'>
+		<h2><%= t 'apps.authorize.header', app: app %></h2>
+		<dl>
+			<% ClientApplication.permissions.each do |p| %>
+				<dt><%=t "apps.permissions.#{p}.label" %></dt>
+				<dd><%=t "apps.permissions.#{p}.description" %></dd>
+			<% end %>
+		</dl>
+	</section>
+	
+	<section id='form'>
+		
+		<%= form_tag authorize_url do %>
+			<%= render partial: 'fields', locals: { token: local_assigns[:token] } %>
+			<%= hidden_field_tag "authorize", "0" %>
+			<%= link_to '#', class: 'button secondary', data: { button: :submit } do %>
+				<span><%= t 'apps.authorize.deny' %></span>
+			<% end %>
+		<% end %>
+		
+		<%= form_tag authorize_url do %>
+			<%= render partial: 'fields', locals: { token: local_assigns[:token] } %>
+			<%= hidden_field_tag "authorize", "1" %>
+			<%= link_to '#', class: 'button', data: { button: :submit } do %>
+				<span><%= t 'apps.authorize.allow' %></span>
+			<% end %>
+		<% end %>
+		
+	</section>
+</article>

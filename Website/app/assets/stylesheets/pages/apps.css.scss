@@ -1,4 +1,66 @@
-#install_button
+a#install_button, a#uninstall_button
 {
 	float: right;
+}
+
+article#authorize
+{
+	@media #{$above-small}
+	{
+		margin: 1em auto;
+		width: 40em;
+		min-height: 30em;	
+	}
+	
+	@media #{$above-large} { margin-top: 3em; }
+	@media #{$above-huge} { margin-top: 6em; }
+	
+	section { margin-bottom: 0; }
+	
+	section#info
+	{
+		padding: 1em;
+		img
+		{
+			display: inline-block;
+		}
+		span.heading
+		{
+			display: inline-block;
+			margin-left: 1em;
+			vertical-align: top;
+			
+			h1 { margin: .5em 0; }
+		}
+	}
+	
+	section#permissions
+	{
+		dl
+		{
+			margin-left: 1em;
+			padding-left: 20px;
+			dt
+			{
+				margin: 0 0 .3em -20px;
+				padding: 0 0 0 20px;
+				background-repeat: no-repeat;
+				
+				&:not(:first-child) { margin-top: 1.3em; }
+			}
+			
+			dd
+			{
+				margin: 0;
+			}
+		}
+	}
+	
+	section#form
+	{
+		margin: 3em 0 1em;
+		padding: 0 1em;
+		text-align: right;
+		a.button { margin: .4em 0 .4em 1em; }
+	}
 }

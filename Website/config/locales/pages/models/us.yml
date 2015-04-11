@@ -42,7 +42,11 @@ us:
         
       authorize:
         link:            'Install'
+        title:           'Install %{app}'
         description:     'Install the app %{app}'
+        
+      revoke:
+        link:            'Uninstall'
   
     devices:
       index:

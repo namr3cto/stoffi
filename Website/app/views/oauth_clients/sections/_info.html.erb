@@ -12,7 +12,7 @@
 		
 		<dt><%=t "apps.permissions.header" %></dt>
 		
-		<% ["name", "picture", "playlists", "listens", "shares"].each do |p| %>
+		<% ClientApplication.permissions.each do |p| %>
 			<dd title="<%=t "apps.permissions.#{p}.description" %>">
 				<%=t "apps.permissions.#{p}.label" %>
 			</dd>

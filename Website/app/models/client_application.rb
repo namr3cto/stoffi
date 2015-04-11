@@ -83,6 +83,10 @@ class ClientApplication < ActiveRecord::Base
 			joins("LEFT JOIN users ON oauth_tokens.user_id = users.id").
 			group("client_applications.id").order("user_count DESC")
 	end
+	
+	def self.permissions
+		["name", "picture", "playlists", "listens", "shares"]
+	end
 
 	# The URL to the OAuth server.
 	def oauth_server
@@ -123,6 +127,15 @@ class ClientApplication < ActiveRecord::Base
 			end
 		end
 		search.results
+	end
+	
+	def installed_by?(user)
+		return false unless user
+		valid_access_tokens.where(user: user).count > 0
+	end
+	
+	def valid_access_tokens
+		access_tokens.where('oauth_tokens.invalidated_at IS NULL AND oauth_tokens.authorized_at IS NOT NULL')
 	end
 	
 	# The type of the resource.

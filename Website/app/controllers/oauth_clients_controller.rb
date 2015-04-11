@@ -86,12 +86,12 @@ class OauthClientsController < ApplicationController
 		redirect_to :index
 	end
 
-	# GET /apps/1/revoke
+	# DELETE /apps/1/revoke
 	def revoke
-		tokens = current_user.tokens.find_by(client_application_id: @app.id)
+		tokens = current_user.tokens.where(client_application_id: @app.id)
 		tokens.each { |t| t.delete }
 		respond_to do |format|
-			format.html { redirect_to :index }
+			format.html { redirect_to (params[:return_uri] || apps_path) }
 			format.xml  { head :ok }
 			format.json { head :ok }
 		end

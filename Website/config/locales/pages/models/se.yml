@@ -42,7 +42,11 @@ se:
         
       authorize:
         link:            'Installera'
+        title:           'Installera %{app}'
         description:     'Installera appen %{app}'
+        
+      revoke:
+        link:            'Avinstallera'
   
     devices:
       index:
