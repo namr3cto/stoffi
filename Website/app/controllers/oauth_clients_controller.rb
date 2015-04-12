@@ -83,7 +83,7 @@ class OauthClientsController < ApplicationController
 	# DELETE /apps/1
 	def destroy
 		@app.destroy
-		redirect_to :index
+		redirect_to apps_path
 	end
 
 	# DELETE /apps/1/revoke
