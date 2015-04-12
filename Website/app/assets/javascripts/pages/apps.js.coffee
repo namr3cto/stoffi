@@ -2,7 +2,6 @@ updateIcon = (size) ->
 	default_url = "/assets/gfx/icons/#{size}/app.png"
 	field = $("#client_application_icon_#{size}")
 	icon = $("#icon_#{size}")
-	console.log "check if #{size} is an image"
 	$('<img/>', {
 		src: field.val()
 		error: ->
