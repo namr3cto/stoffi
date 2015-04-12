@@ -29,7 +29,7 @@ class OauthServerFlowTest < ActionDispatch::IntegrationTest
 		
 		# authorize
 		assert_select 'a span', "Allow", "No allow button"
-		assert_select 'a span', "Deny", "No deny button"
+		assert_select 'a span', "Cancel", "No deny button"
 		assert assigns(:token), "No token assigned"
 		token = OauthToken.find_by_token(assigns(:token).token)
 		assert token, "No token exists"

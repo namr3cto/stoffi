@@ -83,7 +83,7 @@ class OauthClientsControllerTest < ActionController::TestCase
 	end
 
 	test "should not get edit logged out" do
-		post :edit, client_application: @app
+		post :edit, id: @app
 		assert_redirected_to new_user_session_path
 	end
 
@@ -91,7 +91,7 @@ class OauthClientsControllerTest < ActionController::TestCase
 		@app.user = users(:charlie)
 		@app.save
 		sign_in users(:bob)
-		post :edit, client_application: @app
+		post :edit, id: @app
 		assert_redirected_to dashboard_path
 	end
 
@@ -99,7 +99,7 @@ class OauthClientsControllerTest < ActionController::TestCase
 		@app.user = users(:charlie)
 		@app.save
 		sign_in @app.user
-		post :edit, client_application: @app
+		post :edit, id: @app
 		assert_response :success
 	end
 
@@ -107,7 +107,7 @@ class OauthClientsControllerTest < ActionController::TestCase
 		@app.user = users(:charlie)
 		@app.save
 		sign_in @admin
-		post :edit, client_application: @app
+		post :edit, id: @app
 		assert_response :success
 	end
 
