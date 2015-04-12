@@ -12,6 +12,11 @@
 class Oauth2Token < AccessToken
 	attr_accessor :state
 	
+	# TODO: do we need this, or is it enough on base?
+	def self.valid
+		where(invalidated_at: nil).where.not(authorized_at: nil)
+	end
+	
 	# Serializes the access token to JSON.
 	def as_json(options={})
 		d = {access_token:token, token_type: 'bearer'}

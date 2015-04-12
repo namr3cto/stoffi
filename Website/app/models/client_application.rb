@@ -46,6 +46,7 @@ class ClientApplication < ActiveRecord::Base
 		if user == nil
 			return self.all
 		else
+			# TODO: clean up
 			tokens = "SELECT * from oauth_tokens WHERE oauth_tokens.invalidated_at IS NULL AND oauth_tokens.authorized_at IS NOT NULL AND oauth_tokens.user_id = #{user.id}"
 		
 			return select("client_applications.*").
@@ -131,11 +132,7 @@ class ClientApplication < ActiveRecord::Base
 	
 	def installed_by?(user)
 		return false unless user
-		valid_access_tokens.where(user: user).count > 0
-	end
-	
-	def valid_access_tokens
-		access_tokens.where('oauth_tokens.invalidated_at IS NULL AND oauth_tokens.authorized_at IS NOT NULL')
+		tokens.valid.where(user: user).count > 0
 	end
 	
 	# The type of the resource.
@@ -154,10 +151,6 @@ class ClientApplication < ActiveRecord::Base
 			except: :secret,
 			methods: [ :kind, :display, :url ]
 		}
-	end
-	
-	def added_by?(user)
-		access_tokens.where("user_id = #{user.id} AND authorized_at IS NOT NULL AND invalidated_at IS NULL").any?
 	end
 
 	protected

@@ -36,6 +36,10 @@ class OauthToken < ActiveRecord::Base
 		"oauth_token=#{token}&oauth_token_secret=#{secret}"
 	end
 	
+	def self.valid
+		where(invalidated_at: nil).where.not(authorized_at: nil)
+	end
+	
 	#def valid?
 	#	# todo: check valid_to field
 	#	not invalidated?

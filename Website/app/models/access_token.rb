@@ -18,6 +18,11 @@ class AccessToken < OauthToken
 	# def capabilities
 	#   {:invalidate=>"/oauth/invalidate",:capabilities=>"/oauth/capabilities"}
 	# end
+	
+	# TODO: do we need this, or is it enough on base?
+	def self.valid
+		where(invalidated_at: nil).where.not(authorized_at: nil)
+	end
 
 	protected
 
