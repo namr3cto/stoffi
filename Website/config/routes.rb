@@ -78,7 +78,7 @@ Stoffi::Application.routes.draw do
 		get '/channel',    to: 'pages#channel',    as: :facebook_channel
 		get '/old',        to: 'pages#old',        as: :old
 		get '/donate',     to: 'pages#donate',     as: :donations
-		get '/foo',        to: 'pages#foo',        as: :foo
+		get '/barebone',   to: 'pages#barebone',   as: :barebone
 
 		resources :translations, :languages, :votes, :devices
 		resources :oauth_clients, path: 'apps', as: :client_application

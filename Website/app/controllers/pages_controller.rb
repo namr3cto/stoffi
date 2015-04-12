@@ -13,7 +13,8 @@ class PagesController < ApplicationController
 	
 	respond_to :html, :mobile, :embedded, :json, :xml
 	
-	def foo
+	def barebone
+		render text: 'this is a barebone page used for performance testing'
 	end
 
 	def old
