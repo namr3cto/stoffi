@@ -573,16 +573,18 @@ class ApplicationController < ActionController::Base
 	
 	def embedded_device?
 		if cookies[:embedded_param]
-			cookies[:embedded_param] == "1"
+			return cookies[:embedded_param] == "1"
 		else
-			request.env['HTTP_X_EMBEDDER'] != nil or @ua.match(/ msie 7\.0;.* \.net4.0/)
+			return (request.env['HTTP_X_EMBEDDER'] != nil or @ua.match(/ msie 7\.0;.* \.net4.0/))
 		end
 	end
 	helper_method :embedded_device?
 	
 	def prepare_for_embedded
-		cookies[:embedded_param] = params[:embedded] if params[:embedded]
-		request.format = :embedded if embedded_device? && adaptable_format?
+		if embedded_device?
+			cookies[:embedded_param] = '1'
+			request.format = :embedded
+		end
 	end
 	
 	def adaptable_format?

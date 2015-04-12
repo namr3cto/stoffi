@@ -1,0 +1,44 @@
+<% if request.format == :embedded %>
+	<%= javascript_include_tag "embedded" %>
+	
+<% else %>
+	<!-- language for google+ -->
+	<%= javascript_tag do %>
+		window.___gcfg = {lang: '<%= I18n.locale %>'};
+		var Chartkick = {'language': '<%= current_lang %>'};
+		var locale = '<%= I18n.locale %>';
+		var user_id = <%= user_signed_in? ? current_user.id : -1 %>;
+	<% end %>
+
+	<!-- include all js files -->
+	<%= javascript_include_tag "application" %>
+
+	<!-- chartkick -->
+	<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+	<!-- qtip -->
+	<%= javascript_include_tag 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.js' %>
+
+	<!-- google maps -->
+	<%= javascript_include_tag 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAFQ6PulvKZ8cd4dK4Ex1HLkiVHXzp_izQ&sensor=false' %>
+<% end %>
+
+<!-- initialize password strength indicator -->
+<%
+bots = 20000
+speed = 1000000000
+l = I18n.locale
+l = :en if l == :us
+bots_text = number_with_delimiter(bots, :locale => l)
+speed_text = number_to_human(speed, :locale => l).downcase
+crack_time_text = t("notice.password.explanation", botsize: bots_text, speed: speed_text)
+%>
+<%= javascript_tag "initPasswordIndicator('#{bots}', '#{speed}', \"#{crack_time_text}\")" %>
+
+<!-- initialize realtime communication channel -->
+<% unless channels.empty? %>
+	<% c = "["+channels.map{|c|"'#{c}'"}.join(",")+"]" %>
+	<% u = @current_user ? @current_user.id : "null" %>
+	<% d = @current_device ? @current_device.id : "null" %>
+	<%= javascript_tag "initRealtime(#{u}, #{d}, #{c})" %>
+<%end%>

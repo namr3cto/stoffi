@@ -1,0 +1,14 @@
+<%= render 'layouts/doctype' %>
+<%= render 'layouts/html_tag' %>
+	
+	<%= render 'shared/headers' %>
+	
+	<body>
+		<%= yield %>
+		
+		<OBJECT type="application/x-shockwave-flash" id="juggernaut_flash" name="juggernaut_flash" width="0px" height="0px">
+			<PARAM NAME="Movie" VALUE="/juggernaut/juggernaut.swf">
+		</OBJECT>
+		
+	</body>
+</html>

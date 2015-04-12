@@ -28,7 +28,6 @@
 	<%= yield :header if content_for? :header %>
 	
 	<meta name="content-language" content="<%=langtag(I18n.locale)%>" />
-	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
 	<meta name="keywords" content="music player, audio player, free music player, free audio player, stoffiplayer, stoffi" />
 	<meta name="copyright" content="Simplare" />
@@ -38,7 +37,14 @@
 	
 	<link rel="shortcut icon" href="<%= asset_path 'gfx/logos/blue_on_transparent_16.png' %>"/>
 	
-	<%= stylesheet_link_tag "application" %>
+	<% if request.format == :embedded %>
+		<%= stylesheet_link_tag "embedded" %>
+		<meta name="viewport" content="initial-scale=1,maximum-scale=1,user-scalable=no" />
+		
+	<% else %>
+		<%= stylesheet_link_tag "application" %>
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+	<% end %>
 	
 	<%= csrf_meta_tags %>
 		

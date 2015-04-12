@@ -18,7 +18,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 			session["user_return_to"] = request.referer
 		end
 		build_resource {}
-		render '/users/sessions/new', layout: 'fullwidth'
+		if request.format == :embedded
+			render
+		else
+			render '/users/sessions/new', layout: 'fullwidth'
+		end
 	end
 	
 	def create

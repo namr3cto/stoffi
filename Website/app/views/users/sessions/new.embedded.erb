@@ -1,4 +1,4 @@
-<%= form_for(resource, :as => resource_name, :url => session_path(resource_name)) do |f| %>
+<%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
 
 	<div class="notice">
 		<%= flash[:alert] %>
@@ -12,8 +12,8 @@
 				
 			</td>
 			<td class="value">
-				<%= f.email_field :email, :class => "field",
-					:placeholder => t("dialog.email_placeholder"), :size => 20 %>
+				<%= f.email_field :email, class: "field",
+					placeholder: t("dialog.email_placeholder"), size: 20 %>
 				
 			</td>
 		</tr>
@@ -25,8 +25,8 @@
 			</td>
 			<td class="value">
 		
-				<%= f.password_field :plain, :class => "field",
-					:placeholder => t("dialog.password_placeholder"), :size => 21 %>
+				<%= f.password_field :plain, class: "field",
+					placeholder: t("dialog.password_placeholder"), size: 21 %>
 				<%= f.hidden_field :password %>
 				
 			</td>
@@ -40,32 +40,32 @@
 			<td class="value">
 				<%
 				[
-					{ :name => "Twitter" },
-					{ :name => "Facebook" },
-					{ :name => "Google", :link_name => "google_oauth2" },
-					{ :name => "Vimeo" },
-					{ :name => "LinkedIn", :link_name => "linked_in" },
-					{ :name => "SoundCloud" }
+					{ name: "Twitter" },
+					{ name: "Facebook" },
+					{ name: "Google", link_name: "google_oauth2" },
+					{ name: "Vimeo" },
+					{ name: "LinkedIn", link_name: "linked_in" },
+					{ name: "SoundCloud" }
 				].each do |link|
 					n = link[:name]
 					ln = link[:link_name] || n.downcase
 					path = "/auth/#{ln}"
 					css = "auth"
 					disp = image_tag("auth_buttons/#{n.downcase}_black_16.png")
-					title = t("auth.login", :service => n)
+					title = t("auth.login", service: n)
 					%>
-					<%= link_to disp, path, :class => css, :title => title %>
+					<%= link_to disp, path, class: css, title: title %>
 				<% end %>				
 			</td>
 		</tr>
 		<tr>
 			<td class="right" colspan="2">
-				<%= f.submit t("login.link"), :class => "login button", :onclick => "hashPasswords();" %>				
+				<%= f.submit t("pages.users.sessions.new.link"), class: "login button", onclick: "hashPasswords();" %>				
 			</td>
 		</tr>
 		<tr>
 			<td class="center" colspan="2">
-				<%= render :partial => "devise/shared/links" %>
+				<%= render partial: "shared/login/links" %>
 			</td>
 		</tr>
 	</table>
