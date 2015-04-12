@@ -65,8 +65,17 @@ class SongsController < ApplicationController
 
 	# PUT /songs/1
 	def update
-		@song.update(song_params)
-		respond_with(@song)
+		respond_to do |format|
+			if @song.update_attributes(song_params)
+				format.html { redirect_to @song }
+				format.js { }
+				format.json { render json: @song, location: @song }
+			else
+				format.html { render action: 'edit' }
+				format.js { render partial: 'shared/dialog/errors', locals: { resource: @song, action: :update } }
+				format.json { render json: @song.errors, status: :unprocessable_entity }
+			end
+		end
 	end
 
 	# DELETE /songs/1

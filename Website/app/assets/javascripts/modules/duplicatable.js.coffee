@@ -7,7 +7,7 @@ refreshDuplicate = (element) ->
 		element.find('[data-duplicate-unmark]').hide()
 
 toggleDuplicate = (element, event) ->
-	url = element.closest('[data-resource-url]').attr('data-resource-url')
+	url = element.closest('[data-resource-url]').attr('data-resource-url')+'.json'
 	archetype = element.attr 'data-archetype'
 	status = element.attr 'data-duplicate-status'
 	archetype = '' if status == 'marked'
@@ -19,7 +19,7 @@ toggleDuplicate = (element, event) ->
 	refreshDuplicate element
 	
 	$.ajax {
-		type: 'patch',
+		method: 'patch',
 		url: url,
 		data: "song[archetype]=#{archetype}",
 		error: (output) ->
@@ -32,6 +32,6 @@ $(document).on 'contentReady', () ->
 		refreshDuplicate $(element)
 	$("a[data-ajax-call='duplicate']").when 'click.duplicate', (event) ->
 		if event.which == 1
-			stopPropagation()
-			preventDefault()
+			event.stopPropagation()
+			event.preventDefault()
 			toggleDuplicate($(@), event)

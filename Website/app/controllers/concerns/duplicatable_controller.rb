@@ -10,7 +10,7 @@ module DuplicatableController
 		# requests to specify :archetype 
 		def can_duplicate(resource)
 			@duplicatable_model = resource
-			before_filter :redirect_duplicates, only: [:show]
+			before_filter :redirect_duplicates, only: :show
 			before_filter :parse_duplicate_params, only: [:update, :create]
 		end
 		
