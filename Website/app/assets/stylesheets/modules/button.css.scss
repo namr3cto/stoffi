@@ -43,16 +43,8 @@ a.button, ul.buttons li a
 a.button
 {
 	padding: .3em 2em .4em;
-	margin-right: 2em;
-}
-
-form
-{
-	a.button
-	{
-		img { margin-left: -1em; }
-		margin: .4em 1em .4em 0;
-	}
+	img { margin-left: -1em; }
+	margin: .4em 1em .4em 0;
 }
 
 ul.buttons li a

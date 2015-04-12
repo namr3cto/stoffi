@@ -2,13 +2,12 @@ footer
 {
 	clear: both;
 	text-transform: lowercase;
-	padding: 1em 0 0;
+	padding: 0 0 0;
 	text-align: center;
 	position: absolute;
 	bottom: 0;
 	width: 100%;
-	margin-bottom: -12em;
-	height: 11em;
+	height: 12em;
 	
 	@media #{$small}
 	{
