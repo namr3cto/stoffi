@@ -109,19 +109,28 @@ td.inactive
 	vertical-align: top;
 }
 
+.app .image img
+{
+	margin-right: 10px;
+	width: 40px;
+	height: 40px;
+}
+
 .app .title
 {
+	padding-top: 5px;
 }
 
 .app .description
 {
-	height: 30px;
+	height: 100%;
 }
 
 .app h1
 {
 	margin: 0;
 	padding: 0;
+	font-size: 18px;
 }
 
 .auth-buttons

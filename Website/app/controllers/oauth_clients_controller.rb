@@ -108,7 +108,7 @@ class OauthClientsController < ApplicationController
 	# Never trust parameters from the scary internet, only allow the white list through.
 	def app_params
 		params.require(:client_application).permit(:name, :website, :support_url, :callback_url, :icon_16, :icon_64, 
-			:description, :author, :author_url)
+			:icon_512, :description, :author, :author_url)
 	end
 	
 	def ensure_owner_or_admin

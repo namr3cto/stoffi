@@ -1,27 +1,23 @@
 <% if request.format == :embedded %>
 	<%= javascript_include_tag "embedded" %>
-	
-<% else %>
-	<!-- language for google+ -->
-	<%= javascript_tag do %>
-		window.___gcfg = {lang: '<%= I18n.locale %>'};
-		var Chartkick = {'language': '<%= current_lang %>'};
-		var locale = '<%= I18n.locale %>';
-		var user_id = <%= user_signed_in? ? current_user.id : -1 %>;
-	<% end %>
-
-	<!-- include all js files -->
-	<%= javascript_include_tag "application" %>
-
-	<!-- chartkick -->
-	<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
-
-	<!-- qtip -->
-	<%= javascript_include_tag 'http://cdnjs.cloudflare.com/ajax/libs/qtip2/2.2.1/jquery.qtip.min.js' %>
-
-	<!-- google maps -->
-	<%= javascript_include_tag 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAFQ6PulvKZ8cd4dK4Ex1HLkiVHXzp_izQ&sensor=false' %>
 <% end %>
+	
+<!-- setup some parameters -->
+<%= javascript_tag do %>
+	window.___gcfg = {lang: '<%= I18n.locale %>'};
+	var Chartkick = {'language': '<%= current_lang %>'};
+	var locale = '<%= I18n.locale %>';
+	var user_id = <%= user_signed_in? ? current_user.id : -1 %>;
+<% end %>
+
+<!-- include all js files -->
+<%= javascript_include_tag "application" %>
+
+<!-- chartkick -->
+<%= javascript_include_tag "//www.google.com/jsapi", "chartkick" %>
+
+<!-- google maps -->
+<%= javascript_include_tag 'https://maps.googleapis.com/maps/api/js?key=AIzaSyAFQ6PulvKZ8cd4dK4Ex1HLkiVHXzp_izQ&sensor=false' %>
 
 <!-- initialize password strength indicator -->
 <%

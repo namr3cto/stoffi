@@ -112,7 +112,7 @@ class ClientApplication < ActiveRecord::Base
 			small: 32,
 			medium: 64,
 			large: 128,
-			huge: 256
+			huge: 512
 		}
 		raise "Invalid icon size: #{size}" unless size.in? sizes
 		m = "icon_#{sizes[size]}"

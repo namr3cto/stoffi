@@ -1,0 +1,30 @@
+<p>Can <%= app.name %> access your account?</p>
+
+<table class="app">
+	<tr>
+		<td class='image' rowspan="2"><%= image_tag app.image(:medium) %></td>
+		<td class="title"><h1><%= app.name %></h1></td>
+	</tr>
+	<tr>
+		<td class="description"><%= app.description %></td>
+	</tr>
+</table>
+
+<table class="auth-buttons">
+	<tr>
+		<td>
+			<%= form_tag authorize_url do %>
+				<%= render partial: 'fields', locals: { token: local_assigns[:token] } %>
+				<%= hidden_field_tag "authorize", "0" %>
+				<%= submit_tag t('apps.authorize.deny') %>
+			<%- end -%>
+		</td>
+		<td>
+			<%= form_tag authorize_url do %>
+				<%= render partial: 'fields', locals: { token: local_assigns[:token] } %>
+				<%= hidden_field_tag "authorize", "1" %>
+				<%= submit_tag t('apps.authorize.allow') %>
+			<%- end -%>
+		</td>
+	</tr>
+</table>
