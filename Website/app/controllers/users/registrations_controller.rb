@@ -146,6 +146,11 @@ class Users::RegistrationsController < Devise::RegistrationsController
 		@recent = @user.listens.order(created_at: :desc).limit(@max_items).map(&:song)
 		@weekly = Song.top(for: @user, from: 7.days.ago).limit @max_items
 		@alltime = Song.top(for: @user).limit @max_items
+	
+		respond_to do |format|
+			format.html { }
+			format.json { render json: @user }
+		end
 	end
 	
 	def show2
