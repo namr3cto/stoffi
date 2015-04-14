@@ -119,9 +119,9 @@ class LinksController < ApplicationController
 	def destroy
 		@link = current_user.links.find(params[:id])
 		SyncController.send('delete', @link, request)
-			@link.user.playlists.each do |playlist|
-				@link.delete_playlist(playlist)
-			end
+		@link.user.playlists.each do |playlist|
+			@link.delete_playlist(playlist)
+		end
 		@link.destroy
 
 		respond_with(@link) do |format|
