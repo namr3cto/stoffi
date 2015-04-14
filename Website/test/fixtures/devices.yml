@@ -3,3 +3,9 @@ alice_pc:
   user: alice
   app: myapp
   last_ip: 127.0.0.1
+  
+bob_pc:
+  name: Bob PC
+  user: bob
+  app: myapp
+  last_ip: 127.0.0.1
