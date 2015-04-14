@@ -22,7 +22,7 @@ class ActiveSupport::TestCase
 	end
 
 	def teardown
-		Rails.cache.clear
+		Rails.cache.clear rescue nil
 	end
 end
 
@@ -62,6 +62,18 @@ end
 
 class ActionDispatch::IntegrationTest
 	include Capybara::DSL
+	
+	def set_pass(user, passwd)
+		params = { password: passwd, password_confirmation: passwd }
+		assert user.update_with_password(params), "Could not change password"
+		assert user.valid_password?(passwd), "Password did not change properly"
+	end
+	
+	def sign_in(user)
+		pw = (0...20).map { ('a'..'z').to_a[rand(26)] }.join
+		set_pass user, pw
+		post_via_redirect new_user_session_path, user: { email: user.email, password: pw }
+	end
 end
 
 require 'mocha/setup'

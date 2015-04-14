@@ -3,12 +3,6 @@ require 'test_helper'
 class EmbeddedTest < ActionDispatch::IntegrationTest
 	fixtures :users
 	
-	def set_pass(user, passwd)
-		params = { password: passwd, password_confirmation: passwd }
-		assert user.update_with_password(params), "Could not change password"
-		assert user.valid_password?(passwd), "Password did not change properly"
-	end
-	
 	def set_embedded
 		cookies[:embedded_param] = '1'
 	end
