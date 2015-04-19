@@ -1,0 +1,22 @@
+.slider
+{
+	width: 50%;
+	display: inline-block;
+	position: relative;
+	overflow: visible;
+	margin: 0 1em .35em;
+	
+	.thumb
+	{
+		display: block;
+		position: absolute;
+		top: -.5em;
+		margin-left: -.4em;
+		transition: color .3s;
+		
+		&:hover
+		{
+			cursor: pointer;
+		}
+	}
+}
