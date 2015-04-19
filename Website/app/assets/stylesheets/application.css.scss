@@ -1,6 +1,9 @@
 @import "compass";
 @import "compass/reset";
 
+@import "font-awesome-sprockets";
+@import "font-awesome";
+
 @import 'base/breakpoints';
 
 @import 'mixins/**/*';
