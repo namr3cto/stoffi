@@ -1,5 +1,22 @@
 se:
   remote:
+    previous: 'Spela den förra låten'
+    play: 'Börja spela'
+    pause: 'Pausa låten'
+    next: 'Spela nästa låt'
+    shuffle:
+      active: 'Spela låtarna i slumpvis ordning'
+      off: 'Spela låtarna i sekventiell ordning'
+    repeat: 
+      off: 'Spela alla låtar och sluta sen'
+      one: 'Spela samma låt om och om igen'
+      all: 'Fortsätt spela alla låtar i listan'
+    nothing_playing: 'Ingenting spelas just nu'
+    volume: 'Ändra volymen'
+    disabled:
+      sync: Slå på synkronisering i enheten'
+      old: 'Du måste uppgradera Stoffi'
+    
     title: "Fjärrstyrning"
     text1: "Du kan fjärrstyra Stoffi genom att använda antingen en smartphone eller en dator."
     text2: "För att slå på fjärrstyrning i Stoffi måste du logga in med ditt konto genom att gå till <b>Inställningar</b> och välja <b>Tjänster</b>."

@@ -33,8 +33,24 @@ class Device < ActiveRecord::Base
 	def poke(app, ip)
 		update_attribute(:client_application_id, app.id) if app
 		update_attribute(:last_ip, ip) if ip
+		update_attribute(:status, :online)
 	end
 	
+	def image(size = :huge)
+		sizes = {
+			tiny: 16,
+			small: 32,
+			medium: 64,
+			large: 128,
+			huge: 512
+		}
+		base = 'gfx/icons'
+		size_folder = sizes[size]
+		fname = 'device'
+		fname += "_#{type.downcase}" if false
+		
+		"#{base}/#{size_folder}/#{fname}.png"
+	end
 	
 	# The options to use when the device is serialized.
 	def serialize_options

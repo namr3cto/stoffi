@@ -51,8 +51,16 @@ us:
     devices:
       index:
         link:            'Devices'
-        title:           'Devices'
+        title:           'Your devices'
         description:     'See and manage the devices you are using with your Stoffi account.'
+        
+      show:
+        description:     '%{device} is a device running %{app}.'
+        
+      destroy:
+        link:            'Delete'
+        description:     'Delete the device %{device}'
+        confirm:         'Are you sure you want to delete %{device}?'
   
     playlists:
       index:

@@ -1,0 +1,58 @@
+div.remote
+{
+	width: 60%;
+	margin: auto;
+	text-align: center;
+	
+	@media #{$medium} { width: 70%; }
+	@media #{$small} { width: 80%; }
+	@media #{$tiny} { width: 90%; }
+	
+	span.button
+	{
+		display: inline-block;
+		padding: .3em 1em;
+		margin: .7em .3em;
+		transition: color .3s, background .3s;
+		
+		&:hover
+		{
+			cursor: pointer;
+		}
+	}
+	
+	span.shuffle:not([data-button-state='on']),
+	span.repeat[data-button-state='off'],
+	span.repeat:not([data-button-state])
+	{ opacity: .5; }
+	
+	span.repeat[data-button-state='one'] span.repeat-label
+	{ display: initial; }
+	
+	span.repeat span.repeat-label
+	{
+		margin-left: -1.4em;
+		margin-right: .3em;
+		font-size: .7em;
+		display: none;
+	}
+	
+	span.separator
+	{
+		margin: .8em 0;
+		padding: .3em 0;
+		display: inline-block;
+		height: 1em;
+	}
+	
+	.current-song, .volume
+	{
+		display: block;
+		padding: 1em;
+	}
+	
+	.disabled
+	{
+		display: none;
+	}
+}

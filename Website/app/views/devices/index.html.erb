@@ -1,24 +1,16 @@
-<h1>Listing devices</h1>
-
-<table>
-  <tr>
-    <th>Name</th>
-    <th>Last ip</th>
-    <th>Version</th>
-  </tr>
-
-<% @devices.each do |device| %>
-  <tr>
-    <td><span id="name_<%=device.id%>"><%=h device.name %></span></td>
-    <td><span id="last_ip_<%=device.id%>"><%=h device.last_ip %></span></td>
-    <td><span id="version_<%=device.id%>"><%=h device.version %></span></td>
-    <td><%= link_to 'Show', device %></td>
-    <td><%= link_to 'Edit', edit_device_path(device) %></td>
-    <td><%= link_to 'Destroy', device, :confirm => 'Are you sure?', :method => :delete %></td>
-  </tr>
-<% end %>
-</table>
-
-<br />
-
-<%= link_to 'New device', new_device_path %>
+<article>
+	
+	<aside>
+		<section data-type='bonus'>
+			<%= render 'shared/ads/skyscraper' %>
+		</section>
+	</aside>
+	
+	<section>
+		<h1><%= t 'pages.devices.index.title' %></h1>
+		<%= render partial: 'shared/lists/list', locals: {
+			collection: @devices, resource: 'devices'
+		} %>
+	</section>
+	
+</article>

@@ -97,7 +97,7 @@ $(document).on 'contentReady', () ->
 # which will ensure that the handler is only called once when
 # the event is triggered.
 #
-jQuery ->
+$ ->
 	$(document).trigger 'contentReady'
 	
 $(document).on 'ajaxComplete', (event) ->

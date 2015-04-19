@@ -1,21 +1,18 @@
 se:
-  device:
-    info: "Information"
-    name: "Namn:"
-    version: "Version:"
-    sync: "Synkroniseringsprofil:"
-    no_sync: "Ingen profil"
-    app: "App:"
-    req: "Senaste förfrågan"
-    time: "Tid:"
-    ip: "IP:"
-    city: "Stad:"
-    country: "Land:"
-    network: "Nätverk:"
-    status:
-      label: "Status"
-      online: "Ansluten"
-      offline: "Ej ansluten"
-    
   devices:
-    empty: "Inga anslutna enheter."
+    singular: 'enhet'
+    plural: 'enheter'
+    meta:
+      info: 'Information'
+      name: 'Namn'
+      version: 'Version'
+      app: 'App'
+      status: 'Status'
+      last_request: 'Senaste kontakt'
+      
+    status:
+      online: 'Ansluten'
+      offline: 'Ej ansluten'
+      
+    request_html: '%{ago} sen från %{origin}'
+    request_tooltip: 'Datum: %{date}\nTid: %{time}\nLand: %{country}\nIP: %{ip}\nNätverk: %{network}'

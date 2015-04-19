@@ -1,0 +1,26 @@
+div.remote
+{
+	box-shadow: 0px 0px 10px transparentize($shadow, 0.5);
+	background: $primary;
+	color: $primary_text;
+	
+	span.button
+	{
+		transition: color .3s, background .3s;
+		
+		&:hover
+		{
+			background: rgba($primary_hover, 0.1);
+			color: $secondary;
+		}
+	}
+	
+	span.separator
+	{
+		border-left: 1px solid rgba($primary_text, 0.5);
+	}
+	
+	.current-song {
+		color: rgba($primary_text, 0.8);
+	}
+}

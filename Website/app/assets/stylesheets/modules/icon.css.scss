@@ -1,8 +1,14 @@
-span.icon
+span.icon, img.icon
 {
 	width: 16px;
 	height: 16px;
 	display: inline-block;
 	vertical-align: middle;
 	margin-top: -0.3em;
+}
+
+img.flag
+{
+	margin-right: .3em;
+	margin-bottom: -1px;
 }

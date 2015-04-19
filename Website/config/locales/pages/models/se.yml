@@ -51,8 +51,16 @@ se:
     devices:
       index:
         link:            'Enheter'
-        title:           'Enheter'
+        title:           'Dina enheter'
         description:     'Visa och hantera de enheter du använder med ditt Stoffikonto.'
+        
+      show:
+        description:     '%{device} ör en enhet som kör %{app}.'
+          
+      destroy:
+        link:            'Ta bort'
+        description:     'Ta bort enheten %{device}'
+        confirm:         'Är du säker på att du vill ta bort %{device}?'
   
     playlists:
       index:

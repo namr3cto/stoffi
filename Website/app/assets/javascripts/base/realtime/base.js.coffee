@@ -49,7 +49,7 @@
 		# type-specific updates
 		switch object_type
 			when 'device'        then updateDevice   object_id, updated_params
-			when 'configuration' then updateConfig   object_id, updated_params
+			when 'configuration' then updateConfig   object_id, JSON.parse(updated_params)
 			when 'playlist'      then updatePlaylist object_id, updated_params
 			when 'listen'        then updateListen   object_id, updated_params
 			when 'link'          then updateLink     object_id, updated_params
@@ -98,6 +98,7 @@
 		switch object_type
 			when 'device'        then executeDevice   command, params
 			when 'playlist'      then executePlaylist command, params
+			when 'configuration' then executeRemote   command, params
 			
 
 #

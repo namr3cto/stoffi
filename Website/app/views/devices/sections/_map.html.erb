@@ -1,0 +1,16 @@
+<%
+city = origin_city(@device.last_ip)
+lng = city.present? ? city.longitude : 0
+lat = city.present? ? city.latitude : 0
+%>
+<% unless lng == 0 and lat == 0 %>
+	<section class='device-map'>
+		<%= render partial: 'shared/map', locals: {
+			longitude: lng,
+			latitude: lat,
+			zoom: 5,
+			tilt: true,
+			marker: @device.name,
+		} %>
+	</section>
+<% end %>
