@@ -61,7 +61,9 @@ us:
     global: "Global top"
   
   hello: "Hello, %{name}!"
-  empty: 'Nothing to see here'
+  empty: 'nothing to see here'
+  unknown: 'unknown'
+  local: 'local'
   
   location_inside: "%{city} in %{country}"
   
@@ -104,6 +106,9 @@ us:
       require_action: "Your password won't change until you click on the link above and create a new one."
 
     ignore: "If you didn't request this, please ignore this email."
+    
+  city:
+    unknown: 'an unknown city'
     
   sources:
     title: 'Sources'

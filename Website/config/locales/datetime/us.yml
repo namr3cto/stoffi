@@ -136,9 +136,9 @@ us:
     ago: "%{ago} ago"
     
   time:
-    am: am
+    am: fm
     formats:
-      default: ! '%a, %d %b %Y %H:%M:%S %z'
+      default: ! '%l:%M %P'
       long: ! '%B %d, %Y %H:%M'
-      short: ! '%d %b %H:%M'
-    pm: pm
+      short: ! '%l:%M %P'
+    pm: em

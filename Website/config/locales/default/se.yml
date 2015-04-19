@@ -58,7 +58,9 @@ se:
     global: "Global topp"
   
   hello: "Hallå, %{name}!"
-  empty: 'Här var det tomt'
+  empty: 'här var det tomt'
+  unknown: 'okänt'
+  local: 'lokalt'
   
   location_inside: "%{city} i %{country}"
   
@@ -88,7 +90,6 @@ se:
     unmark:
       description: 'Avmarkera som en dubblett av %{archetype}'
       link: 'Ta bort som dubblett'
-      
   
   mail:
     title: "Kontakta oss"
@@ -102,6 +103,9 @@ se:
       require_action: "Ditt lösenord kommer inte att ändras förrens du klickar på länken ovan och skapar ett nytt."
 
     ignore: "Om du inte begärde detta mail kan du ignorera det."
+    
+  city:
+    unknown: 'en okänd stad'
 
   number:
     # Used in number_with_delimiter()

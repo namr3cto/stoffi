@@ -32,8 +32,8 @@ se:
     - lördag
     formats:
       default: ! '%Y-%m-%d'
-      long: ! '%e %B %Y'
-      short: ! '%e %b'
+      long: ! '%A den %d %b %Y'
+      short: ! '%-d/%-m'
     month_names:
     - 
     - januari
@@ -54,6 +54,11 @@ se:
     - :year
     
   datetime:
+    formats:
+      default: ! '%Y-%m-%d %H:%M'
+      long: ! 'kl %H:%M %A den %d %b %Y'
+      short: ! '%-d/%-m -%y'
+      
     distance_in_words:
       half_a_minute: "en halv minut"
 
@@ -139,7 +144,7 @@ se:
   time:
     am: ''
     formats:
-      default: ! '%a, %e %b %Y %H:%M:%S %z'
+      default: ! '%H:%M'
       long: ! '%e %B %Y %H:%M'
-      short: ! '%e %b %H:%M'
+      short: ! '%H:%M'
     pm: ''
