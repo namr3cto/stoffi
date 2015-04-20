@@ -9,7 +9,7 @@
 # License::		GNU General Public License (stoffiplayer.com/license)
 
 class PagesController < ApplicationController
-	oauthenticate only: [ :remote ]
+	oauthenticate interactive: true, only: [ :remote ]
 	
 	respond_to :html, :mobile, :embedded, :json, :xml
 	
@@ -72,21 +72,13 @@ class PagesController < ApplicationController
 	end
 
 	def history
-		redirect_to "http://dev.stoffiplayer.com/wiki/History"
+		redirect_to "https://github.com/simplare/stoffi/wiki/History"
 	end
 
 	def remote
-	
-		if current_user and current_user.configurations.count > 0 and current_user.configurations.first.devices.count > 0
-			@configuration = current_user.configurations.first
-			
-			@devices = @configuration.devices.order(:name)
+		if user_signed_in?
+			@devices = current_user.devices.order(:name)
 		end
-		
-		@title = t("remote.title")
-		@description = t("remote.description")
-		
-		render "configurations/show", layout: (params[:format] != "mobile" ? true : 'empty')
 	end
 
 	def language
