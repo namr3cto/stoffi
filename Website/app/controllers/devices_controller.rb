@@ -65,6 +65,10 @@ class DevicesController < ApplicationController
 	def destroy
 		SyncController.send('delete', @device, request)
 		@device.destroy
+		respond_to do |format|
+			format.html { redirect_to devices_url, notice: 'Device was successfully destroyed.' }
+			format.json { head :no_content }
+		end
 	end
 	
 	private
