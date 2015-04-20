@@ -7,12 +7,7 @@ html
 
 body
 {
-	margin: 0;
-	position: relative;
 	font-family: verdana, sans-serif;
-	padding-top: 2em;
-	padding-bottom: 12em;
-	@media #{$small} { padding-bottom: 0; }
 	
 	&::after
 	{

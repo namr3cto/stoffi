@@ -5,13 +5,15 @@
 	
 	<body>
 		
-		<%= render 'shared/navigation' %>
-		
-		<main class='fullwidth'>
-			<%= yield %>
-		</main>
-		
-		<%= render 'shared/footer' %>
+		<div id='root'>
+			<%= render 'shared/navigation' %>
+	
+			<main class='fullwidth'>
+				<%= yield %>
+			</main>
+	
+			<%= render 'shared/footer' %>
+		</div>
 		
 	</body>
 </html>

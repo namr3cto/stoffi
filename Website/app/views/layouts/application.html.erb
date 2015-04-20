@@ -5,17 +5,19 @@
 	
 	<body>
 		
-		<%= render 'shared/navigation' %>
-		
-		<main>
-			<%= yield %>
-		</main>
-		
-		<aside class='sidebar'>
-			<%= content_for?(:sidebar) ? yield(:sidebar) : render('shared/sidebars/default') %>
-		</aside>
-		
-		<%= render 'shared/footer' %>
+		<div id='root'>
+			<%= render 'shared/navigation' %>
+	
+			<main>
+				<%= yield %>
+			</main>
+			
+			<aside class='sidebar'>
+				<%= content_for?(:sidebar) ? yield(:sidebar) : render('shared/sidebars/default') %>
+			</aside>
+	
+			<%= render 'shared/footer' %>
+		</div>
 		
 	</body>
 </html>

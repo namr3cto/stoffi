@@ -1,0 +1,55 @@
+// a layout consisting of the follow:
+//   a header at the top
+//   main content
+//   optional sidebar to the right
+//   a footer at the bottom of the page
+
+html
+{
+	height: 100%;
+	
+	body
+	{
+		height: 100%;
+		margin: 0;
+		padding: 0;
+		
+		#root
+		{
+			position: relative;
+			min-height: 100%;
+			
+			// at the top
+			header { }
+			
+			// main content and sidebar
+			main, aside
+			{
+				margin: 4em 0 0;
+				padding-bottom: 15em;
+	
+				@media #{$small}
+				{
+					padding-bottom: 2em;
+				}
+			}
+			
+			// always at the bottom
+			footer
+			{
+				height: 12em;
+				width: 100%;
+				position: absolute;
+				bottom: 0;
+				left: 0;
+	
+				@media #{$small}
+				{
+					height: initial;
+					position: initial;
+				}
+			}
+		}
+
+	}
+}
