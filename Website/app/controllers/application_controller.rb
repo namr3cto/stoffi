@@ -512,11 +512,6 @@ class ApplicationController < ActionController::Base
 		return if controller_name == "pages" and action_name == "old"
 		return if @ua.include?("capybara-webkit")
 		
-		logger.debug "ua: #{@ua}"
-		logger.debug "browser: #{@browser}"
-		logger.debug "os: #{@os}"
-		logger.debug "embedded_device?: #{embedded_device?}"
-		
 		if params[:dangerous]
 			cookies[:skip_old] = "1"
 		else
