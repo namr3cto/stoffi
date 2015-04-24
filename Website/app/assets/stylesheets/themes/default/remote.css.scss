@@ -1,26 +1,69 @@
 div.remote
 {
 	box-shadow: 0px 0px 10px transparentize($shadow, 0.5);
-	background: $primary;
-	color: $primary_text;
-	
-	span.button
-	{
-		transition: color .3s, background .3s;
-		
-		&:hover
-		{
-			background: rgba($primary_hover, 0.1);
-			color: $secondary;
-		}
-	}
 	
 	span.separator
 	{
 		border-left: 1px solid rgba($primary_text, 0.5);
 	}
 	
+	span.button:hover
+	{
+		background: rgba($primary_hover, 0.1);
+		color: $secondary;
+	}
+	
+	.slider
+	{
+		border-bottom: 1px solid $primary_text;
+		.thumb:hover { color: $secondary; }
+	}
+}
+
+article#remote, div.remote
+{
+	background: $primary;
+	color: $primary_text;
+	
+	span.button
+	{
+		transition: color .3s, background .3s;
+	}
+	
 	.current-song {
 		color: rgba($primary_text, 0.8);
+	}
+}
+
+article#remote
+{	
+	@media #{$small}
+	{
+		background: $background;
+		color: $text;
+	
+		span.button:hover
+		{
+			color: $primary;
+		}
+	
+		.current-song {
+			color: rgba($text, 0.8);
+		}
+	}
+	
+	@media #{$above_small}
+	{
+		.slider
+		{
+			border-bottom: 1px solid $primary_text;
+			.thumb:hover { color: $secondary; }
+		}
+	
+		span.button:hover
+		{
+			background: rgba($primary_hover, 0.1);
+			color: $secondary;
+		}
 	}
 }

@@ -1,12 +1,6 @@
-div.remote
+article#remote, div.remote
 {
-	width: 60%;
-	margin: auto;
 	text-align: center;
-	
-	@media #{$medium} { width: 70%; }
-	@media #{$small} { width: 80%; }
-	@media #{$tiny} { width: 90%; }
 	
 	span.button
 	{
@@ -37,6 +31,22 @@ div.remote
 		display: none;
 	}
 	
+	.current-song, .volume
+	{
+		display: block;
+		padding: 1em;
+	}
+}
+
+div.remote
+{
+	width: 60%;
+	margin: auto;
+	
+	@media #{$medium} { width: 70%; }
+	@media #{$small} { width: 80%; }
+	@media #{$tiny} { width: 90%; }
+	
 	span.separator
 	{
 		margin: .8em 0;
@@ -45,14 +55,84 @@ div.remote
 		height: 1em;
 	}
 	
-	.current-song, .volume
-	{
-		display: block;
-		padding: 1em;
-	}
-	
 	.disabled
 	{
 		display: none;
+	}
+}
+
+article#remote
+{
+	width: 500px;
+	margin: auto;
+	
+	@media #{$small}
+	{
+		width: auto;
+		position: absolute;
+		top: 0;
+		bottom: 0;
+		left: 0;
+		right: 0;
+		margin: 0;
+		z-index: 9999; // TODO: move this and all other to $level_XXX
+		
+		span.button, span.volume, span.current-song, span.device, span.back
+		{
+			margin: 0;
+			padding: 0;
+			position: absolute;
+		}
+		
+		span
+		{
+			&.back         { width: 40%; top: .5em; height: 5em; left: .5em; text-align: left; }
+			&.device       { width: 40%; top: .5em; height: 5em; right: .5em; text-align: right; }
+			
+			&.previous     { width: 33%; top: 20%; height: 20%; left: 0; }
+			&.play-pause   { width: 33%; top: 20%; height: 20%; left: 33%; }
+			&.next         { width: 33%; top: 20%; height: 20%; right: 0; }
+			
+			&.repeat       { width: 50%; top: 40%; height: 20%; left: 0; }
+			&.shuffle      { width: 50%; top: 40%; height: 20%; right: 0; }
+			
+			&.current-song { width: 100%; top: 60%; height: 20%; left: 0; }
+			&.volume       { width: 100%; top: 80%; height: 20%; left: 0; }
+		}
+		span.back i.fa { margin-right: .5em; }
+	}
+	
+	@media #{$above_small}
+	{
+		span.back { display: none; }
+		span.device { display: block; padding: 1em; }
+	}
+	
+	span.button, span.volume
+	{
+		@media #{$small} { font-size: 2.4em; }
+		@media #{$tiny} { font-size: 2em; }
+	}
+	
+	span.current-song
+	{
+		@media #{$small} { font-size: 1em; }
+	}
+	
+	@media #{$small} and (orientation: landscape)
+	{
+		span
+		{	
+			&.repeat       { width: 20%; top: 20%; height: 18%; left: 0; }
+			&.previous     { width: 20%; top: 20%; height: 18%; left: 20%; }
+			&.play-pause   { width: 20%; top: 20%; height: 18%; left: 40%; }
+			&.next         { width: 20%; top: 20%; height: 18%; left: 60%; }
+			&.shuffle      { width: 20%; top: 20%; height: 18%; left: 80%; }
+			
+			&.current-song { width: 100%; top: 38%; height: 18%; left: 0; }
+			&.volume       { width: 100%; top: 56%; height: 18%; left: 0; }
+			
+			&.button, &.volume { font-size: 1.5em; }
+		}
 	}
 }

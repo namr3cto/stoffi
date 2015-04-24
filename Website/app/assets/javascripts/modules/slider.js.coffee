@@ -34,6 +34,13 @@ $(document).on 'contentReady', ->
 		deactivateSlider()
 	$(document).when 'mousemove', (event) ->
 		moveSlider(event)
+	$('.slider .thumb').when 'touchstart', (event) ->
+		activateSlider event, $(@)
+	$(document).when 'touchend', ->
+		deactivateSlider()
+	$(document).when 'touchmove', (event) ->
+		event = event.originalEvent.touches[0]
+		moveSlider(event)
 		
 	for slider in $('.slider[data-slider-value]')
 		p = $(slider).data 'slider-value'

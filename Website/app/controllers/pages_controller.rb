@@ -79,6 +79,11 @@ class PagesController < ApplicationController
 		if user_signed_in?
 			@devices = current_user.devices.order(:name)
 		end
+		if request.user_agent =~ /Mobile|webOS/ or params[:mobile]
+			render layout: 'empty'
+		else
+			render layout: 'fullwidth'
+		end
 	end
 
 	def language
