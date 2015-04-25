@@ -1,6 +1,7 @@
 <%= hidden_field_tag 'fullscreen_mode' %>
+<% c = current_user.configurations.any? ? current_user.configurations.first : -1 %>
 
-<article id='remote'>
+<article class='remote' data-remote-device data-remote-configuration='<%= c %>'>
 	<section>
 		<% current_user.devices.each do |device| %>
 			<% next unless device.configuration %>

@@ -23,18 +23,20 @@ volumeChanged = ->
 	updateConfiguration -1, { volume: value }
 	
 fixLineHeights = ->
-	stretch = $('article#remote').css('position') == 'absolute'
+	stretch = $('article.remote').css('position') == 'absolute'
 		
 	for e in ['button', 'current-song', 'volume']
 		if stretch
-			h = $("article#remote span.#{e}").height()
-			$("article#remote span.#{e}").css 'line-height', "#{h}px"
+			h = $("article.remote span.#{e}").height()
+			$("article.remote span.#{e}").css 'line-height', "#{h}px"
 		else
-			$("article#remote span.#{e}").css 'line-height', "initial"
-	
-	#$("article#remote span.button").fitText(1.5)
-	#$("article#remote span.volume").fitText(2)
-	#$("article#remote span.current-song").fitText(3)
+			$("article.remote span.#{e}").css 'line-height', "initial"
+			
+refreshDevice = (element) ->
+	element = $(element)
+	device = element.val()
+	remote = element.closest '.remote'
+	remote.attr 'data-remote-device', device
 	
 $ ->
 	if $('#fullscreen_mode').length > 0 and navigator.userAgent.match(/(iPad|iPhone|Chrome)/i)
@@ -56,10 +58,12 @@ $(document).on 'contentReady', ->
 	$('.remote .play-pause').when 'click', ->
 		playPauseClicked()
 		
-	#fixLineHeights()
+	$('.remote #device').when 'change', ->
+		refreshDevice $(@)
+		
+	$('.remote .back').when 'click', ->
+		window.history.back()
+		
+	fixLineHeights()
 	$(window).when 'resize', ->
-		if $('article#remote').css('position') == 'absolute'
-			$('footer').hide()
-		else if $('article#remote').length > 0
-			$('footer').show()
 		fixLineHeights()

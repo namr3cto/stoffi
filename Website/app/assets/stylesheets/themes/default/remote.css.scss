@@ -1,3 +1,18 @@
+.remote
+{
+	background: $primary;
+	color: $primary_text;
+	
+	span.button
+	{
+		transition: color .3s, background .3s;
+	}
+	
+	.current-song {
+		color: rgba($primary_text, 0.8);
+	}
+}
+
 div.remote
 {
 	box-shadow: 0px 0px 10px transparentize($shadow, 0.5);
@@ -20,22 +35,7 @@ div.remote
 	}
 }
 
-article#remote, div.remote
-{
-	background: $primary;
-	color: $primary_text;
-	
-	span.button
-	{
-		transition: color .3s, background .3s;
-	}
-	
-	.current-song {
-		color: rgba($primary_text, 0.8);
-	}
-}
-
-article#remote
+article.remote
 {	
 	@media #{$small}
 	{
