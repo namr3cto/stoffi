@@ -31,8 +31,12 @@ updateSlide = ->
 		$("#text").fadeIn s
 
 $(document).on 'contentReady', () ->
-	preloadImages tourSlides.map((i) -> "/assets/#{locale}/tour/#{i}.png")
-	updateSlide()
+	try
+		preloadImages tourSlides.map((i) -> "/assets/#{locale}/tour/#{i}.png")
+		updateSlide()
+	catch
+		# TODO: why does this fail in embedded browser?
+	
 	$('#prevSlide').when 'click.tour.slide', ->
 		return if isChangingSlide
 		#trackEvent 'Tour', 'Prev at ' + tourSlides[currentSlide];

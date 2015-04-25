@@ -91,34 +91,40 @@ connect = ->
 	connection = new Juggernaut({
 		secure: window.location.protocol == 'https:', 
 		host: getHostname(), port: getPort()})
-		
-	$.ajaxSetup {
-		beforeSend: (xhr) ->
-			xhr.setRequestHeader 'X-Session-ID', connection.sessionID
-			xhr.setRequestHeader 'X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')
-	}
-	
-	connection.meta = { version: version }
-	connection.meta['user_id'] = userID if userID?	
-	connection.meta['device_id'] = deviceID if deviceID?
-		
-	for channel in channels
-		connection.subscribe channel, (data) ->
-			try
-				eval data
-			catch err
-	
+
 	connection.on 'connect', () ->
 		try
+			setSessionID connection.sessionID
 			clearInterval(reconnectInterval) if reconnector?
-			setSessionID sessionID
 		catch err
-	
+			alert err
+
 	connection.on 'disconnect', () ->
 		try
 			setSessionID ''
 			reconnect()
 		catch err
+	
+	$.ajaxSetup {
+		beforeSend: (xhr) ->
+			xhr.setRequestHeader 'X-Session-ID', connection.sessionID
+			xhr.setRequestHeader 'X-CSRF-Token', $('meta[name="csrf-token"]').attr('content')
+	}
+
+	connection.meta = { version: version }
+	connection.meta['user_id'] = userID if userID?	
+	connection.meta['device_id'] = deviceID if deviceID?
+	
+	for channel in channels
+		connection.subscribe channel, (data) ->
+			try
+				eval data
+			catch err
+		
+	# TODO: why cannot embedded browser see the 'connect' event?
+	setTimeout ->
+		setSessionID connection.sessionID
+	, 2000
 		
 #
 # Initialize the realtime communication parameters.
@@ -140,7 +146,7 @@ connect = ->
 	deviceID = dID
 	channels = c
 	version = v
-
+	
 $ ->
 	url = "#{window.location.protocol}//#{getHostname()}:#{getPort()}"
 	window.WEB_SOCKET_SWF_LOCATION = "#{url}/socket.io/WebSocketMain.swf"
