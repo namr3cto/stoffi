@@ -1,11 +1,11 @@
+<% c = current_user.configurations.any? ? current_user.configurations.first : nil %>
 <%= hidden_field_tag 'fullscreen_mode' %>
-<% c = current_user.configurations.any? ? current_user.configurations.first : -1 %>
 
-<article class='remote' data-remote-device data-remote-configuration='<%= c %>'>
+<article class='remote' data-remote-device data-remote-configuration='<%= c ? c.id : -1 %>'>
 	<section>
 		<% current_user.devices.each do |device| %>
 			<% next unless device.configuration %>
-			<%= hidden_field_tag "device_#{device.id}_current_song", device.configuration.current_song %>
+			<%= hidden_field_tag "device_#{device.id}_now_playing", device.configuration.now_playing %>
 			<%= hidden_field_tag "device_#{device.id}_repeat", device.configuration.repeat %>
 			<%= hidden_field_tag "device_#{device.id}_shuffle", device.configuration.shuffle %>
 			<%= hidden_field_tag "device_#{device.id}_volume", device.configuration.volume %>
@@ -41,7 +41,7 @@
 			<span class='repeat-label'>1</span>
 		</span>
 		<span class='current-song'>
-			<%= t 'remote.nothing_playing' %>
+			<%= t('remote.nothing_playing') %>
 		</span>
 		<span class='volume' title='<%= t 'remote.volume' %>'>
 			<%= icon 'volume-down' %>
