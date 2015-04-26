@@ -1,0 +1,15 @@
+alice_config:
+  name: Alice Config
+  user: alice
+  current_track: one_love
+  volume: 42
+  shuffle: on
+  repeat: all
+  
+bob_config:
+  name: Bob Config
+  user: bob
+  current_track: not_afraid
+  volume: 69
+  shuffle: off
+  repeat: one
