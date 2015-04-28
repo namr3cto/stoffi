@@ -22,7 +22,6 @@ class DevicesController < ApplicationController
 
 	# GET /devices/1
 	def show
-		@device.update_attribute :last_ip, '81.226.15.69'
 	end
 
 	# POST /devices
