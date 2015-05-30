@@ -1,4 +1,0 @@
-list = "[data-list='playlists'][data-list-owner='<%=@playlist.user.id%>']";
-$("<%= escape_javascript(render @playlist) %>").insertBefore(list+" [data-list-add]");
-$(list+" [data-empty]").slideUp();
-closeDialog();

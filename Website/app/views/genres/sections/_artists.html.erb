@@ -1,9 +1,0 @@
-<section>
-	<h1><%= t 'genres.artists' %></h1>
-	<%= render partial: 'shared/lists/list', locals:
-	{
-		collection: @genre.artists.top.limit(5),
-		resource: 'artists',
-		data: { genre: @genre.id },
-	} %>
-</section>

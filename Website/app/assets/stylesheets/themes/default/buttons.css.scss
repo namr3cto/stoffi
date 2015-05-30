@@ -1,9 +1,0 @@
-a.button, ul.buttons li a
-{
-	@include button-colors($primary, $primary_text, $shadow);
-	
-	&.secondary
-	{
-		@include button-colors($secondary, $secondary_text, $shadow);
-	}
-}

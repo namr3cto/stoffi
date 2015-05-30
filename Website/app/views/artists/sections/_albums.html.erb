@@ -1,9 +1,0 @@
-<section>
-	<h1><%= t 'artists.albums' %></h1>
-	<%= render partial: 'shared/lists/list', locals:
-	{
-		collection: @artist.albums.top,
-		resource: 'albums',
-		data: { artist: @artist.id }
-	} %>
-</section>

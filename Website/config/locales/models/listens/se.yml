@@ -1,6 +1,0 @@
-se:
-  listens:
-    empty:
-      recent: 'Ingenting har spelats nyligen'
-      weekly: 'Ingenting har spelats senaste veckan'
-      alltime: 'Ingenting har spelats någonsin'

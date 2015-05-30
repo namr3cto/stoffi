@@ -1,9 +1,0 @@
-<section>
-	<h1><%= t 'artists.events' %></h1>
-	<%= render partial: 'shared/lists/list', locals:
-	{
-		collection: @artist.events.where(['start > ?', Time.now]).order(start: :desc).limit(5),
-		resource: 'events',
-		data: { artist: @artist.id }
-	} %>
-</section>

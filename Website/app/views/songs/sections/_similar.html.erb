@@ -1,9 +1,0 @@
-<% similar = @song.similar %>
-<% if similar.size > 0 %>
-	<section>
-		<h1><%= t 'songs.similar' %></h1>
-		<ul class='list' data-list='songs'>
-			<%= render partial: 'songs/song', collection: similar, locals: { archetype: @song } %>
-		</ul>
-	</section>
-<% end %>

@@ -1,7 +1,0 @@
-<section>
-	<h1><%= t 'artists.meta.info' %></h1>
-	<dl>
-		<dt><%= t 'artists.meta.name' %></dt>
-		<%= editable_field 'dd', @artist, 'name', @artist.name, disabled: !current_user.admin? %>
-	</dl>
-</section>

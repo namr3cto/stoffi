@@ -1,7 +1,0 @@
-<ul class='grid'>
-	<% if @weekly and @weekly.length > 0 %>
-		<%= render partial: 'songs/song', collection: @weekly, locals: { deletable: true } %>
-	<% else %>
-		<li data-empty='songs'><%= t 'listens.empty.weekly' %></li>
-	<% end %>
-</ul>
